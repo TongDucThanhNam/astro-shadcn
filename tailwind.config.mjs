@@ -4,10 +4,9 @@ export default {
     content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
     theme: {
         extend: {
-            borderRadius: {
-                lg: 'var(--radius)',
-                md: 'calc(var(--radius) - 2px)',
-                sm: 'calc(var(--radius) - 4px)'
+            fontFamily: {
+                sans: ['Space Grotesk', 'system-ui', 'sans-serif'],
+                display: ['Space Grotesk', 'system-ui', 'sans-serif'],
             },
             colors: {
                 background: 'hsl(var(--background))',
@@ -49,8 +48,31 @@ export default {
                     '3': 'hsl(var(--chart-3))',
                     '4': 'hsl(var(--chart-4))',
                     '5': 'hsl(var(--chart-5))'
-                }
-            }
+                },
+            },
+            borderRadius: {
+                DEFAULT: '0px',
+                none: '0px',
+                sm: '2px',
+            },
+            letterSpacing: {
+                tighter: '-0.05em',
+                tight: '-0.025em',
+                normal: '0em',
+                wide: '0.025em',
+                wider: '0.05em',
+                widest: '0.1em',
+            },
+            fontSize: {
+                'hero': 'clamp(3rem, 12vw, 14rem)',
+                'massive': 'clamp(4rem, 10vw, 12rem)',
+                'display': 'clamp(2.5rem, 8vw, 6rem)',
+            },
+            lineHeight: {
+                tighter: '0.9',
+                tight: '1.1',
+                normal: '1.5',
+            },
         }
     },
     plugins: [require("tailwindcss-animate")],

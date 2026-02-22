@@ -1,6 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import MovieCard from "@/components/MovieCard.astro";
+import FilterPanel from "@/components/FilterPanel.astro";
 import {
   Pagination,
   PaginationContent,
@@ -9,31 +10,46 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { getListByType, type ListItem } from "@/lib/phimapi";
+import {
+  getByCountry,
+  listQueryFromRequest,
+  parseListQuery,
+  toListSearchParams,
+  type ListItem,
+} from "@/lib/phimapi";
 
 const { type } = Astro.params;
-
 if (!type) {
-  throw new Error("Missing list type.");
+  throw new Error("Missing country slug.");
 }
 
-const data = await getListByType(type, { page: 1, limit: 10 });
+const requestUrl = new URL(Astro.request.url);
+const queryInput = listQueryFromRequest(requestUrl.searchParams);
+const query = parseListQuery(queryInput, { limit: 10 });
+
+const data = await getByCountry(type, query);
 const movies = data.data.items;
-const currentPage = 1;
+const currentPage = query.page;
 const totalPages = data.data.params.pagination.totalPages;
 
-function getPageUrl(pageNum: number) {
-  if (pageNum === 1) return `/danh-sach/${type}/`;
-  return `/danh-sach/${type}/${pageNum}`;
+function getPageUrl(pageNum: number): string {
+  const params = toListSearchParams({ ...query, page: pageNum });
+  return `/danh-sach/quoc-gia/${type}?${params.toString()}`;
 }
 ---
 
-<Layout title={type || "Danh sach phim"}>
+<Layout title={`Quoc gia ${type}`}>
   <main>
     <div class="flex flex-col items-center mt-2">
-      <div class="mx-4 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-20">
+      <div class="mx-4 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-20 w-full max-w-7xl">
         <section class="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-          <div class="container mx-auto px-4 py-8">
+          <FilterPanel
+            currentType={type}
+            currentPage={currentPage}
+            basePath="/danh-sach/quoc-gia"
+          />
+
+          <div class="w-full container mx-auto px-4 py-8">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
               {
                 movies.map((item: ListItem, index: number) => (

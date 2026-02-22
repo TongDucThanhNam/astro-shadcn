@@ -1,35 +1,29 @@
 ---
-import type { ResponseFlimType } from "@/types";
-
 import { Image } from "astro:assets";
-import { getSecret } from "astro:env/server";
+
 import { getCachedValue, setCachedValue } from "@/lib/server-cache";
+import { getLatestMovies, parseFeedVersion, type LatestFeedVersion } from "@/lib/phimapi";
 import { resolveImageUrl, imagePresets } from "@/lib/wsrv";
 
-const PUBLIC_PHIM_MOI = getSecret("PUBLIC_PHIM_MOI");
-const HERO_CACHE_KEY = "hero:latest";
-const HERO_CACHE_TTL_SECONDS = 3600 * 3; // keep the hero data warm for 3 hours
-
-let latestData: ResponseFlimType | undefined = getCachedValue<ResponseFlimType>(HERO_CACHE_KEY);
-
-if (!latestData && PUBLIC_PHIM_MOI) {
-    const latestResponse = await fetch(
-        `${PUBLIC_PHIM_MOI}/danh-sach/phim-moi-cap-nhat?page=1`,
-        {
-            cache: "force-cache",
-            headers: {
-                "Cache-Control": `max-age=${3600 * 6}, s-maxage=${3600 * 6}, stale-while-revalidate=${3600 * 12}`,
-            },
-        },
-    );
-
-    latestData = await latestResponse.json();
-    if (latestData) {
-        setCachedValue(HERO_CACHE_KEY, latestData, HERO_CACHE_TTL_SECONDS);
-    }
+interface Props {
+	feedVersion?: LatestFeedVersion;
 }
 
-const items = latestData?.items ?? [];
+const { feedVersion = "v1" } = Astro.props as Props;
+const selectedFeed = parseFeedVersion(feedVersion);
+const HERO_CACHE_KEY = `hero:latest:${selectedFeed}`;
+const HERO_CACHE_TTL_SECONDS = 3600 * 3;
+
+type LatestFeedResponse = Awaited<ReturnType<typeof getLatestMovies>>;
+
+let latestData = getCachedValue<LatestFeedResponse>(HERO_CACHE_KEY);
+
+if (!latestData) {
+	latestData = await getLatestMovies({ page: 1, feedVersion: selectedFeed });
+	setCachedValue(HERO_CACHE_KEY, latestData, HERO_CACHE_TTL_SECONDS);
+}
+
+const items = latestData.items ?? [];
 
 const featured = items.slice(0, 5);
 const hasFeatured = featured.length > 0;
@@ -37,15 +31,15 @@ const heroPreset = imagePresets.hero;
 ---
 
 <section
-    class="relative mx-auto flex w-full flex-col gap-10 px-4 pt-6 pb-12 sm:gap-12 sm:px-8 sm:pt-8"
+    class="relative mx-auto flex w-full flex-col gap-10 px-0 pt-6 pb-12 sm:gap-12 sm:px-0"
 >
     {
         hasFeatured ? (
-            <div class="relative rounded-3xl bg-slate-900/70 shadow-2xl ring-1 ring-white/10" data-carousel="hero">
-                <div class="relative min-h-[22rem] overflow-hidden sm:min-h-[28rem] md:min-h-[32rem]">
+            <div class="relative border-2 border-[#3F3F46]" data-carousel="hero">
+                <div class="relative min-h-[20rem] overflow-hidden sm:min-h-[26rem] md:min-h-[30rem] lg:min-h-[32rem]">
                     {featured.map((item, index) => (
                         <article
-                            class={`absolute inset-0 h-full w-full transition-opacity duration-500 ${
+                            class={`absolute inset-0 h-full w-full transition-opacity duration-1000 ${
                                 index === 0
                                     ? "z-20 opacity-100"
                                     : "z-10 pointer-events-none opacity-0"
@@ -54,7 +48,7 @@ const heroPreset = imagePresets.hero;
                             data-index={index}
                             aria-hidden={index === 0 ? "false" : "true"}
                         >
-                            <div class="absolute inset-0 overflow-hidden rounded-3xl">
+                            <div class="absolute inset-0 overflow-hidden">
                                 {(() => {
                                     const imageSource = resolveImageUrl(item?.thumb_url ?? item?.poster_url);
                                     if (!imageSource) return null;
@@ -71,41 +65,41 @@ const heroPreset = imagePresets.hero;
                                             fit="cover"
                                             loading={index === 0 ? "eager" : "lazy"}
                                             fetchpriority={index === 0 ? "high" : "auto"}
-                                            class="pointer-events-none h-full w-full object-cover opacity-70"
+                                            class="pointer-events-none h-full w-full object-cover opacity-80"
                                             style="mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.65) 70%, rgba(0, 0, 0, 0.4) 100%);"
                                         />
                                     );
                                 })()}
-                                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/20" />
+                                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#09090B] via-[#09090B]/50 to-transparent" />
                             </div>
 
-                            <div class="relative flex h-full flex-col justify-end gap-6 px-5 pb-14 pt-10 text-center sm:px-10 sm:text-left md:px-14 lg:px-20">
+                            <div class="relative flex h-full flex-col justify-end gap-5 sm:gap-6 px-4 pb-14 pt-10 sm:px-8 md:px-12 lg:px-16">
                                 <div class="flex justify-center sm:justify-start">
-                                    <span class="rounded-full bg-white/15 px-3 py-1 text-xs font-medium uppercase tracking-wide sm:text-sm">
+                                    <span class="bg-[#DFE104] px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-[#09090B] sm:px-5 sm:py-2 sm:text-sm">
                                         Mới cập nhật
-                                    </span>                                    
+                                    </span>
                                 </div>
 
-                                <div class="mx-auto max-w-xl space-y-3 sm:mx-0 sm:max-w-3xl">
-                                    <h1 class="text-3xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+                                <div class="mx-auto max-w-md sm:max-w-xl md:max-w-2xl lg:max-w-3xl space-y-2 sm:space-y-3">
+                                    <h1 class="text-3xl font-bold uppercase tracking-tighter text-[#FAFAFA] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
                                         {item.name}
                                     </h1>
-                                    <p class="text-sm text-white/80 sm:text-base">
+                                    <p class="text-sm text-[#A1A1AA] sm:text-base md:text-lg uppercase tracking-wide">
                                         {item.origin_name}
                                     </p>
                                 </div>
 
-                                <div class="flex flex-wrap items-center justify-center gap-3 sm:justify-start sm:gap-4">
+                                <div class="flex flex-wrap items-center justify-center gap-4 sm:justify-start sm:gap-6">
                                     <a
                                         href={`/phim/${item.slug}`}
-                                        class="inline-flex items-center justify-center rounded-full bg-white px-6 py-2 text-sm font-semibold text-slate-900 transition hover:bg-sky-200"
+                                        class="inline-flex items-center justify-center bg-[#DFE104] px-8 py-3 text-sm font-bold uppercase tracking-wider text-[#09090B] transition-all duration-300 hover:scale-105 hover:bg-[#DFE104]/90 focus:outline-none focus:ring-2 focus:ring-[#DFE104] focus:ring-offset-2 focus:ring-offset-[#09090B] sm:px-10 sm:py-4"
                                         tabindex={index === 0 ? "0" : "-1"}
                                     >
                                         Xem ngay
                                     </a>
                                     <a
                                         href={`/phim/${item.slug}`}
-                                        class="inline-flex items-center justify-center rounded-full border border-white/30 px-6 py-2 text-sm font-semibold text-white transition hover:border-white hover:bg-white/10"
+                                        class="inline-flex items-center justify-center border-2 border-[#3F3F46] bg-transparent px-8 py-3 text-sm font-bold uppercase tracking-wider text-[#FAFAFA] transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B] focus:outline-none focus:ring-2 focus:ring-[#DFE104] focus:ring-offset-2 focus:ring-offset-[#09090B] sm:px-10 sm:py-4"
                                         tabindex={index === 0 ? "0" : "-1"}
                                     >
                                         Chi tiết
@@ -121,41 +115,50 @@ const heroPreset = imagePresets.hero;
                         <div class="pointer-events-auto absolute inset-y-0 left-0 z-40 flex items-center px-2 sm:px-3">
                             <button
                                 type="button"
-                                class="z-50 inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-white shadow-lg ring-2 ring-sky-300/70 transition hover:bg-slate-800 sm:h-12 sm:w-12"
+                                class="z-50 inline-flex h-12 w-12 items-center justify-center border-2 border-[#3F3F46] bg-[#09090B]/80 text-[#FAFAFA] backdrop-blur-sm transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B] hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#DFE104] focus:ring-offset-2 focus:ring-offset-[#09090B]"
                                 data-prev
                                 aria-label="Phim trước"
                             >
-                                <span aria-hidden="true">‹</span>
+                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                </svg>
                             </button>
                         </div>
                         <div class="pointer-events-auto absolute inset-y-0 right-0 z-40 flex items-center px-2 sm:px-3">
                             <button
                                 type="button"
-                                class="z-50 inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-white shadow-lg ring-2 ring-sky-300/70 transition hover:bg-slate-800 sm:h-12 sm:w-12"
+                                class="z-50 inline-flex h-12 w-12 items-center justify-center border-2 border-[#3F3F46] bg-[#09090B]/80 text-[#FAFAFA] backdrop-blur-sm transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B] hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#DFE104] focus:ring-offset-2 focus:ring-offset-[#09090B]"
                                 data-next
                                 aria-label="Phim tiếp"
                             >
-                                <span aria-hidden="true">›</span>
+                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
                             </button>
                         </div>
-                        <div class="pointer-events-none absolute inset-x-0 bottom-8 z-40 flex justify-center gap-2">
-                            {featured.map((item, index) => (
-                                <button
-                                    type="button"
-                                    class={`pointer-events-auto h-2 w-8 rounded-full transition ${
-                                        index === 0 ? "bg-white" : "bg-white/30"
-                                    }`}
-                                    data-dot
-                                    data-index={index}
-                                    aria-label={`Chuyển tới phim ${item.name}`}
-                                />
-                            ))}
+                        <div class="pointer-events-none absolute inset-x-0 bottom-4 z-40 flex justify-center gap-2">
+                            <div class="flex items-center space-x-2">
+                                {featured.map((item, index) => (
+                                    <button
+                                        type="button"
+                                        class={`pointer-events-auto h-3 w-8 transition-all duration-300 ${
+                                            index === 0 ? "bg-[#DFE104]" : "bg-[#3F3F46] hover:bg-[#A1A1AA]"
+                                        }`}
+                                        data-dot
+                                        data-index={index}
+                                        aria-label={`Chuyển tới phim ${item.name}`}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                        <div class="pointer-events-none absolute bottom-4 right-4 z-40 border border-[#3F3F46] bg-[#09090B]/80 px-4 py-2 text-xs font-bold uppercase tracking-widest text-[#A1A1AA] backdrop-blur-sm">
+                            <span class="text-[#DFE104]" data-current>1</span> / <span data-total>{featured.length}</span>
                         </div>
                     </>
                 )}
             </div>
         ) : (
-            <div class="rounded-3xl border border-white/10 bg-slate-900/70 p-12 text-center text-sm text-white/70">
+            <div class="border-2 border-[#3F3F46] bg-[#09090B] p-12 text-center text-sm text-[#A1A1AA]">
                 Không thể tải dữ liệu phim mới. Vui lòng thử lại sau.
             </div>
         )
@@ -169,7 +172,14 @@ const heroPreset = imagePresets.hero;
                 const dots = Array.from(heroCarousel.querySelectorAll('[data-dot]'));
                 const prevButton = heroCarousel.querySelector('[data-prev]');
                 const nextButton = heroCarousel.querySelector('[data-next]');
+                const currentIndicator = heroCarousel.querySelector('[data-current]');
                 let activeIndex = 0;
+
+                const updateIndicators = () => {
+                    if (currentIndicator) {
+                        currentIndicator.textContent = (activeIndex + 1).toString();
+                    }
+                };
 
                 const toggleSlide = (index) => {
                     if (!slides.length) return;
@@ -183,7 +193,7 @@ const heroPreset = imagePresets.hero;
                         slide.classList.toggle('z-20', isActive);
                         slide.classList.toggle('z-10', !isActive);
                         slide.setAttribute('aria-hidden', (!isActive).toString());
-                        
+
                         // Update tabindex for all links in the slide
                         const links = slide.querySelectorAll('a');
                         links.forEach(link => {
@@ -193,9 +203,12 @@ const heroPreset = imagePresets.hero;
 
                     dots.forEach((dot, dotIndex) => {
                         const isActive = dotIndex === activeIndex;
-                        dot.classList.toggle('bg-white', isActive);
-                        dot.classList.toggle('bg-white/30', !isActive);
+                        dot.classList.toggle('bg-[#DFE104]', isActive);
+                        dot.classList.toggle('bg-[#3F3F46]', !isActive);
+                        dot.setAttribute('aria-pressed', isActive.toString());
                     });
+
+                    updateIndicators();
                 };
 
                 const handleNext = () => toggleSlide(activeIndex + 1);
@@ -257,6 +270,7 @@ const heroPreset = imagePresets.hero;
                     }
                 });
 
+                updateIndicators();
                 startAuto();
             }
         </script>

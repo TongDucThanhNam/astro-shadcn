@@ -1,16 +1,14 @@
 "use client"
 
 import * as React from "react"
-import { Film, Tv, Trophy, Radio } from "lucide-react"
+import { Film, Tv } from "lucide-react"
 
 import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
-  NavigationMenuList,
   NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 import { cn } from "@/lib/utils"
 
@@ -116,7 +114,7 @@ export function NavigationMenuDemo() {
                 Các phim chiếu rạp đầy đủ thể loại
               </ListItem>
               <ListItem
-                href="/danh-sach/tv-show"
+                href="/danh-sach/tv-shows"
                 title="TV Shows"
                 icon={Tv}
               >
@@ -143,17 +141,27 @@ export function NavigationMenuDemo() {
                           href="/"
                           className="text-sm font-medium text-foreground transition hover:text-primary"
                         >
-                          Browse Channels
+                          Feed V1
                         </a>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
                         <a
-                          href="/danh-sach/phim-moi-cap-nhat"
+                          href="/?feed=v2"
                           className="text-sm font-medium text-foreground transition hover:text-primary"
                         >
-                          New Releases
+                          Feed V2
+                        </a>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <a
+                          href="/?feed=v3"
+                          className="text-sm font-medium text-foreground transition hover:text-primary"
+                        >
+                          Feed V3
                         </a>
                       </NavigationMenuLink>
                     </li>
@@ -167,7 +175,7 @@ export function NavigationMenuDemo() {
                     <li>
                       <NavigationMenuLink asChild>
                         <a
-                          href="/danh-sach/hanh-dong"
+                          href="/danh-sach/the-loai/hanh-dong"
                           className="text-sm font-medium text-foreground transition hover:text-primary"
                         >
                           Hành Động
@@ -177,7 +185,7 @@ export function NavigationMenuDemo() {
                     <li>
                       <NavigationMenuLink asChild>
                         <a
-                          href="/danh-sach/tinh-cam"
+                          href="/danh-sach/the-loai/tinh-cam"
                           className="text-sm font-medium text-foreground transition hover:text-primary"
                         >
                           Tình Cảm
@@ -187,7 +195,7 @@ export function NavigationMenuDemo() {
                     <li>
                       <NavigationMenuLink asChild>
                         <a
-                          href="/danh-sach/co-trang"
+                          href="/danh-sach/the-loai/co-trang"
                           className="text-sm font-medium text-foreground transition hover:text-primary"
                         >
                           Cổ Trang

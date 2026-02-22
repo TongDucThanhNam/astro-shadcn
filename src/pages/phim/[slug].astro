@@ -1,48 +1,41 @@
 ---
-import { type MovieResponseDetail } from "../../types";
-import MovieDetailPage from "../../components/MovieDetailPage.astro";
-import Layout from "../../layouts/Layout.astro";
-const { slug } = Astro.params;
+import type { MovieResponseDetail } from "@/types";
+import MovieDetailPage from "@/components/MovieDetailPage.astro";
+import Layout from "@/layouts/Layout.astro";
 import "@/styles/globals.css";
-import { getSecret } from "astro:env/server";
+
 import {
-    CACHE_CONFIGS,
-    getCacheHeaders,
-    getAstroCacheHeaders,
+  CACHE_CONFIGS,
+  getAstroCacheHeaders,
+  getCacheHeaders,
 } from "@/lib/cache";
 import { getCachedValue, setCachedValue } from "@/lib/server-cache";
-const PUBLIC_PHIM_MOI = getSecret("PUBLIC_PHIM_MOI");
+import { getMovieDetail } from "@/lib/phimapi";
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  throw new Error("Missing movie slug.");
+}
+
 const cacheKey = `movie-detail:${slug}`;
 let data = getCachedValue<MovieResponseDetail>(cacheKey);
 
 if (!data) {
-    if (!PUBLIC_PHIM_MOI) {
-        throw new Error("Thiếu cấu hình API cho phim chi tiết.");
-    }
-
-    const response = await fetch(`${PUBLIC_PHIM_MOI}/phim/${slug}`, {
-        cache: "force-cache",
-        headers: getCacheHeaders(CACHE_CONFIGS.MOVIE_DETAIL),
-    });
-
-    if (!response.ok) {
-        throw new Error(`Không thể tải dữ liệu phim: ${response.status}`);
-    }
-
-    data = await response.json();
-    setCachedValue(cacheKey, data, CACHE_CONFIGS.MOVIE_DETAIL.maxAge);
+  data = await getMovieDetail(slug);
+  setCachedValue(cacheKey, data, CACHE_CONFIGS.MOVIE_DETAIL.maxAge);
 }
 
 const astroHeaders = {
-    ...getCacheHeaders(CACHE_CONFIGS.MOVIE_DETAIL),
-    ...getAstroCacheHeaders(),
+  ...getCacheHeaders(CACHE_CONFIGS.MOVIE_DETAIL),
+  ...getAstroCacheHeaders(),
 };
 
 for (const [key, value] of Object.entries(astroHeaders)) {
-    Astro.response.headers.set(key, value);
+  Astro.response.headers.set(key, value);
 }
 ---
 
-<Layout title="Chi tiet">
-    <MovieDetailPage data={data} slug={slug} />
+<Layout title={data.movie?.name ? `${data.movie.name} - AstroFlim` : "Chi tiet - AstroFlim"}>
+  <MovieDetailPage data={data} slug={slug} />
 </Layout>

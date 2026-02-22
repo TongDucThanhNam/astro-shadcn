@@ -11,24 +11,25 @@ import {
 } from "@/components/ui/pagination";
 import { getListByType, type ListItem } from "@/lib/phimapi";
 
-const { type } = Astro.params;
+const { type, page } = Astro.params;
 
 if (!type) {
   throw new Error("Missing list type.");
 }
 
-const data = await getListByType(type, { page: 1, limit: 10 });
+const pageNum = Number(page) > 0 ? Number(page) : 1;
+const data = await getListByType(type, { page: pageNum, limit: 10 });
 const movies = data.data.items;
-const currentPage = 1;
+const currentPage = pageNum;
 const totalPages = data.data.params.pagination.totalPages;
 
-function getPageUrl(pageNum: number) {
-  if (pageNum === 1) return `/danh-sach/${type}/`;
-  return `/danh-sach/${type}/${pageNum}`;
+function getPageUrl(pageNumber: number) {
+  if (pageNumber === 1) return `/danh-sach/${type}/`;
+  return `/danh-sach/${type}/${pageNumber}`;
 }
 ---
 
-<Layout title={type || "Danh sach phim"}>
+<Layout title={`${type} - Trang ${currentPage}`}>
   <main>
     <div class="flex flex-col items-center mt-2">
       <div class="mx-4 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-20">

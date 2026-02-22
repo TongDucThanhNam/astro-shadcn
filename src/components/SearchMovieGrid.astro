@@ -1,58 +1,32 @@
 ---
-import type { Item } from "../types";
 import MovieCard from "./MovieCard.astro";
+import { searchMovies, type ListItem, type QueryInput } from "@/lib/phimapi";
 
-const { api, filters = {} } = Astro.props;
+interface Props {
+  filters?: QueryInput;
+}
+
+const { filters = {} } = Astro.props as Props;
 const keyword = Astro.params.keyword ?? "";
 
-const queryParams = new URLSearchParams(filters as Record<string, string>);
-
-if (!queryParams.has("limit")) {
-    queryParams.set("limit", "32");
-}
-
-if (!queryParams.has("page")) {
-    queryParams.set("page", "1");
-}
-
-if (!queryParams.has("sort_field")) {
-    queryParams.set("sort_field", "modified.time");
-}
-
-if (!queryParams.has("sort_type")) {
-    queryParams.set("sort_type", "desc");
-}
-
-const queryString = queryParams.toString();
-
-const searchKeyword = encodeURIComponent(keyword);
-
-const response = await fetch(
-    `${api}/v1/api/tim-kiem?keyword=${searchKeyword}${
-        queryString ? `&${queryString}` : ""
-    }`,
-);
-const data: any = await response.json();
-const APP_DOMAIN_CDN_IMAGE = data?.data?.APP_DOMAIN_CDN_IMAGE ?? "";
-const movies = data?.data?.items ?? [];
+const data = await searchMovies(keyword, filters);
+const movies = data.data.items;
 ---
 
 <section class="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-    <div class="container mx-auto px-4 py-8">
-        <div
-            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6"
-        >
-            {
-                movies.map((item: Item, index: number) => (
-                    <MovieCard
-                        index={index}
-                        slug={item.slug}
-                        name={item.name}
-                        image={item.poster_url}
-                        year={item.year.toString()}
-                    />
-                ))
-            }
-        </div>
+  <div class="container mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+      {
+        movies.map((item: ListItem, index: number) => (
+          <MovieCard
+            index={index}
+            slug={item.slug}
+            name={item.name}
+            image={item.poster_url}
+            year={item.year.toString()}
+          />
+        ))
+      }
     </div>
+  </div>
 </section>

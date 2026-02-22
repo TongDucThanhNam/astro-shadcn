@@ -2,9 +2,11 @@
 import Layout from "../layouts/Layout.astro";
 import MovieGrid from "../components/MovieGrid.astro";
 import MovieTypeSelector from "../components/MovieTypeSelector";
-import { getSecret } from "astro:env/server";
-const PUBLIC_PHIM_MOI = getSecret("PUBLIC_PHIM_MOI");
+import { parseFeedVersion } from "@/lib/phimapi";
+
 const { page } = Astro.params;
+const requestUrl = new URL(Astro.request.url);
+const feedVersion = parseFeedVersion(requestUrl.searchParams.get("feed"));
 ---
 
 <Layout title="Astro flim.">
@@ -21,7 +23,7 @@ const { page } = Astro.params;
         <div class="flex flex-col items-center mt-2">
             <!-- Movies Grid -->
             <div class="mx-4 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-20">
-                <MovieGrid api={PUBLIC_PHIM_MOI} page={page} />
+                <MovieGrid page={page} feedVersion={feedVersion} />
             </div>
         </div>
     </main>

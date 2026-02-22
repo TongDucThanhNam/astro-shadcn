@@ -22,8 +22,8 @@ const menuItems: MenuItem[] = [
     submenu: [
       { title: "Phim lẻ", href: "/danh-sach/phim-le" },
       { title: "Phim bộ", href: "/danh-sach/phim-bo" },
-      { title: "TV Shows", href: "/danh-sach/tv-show" },
-      { title: "Phim chiếu rạp", href: "/danh-sach/phim-chieu-rap" },
+      { title: "TV Shows", href: "/danh-sach/tv-shows" },
+      { title: "Phim Vietsub", href: "/danh-sach/phim-vietsub" },
     ],
   },
   {

@@ -52,3 +52,9 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+
+## API Integration
+
+Project-specific API integration details (PhimAPI coverage, canonical client, runtime schema validation, query invariants):
+
+- `docs/api-integration.md`

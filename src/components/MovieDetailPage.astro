@@ -1,19 +1,5 @@
 ---
-import {
-    Star,
-    Calendar,
-    Eye,
-    Play,
-    Share2,
-    ThumbsUp,
-    Plus,
-} from "lucide-react";
 import { Image } from "astro:assets";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import EpisodeSelector from "./EpisodeSelector";
 import VideoPlayer from "./VideoPlayer";
 import { resolveImageUrl, imagePresets } from "@/lib/wsrv";
 
@@ -28,233 +14,428 @@ const posterPreset = imagePresets.poster;
 
 const heroSource = resolveImageUrl(movie.thumb_url ?? movie.poster_url);
 const posterSource = resolveImageUrl(movie.poster_url ?? movie.thumb_url);
+
+const rating = movie.tmdb?.vote_average ? Number(movie.tmdb.vote_average).toFixed(1) : "0.0";
+const ratingPercent = Math.round((Number(rating) / 10) * 100);
 ---
 
-<div class="container mx-auto py-10 space-y-10">
-    <!-- Movie Details -->
-    <section
-        class="relative isolate overflow-hidden rounded-3xl bg-slate-950 text-slate-50 shadow-2xl"
-    >
-        <div class="absolute inset-0">
-            {
-                heroSource ? (
-                    <Image
-                        loading="eager"
-                        fetchpriority="high"
-                        src={heroSource}
-                        alt={movie.name}
-                        width={heroPreset.dimension.width}
-                        height={heroPreset.dimension.height}
-                        widths={heroPreset.widths}
-                        sizes={heroPreset.sizes}
-                        quality={heroPreset.quality}
-                        fit="cover"
-                        class="h-full w-full object-cover"
-                        transition:name={`poster-${slug}`}
-                    />
-                ) : null
-            }
-            <div
-                class="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/85 to-slate-900/20"
-                aria-hidden="true"
-            >
-            </div>
-        </div>
-        <div
-            class="relative z-10 flex flex-col gap-10 px-6 py-12 md:flex-row md:items-center"
-        >
-            <div class="mx-auto w-full max-w-sm shrink-0 md:mx-0">
-                <Card
-                    className="overflow-hidden rounded-3xl border-slate-800/60 bg-slate-900/70 shadow-2xl shadow-slate-950/40"
+<!-- Hero Section -->
+<section class="relative min-h-screen overflow-hidden">
+    <!-- Background Number Effect -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+        <span class="absolute -right-20 -top-20 text-[20rem] md:text-[30rem] font-bold text-[#27272A] opacity-50 select-none uppercase tracking-tighter">
+            {movie.episode_total > 1 ? "SERIES" : "MOVIE"}
+        </span>
+    </div>
+
+    <!-- Hero Backdrop -->
+    <div class="absolute inset-0">
+        {heroSource ? (
+            <Image
+                loading="eager"
+                fetchpriority="high"
+                src={heroSource}
+                alt={movie.name}
+                width={heroPreset.dimension.width}
+                height={heroPreset.dimension.height}
+                widths={heroPreset.widths}
+                sizes={heroPreset.sizes}
+                quality={heroPreset.quality}
+                fit="cover"
+                class="h-full w-full object-cover opacity-40"
+                transition:name={`poster-${slug}`}
+            />
+        ) : null}
+        <div class="absolute inset-0 bg-gradient-to-r from-[#09090B] via-[#09090B]/95 to-transparent"></div>
+        <!-- Shine effect -->
+        <div class="absolute inset-0 shine-effect pointer-events-none"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="relative z-10 container mx-auto px-4 lg:px-8 py-12 lg:py-20">
+        <div class="flex flex-col lg:flex-row gap-8 lg:gap-16 items-start">
+            <!-- Poster -->
+            <div class="w-full max-w-[280px] lg:max-w-[320px] mx-auto lg:mx-0 flex-shrink-0">
+                <div
+                    class="border-2 border-[#3F3F46] bg-[#09090B] overflow-hidden transition-all duration-300 hover:scale-[1.02] group"
+                    transition:name={`image-${slug}`}
                 >
-                    <CardContent className="p-0">
-                        {
-                            posterSource ? (
-                                <Image
-                                    loading="eager"
-                                    fetchpriority="high"
-                                    src={posterSource}
-                                    alt={movie.name}
-                                    width={posterPreset.dimension.width}
-                                    height={posterPreset.dimension.height}
-                                    widths={posterPreset.widths}
-                                    sizes="(max-width: 768px) 60vw, 320px"
-                                    quality={posterPreset.quality}
-                                    fit="cover"
-                                    transition:name={`image-${slug}`}
-                                    class="h-full w-full object-cover"
-                                />
-                            ) : (
-                                <div class="flex aspect-[2/3] w-full items-center justify-center bg-slate-800 text-sm text-white/60">
-                                    No Image
-                                </div>
-                            )
-                        }
-                    </CardContent>
-                </Card>
+                    {posterSource ? (
+                        <Image
+                            loading="eager"
+                            fetchpriority="high"
+                            src={posterSource}
+                            alt={movie.name}
+                            width={posterPreset.dimension.width}
+                            height={posterPreset.dimension.height}
+                            widths={posterPreset.widths}
+                            sizes="(max-width: 768px) 60vw, 320px"
+                            quality={posterPreset.quality}
+                            fit="cover"
+                            class="h-full w-full object-cover group-hover:opacity-80 transition-opacity"
+                        />
+                    ) : (
+                        <div class="flex aspect-[2/3] w-full items-center justify-center bg-[#27272A] text-sm text-[#A1A1AA]">
+                            No Image
+                        </div>
+                    )}
+                </div>
             </div>
 
-            <div class="space-y-6 md:w-2/3">
-                <div class="space-y-3">
-                    <div
-                        class="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.35em] text-slate-300/90"
-                    >
-                        <span
-                            >{
-                                movie.episode_total > 1 ? "Series" : "Movie"
-                            }</span
-                        >
-                        <Separator
-                            orientation="vertical"
-                            className="h-6 bg-slate-700/70"
-                        />
-                        <span>{movie.status}</span>
-                    </div>
-                    <h1
-                        class="text-3xl font-semibold tracking-tight text-slate-50 sm:text-4xl md:text-5xl"
-                    >
+            <!-- Info -->
+            <div class="flex-1 space-y-6">
+                <!-- Meta -->
+                <div class="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.35em] text-[#A1A1AA]">
+                    <span>{movie.episode_total > 1 ? "Series" : "Movie"}</span>
+                    <span class="w-6 h-[1px] bg-[#3F3F46]"></span>
+                    <span class="text-[#DFE104]">{movie.status}</span>
+                </div>
+
+                <!-- Title -->
+                <div class="space-y-2">
+                    <h1 class="text-3xl font-bold uppercase tracking-tighter text-[#FAFAFA] sm:text-4xl md:text-5xl lg:text-6xl">
                         {movie.name}
                     </h1>
-                    <p class="text-lg text-slate-300">
+                    <p class="text-lg text-[#A1A1AA] uppercase tracking-wide">
                         {movie.origin_name}
                     </p>
-                    <div
-                        class="flex flex-wrap items-center gap-3 text-sm text-slate-200/80"
-                    >
-                        <Badge
-                            variant="secondary"
-                            className="rounded-full bg-slate-900/70 px-3 py-1 font-medium text-slate-100"
-                        >
-                            <Calendar
-                                className="mr-2 h-4 w-4 text-slate-200/80"
-                            />{movie.year}
-                        </Badge>
-                        <Badge
-                            variant="secondary"
-                            className="rounded-full bg-amber-500/10 px-3 py-1 font-medium text-amber-200"
-                        >
-                            {
-                                movie.episode_total > 1
-                                    ? `${movie.episode_current}/${movie.episode_total} tập`
-                                    : movie.time
-                            }
-                        </Badge>
-                        <span class="flex items-center gap-2">
-                            <Star className="h-4 w-4 text-yellow-300" />{
-                                movie.tmdb.vote_average
-                            } / 10
+                </div>
+
+                <!-- Stats Row -->
+                <div class="flex flex-wrap items-center gap-6">
+                    <!-- Rating -->
+                    <div class="flex items-center gap-2">
+                        <span class="text-[#DFE104] font-bold text-xl">★ {rating}</span>
+                        <span class="text-[#A1A1AA] text-sm">/10</span>
+                    </div>
+
+                    <!-- Other Stats -->
+                    <div class="flex flex-wrap items-center gap-4 text-sm text-[#A1A1AA]">
+                        <span class="uppercase tracking-wider">{movie.year}</span>
+                        <span class="w-1 h-1 bg-[#3F3F46]"></span>
+                        <span>
+                            {movie.episode_total > 1
+                                ? `${movie.episode_current}/${movie.episode_total} tập`
+                                : movie.time || "N/A"}
                         </span>
-                        <span class="flex items-center gap-2">
-                            <Eye className="h-4 w-4" />{
-                                viewFormatter.format(Number(movie.view) || 0)
-                            } lượt xem
-                        </span>
+                        <span class="w-1 h-1 bg-[#3F3F46]"></span>
+                        <span>{viewFormatter.format(Number(movie.view) || 0)} lượt xem</span>
                     </div>
                 </div>
 
+                <!-- Categories -->
                 <div class="flex flex-wrap gap-2">
-                    {
-                        movie.category.map((cat: { name: string }) => (
-                            <Badge
-                                variant="secondary"
-                                className="rounded-full bg-slate-900/70 px-3 py-1 text-slate-100"
-                            >
-                                {cat.name}
-                            </Badge>
-                        ))
-                    }
-                    {
-                        movie.country.map((country: { name: string }) => (
-                            <Badge
-                                variant="outline"
-                                className="rounded-full border-slate-700/80 bg-slate-900/40 px-3 py-1 text-slate-200"
-                            >
-                                {country.name}
-                            </Badge>
-                        ))
-                    }
+                    {movie.category?.map((cat: { name: string }) => (
+                        <span class="border border-[#3F3F46] bg-[#09090B] px-3 py-1 text-xs uppercase tracking-wider text-[#FAFAFA] hover:bg-[#DFE104] hover:text-[#000] hover:border-[#DFE104] transition-all cursor-pointer">
+                            {cat.name}
+                        </span>
+                    ))}
+                    {movie.country?.map((country: { name: string }) => (
+                        <span class="border border-[#DFE104] bg-[#DFE104]/10 px-3 py-1 text-xs uppercase tracking-wider text-[#DFE104]">
+                            {country.name}
+                        </span>
+                    ))}
                 </div>
 
-                <div class="flex flex-col gap-3 text-sm text-slate-200">
+                <!-- Crew -->
+                <div class="flex flex-col gap-1 text-sm text-[#A1A1AA]">
                     <span>
-                        <strong class="text-slate-100">Đạo diễn:</strong>
-                        {
-                            movie.director.length
-                                ? ` ${movie.director.join(", ")}`
-                                : " Đang cập nhật"
-                        }
+                        <strong class="text-[#FAFAFA] font-medium">Đạo diễn:</strong>
+                        {movie.director?.length ? ` ${movie.director.join(", ")}` : " Đang cập nhật"}
                     </span>
                     <span>
-                        <strong class="text-slate-100">Diễn viên:</strong>
-                        {
-                            movie.actor.length
-                                ? ` ${movie.actor.join(", ")}`
-                                : " Đang cập nhật"
-                        }
+                        <strong class="text-[#FAFAFA] font-medium">Diễn viên:</strong>
+                        {movie.actor?.length ? ` ${movie.actor.join(", ")}` : " Đang cập nhật"}
                     </span>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-4">
-                    <Button
-                        asChild
-                        size="lg"
-                        className="rounded-full bg-slate-50 px-6 text-slate-900 hover:bg-white"
+                <!-- Actions -->
+                <div class="flex flex-wrap items-center gap-4 pt-2">
+                    <!-- Primary Button - Acid Yellow -->
+                    <a
+                        href="#episode-selection"
+                        class="uppercase tracking-tighter font-bold bg-[#DFE104] text-black px-6 py-3 hover:scale-105 transition-all inline-flex items-center gap-2"
                     >
-                        <a
-                            href="#episode-selection"
-                            class="h-9 flex items-center gap-2 rounded-full bg-slate-50 px-6 text-slate-900 hover:bg-white"
-                        >
-                            <Play className="h-4 w-4" /> Xem ngay
-                        </a>
-                    </Button>
-                    <div class="flex flex-wrap gap-3 text-slate-200/80">
-                        <button
-                            class="flex items-center gap-2 rounded-full border border-slate-700/80 px-4 py-2 text-sm backdrop-blur-sm transition hover:border-slate-500"
-                        >
-                            <Plus className="h-4 w-4" /> Thêm vào danh sách
-                        </button>
-                        <button
-                            class="flex items-center gap-2 rounded-full border border-slate-700/80 px-4 py-2 text-sm backdrop-blur-sm transition hover:border-slate-500"
-                        >
-                            <ThumbsUp className="h-4 w-4" /> Thích
-                        </button>
-                        <button
-                            class="flex items-center gap-2 rounded-full border border-slate-700/80 px-4 py-2 text-sm backdrop-blur-sm transition hover:border-slate-500"
-                        >
-                            <Share2 className="h-4 w-4" /> Chia sẻ
-                        </button>
-                    </div>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                        Xem ngay
+                    </a>
+
+                    <!-- Outline Buttons -->
+                    <button
+                        class="uppercase tracking-tighter font-bold border-2 border-[#3F3F46] bg-transparent px-4 py-2 text-[#FAFAFA] hover:bg-[#FAFAFA] hover:text-[#09090B] hover:border-[#FAFAFA] transition-all inline-flex items-center gap-2"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Thêm vào danh sách
+                    </button>
+                    <button
+                        class="uppercase tracking-tighter font-bold border-2 border-[#3F3F46] bg-transparent px-4 py-2 text-[#FAFAFA] hover:bg-[#FAFAFA] hover:text-[#09090B] hover:border-[#FAFAFA] transition-all inline-flex items-center gap-2"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
+                        </svg>
+                        Thích
+                    </button>
+                    <button
+                        class="uppercase tracking-tighter font-bold border-2 border-[#3F3F46] bg-transparent px-4 py-2 text-[#FAFAFA] hover:bg-[#FAFAFA] hover:text-[#09090B] hover:border-[#FAFAFA] transition-all inline-flex items-center gap-2"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                        </svg>
+                        Chia sẻ
+                    </button>
                 </div>
 
-                <p class="max-w-2xl text-base leading-relaxed text-slate-200">
-                    {movie.content}
-                </p>
+                <!-- Synopsis -->
+                <div class="max-w-2xl pt-4">
+                    <p class="text-base leading-relaxed text-[#A1A1AA]">
+                        {movie.content}
+                    </p>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Episode Selection -->
-    <section class="space-y-6" id="episode-selection">
-        <section class="space-y-6">
-            <h2 class="text-xl font-semibold text-slate-50">Chọn tập</h2>
-            <Separator className="bg-slate-800" />
-            {
-                episodes.length > 0 ? (
-                    <EpisodeSelector client:load episodes={episodes} />
+<!-- Episode Selection -->
+<section class="py-12 lg:py-16 bg-[#09090B]" id="episode-selection">
+    <div class="container mx-auto px-4 lg:px-8">
+        <div class="border-t-2 border-[#3F3F46] pt-8">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-2xl font-bold uppercase tracking-tighter text-[#FAFAFA]">Chọn Tập</h2>
+                <div class="flex items-center gap-2 text-sm text-[#A1A1AA]">
+                    <span class="w-2 h-2 bg-emerald-500"></span>
+                    <span class="uppercase tracking-wider">{movie.episode_total > 1 ? `${movie.episode_current}/${movie.episode_total} tập đã cập nhật` : "Hoàn tất"}</span>
+                </div>
+            </div>
+
+            <!-- Server Tabs -->
+            <div class="flex gap-0 mb-6 overflow-x-auto">
+                <button class="server-tab active px-6 py-2 text-sm font-bold uppercase tracking-wider bg-[#DFE104] text-black border-2 border-[#DFE104]" data-server="1">
+                    Server #1
+                </button>
+                <button class="server-tab px-6 py-2 text-sm font-bold uppercase tracking-wider bg-transparent text-[#A1A1AA] border-2 border-[#3F3F46] border-l-0 hover:border-[#DFE104] hover:text-[#DFE104] transition-all" data-server="2">
+                    Server #2
+                </button>
+                <button class="server-tab px-6 py-2 text-sm font-bold uppercase tracking-wider bg-transparent text-[#A1A1AA] border-2 border-[#3F3F46] border-l-0 hover:border-[#DFE104] hover:text-[#DFE104] transition-all" data-server="3">
+                    Server VIP
+                </button>
+            </div>
+
+            <!-- Episode Grid -->
+            <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-2">
+                {episodes.length > 0 ? (
+                    episodes.map((ep: { id: number; name: string; slug: string }) => (
+                        <button
+                            class="episode-item group"
+                            data-episode={ep.id}
+                            aria-label={`Xem ${ep.name}`}
+                        >
+                            <span class="text-sm font-bold text-[#FAFAFA] group-hover:text-black group-hover:bg-[#DFE104] group-hover:border-[#DFE104] transition-all">
+                                {ep.id}
+                            </span>
+                        </button>
+                    ))
                 ) : (
-                    <p class="text-slate-400">
-                        Hiện chưa có tập nào được cập nhật.
-                    </p>
-                )
-            }
-        </section>
+                    <p class="text-[#A1A1AA]">Hiện chưa có tập nào được cập nhật.</p>
+                )}
+            </div>
+        </div>
+    </div>
+</section>
 
-        <section class="space-y-6">
-            <h2 class="text-xl font-semibold text-slate-50">
-                Xem Trailer / Tập
+<!-- Video Player -->
+<section class="py-12 lg:py-16 bg-[#09090B]">
+    <div class="container mx-auto px-4 lg:px-8">
+        <div class="border-t-2 border-[#3F3F46] pt-8">
+            <h2 class="text-2xl font-bold uppercase tracking-tighter mb-8 text-[#FAFAFA]">
+                Đang Phát: Tập 1
             </h2>
-            <Separator className="bg-slate-800" />
-            <VideoPlayer client:load />
-        </section>
-    </section>
-</div>
+            <div class="border-2 border-[#3F3F46] bg-[#09090B] aspect-video flex items-center justify-center">
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-[#DFE104] flex items-center justify-center mx-auto mb-4 hover:scale-110 transition-transform cursor-pointer">
+                        <svg class="w-8 h-8 text-black ml-1" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                    </div>
+                    <p class="text-[#A1A1AA] text-sm uppercase tracking-wider">Nhấn vào để phát</p>
+                </div>
+                <!-- Video Player component -->
+                <VideoPlayer client:load />
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Current state
+    let currentEpisode = 1;
+    let currentServer = 1;
+
+    // DOM Elements
+    const playButton = document.querySelector('.play-button-large');
+    const watchBtn = document.querySelector('#watchBtn');
+    const bookmarkBtn = document.getElementById('bookmarkBtn');
+    const likeBtn = document.getElementById('likeBtn');
+    const shareBtn = document.getElementById('shareBtn');
+    const serverTabs = document.querySelectorAll('.server-tab');
+
+    // Select Episode
+    function selectEpisode(id: number) {
+        currentEpisode = id;
+        const items = document.querySelectorAll('.episode-item');
+        items.forEach(item => {
+            const itemId = parseInt((item as HTMLElement).dataset.episode || '0');
+            const isActive = itemId === id;
+            item.classList.toggle('bg-[#DFE104]', isActive);
+            item.classList.toggle('border-[#DFE104]', isActive);
+            item.classList.toggle('text-black', isActive);
+        });
+
+        // Update heading
+        const heading = document.querySelector('#episode-selection + section h2');
+        if (heading) {
+            heading.textContent = `Đang Phát: Tập ${id}`;
+        }
+
+        // Scroll to player
+        const playerSection = document.querySelector('#episode-selection + section');
+        if (playerSection) {
+            playerSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+
+    // Add click handlers to episode items
+    document.querySelectorAll('.episode-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const episodeId = parseInt((item as HTMLElement).dataset.episode || '0');
+            selectEpisode(episodeId);
+        });
+    });
+
+    // Server Tab Click
+    serverTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            currentServer = parseInt((tab as HTMLElement).dataset.server || '1');
+            serverTabs.forEach(t => {
+                const isActive = t === tab;
+                t.classList.toggle('bg-[#DFE104]', isActive);
+                t.classList.toggle('text-black', isActive);
+                t.classList.toggle('border-[#DFE104]', isActive);
+                t.classList.toggle('bg-transparent', !isActive);
+                t.classList.toggle('text-[#A1A1AA]', !isActive);
+                t.classList.toggle('border-[#3F3F46]', !isActive);
+                t.classList.toggle('border-l-0', !isActive);
+            });
+        });
+    });
+
+    // Button Interactions - Kinetic Typography hover invert effect
+    if (bookmarkBtn) {
+        bookmarkBtn.addEventListener('click', function() {
+            this.classList.toggle('bg-[#DFE104]');
+            this.classList.toggle('text-black');
+            this.classList.toggle('border-[#DFE104]');
+            this.classList.toggle('bg-transparent');
+            this.classList.toggle('text-[#FAFAFA]');
+            this.classList.toggle('border-[#3F3F46]');
+        });
+    }
+
+    if (likeBtn) {
+        likeBtn.addEventListener('click', function() {
+            this.classList.toggle('bg-[#DFE104]');
+            this.classList.toggle('text-black');
+            this.classList.toggle('border-[#DFE104]');
+            this.classList.toggle('bg-transparent');
+            this.classList.toggle('text-[#FAFAFA]');
+            this.classList.toggle('border-[#3F3F46]');
+        });
+    }
+
+    if (shareBtn) {
+        shareBtn.addEventListener('click', () => {
+            if (navigator.share) {
+                navigator.share({
+                    title: document.title,
+                    text: 'Xem phim',
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                alert('Link đã được sao chép!');
+            }
+        });
+    }
+
+    if (playButton) {
+        playButton.addEventListener('click', () => {
+            (playButton as HTMLElement).style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                (playButton as HTMLElement).style.transform = 'scale(1)';
+            }, 150);
+        });
+    }
+</script>
+
+<style>
+    /* Shine effect animation */
+    .shine-effect::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.1),
+            transparent
+        );
+        transform: skewX(-20deg);
+        animation: shine 8s infinite;
+    }
+
+    @keyframes shine {
+        0% {
+            left: -100%;
+        }
+        20% {
+            left: 200%;
+        }
+        100% {
+            left: 200%;
+        }
+    }
+
+    /* Episode Item - Sharp corners, border-2 */
+    .episode-item {
+        padding: 16px 20px;
+        background: transparent;
+        border: 2px solid #3F3F46;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .episode-item:hover {
+        border-color: #DFE104;
+        background: #DFE104;
+    }
+
+    .episode-item:hover span {
+        color: black;
+    }
+
+    .episode-item.active {
+        border-color: #DFE104;
+        background: #DFE104;
+    }
+
+    .episode-item.active span {
+        color: black;
+    }
+</style>

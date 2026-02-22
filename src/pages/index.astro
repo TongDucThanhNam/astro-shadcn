@@ -2,12 +2,16 @@
 import HeroMovie from "@/components/HeroMovie.astro";
 import Layout from "../layouts/Layout.astro";
 import BatchedHomeSections from "@/components/ui/sections/BatchedHomeSections.astro";
+import { parseFeedVersion } from "@/lib/phimapi";
+
+const requestUrl = new URL(Astro.request.url);
+const feedVersion = parseFeedVersion(requestUrl.searchParams.get("feed"));
 ---
 
 <Layout title="AstroFlim Prime">
     <main class="text-white">
         <!-- Hero Movie Section -->
-        <HeroMovie />
+        <HeroMovie feedVersion={feedVersion} />
 
         <BatchedHomeSections />
     </main>

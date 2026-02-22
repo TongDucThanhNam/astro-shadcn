@@ -1,34 +1,11 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import MovieTypeSelector from "@/components/MovieTypeSelector";
 import SearchMovieGrid from "@/components/SearchMovieGrid.astro";
+import { listQueryFromRequest } from "@/lib/phimapi";
 
 const requestUrl = new URL(Astro.request.url);
 const searchParams = requestUrl.searchParams;
-
-const allowedFilters = [
-    "page",
-    "sort_field",
-    "sort_type",
-    "sort_lang",
-    "category",
-    "country",
-    "year",
-    "limit",
-];
-
-const filters: Record<string, string> = {};
-
-for (const key of allowedFilters) {
-    const value = searchParams.get(key);
-    if (value) {
-        filters[key] = value;
-    }
-}
-
-// const PUBLIC_PHIM_MOI = import.meta.env.PUBLIC_PHIM_MOI;
-import { getSecret } from "astro:env/server";
-const PUBLIC_PHIM_MOI = getSecret("PUBLIC_PHIM_MOI");
+const filters = listQueryFromRequest(searchParams);
 ---
 
 <Layout title="Astro flim.">
@@ -36,7 +13,7 @@ const PUBLIC_PHIM_MOI = getSecret("PUBLIC_PHIM_MOI");
         <div class="flex flex-col items-center mt-2">
             <!-- Movies Grid -->
             <div class="mx-4 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-20">
-                <SearchMovieGrid api={PUBLIC_PHIM_MOI} filters={filters} />
+                <SearchMovieGrid filters={filters} />
             </div>
         </div>
     </main>

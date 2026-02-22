@@ -1,8 +1,11 @@
-// Batched API service for optimized performance
-import { getSecret } from "astro:env/server";
-import { CACHE_CONFIGS, getCacheHeaders } from "./cache";
-import type { Item } from "@/types";
+import { CACHE_CONFIGS } from "./cache";
 import { getCachedValue, setCachedValue } from "./server-cache";
+import {
+  PhimApiClientError,
+  getListByType,
+  type ListItem,
+  type QueryInput,
+} from "@/lib/phimapi";
 
 export interface SectionRequest {
   key: string;
@@ -12,7 +15,7 @@ export interface SectionRequest {
 
 export interface SectionResponse {
   key: string;
-  items: Item[];
+  items: ListItem[];
   error?: string;
 }
 
@@ -20,59 +23,35 @@ export interface BatchedResponse {
   sections: SectionResponse[];
 }
 
-const PUBLIC_PHIM_MOI = getSecret("PUBLIC_PHIM_MOI");
-
-/**
- * Fetch multiple sections in a single API call
- */
-export async function fetchBatchedSections(requests: SectionRequest[]): Promise<BatchedResponse> {
-  if (!PUBLIC_PHIM_MOI) {
-    return {
-      sections: requests.map(req => ({
-        key: req.key,
-        items: [],
-        error: "Thiếu cấu hình API."
-      }))
-    };
-  }
-
-  // For now, we'll make individual calls but with better caching
-  // In the future, we could implement a batched endpoint on the API side
+export async function fetchBatchedSections(
+  requests: SectionRequest[],
+): Promise<BatchedResponse> {
   const promises = requests.map(async (req) => {
     try {
-      const requestUrl = new URL(`/v1/api/danh-sach/${req.typeList}`, PUBLIC_PHIM_MOI);
-      const searchParams = new URLSearchParams(req.params);
-      requestUrl.search = searchParams.toString();
-
-      const cacheKey = `section:${req.typeList}?${searchParams.toString()}`;
+      const query = req.params as QueryInput;
+      const cacheKey = `section:${req.typeList}?${new URLSearchParams(req.params).toString()}`;
       const cached = getCachedValue<SectionResponse>(cacheKey);
       if (cached) {
         return cached;
       }
 
-      const response = await fetch(requestUrl.toString(), {
-        cache: "force-cache",
-        headers: getCacheHeaders(CACHE_CONFIGS.SECTION_DATA),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
-
-      const data = await response.json();
+      const data = await getListByType(req.typeList, query);
       const result: SectionResponse = {
         key: req.key,
-        items: data.data?.items ?? [],
+        items: data.data.items,
       };
 
       setCachedValue(cacheKey, result, CACHE_CONFIGS.SECTION_DATA.maxAge);
-
       return result;
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message =
+        error instanceof PhimApiClientError
+          ? error.message
+          : "Khong the tai du lieu.";
       return {
         key: req.key,
         items: [],
-        error: error?.message ?? "Không thể tải dữ liệu.",
+        error: message,
       };
     }
   });
@@ -81,10 +60,9 @@ export async function fetchBatchedSections(requests: SectionRequest[]): Promise<
   return { sections };
 }
 
-/**
- * Get section data with optimized caching
- */
-export async function getOptimizedSectionData(config: SectionRequest): Promise<SectionResponse> {
+export async function getOptimizedSectionData(
+  config: SectionRequest,
+): Promise<SectionResponse> {
   const result = await fetchBatchedSections([config]);
   return result.sections[0];
 }

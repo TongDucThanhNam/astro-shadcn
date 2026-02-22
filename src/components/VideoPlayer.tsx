@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Toggle } from "@/components/ui/toggle";
 import { AdvancedPlayer } from "./AdvancedPlayer";
 
 const VideoPlayer: React.FC = () => {

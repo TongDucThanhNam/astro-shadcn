@@ -115,7 +115,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
   };
 
   useEffect(() => {
-    userSortOverrideRef.current = false;
+    userSortOverrideRef.current = false
   }, [episodes]);
 
   useEffect(() => {
@@ -141,18 +141,18 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
   }, [episodes]);
 
   return (
-    <Card className="mt-6 border-slate-800/70 bg-slate-950/40 backdrop-blur">
+    <Card className="mt-6 border-2 border-[#3F3F46] bg-[#09090B]">
       <CardHeader className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <CardTitle className="text-lg font-semibold text-slate-100">
+          <CardTitle className="text-lg font-bold uppercase tracking-tighter text-[#FAFAFA]">
             Các tập
           </CardTitle>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-[#A1A1AA]">
             Chọn nguồn phát và tập muốn xem. Tổng cộng {totalEpisodes} tập.
           </p>
         </div>
         {selectedEpisode && (
-          <div className="flex items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1 text-xs font-medium uppercase tracking-wide text-emerald-200">
+          <div className="flex items-center gap-2 border-2 border-[#DFE104] bg-[#DFE104]/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-[#DFE104]">
             <Play className="h-4 w-4" /> Đang phát {selectedEpisode.label}
           </div>
         )}
@@ -167,13 +167,13 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
             <TooltipProvider delayDuration={150}>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <div className="flex w-full items-center gap-2 overflow-x-auto rounded-full border border-slate-800 bg-slate-900/60 p-1 shadow-inner lg:w-auto">
+                  <div className="flex w-full items-center gap-2 overflow-x-auto border-2 border-[#3F3F46] bg-[#27272A] p-1 lg:w-auto">
                     <TabsList className="flex w-max gap-1 bg-transparent p-0">
                       {episodes.map((episode) => (
                         <TabsTrigger
                           key={episode.server_name}
                           value={episode.server_name}
-                          className="rounded-full px-4 py-2 text-sm font-medium data-[state=active]:bg-slate-200 data-[state=active]:text-slate-900"
+                          className="px-4 py-2 text-sm font-bold uppercase tracking-wide data-[state=active]:bg-[#DFE104] data-[state=active]:text-[#09090B]"
                         >
                           {episode.server_name}
                         </TabsTrigger>
@@ -181,19 +181,19 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
                     </TabsList>
                   </div>
                 </TooltipTrigger>
-                <TooltipContent className="bg-slate-800/90 text-slate-100">
+                <TooltipContent className="border-2 border-[#3F3F46] bg-[#27272A] text-[#FAFAFA]">
                   Chuyển giữa các nguồn phát khi gặp lỗi hoặc muốn tốc độ tốt hơn.
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
 
             <label className="relative w-full lg:max-w-xs">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#A1A1AA]" />
               <Input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Tìm theo tên tập hoặc số tập"
-                className="w-full rounded-full border-slate-800 bg-slate-900/70 pl-10 text-sm text-slate-200 placeholder:text-slate-500"
+                className="w-full border-2 border-[#3F3F46] bg-[#27272A] pl-10 text-sm text-[#FAFAFA] placeholder:text-[#A1A1AA]"
               />
             </label>
 
@@ -210,7 +210,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
                   }));
                 }
               }}
-              className="flex w-full items-center justify-center gap-2 rounded-full border border-slate-800 bg-slate-900/60 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-slate-700 hover:bg-slate-800/80 lg:w-auto"
+              className="flex w-full items-center justify-center gap-2 border-2 border-[#3F3F46] bg-[#27272A] px-4 py-2 text-sm font-bold uppercase tracking-wide text-[#FAFAFA] transition hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B] lg:w-auto"
               aria-label="Đổi thứ tự tập"
             >
               <ArrowUpDown className="h-4 w-4" />
@@ -270,11 +270,11 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
                 className={cn("space-y-4", isActiveServer ? "block" : "hidden")}
               >
                 <div className="flex items-center gap-2">
-                  <Badge className="rounded-full bg-slate-900/60 text-xs font-medium uppercase tracking-wide text-slate-200">
+                  <Badge className="bg-[#27272A] text-xs font-bold uppercase tracking-wide text-[#FAFAFA]">
                     {totalEpisodeCount} tập
                   </Badge>
                   {normalizedQuery && (
-                    <span className="text-sm text-slate-400">
+                    <span className="text-sm text-[#A1A1AA]">
                       {filteredServerData.length} kết quả khớp với "{query}"
                     </span>
                   )}
@@ -297,23 +297,23 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
                             )
                           }
                           className={cn(
-                            "h-11 w-full justify-between rounded-2xl border border-slate-800/70 bg-slate-900/60 px-4 text-sm text-slate-200 transition hover:border-slate-600 hover:bg-slate-800/80",
+                            "h-11 w-full justify-between border-2 border-[#3F3F46] bg-[#27272A] px-4 text-sm font-bold uppercase tracking-wide text-[#FAFAFA] transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]",
                             isSelected &&
-                              "border-emerald-400/60 bg-emerald-500/15 text-emerald-100 hover:border-emerald-400 hover:bg-emerald-500/20",
+                              "border-[#DFE104] bg-[#DFE104]/15 text-[#DFE104] hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]",
                           )}
                           variant="ghost"
                         >
-                          <span className="truncate font-medium">
+                          <span className="truncate">
                             {serverData.name}
                           </span>
                           {isSelected ? (
-                            <Badge className="rounded-full bg-emerald-500/20 text-xs uppercase tracking-wide text-emerald-200">
+                            <Badge className="bg-[#DFE104]/20 text-xs font-bold uppercase tracking-wide text-[#DFE104]">
                               Đang xem
                             </Badge>
                           ) : (
                             <Badge
                               variant="outline"
-                              className="rounded-full border-slate-700/80 bg-transparent text-xs text-slate-400"
+                              className="border-[#3F3F46] bg-transparent text-xs text-[#A1A1AA]"
                             >
                               {serverData.slug.replace(/^[^\d]*/g, "") || "#"}
                             </Badge>
@@ -323,7 +323,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
                     })}
                   </div>
                 ) : (
-                  <div className="rounded-2xl border border-slate-800/60 bg-slate-900/40 p-6 text-center text-sm text-slate-400">
+                  <div className="border-2 border-[#3F3F46] bg-[#27272A]/50 p-6 text-center text-sm text-[#A1A1AA]">
                     Không tìm thấy tập nào khớp với "{query}" trong nguồn {episode.server_name}.
                   </div>
                 )}
@@ -342,7 +342,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
                               [episode.server_name]: Math.max(activePage - 1, 1),
                             }));
                           }}
-                          className="text-sm"
+                          className="text-sm text-[#FAFAFA] border-[#3F3F46]"
                           aria-disabled={activePage === 1}
                           tabIndex={activePage === 1 ? -1 : 0}
                         />
@@ -381,6 +381,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
                                   [episode.server_name]: pageNumber,
                                 }));
                               }}
+                              className={pageNumber === activePage ? "bg-[#DFE104] text-[#09090B]" : "text-[#FAFAFA] border-[#3F3F46]"}
                             >
                               {pageNumber}
                             </PaginationLink>
@@ -402,7 +403,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
                               ),
                             }));
                           }}
-                          className="text-sm"
+                          className="text-sm text-[#FAFAFA] border-[#3F3F46]"
                           aria-disabled={activePage === totalPages}
                           tabIndex={activePage === totalPages ? -1 : 0}
                         />

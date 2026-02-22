@@ -14,7 +14,8 @@ const QUICK_LINKS = [
     { label: "Phim mới cập nhật", href: "/" },
     { label: "Phim lẻ nổi bật", href: "/danh-sach/phim-le" },
     { label: "Phim bộ", href: "/danh-sach/phim-bo" },
-    { label: "Phim chiếu rạp", href: "/danh-sach/phim-chieu-rap" },
+    { label: "TV Shows", href: "/danh-sach/tv-shows" },
+    { label: "Phim Âu Mỹ", href: "/danh-sach/quoc-gia/au-my" },
 ]
 
 interface SearchFormProps {
