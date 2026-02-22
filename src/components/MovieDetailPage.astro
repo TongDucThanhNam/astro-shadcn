@@ -1,12 +1,33 @@
 ---
 import { Image } from "astro:assets";
+import EpisodeSelector from "./EpisodeSelector";
 import VideoPlayer from "./VideoPlayer";
 import { resolveImageUrl, imagePresets } from "@/lib/wsrv";
+
+type EpisodeServerData = {
+    slug: string;
+    name: string;
+    link_embed: string;
+    link_m3u8?: string;
+};
+
+type EpisodeServer = {
+    server_name: string;
+    server_data: EpisodeServerData[];
+};
+
+type PlayableEpisode = {
+    ep: string;
+    label: string;
+    linkEmbed: string;
+    linkM3u8?: string;
+    serverName: string;
+};
 
 const { data, slug: routeSlug } = Astro.props;
 const movie = data.movie;
 const slug = routeSlug ?? movie.slug;
-const episodes = data.episodes;
+const episodes = (data.episodes ?? []) as EpisodeServer[];
 const viewFormatter = new Intl.NumberFormat("vi-VN");
 
 const heroPreset = imagePresets.hero;
@@ -16,20 +37,71 @@ const heroSource = resolveImageUrl(movie.thumb_url ?? movie.poster_url);
 const posterSource = resolveImageUrl(movie.poster_url ?? movie.thumb_url);
 
 const rating = movie.tmdb?.vote_average ? Number(movie.tmdb.vote_average).toFixed(1) : "0.0";
-const ratingPercent = Math.round((Number(rating) / 10) * 100);
+const toEpisodeCount = (value: string | number | null | undefined) => {
+    const count = Number.parseInt(String(value ?? "").replace(/\D/g, ""), 10);
+    return Number.isFinite(count) ? count : 0;
+};
+const totalEpisodeCount = episodes.reduce((sum, episode) => sum + episode.server_data.length, 0);
+const episodeTotal = toEpisodeCount(movie.episode_total);
+const episodeCurrent = toEpisodeCount(movie.episode_current);
+const isSeries = Math.max(totalEpisodeCount, episodeTotal) > 1;
+const episodeProgress = isSeries
+    ? `${movie.episode_current || episodeCurrent}/${movie.episode_total || episodeTotal} tập`
+    : movie.time || "N/A";
+const episodeAvailability = isSeries
+    ? `${movie.episode_current || episodeCurrent}/${movie.episode_total || episodeTotal} tập đã cập nhật`
+    : "Hoàn tất";
+
+const playableEpisodes: PlayableEpisode[] = [];
+const seenPlayable = new Set<string>();
+for (const episode of episodes) {
+    for (const serverData of episode.server_data) {
+        if (!serverData.link_embed) {
+            continue;
+        }
+        const key = `${episode.server_name}:${serverData.slug}:${serverData.link_embed}`;
+        if (seenPlayable.has(key)) {
+            continue;
+        }
+        seenPlayable.add(key);
+        playableEpisodes.push({
+            ep: serverData.slug,
+            label: serverData.name,
+            linkEmbed: serverData.link_embed,
+            linkM3u8: serverData.link_m3u8,
+            serverName: episode.server_name,
+        });
+    }
+}
+
+const firstPlayableEpisode = playableEpisodes[0];
+const hasEpisodes = totalEpisodeCount > 0;
+const firstPlayableLabel = firstPlayableEpisode?.label ?? "Chọn tập để phát";
+const actionButtonClass =
+    "uppercase tracking-tighter font-bold border-2 border-[#3F3F46] bg-transparent px-4 py-2 text-[#FAFAFA] hover:bg-[#FAFAFA] hover:text-[#09090B] hover:border-[#FAFAFA] transition-all inline-flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B]";
 ---
 
 <!-- Hero Section -->
-<section class="relative min-h-screen overflow-hidden">
+<section id="movie-hero" class="relative min-h-[88svh] overflow-hidden md:min-h-[92svh]">
     <!-- Background Number Effect -->
     <div class="absolute inset-0 pointer-events-none overflow-hidden">
-        <span class="absolute -right-20 -top-20 text-[20rem] md:text-[30rem] font-bold text-[#27272A] opacity-50 select-none uppercase tracking-tighter">
-            {movie.episode_total > 1 ? "SERIES" : "MOVIE"}
+        <span
+            data-parallax-layer
+            data-speed="0.8"
+            data-shift="80"
+            class="parallax-layer absolute -right-16 -top-24 hidden text-[20rem] font-bold text-[#27272A] opacity-50 select-none uppercase tracking-tighter md:block md:text-[28rem]"
+        >
+            {isSeries ? "SERIES" : "MOVIE"}
         </span>
     </div>
 
     <!-- Hero Backdrop -->
-    <div class="absolute inset-0">
+    <div
+        data-parallax-layer
+        data-speed="1"
+        data-shift="56"
+        class="parallax-layer absolute inset-0"
+    >
         {heroSource ? (
             <Image
                 loading="eager"
@@ -47,6 +119,7 @@ const ratingPercent = Math.round((Number(rating) / 10) * 100);
             />
         ) : null}
         <div class="absolute inset-0 bg-gradient-to-r from-[#09090B] via-[#09090B]/95 to-transparent"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_18%_26%,rgba(223,225,4,0.2),transparent_42%),radial-gradient(circle_at_82%_20%,rgba(255,255,255,0.08),transparent_35%)]"></div>
         <!-- Shine effect -->
         <div class="absolute inset-0 shine-effect pointer-events-none"></div>
     </div>
@@ -55,15 +128,21 @@ const ratingPercent = Math.round((Number(rating) / 10) * 100);
     <div class="relative z-10 container mx-auto px-4 lg:px-8 py-12 lg:py-20">
         <div class="flex flex-col lg:flex-row gap-8 lg:gap-16 items-start">
             <!-- Poster -->
-            <div class="w-full max-w-[280px] lg:max-w-[320px] mx-auto lg:mx-0 flex-shrink-0">
+            <div
+                data-parallax-layer
+                data-speed="1.3"
+                data-shift="44"
+                data-pointer="true"
+                class="parallax-layer w-full max-w-[280px] lg:max-w-[320px] mx-auto lg:mx-0 flex-shrink-0"
+            >
                 <div
-                    class="border-2 border-[#3F3F46] bg-[#09090B] overflow-hidden transition-all duration-300 hover:scale-[1.02] group"
+                    class="poster-card border-2 border-[#3F3F46] bg-[#09090B] overflow-hidden transition-all duration-300 hover:scale-[1.02] group"
                     transition:name={`image-${slug}`}
                 >
                     {posterSource ? (
                         <Image
-                            loading="eager"
-                            fetchpriority="high"
+                            loading="lazy"
+                            fetchpriority="auto"
                             src={posterSource}
                             alt={movie.name}
                             width={posterPreset.dimension.width}
@@ -83,10 +162,15 @@ const ratingPercent = Math.round((Number(rating) / 10) * 100);
             </div>
 
             <!-- Info -->
-            <div class="flex-1 space-y-6">
+            <div
+                data-parallax-layer
+                data-speed="0.6"
+                data-shift="28"
+                class="parallax-layer flex-1 space-y-6"
+            >
                 <!-- Meta -->
                 <div class="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.35em] text-[#A1A1AA]">
-                    <span>{movie.episode_total > 1 ? "Series" : "Movie"}</span>
+                    <span>{isSeries ? "Series" : "Movie"}</span>
                     <span class="w-6 h-[1px] bg-[#3F3F46]"></span>
                     <span class="text-[#DFE104]">{movie.status}</span>
                 </div>
@@ -113,11 +197,7 @@ const ratingPercent = Math.round((Number(rating) / 10) * 100);
                     <div class="flex flex-wrap items-center gap-4 text-sm text-[#A1A1AA]">
                         <span class="uppercase tracking-wider">{movie.year}</span>
                         <span class="w-1 h-1 bg-[#3F3F46]"></span>
-                        <span>
-                            {movie.episode_total > 1
-                                ? `${movie.episode_current}/${movie.episode_total} tập`
-                                : movie.time || "N/A"}
-                        </span>
+                        <span>{episodeProgress}</span>
                         <span class="w-1 h-1 bg-[#3F3F46]"></span>
                         <span>{viewFormatter.format(Number(movie.view) || 0)} lượt xem</span>
                     </div>
@@ -125,16 +205,34 @@ const ratingPercent = Math.round((Number(rating) / 10) * 100);
 
                 <!-- Categories -->
                 <div class="flex flex-wrap gap-2">
-                    {movie.category?.map((cat: { name: string }) => (
-                        <span class="border border-[#3F3F46] bg-[#09090B] px-3 py-1 text-xs uppercase tracking-wider text-[#FAFAFA] hover:bg-[#DFE104] hover:text-[#000] hover:border-[#DFE104] transition-all cursor-pointer">
-                            {cat.name}
-                        </span>
-                    ))}
-                    {movie.country?.map((country: { name: string }) => (
-                        <span class="border border-[#DFE104] bg-[#DFE104]/10 px-3 py-1 text-xs uppercase tracking-wider text-[#DFE104]">
-                            {country.name}
-                        </span>
-                    ))}
+                    {movie.category?.map((cat: { name: string; slug?: string }) =>
+                        cat.slug ? (
+                            <a
+                                href={`/danh-sach/the-loai/${cat.slug}`}
+                                class="border border-[#3F3F46] bg-[#09090B] px-3 py-1 text-xs uppercase tracking-wider text-[#FAFAFA] hover:bg-[#DFE104] hover:text-[#000] hover:border-[#DFE104] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B]"
+                            >
+                                {cat.name}
+                            </a>
+                        ) : (
+                            <span class="border border-[#3F3F46] bg-[#09090B] px-3 py-1 text-xs uppercase tracking-wider text-[#FAFAFA]">
+                                {cat.name}
+                            </span>
+                        ),
+                    )}
+                    {movie.country?.map((country: { name: string; slug?: string }) =>
+                        country.slug ? (
+                            <a
+                                href={`/danh-sach/quoc-gia/${country.slug}`}
+                                class="border border-[#DFE104] bg-[#DFE104]/10 px-3 py-1 text-xs uppercase tracking-wider text-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B]"
+                            >
+                                {country.name}
+                            </a>
+                        ) : (
+                            <span class="border border-[#DFE104] bg-[#DFE104]/10 px-3 py-1 text-xs uppercase tracking-wider text-[#DFE104]">
+                                {country.name}
+                            </span>
+                        ),
+                    )}
                 </div>
 
                 <!-- Crew -->
@@ -151,36 +249,50 @@ const ratingPercent = Math.round((Number(rating) / 10) * 100);
 
                 <!-- Actions -->
                 <div class="flex flex-wrap items-center gap-4 pt-2">
-                    <!-- Primary Button - Acid Yellow -->
-                    <a
-                        href="#episode-selection"
-                        class="uppercase tracking-tighter font-bold bg-[#DFE104] text-black px-6 py-3 hover:scale-105 transition-all inline-flex items-center gap-2"
+                    <button
+                        id="watchBtn"
+                        type="button"
+                        class="uppercase tracking-tighter font-bold bg-[#DFE104] text-black px-6 py-3 hover:scale-105 transition-all inline-flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B]"
+                        data-default-ep={firstPlayableEpisode?.ep ?? ""}
+                        data-default-label={firstPlayableEpisode?.label ?? ""}
+                        data-default-link={firstPlayableEpisode?.linkEmbed ?? ""}
+                        data-default-m3u8={firstPlayableEpisode?.linkM3u8 ?? ""}
+                        data-default-server={firstPlayableEpisode?.serverName ?? ""}
+                        disabled={!firstPlayableEpisode}
+                        aria-disabled={!firstPlayableEpisode}
                     >
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M8 5v14l11-7z"/>
                         </svg>
-                        Xem ngay
-                    </a>
+                        {firstPlayableEpisode ? "Xem ngay" : "Chưa có tập"}
+                    </button>
 
-                    <!-- Outline Buttons -->
                     <button
-                        class="uppercase tracking-tighter font-bold border-2 border-[#3F3F46] bg-transparent px-4 py-2 text-[#FAFAFA] hover:bg-[#FAFAFA] hover:text-[#09090B] hover:border-[#FAFAFA] transition-all inline-flex items-center gap-2"
+                        id="bookmarkBtn"
+                        type="button"
+                        class={actionButtonClass}
+                        aria-pressed="false"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>
-                        Thêm vào danh sách
+                        Lưu phim
                     </button>
                     <button
-                        class="uppercase tracking-tighter font-bold border-2 border-[#3F3F46] bg-transparent px-4 py-2 text-[#FAFAFA] hover:bg-[#FAFAFA] hover:text-[#09090B] hover:border-[#FAFAFA] transition-all inline-flex items-center gap-2"
+                        id="likeBtn"
+                        type="button"
+                        class={actionButtonClass}
+                        aria-pressed="false"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
                         </svg>
-                        Thích
+                        Yêu thích
                     </button>
                     <button
-                        class="uppercase tracking-tighter font-bold border-2 border-[#3F3F46] bg-transparent px-4 py-2 text-[#FAFAFA] hover:bg-[#FAFAFA] hover:text-[#09090B] hover:border-[#FAFAFA] transition-all inline-flex items-center gap-2"
+                        id="shareBtn"
+                        type="button"
+                        class={actionButtonClass}
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
@@ -200,191 +312,405 @@ const ratingPercent = Math.round((Number(rating) / 10) * 100);
     </div>
 </section>
 
+<div
+    id="watchDock"
+    class="watch-dock fixed inset-x-4 bottom-4 z-40 mx-auto flex max-w-[26rem] translate-y-8 items-center justify-between gap-3 border-2 border-[#3F3F46] bg-[#09090B]/95 px-4 py-3 opacity-0 shadow-[0_18px_45px_rgba(0,0,0,0.55)] backdrop-blur-sm pointer-events-none transition-all duration-300 md:inset-x-auto md:right-8 md:left-auto"
+    aria-hidden="true"
+>
+    <div class="min-w-0">
+        <p class="text-[10px] font-bold uppercase tracking-[0.28em] text-[#A1A1AA]">Cinema Mode</p>
+        <p id="watchDockLabel" class="truncate text-sm font-bold uppercase tracking-wide text-[#FAFAFA]">
+            {firstPlayableLabel}
+        </p>
+    </div>
+    <div class="flex items-center gap-2">
+        <button
+            id="watchDockPlay"
+            type="button"
+            class="inline-flex items-center gap-2 border-2 border-[#DFE104] bg-[#DFE104] px-3 py-2 text-xs font-bold uppercase tracking-wide text-[#09090B] transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B] disabled:cursor-not-allowed disabled:opacity-40"
+            disabled={!firstPlayableEpisode}
+            aria-disabled={!firstPlayableEpisode}
+        >
+            <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"></path>
+            </svg>
+            Phát
+        </button>
+        <a
+            href="#episode-selection"
+            class="inline-flex items-center border-2 border-[#3F3F46] px-3 py-2 text-xs font-bold uppercase tracking-wide text-[#FAFAFA] transition hover:border-[#DFE104] hover:text-[#DFE104] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B]"
+        >
+            Tập
+        </a>
+    </div>
+</div>
+
 <!-- Episode Selection -->
 <section class="py-12 lg:py-16 bg-[#09090B]" id="episode-selection">
     <div class="container mx-auto px-4 lg:px-8">
         <div class="border-t-2 border-[#3F3F46] pt-8">
-            <div class="flex items-center justify-between mb-8">
+            <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <h2 class="text-2xl font-bold uppercase tracking-tighter text-[#FAFAFA]">Chọn Tập</h2>
                 <div class="flex items-center gap-2 text-sm text-[#A1A1AA]">
                     <span class="w-2 h-2 bg-emerald-500"></span>
-                    <span class="uppercase tracking-wider">{movie.episode_total > 1 ? `${movie.episode_current}/${movie.episode_total} tập đã cập nhật` : "Hoàn tất"}</span>
+                    <span class="uppercase tracking-wider">{episodeAvailability}</span>
                 </div>
             </div>
-
-            <!-- Server Tabs -->
-            <div class="flex gap-0 mb-6 overflow-x-auto">
-                <button class="server-tab active px-6 py-2 text-sm font-bold uppercase tracking-wider bg-[#DFE104] text-black border-2 border-[#DFE104]" data-server="1">
-                    Server #1
-                </button>
-                <button class="server-tab px-6 py-2 text-sm font-bold uppercase tracking-wider bg-transparent text-[#A1A1AA] border-2 border-[#3F3F46] border-l-0 hover:border-[#DFE104] hover:text-[#DFE104] transition-all" data-server="2">
-                    Server #2
-                </button>
-                <button class="server-tab px-6 py-2 text-sm font-bold uppercase tracking-wider bg-transparent text-[#A1A1AA] border-2 border-[#3F3F46] border-l-0 hover:border-[#DFE104] hover:text-[#DFE104] transition-all" data-server="3">
-                    Server VIP
-                </button>
-            </div>
-
-            <!-- Episode Grid -->
-            <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-2">
-                {episodes.length > 0 ? (
-                    episodes.map((ep: { id: number; name: string; slug: string }) => (
-                        <button
-                            class="episode-item group"
-                            data-episode={ep.id}
-                            aria-label={`Xem ${ep.name}`}
-                        >
-                            <span class="text-sm font-bold text-[#FAFAFA] group-hover:text-black group-hover:bg-[#DFE104] group-hover:border-[#DFE104] transition-all">
-                                {ep.id}
-                            </span>
-                        </button>
-                    ))
-                ) : (
-                    <p class="text-[#A1A1AA]">Hiện chưa có tập nào được cập nhật.</p>
-                )}
-            </div>
+            {hasEpisodes ? (
+                <EpisodeSelector client:idle episodes={episodes} />
+            ) : (
+                <div class="border-2 border-[#3F3F46] bg-[#27272A]/40 p-6 text-center text-sm text-[#A1A1AA]">
+                    Hiện chưa có tập nào được cập nhật.
+                </div>
+            )}
         </div>
     </div>
 </section>
 
 <!-- Video Player -->
-<section class="py-12 lg:py-16 bg-[#09090B]">
+<section class="py-12 lg:py-16 bg-[#09090B]" id="video-player">
     <div class="container mx-auto px-4 lg:px-8">
-        <div class="border-t-2 border-[#3F3F46] pt-8">
-            <h2 class="text-2xl font-bold uppercase tracking-tighter mb-8 text-[#FAFAFA]">
-                Đang Phát: Tập 1
-            </h2>
-            <div class="border-2 border-[#3F3F46] bg-[#09090B] aspect-video flex items-center justify-center">
-                <div class="text-center">
-                    <div class="w-20 h-20 bg-[#DFE104] flex items-center justify-center mx-auto mb-4 hover:scale-110 transition-transform cursor-pointer">
-                        <svg class="w-8 h-8 text-black ml-1" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z"/>
-                        </svg>
-                    </div>
-                    <p class="text-[#A1A1AA] text-sm uppercase tracking-wider">Nhấn vào để phát</p>
-                </div>
-                <!-- Video Player component -->
-                <VideoPlayer client:load />
+        <div class="border-t-2 border-[#3F3F46] pt-8 space-y-4">
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <h2 id="playerHeading" class="text-2xl font-bold uppercase tracking-tighter text-[#FAFAFA]">
+                    {firstPlayableEpisode ? `Sẵn sàng phát: ${firstPlayableEpisode.label}` : "Chưa có tập để phát"}
+                </h2>
+                <span id="playerStatus" class="text-sm uppercase tracking-wider text-[#A1A1AA]" aria-live="polite">
+                    {hasEpisodes ? "Chọn tập để bắt đầu phát." : "Đợi nhà phát hành cập nhật tập mới."}
+                </span>
+            </div>
+            <div id="playerShell" class="player-shell relative overflow-hidden border-2 border-[#3F3F46] bg-[#09090B] p-2 sm:p-3">
+                <VideoPlayer client:load playlist={playableEpisodes} />
             </div>
         </div>
     </div>
 </section>
 
 <script>
-    // Current state
-    let currentEpisode = 1;
-    let currentServer = 1;
+    type EpisodeSelectionDetail = {
+        ep: string;
+        label?: string;
+        linkEmbed: string;
+        linkM3u8?: string;
+        serverName?: string;
+    };
 
-    // DOM Elements
-    const playButton = document.querySelector('.play-button-large');
-    const watchBtn = document.querySelector('#watchBtn');
-    const bookmarkBtn = document.getElementById('bookmarkBtn');
-    const likeBtn = document.getElementById('likeBtn');
-    const shareBtn = document.getElementById('shareBtn');
-    const serverTabs = document.querySelectorAll('.server-tab');
+    const watchBtn = document.getElementById("watchBtn") as HTMLButtonElement | null;
+    const bookmarkBtn = document.getElementById("bookmarkBtn") as HTMLButtonElement | null;
+    const likeBtn = document.getElementById("likeBtn") as HTMLButtonElement | null;
+    const shareBtn = document.getElementById("shareBtn") as HTMLButtonElement | null;
+    const watchDock = document.getElementById("watchDock");
+    const watchDockPlay = document.getElementById("watchDockPlay") as HTMLButtonElement | null;
+    const watchDockLabel = document.getElementById("watchDockLabel");
+    const playerHeading = document.getElementById("playerHeading");
+    const playerStatus = document.getElementById("playerStatus");
+    const playerShell = document.getElementById("playerShell");
+    const playerSection = document.getElementById("video-player");
+    const heroRoot = document.getElementById("movie-hero");
+    const parallaxLayers = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-parallax-layer]"),
+    );
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const scrollBehavior: ScrollBehavior = prefersReducedMotion ? "auto" : "smooth";
+    const cleanupTasks: Array<() => void> = [];
 
-    // Select Episode
-    function selectEpisode(id: number) {
-        currentEpisode = id;
-        const items = document.querySelectorAll('.episode-item');
-        items.forEach(item => {
-            const itemId = parseInt((item as HTMLElement).dataset.episode || '0');
-            const isActive = itemId === id;
-            item.classList.toggle('bg-[#DFE104]', isActive);
-            item.classList.toggle('border-[#DFE104]', isActive);
-            item.classList.toggle('text-black', isActive);
+    const clamp = (value: number, min: number, max: number) =>
+        Math.min(max, Math.max(min, value));
+
+    const setPlayerStatus = (text: string, highlight = false) => {
+        if (!playerStatus) {
+            return;
+        }
+
+        playerStatus.textContent = text;
+        playerStatus.classList.toggle("text-[#DFE104]", highlight);
+        playerStatus.classList.toggle("text-[#A1A1AA]", !highlight);
+    };
+
+    const updatePlayerMeta = (detail: EpisodeSelectionDetail) => {
+        const episodeLabel = detail.label?.trim() || `Tập ${detail.ep}`;
+        if (playerHeading) {
+            playerHeading.textContent = `Đang phát: ${episodeLabel}`;
+        }
+        if (watchDockLabel) {
+            watchDockLabel.textContent = episodeLabel;
+        }
+        setPlayerStatus(`Đã sẵn sàng phát ${episodeLabel}.`, true);
+    };
+
+    const pulsePlayerShell = () => {
+        if (!playerShell || prefersReducedMotion) {
+            return;
+        }
+
+        playerShell.classList.remove("player-shell-active");
+        void playerShell.offsetWidth;
+        playerShell.classList.add("player-shell-active");
+        window.setTimeout(() => playerShell.classList.remove("player-shell-active"), 900);
+    };
+
+    const getDefaultEpisode = (): EpisodeSelectionDetail | null => {
+        if (!watchBtn) {
+            return null;
+        }
+
+        const ep = watchBtn.dataset.defaultEp;
+        const label = watchBtn.dataset.defaultLabel;
+        const linkEmbed = watchBtn.dataset.defaultLink;
+        const linkM3u8 = watchBtn.dataset.defaultM3u8 || undefined;
+        const serverName = watchBtn.dataset.defaultServer || undefined;
+        if (!ep || !linkEmbed) {
+            return null;
+        }
+
+        return { ep, label, linkEmbed, linkM3u8, serverName };
+    };
+
+    const playEpisode = (detail: EpisodeSelectionDetail) => {
+        window.dispatchEvent(new CustomEvent("episodeSelected", { detail }));
+        playerSection?.scrollIntoView({ behavior: scrollBehavior, block: "start" });
+    };
+
+    const setWatchDockVisibility = () => {
+        if (!watchDock || !heroRoot) {
+            return;
+        }
+        const hasPlayableEpisode = Boolean(defaultEpisode);
+        const heroBottom = heroRoot.getBoundingClientRect().bottom;
+        const shouldShow = hasPlayableEpisode && heroBottom < window.innerHeight * 0.4;
+        watchDock.classList.toggle("watch-dock-visible", shouldShow);
+        watchDock.setAttribute("aria-hidden", String(!shouldShow));
+    };
+
+    const applyToggleState = (button: HTMLButtonElement, active: boolean) => {
+        button.setAttribute("aria-pressed", String(active));
+        button.classList.toggle("bg-[#DFE104]", active);
+        button.classList.toggle("text-black", active);
+        button.classList.toggle("border-[#DFE104]", active);
+        button.classList.toggle("bg-transparent", !active);
+        button.classList.toggle("text-[#FAFAFA]", !active);
+        button.classList.toggle("border-[#3F3F46]", !active);
+    };
+
+    const bindToggleAction = (button: HTMLButtonElement | null, key: string) => {
+        if (!button) {
+            return;
+        }
+
+        let active = false;
+        try {
+            active = localStorage.getItem(key) === "1";
+        } catch {
+            active = false;
+        }
+        applyToggleState(button, active);
+
+        button.addEventListener("click", () => {
+            active = !active;
+            applyToggleState(button, active);
+            try {
+                localStorage.setItem(key, active ? "1" : "0");
+            } catch {
+                // Ignore write failures for private mode / blocked storage.
+            }
         });
+    };
 
-        // Update heading
-        const heading = document.querySelector('#episode-selection + section h2');
-        if (heading) {
-            heading.textContent = `Đang Phát: Tập ${id}`;
-        }
+    const defaultEpisode = getDefaultEpisode();
+    let activeEpisode: EpisodeSelectionDetail | null = defaultEpisode;
 
-        // Scroll to player
-        const playerSection = document.querySelector('#episode-selection + section');
-        if (playerSection) {
-            playerSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+    if (watchBtn) {
+        watchBtn.addEventListener("click", () => {
+            if (!defaultEpisode) {
+                document.getElementById("episode-selection")?.scrollIntoView({
+                    behavior: scrollBehavior,
+                    block: "start",
+                });
+                return;
+            }
+            playEpisode(defaultEpisode);
+        });
     }
 
-    // Add click handlers to episode items
-    document.querySelectorAll('.episode-item').forEach(item => {
-        item.addEventListener('click', () => {
-            const episodeId = parseInt((item as HTMLElement).dataset.episode || '0');
-            selectEpisode(episodeId);
+    if (watchDockPlay) {
+        watchDockPlay.addEventListener("click", () => {
+            const episodeToPlay = activeEpisode ?? defaultEpisode;
+            if (!episodeToPlay) {
+                document.getElementById("episode-selection")?.scrollIntoView({
+                    behavior: scrollBehavior,
+                    block: "start",
+                });
+                return;
+            }
+            playEpisode(episodeToPlay);
         });
-    });
+    }
 
-    // Server Tab Click
-    serverTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            currentServer = parseInt((tab as HTMLElement).dataset.server || '1');
-            serverTabs.forEach(t => {
-                const isActive = t === tab;
-                t.classList.toggle('bg-[#DFE104]', isActive);
-                t.classList.toggle('text-black', isActive);
-                t.classList.toggle('border-[#DFE104]', isActive);
-                t.classList.toggle('bg-transparent', !isActive);
-                t.classList.toggle('text-[#A1A1AA]', !isActive);
-                t.classList.toggle('border-[#3F3F46]', !isActive);
-                t.classList.toggle('border-l-0', !isActive);
+    const onEpisodeSelected = (event: Event) => {
+        const detail = (event as CustomEvent<EpisodeSelectionDetail>).detail;
+        if (!detail?.ep || !detail.linkEmbed) {
+            return;
+        }
+        activeEpisode = detail;
+        updatePlayerMeta(detail);
+        pulsePlayerShell();
+    };
+    window.addEventListener("episodeSelected", onEpisodeSelected);
+    cleanupTasks.push(() => window.removeEventListener("episodeSelected", onEpisodeSelected));
+
+    const onWindowScroll = () => setWatchDockVisibility();
+    const onWindowResize = () => setWatchDockVisibility();
+    window.addEventListener("scroll", onWindowScroll, { passive: true });
+    window.addEventListener("resize", onWindowResize);
+    cleanupTasks.push(() => window.removeEventListener("scroll", onWindowScroll));
+    cleanupTasks.push(() => window.removeEventListener("resize", onWindowResize));
+    setWatchDockVisibility();
+
+    if (!prefersReducedMotion && heroRoot && parallaxLayers.length) {
+        let pointerX = 0;
+        let pointerY = 0;
+        let rafId = 0;
+
+        const renderParallax = () => {
+            rafId = 0;
+            const rect = heroRoot.getBoundingClientRect();
+            const viewportHeight = window.innerHeight || 1;
+            const normalizedScroll = clamp(
+                (viewportHeight * 0.5 - (rect.top + rect.height * 0.5)) / viewportHeight,
+                -1,
+                1,
+            );
+
+            parallaxLayers.forEach((layer) => {
+                const speed = Number(layer.dataset.speed ?? "1");
+                const shift = Number(layer.dataset.shift ?? "40");
+                const pointerEnabled = layer.dataset.pointer === "true";
+                const translateY = normalizedScroll * shift * speed;
+                const pointerOffsetX = pointerEnabled ? pointerX * shift * 0.24 * speed : 0;
+                const pointerOffsetY = pointerEnabled ? pointerY * shift * 0.16 * speed : 0;
+
+                layer.style.transform = `translate3d(${pointerOffsetX.toFixed(2)}px, ${(translateY + pointerOffsetY).toFixed(2)}px, 0)`;
             });
-        });
-    });
+        };
 
-    // Button Interactions - Kinetic Typography hover invert effect
-    if (bookmarkBtn) {
-        bookmarkBtn.addEventListener('click', function() {
-            this.classList.toggle('bg-[#DFE104]');
-            this.classList.toggle('text-black');
-            this.classList.toggle('border-[#DFE104]');
-            this.classList.toggle('bg-transparent');
-            this.classList.toggle('text-[#FAFAFA]');
-            this.classList.toggle('border-[#3F3F46]');
+        const requestParallaxFrame = () => {
+            if (rafId) {
+                return;
+            }
+            rafId = window.requestAnimationFrame(renderParallax);
+        };
+
+        const onHeroPointerMove = (event: PointerEvent) => {
+            const rect = heroRoot.getBoundingClientRect();
+            pointerX = clamp(((event.clientX - rect.left) / rect.width) * 2 - 1, -1, 1);
+            pointerY = clamp(((event.clientY - rect.top) / rect.height) * 2 - 1, -1, 1);
+            requestParallaxFrame();
+        };
+
+        const onHeroPointerLeave = () => {
+            pointerX = 0;
+            pointerY = 0;
+            requestParallaxFrame();
+        };
+
+        window.addEventListener("scroll", requestParallaxFrame, { passive: true });
+        window.addEventListener("resize", requestParallaxFrame);
+        heroRoot.addEventListener("pointermove", onHeroPointerMove, { passive: true });
+        heroRoot.addEventListener("pointerleave", onHeroPointerLeave);
+
+        cleanupTasks.push(() => window.removeEventListener("scroll", requestParallaxFrame));
+        cleanupTasks.push(() => window.removeEventListener("resize", requestParallaxFrame));
+        cleanupTasks.push(() => heroRoot.removeEventListener("pointermove", onHeroPointerMove));
+        cleanupTasks.push(() => heroRoot.removeEventListener("pointerleave", onHeroPointerLeave));
+        cleanupTasks.push(() => {
+            if (rafId) {
+                window.cancelAnimationFrame(rafId);
+            }
         });
+
+        requestParallaxFrame();
     }
 
-    if (likeBtn) {
-        likeBtn.addEventListener('click', function() {
-            this.classList.toggle('bg-[#DFE104]');
-            this.classList.toggle('text-black');
-            this.classList.toggle('border-[#DFE104]');
-            this.classList.toggle('bg-transparent');
-            this.classList.toggle('text-[#FAFAFA]');
-            this.classList.toggle('border-[#3F3F46]');
-        });
-    }
+    const storageScope = `movie-detail:${window.location.pathname}`;
+    bindToggleAction(bookmarkBtn, `${storageScope}:bookmark`);
+    bindToggleAction(likeBtn, `${storageScope}:like`);
 
     if (shareBtn) {
-        shareBtn.addEventListener('click', () => {
-            if (navigator.share) {
-                navigator.share({
-                    title: document.title,
-                    text: 'Xem phim',
-                    url: window.location.href
-                });
-            } else {
-                navigator.clipboard.writeText(window.location.href);
-                alert('Link đã được sao chép!');
+        shareBtn.addEventListener("click", async () => {
+            const shareData = {
+                title: document.title,
+                text: "Xem phim trên AstroFlim",
+                url: window.location.href,
+            };
+
+            try {
+                if (navigator.share) {
+                    await navigator.share(shareData);
+                    setPlayerStatus("Đã mở bảng chia sẻ.", true);
+                    return;
+                }
+                await navigator.clipboard.writeText(window.location.href);
+                setPlayerStatus("Đã sao chép link vào clipboard.", true);
+            } catch {
+                setPlayerStatus("Không thể chia sẻ ngay lúc này.", false);
             }
         });
     }
 
-    if (playButton) {
-        playButton.addEventListener('click', () => {
-            (playButton as HTMLElement).style.transform = 'scale(0.9)';
-            setTimeout(() => {
-                (playButton as HTMLElement).style.transform = 'scale(1)';
-            }, 150);
-        });
-    }
+    window.addEventListener(
+        "pagehide",
+        () => {
+            cleanupTasks.forEach((cleanup) => cleanup());
+        },
+        { once: true },
+    );
 </script>
 
 <style>
+    .parallax-layer {
+        transform: translate3d(0, 0, 0);
+        will-change: transform;
+    }
+
+    .poster-card {
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    }
+
+    .watch-dock {
+        will-change: transform, opacity;
+    }
+
+    .watch-dock.watch-dock-visible {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .player-shell {
+        isolation: isolate;
+    }
+
+    .player-shell::before {
+        content: "";
+        position: absolute;
+        inset: -35%;
+        background: radial-gradient(circle at center, rgba(223, 225, 4, 0.32), transparent 58%);
+        opacity: 0;
+        pointer-events: none;
+        transform: scale(0.92);
+        transition: opacity 240ms ease, transform 240ms ease;
+        z-index: -1;
+    }
+
+    .player-shell.player-shell-active::before {
+        opacity: 1;
+        transform: scale(1);
+        animation: playerPulse 900ms ease-out;
+    }
+
     /* Shine effect animation */
     .shine-effect::after {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         left: -100%;
@@ -412,30 +738,33 @@ const ratingPercent = Math.round((Number(rating) / 10) * 100);
         }
     }
 
-    /* Episode Item - Sharp corners, border-2 */
-    .episode-item {
-        padding: 16px 20px;
-        background: transparent;
-        border: 2px solid #3F3F46;
-        cursor: pointer;
-        transition: all 0.3s ease;
+    @keyframes playerPulse {
+        0% {
+            opacity: 0.95;
+            transform: scale(0.88);
+        }
+        100% {
+            opacity: 0;
+            transform: scale(1.06);
+        }
     }
 
-    .episode-item:hover {
-        border-color: #DFE104;
-        background: #DFE104;
-    }
+    @media (prefers-reduced-motion: reduce) {
+        .parallax-layer {
+            transform: none !important;
+        }
 
-    .episode-item:hover span {
-        color: black;
-    }
+        .watch-dock {
+            transition: none;
+        }
 
-    .episode-item.active {
-        border-color: #DFE104;
-        background: #DFE104;
-    }
+        .player-shell::before {
+            animation: none;
+            transition: none;
+        }
 
-    .episode-item.active span {
-        color: black;
+        .shine-effect::after {
+            animation: none;
+        }
     }
 </style>

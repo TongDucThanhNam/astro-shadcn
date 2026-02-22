@@ -105,11 +105,12 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
     label: string,
     linkEmbed: string,
     linkM3u8?: string,
+    serverName?: string,
   ) => {
     setSelectedEpisode({ id, label, linkEmbed, linkM3u8 });
     window.dispatchEvent(
       new CustomEvent("episodeSelected", {
-        detail: { ep: id, linkEmbed, linkM3u8 },
+        detail: { ep: id, label, linkEmbed, linkM3u8, serverName },
       }),
     );
   };
@@ -117,6 +118,50 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
   useEffect(() => {
     userSortOverrideRef.current = false
   }, [episodes]);
+
+  useEffect(() => {
+    const handleExternalEpisodeSelection = (event: Event) => {
+      const detail = (event as CustomEvent<{
+        ep: string;
+        label?: string;
+        linkEmbed: string;
+        linkM3u8?: string;
+        serverName?: string;
+      }>).detail;
+
+      if (!detail?.ep || !detail.linkEmbed) {
+        return;
+      }
+
+      const matchedServerName =
+        detail.serverName &&
+        episodes.some((episode) => episode.server_name === detail.serverName)
+          ? detail.serverName
+          : episodes.find((episode) =>
+              episode.server_data.some(
+                (serverData) =>
+                  serverData.slug === detail.ep &&
+                  serverData.link_embed === detail.linkEmbed,
+              ),
+            )?.server_name;
+
+      if (matchedServerName && matchedServerName !== selectedServer) {
+        setSelectedServer(matchedServerName);
+      }
+
+      setSelectedEpisode({
+        id: detail.ep,
+        label: detail.label ?? `Tập ${detail.ep}`,
+        linkEmbed: detail.linkEmbed,
+        linkM3u8: detail.linkM3u8,
+      });
+    };
+
+    window.addEventListener("episodeSelected", handleExternalEpisodeSelection);
+    return () => {
+      window.removeEventListener("episodeSelected", handleExternalEpisodeSelection);
+    };
+  }, [episodes, selectedServer]);
 
   useEffect(() => {
     if (userSortOverrideRef.current) return;
@@ -294,6 +339,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
                               serverData.name,
                               serverData.link_embed,
                               serverData.link_m3u8,
+                              episode.server_name,
                             )
                           }
                           className={cn(

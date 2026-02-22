@@ -10,20 +10,30 @@ import {
   getCacheHeaders,
 } from "@/lib/cache";
 import { getCachedValue, setCachedValue } from "@/lib/server-cache";
-import { getMovieDetail } from "@/lib/phimapi";
+import { PhimApiClientError, getMovieDetail } from "@/lib/phimapi";
 
 const { slug } = Astro.params;
 
 if (!slug) {
-  throw new Error("Missing movie slug.");
+  return new Response("Not Found", { status: 404 });
 }
 
 const cacheKey = `movie-detail:${slug}`;
 let data = getCachedValue<MovieResponseDetail>(cacheKey);
 
 if (!data) {
-  data = await getMovieDetail(slug);
-  setCachedValue(cacheKey, data, CACHE_CONFIGS.MOVIE_DETAIL.maxAge);
+  try {
+    data = await getMovieDetail(slug);
+    setCachedValue(cacheKey, data, CACHE_CONFIGS.MOVIE_DETAIL.maxAge);
+  } catch (error: unknown) {
+    if (error instanceof PhimApiClientError) {
+      if (error.code === "invalid_query" || error.status === 404) {
+        return new Response("Not Found", { status: 404 });
+      }
+    }
+
+    throw error;
+  }
 }
 
 const astroHeaders = {

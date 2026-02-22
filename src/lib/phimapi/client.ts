@@ -167,7 +167,12 @@ export async function getLatestMovies(options: {
 }
 
 export async function getMovieDetail(slug: string): Promise<MovieDetailResponse> {
-  const normalizedSlug = normalizeTypeList(slug, "slug");
+  let normalizedSlug: string;
+  try {
+    normalizedSlug = normalizeTypeList(slug, "slug");
+  } catch {
+    throw new PhimApiClientError("Invalid slug.", "invalid_query", 400);
+  }
 
   return requestJson({
     pathname: `/phim/${encodeURIComponent(normalizedSlug)}`,

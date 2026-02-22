@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog"
-import { Search } from "lucide-react"
+    CommandDialog,
+    CommandInput,
+    CommandList,
+    CommandGroup,
+    CommandItem,
+    CommandShortcut,
+} from "@/components/ui/command"
+import { Search, Film, Tv, Globe, Calendar } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const QUICK_LINKS = [
-    { label: "Phim mới cập nhật", href: "/" },
-    { label: "Phim lẻ nổi bật", href: "/danh-sach/phim-le" },
-    { label: "Phim bộ", href: "/danh-sach/phim-bo" },
-    { label: "TV Shows", href: "/danh-sach/tv-shows" },
-    { label: "Phim Âu Mỹ", href: "/danh-sach/quoc-gia/au-my" },
+    { label: "Phim mới cập nhật", href: "/", icon: Film },
+    { label: "Phim lẻ nổi bật", href: "/danh-sach/phim-le", icon: Film },
+    { label: "Phim bộ", href: "/danh-sach/phim-bo", icon: Tv },
+    { label: "TV Shows", href: "/danh-sach/tv-shows", icon: Tv },
+    { label: "Phim Âu Mỹ", href: "/danh-sach/quoc-gia/au-my", icon: Globe },
+    { label: "Phim 2024", href: "/danh-sach/nam/2024", icon: Calendar },
 ]
 
 interface SearchFormProps {
@@ -45,9 +47,16 @@ const SearchForm: React.FC<SearchFormProps> = ({ variant = "default" }) => {
         window.location.href = `/tim-kiem/${encodeURIComponent(trimmed)}`
     }
 
-    const handleSearch = () => {
-        navigateToSearch(searchQuery)
+    const handleSelect = (href: string) => {
+        window.location.href = href
         setOpen(false)
+    }
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === "Enter" && searchQuery.trim()) {
+            navigateToSearch(searchQuery)
+            setOpen(false)
+        }
     }
 
     return (
@@ -73,50 +82,48 @@ const SearchForm: React.FC<SearchFormProps> = ({ variant = "default" }) => {
                     </>
                 )}
             </Button>
-            <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent className="w-full max-w-md bg-slate-900">
-                    <DialogHeader>
-                        <DialogTitle>Tìm kiếm phim</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4">
-                        <div className="flex gap-2">
-                            <Input
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                onKeyDown={(e) => {
-                                    if (e.key === "Enter") {
-                                        handleSearch()
-                                    }
+            <CommandDialog open={open} onOpenChange={setOpen}>
+                <CommandInput
+                    value={searchQuery}
+                    onValueChange={setSearchQuery}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Tìm phim, diễn viên, đạo diễn..."
+                    className="bg-transparent"
+                />
+                <CommandList>
+                    {searchQuery.trim() ? (
+                        <CommandGroup heading="Kết quả tìm kiếm">
+                            <CommandItem
+                                onSelect={() => {
+                                    navigateToSearch(searchQuery)
+                                    setOpen(false)
                                 }}
-                                placeholder="Nhập tên phim hoặc từ khóa..."
-                                className="flex-1"
-                                autoFocus
-                            />
-                            <Button onClick={handleSearch} disabled={!searchQuery.trim()}>
+                                className="flex items-center gap-2"
+                            >
                                 <Search className="h-4 w-4" />
-                            </Button>
-                        </div>
-                        <div className="space-y-2">
-                            <p className="text-sm text-gray-500">Liên kết nhanh:</p>
-                            <div className="grid gap-2">
-                                {QUICK_LINKS.map((link) => (
-                                    <Button
+                                <span>Tìm &quot;{searchQuery}&quot;</span>
+                                <CommandShortcut>Enter</CommandShortcut>
+                            </CommandItem>
+                        </CommandGroup>
+                    ) : (
+                        <CommandGroup heading="Liên kết nhanh">
+                            {QUICK_LINKS.map((link) => {
+                                const Icon = link.icon
+                                return (
+                                    <CommandItem
                                         key={link.href}
-                                        variant="outline"
-                                        className="justify-start text-left"
-                                        onClick={() => {
-                                            window.location.href = link.href
-                                            setOpen(false)
-                                        }}
+                                        onSelect={() => handleSelect(link.href)}
+                                        className="flex items-center gap-2"
                                     >
-                                        {link.label}
-                                    </Button>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </DialogContent>
-            </Dialog>
+                                        <Icon className="h-4 w-4" />
+                                        <span>{link.label}</span>
+                                    </CommandItem>
+                                )
+                            })}
+                        </CommandGroup>
+                    )}
+                </CommandList>
+            </CommandDialog>
         </>
     )
 }
