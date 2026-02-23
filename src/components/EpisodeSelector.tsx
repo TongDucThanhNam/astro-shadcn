@@ -28,7 +28,7 @@ type Episode = {
     server_data: {
         slug: string;
         name: string;
-        link_embed: string;
+        link_embed?: string;
         link_m3u8?: string;
     }[];
 };
@@ -58,7 +58,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
   const [selectedEpisode, setSelectedEpisode] = useState<{
     id: string;
     label: string;
-    linkEmbed: string;
+    linkEmbed?: string;
     linkM3u8?: string;
   } | null>(null);
   const [query, setQuery] = useState<string>("");
@@ -103,10 +103,13 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
   const handleEpisodeSelect = (
     id: string,
     label: string,
-    linkEmbed: string,
+    linkEmbed?: string,
     linkM3u8?: string,
     serverName?: string,
   ) => {
+    if (!linkEmbed && !linkM3u8) {
+      return;
+    }
     setSelectedEpisode({ id, label, linkEmbed, linkM3u8 });
     window.dispatchEvent(
       new CustomEvent("episodeSelected", {
@@ -124,12 +127,12 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
       const detail = (event as CustomEvent<{
         ep: string;
         label?: string;
-        linkEmbed: string;
+        linkEmbed?: string;
         linkM3u8?: string;
         serverName?: string;
       }>).detail;
 
-      if (!detail?.ep || !detail.linkEmbed) {
+      if (!detail?.ep || (!detail.linkEmbed && !detail.linkM3u8)) {
         return;
       }
 
@@ -141,7 +144,10 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
               episode.server_data.some(
                 (serverData) =>
                   serverData.slug === detail.ep &&
-                  serverData.link_embed === detail.linkEmbed,
+                  ((detail.linkM3u8 &&
+                    serverData.link_m3u8 === detail.linkM3u8) ||
+                    (detail.linkEmbed &&
+                      serverData.link_embed === detail.linkEmbed)),
               ),
             )?.server_name;
 
@@ -329,6 +335,9 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
                   <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
                     {visibleServerData.map((serverData) => {
                       const isSelected = selectedEpisode?.id === serverData.slug;
+                      const canPlay = Boolean(
+                        serverData.link_m3u8 || serverData.link_embed,
+                      );
 
                       return (
                         <Button
@@ -342,10 +351,13 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
                               episode.server_name,
                             )
                           }
+                          disabled={!canPlay}
                           className={cn(
                             "h-11 w-full justify-between border-2 border-[#3F3F46] bg-[#27272A] px-4 text-sm font-bold uppercase tracking-wide text-[#FAFAFA] transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]",
                             isSelected &&
                               "border-[#DFE104] bg-[#DFE104]/15 text-[#DFE104] hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]",
+                            !canPlay &&
+                              "cursor-not-allowed border-[#3F3F46]/60 text-[#71717A] opacity-50 hover:border-[#3F3F46]/60 hover:bg-[#27272A] hover:text-[#71717A]",
                           )}
                           variant="ghost"
                         >

@@ -7,7 +7,7 @@ import { resolveImageUrl, imagePresets } from "@/lib/wsrv";
 type EpisodeServerData = {
     slug: string;
     name: string;
-    link_embed: string;
+    link_embed?: string;
     link_m3u8?: string;
 };
 
@@ -19,7 +19,7 @@ type EpisodeServer = {
 type PlayableEpisode = {
     ep: string;
     label: string;
-    linkEmbed: string;
+    linkEmbed?: string;
     linkM3u8?: string;
     serverName: string;
 };
@@ -56,10 +56,10 @@ const playableEpisodes: PlayableEpisode[] = [];
 const seenPlayable = new Set<string>();
 for (const episode of episodes) {
     for (const serverData of episode.server_data) {
-        if (!serverData.link_embed) {
+        if (!serverData.link_m3u8 && !serverData.link_embed) {
             continue;
         }
-        const key = `${episode.server_name}:${serverData.slug}:${serverData.link_embed}`;
+        const key = `${episode.server_name}:${serverData.slug}:${serverData.link_m3u8 ?? ""}:${serverData.link_embed ?? ""}`;
         if (seenPlayable.has(key)) {
             continue;
         }
@@ -76,6 +76,7 @@ for (const episode of episodes) {
 
 const firstPlayableEpisode = playableEpisodes[0];
 const hasEpisodes = totalEpisodeCount > 0;
+const hasPlayableEpisodes = playableEpisodes.length > 0;
 const firstPlayableLabel = firstPlayableEpisode?.label ?? "Chọn tập để phát";
 const actionButtonClass =
     "uppercase tracking-tighter font-bold border-2 border-[#3F3F46] bg-transparent px-4 py-2 text-[#FAFAFA] hover:bg-[#FAFAFA] hover:text-[#09090B] hover:border-[#FAFAFA] transition-all inline-flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B]";
@@ -376,10 +377,17 @@ const actionButtonClass =
                     {firstPlayableEpisode ? `Sẵn sàng phát: ${firstPlayableEpisode.label}` : "Chưa có tập để phát"}
                 </h2>
                 <span id="playerStatus" class="text-sm uppercase tracking-wider text-[#A1A1AA]" aria-live="polite">
-                    {hasEpisodes ? "Chọn tập để bắt đầu phát." : "Đợi nhà phát hành cập nhật tập mới."}
+                    {hasPlayableEpisodes
+                        ? "Chọn tập để bắt đầu phát."
+                        : hasEpisodes
+                            ? "Đang cập nhật nguồn phát."
+                            : "Đợi nhà phát hành cập nhật tập mới."}
                 </span>
             </div>
-            <div id="playerShell" class="player-shell relative overflow-hidden border-2 border-[#3F3F46] bg-[#09090B] p-2 sm:p-3">
+            <div
+                id="playerShell"
+                class="player-shell relative overflow-hidden rounded-2xl border border-[#27272A] bg-[linear-gradient(145deg,rgba(8,8,10,0.96),rgba(14,14,18,0.88))] p-2 sm:p-3"
+            >
                 <VideoPlayer client:load playlist={playableEpisodes} />
             </div>
         </div>
@@ -390,7 +398,7 @@ const actionButtonClass =
     type EpisodeSelectionDetail = {
         ep: string;
         label?: string;
-        linkEmbed: string;
+        linkEmbed?: string;
         linkM3u8?: string;
         serverName?: string;
     };
@@ -459,7 +467,7 @@ const actionButtonClass =
         const linkEmbed = watchBtn.dataset.defaultLink;
         const linkM3u8 = watchBtn.dataset.defaultM3u8 || undefined;
         const serverName = watchBtn.dataset.defaultServer || undefined;
-        if (!ep || !linkEmbed) {
+        if (!ep || (!linkEmbed && !linkM3u8)) {
             return null;
         }
 
@@ -548,7 +556,7 @@ const actionButtonClass =
 
     const onEpisodeSelected = (event: Event) => {
         const detail = (event as CustomEvent<EpisodeSelectionDetail>).detail;
-        if (!detail?.ep || !detail.linkEmbed) {
+        if (!detail?.ep || (!detail.linkEmbed && !detail.linkM3u8)) {
             return;
         }
         activeEpisode = detail;
@@ -688,6 +696,16 @@ const actionButtonClass =
 
     .player-shell {
         isolation: isolate;
+        box-shadow: 0 24px 58px rgba(0, 0, 0, 0.46);
+    }
+
+    .player-shell::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: inherit;
+        pointer-events: none;
     }
 
     .player-shell::before {
