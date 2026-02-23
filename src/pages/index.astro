@@ -9,7 +9,7 @@ const feedVersion = parseFeedVersion(requestUrl.searchParams.get("feed"));
 ---
 
 <Layout title="AstroFlim Prime">
-    <main class="text-white">
+    <main class="mx-auto w-full max-w-[96rem] px-2 pb-20 text-white sm:px-3 lg:px-4">
         <!-- Hero Movie Section -->
         <HeroMovie feedVersion={feedVersion} />
 

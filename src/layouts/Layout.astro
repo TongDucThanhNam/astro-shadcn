@@ -1,16 +1,33 @@
 ---
 interface Props {
-    title: string;
+	title: string;
 }
 const { title } = Astro.props;
+
 import { ClientRouter } from "astro:transitions";
 import ProgressBar from "astro-vtbot/components/ProgressBar.astro";
 
 import "@/styles/globals.css";
-import SearchForm from "@/components/SearchForm";
-import { NavigationMenuDemo } from "@/components/NavigationMenuDemo";
 import MobileMenu from "@/components/MobileMenu";
+import SearchForm from "@/components/SearchForm";
 import Cursor from "@/components/ui/Cursor";
+
+const primaryLinks = [
+	{ label: "Phim lẻ", href: "/danh-sach/phim-le" },
+	{ label: "Phim bộ", href: "/danh-sach/phim-bo" },
+	{ label: "TV Shows", href: "/danh-sach/tv-shows" },
+];
+
+const genreLinks = [
+	{ label: "Hành Động", href: "/danh-sach/the-loai/hanh-dong" },
+	{ label: "Tình Cảm", href: "/danh-sach/the-loai/tinh-cam" },
+	{ label: "Cổ Trang", href: "/danh-sach/the-loai/co-trang" },
+	{ label: "Kinh Dị", href: "/danh-sach/the-loai/kinh-di" },
+	{ label: "Hài Hước", href: "/danh-sach/the-loai/hai-huoc" },
+	{ label: "Viễn Tưởng", href: "/danh-sach/the-loai/vien-tuong" },
+	{ label: "Phiêu Lưu", href: "/danh-sach/the-loai/phieu-luu" },
+	{ label: "Bí Ẩn", href: "/danh-sach/the-loai/bi-an" },
+];
 ---
 
 <!doctype html>
@@ -32,49 +49,80 @@ import Cursor from "@/components/ui/Cursor";
         <!-- Noise texture overlay -->
         <div class="noise-overlay" aria-hidden="true"></div>
 
-        <nav
-            class="sticky top-0 z-50 border-b-2 border-[#3F3F46] bg-[#09090B]/90 backdrop-blur-sm transition-all duration-300"
+        <header
+            class="sticky top-0 z-50 border-y border-[#2D2F35] bg-[#09090B]/92 backdrop-blur-xl"
             transition:persist
         >
-            <div
-                class="mx-auto flex w-full max-w-[95vw] flex-col gap-4 px-4 py-4 md:flex-row md:items-center md:justify-between"
-            >
-                <div
-                    class="flex w-full items-center justify-between gap-3 md:w-auto md:justify-start"
-                >
-                    <a
-                        href="/"
-                        class="flex flex-shrink-0 items-center gap-2 transition-all duration-200 hover:opacity-80"
-                        aria-label="AstroFlim Home"
-                    >
-                        <span
-                            class="bg-[#DFE104] px-4 py-2 text-sm font-bold uppercase tracking-wider text-[#09090B]"
+            <div class="mx-auto w-full max-w-[96rem] px-2 sm:px-3 lg:px-4">
+                <div class="flex h-[4.75rem] items-center justify-between gap-3">
+                    <div class="flex min-w-0 items-center gap-3 sm:gap-5">
+                        <a
+                            href="/"
+                            class="inline-flex shrink-0 items-center border border-[#DFE104] bg-[#DFE104] px-4 py-2 text-sm font-black uppercase tracking-[0.08em] text-[#09090B] transition-colors duration-200 hover:bg-[#F2F43A]"
+                            aria-label="AstroFlim Home"
                         >
                             AstroFlim
-                        </span>
-                    </a>
-                    <div class="flex items-center gap-2 md:hidden">
-                        <SearchForm client:only="react" variant="icon" />
+                        </a>
+
+                        <nav class="hidden items-center gap-3 lg:flex lg:gap-4" aria-label="Điều hướng chính">
+                            {
+                                primaryLinks.map((link, index) => (
+                                    <div class="flex items-center gap-3 lg:gap-4">
+                                        <a
+                                            href={link.href}
+                                            class="text-sm font-bold uppercase tracking-[0.08em] text-[#FAFAFA] transition-colors duration-200 hover:text-[#DFE104]"
+                                        >
+                                            {link.label}
+                                        </a>
+                                        {index < primaryLinks.length - 1 && (
+                                            <span class="text-xs text-[#52525B]" aria-hidden="true">•</span>
+                                        )}
+                                    </div>
+                                ))
+                            }
+                            <div class="group relative">
+                                <button
+                                    type="button"
+                                    class="inline-flex items-center gap-1 text-sm font-bold uppercase tracking-[0.08em] text-[#FAFAFA] transition-colors duration-200 hover:text-[#DFE104]"
+                                >
+                                    Thể loại
+                                    <span class="text-xs text-[#71717A]">▾</span>
+                                </button>
+                                <div class="pointer-events-none absolute left-0 top-full z-40 -translate-y-1 pt-3 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                                    <div class="w-[22rem] border border-[#2D2F35] bg-[#0E1015] p-4 shadow-[0_14px_40px_rgba(0,0,0,0.45)]">
+                                        <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-[#71717A]">
+                                            Thể loại nổi bật
+                                        </p>
+                                        <div class="mt-3 grid grid-cols-2 gap-2">
+                                            {
+                                                genreLinks.map((genre) => (
+                                                    <a
+                                                        href={genre.href}
+                                                        class="border border-[#2D2F35] bg-[#12141B] px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-[#D4D4D8] transition-all duration-200 hover:border-[#DFE104] hover:bg-[#181B24] hover:text-[#DFE104]"
+                                                    >
+                                                        {genre.label}
+                                                    </a>
+                                                ))
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <div class="hidden w-[15rem] md:block lg:w-[20rem]">
+                            <SearchForm client:only="react" variant="header" />
+                        </div>
+                        <div class="md:hidden">
+                            <SearchForm client:only="react" variant="icon" />
+                        </div>
                         <MobileMenu client:only="react" />
                     </div>
                 </div>
-                <div
-                    class="hidden w-full md:flex md:flex-1 md:items-center md:gap-2 lg:gap-6"
-                >
-                    <NavigationMenuDemo client:only="react" />
-                </div>
-                <div
-                    class="hidden w-full md:block md:w-auto md:max-w-sm md:flex-1 lg:flex-none lg:w-80"
-                >
-                    <SearchForm client:only="react" />
-                </div>
             </div>
-
-            <!-- Mobile Navigation below header -->
-            <div class="md:hidden px-4 pb-4">
-                <NavigationMenuDemo client:only="react" />
-            </div>
-        </nav>
+        </header>
         <slot />
         <footer
             class="flex flex-col items-center justify-center w-full bg-[#09090B] py-12 border-t-2 border-[#3F3F46]"
@@ -86,9 +134,6 @@ import Cursor from "@/components/ui/Cursor";
             </div>
             <p class="text-sm text-[#A1A1AA] text-center max-w-md uppercase tracking-wide">
                 Trang web được làm với mục đích học tập và phi thương mại.
-            </p>
-            <p class="text-xs text-[#A1A1AA]/60 mt-4 uppercase tracking-widest text-[10px]">
-                Powered by <a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="text-[#DFE104] hover:text-[#DFE104]/80 transition-colors">Astro</a> & <a href="https://ui.shadcn.com" target="_blank" rel="noopener noreferrer" class="text-[#DFE104] hover:text-[#DFE104]/80 transition-colors">shadcn/ui</a>
             </p>
         </footer>
     </body>

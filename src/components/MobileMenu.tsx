@@ -54,8 +54,8 @@ const MenuItemComponent: React.FC<MenuItemComponentProps> = ({
         <CollapsibleTrigger asChild>
           <button
             className={cn(
-              "flex w-full items-center justify-between py-2 text-base font-medium transition-colors hover:text-primary",
-              depth > 0 && "pl-4",
+              "flex w-full items-center justify-between border border-transparent px-2 py-2.5 text-sm font-semibold uppercase tracking-[0.1em] text-[#E4E4E7] transition-colors duration-200 hover:border-[#2D2F35] hover:bg-[#111318] hover:text-[#DFE104]",
+              depth > 0 && "pl-4 text-xs tracking-[0.08em]",
             )}
           >
             {item.title}
@@ -84,8 +84,8 @@ const MenuItemComponent: React.FC<MenuItemComponentProps> = ({
     <a
       href={item.href}
       className={cn(
-        "block py-2 text-base transition-colors hover:text-primary",
-        depth > 0 && "pl-4",
+        "block border border-transparent px-2 py-2.5 text-sm font-semibold uppercase tracking-[0.1em] text-[#E4E4E7] transition-colors duration-200 hover:border-[#2D2F35] hover:bg-[#111318] hover:text-[#DFE104]",
+        depth > 0 && "pl-4 text-xs tracking-[0.08em] text-[#A1A1AA]",
       )}
       onClick={onNavigate}
     >
@@ -100,13 +100,23 @@ export default function MobileMenu() {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="md:hidden">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-10 w-10 border border-[#2D2F35] bg-[#111318]/85 text-[#FAFAFA] transition-colors duration-200 hover:border-[#DFE104] hover:bg-[#151821] hover:text-[#DFE104] lg:hidden"
+        >
           <Menu className="h-5 w-5" />
           <span className="sr-only">Mở menu</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-[260px] bg-slate-950 text-white sm:w-[320px]">
-        <nav className="mt-6 flex flex-col space-y-2">
+      <SheetContent
+        side="left"
+        className="w-[280px] border-r border-[#2D2F35] bg-[#09090B] p-0 text-white sm:w-[340px]"
+      >
+        <div className="border-b border-[#2D2F35] px-5 py-4">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#71717A]">Điều hướng</p>
+        </div>
+        <nav className="flex flex-col gap-1 px-3 py-4">
           {menuItems.map((item) => (
             <MenuItemComponent
               key={item.title}

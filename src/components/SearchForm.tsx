@@ -21,11 +21,13 @@ const QUICK_LINKS = [
 ]
 
 interface SearchFormProps {
-    variant?: "default" | "icon"
+    variant?: "default" | "icon" | "header"
+    className?: string
 }
 
-const SearchForm: React.FC<SearchFormProps> = ({ variant = "default" }) => {
+const SearchForm: React.FC<SearchFormProps> = ({ variant = "default", className }) => {
     const isIconVariant = variant === "icon"
+    const isHeaderVariant = variant === "header"
     const [open, setOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState("")
 
@@ -65,20 +67,46 @@ const SearchForm: React.FC<SearchFormProps> = ({ variant = "default" }) => {
                 variant={isIconVariant ? "ghost" : "outline"}
                 size={isIconVariant ? "icon" : "default"}
                 className={cn(
-                    "border-white/10 bg-white/5 text-white hover:bg-white/10",
+                    "text-white transition-colors duration-200",
                     isIconVariant
-                        ? "h-10 w-10 rounded-full"
-                        : "w-full justify-start gap-2"
+                        ? "h-10 w-10 border border-[#2D2F35] bg-[#111318]/85 hover:border-[#DFE104] hover:bg-[#151821] hover:text-[#DFE104]"
+                        : isHeaderVariant
+                            ? "h-11 w-full justify-start gap-2 border border-[#2D2F35] bg-[#111318]/92 px-3 hover:border-[#5A5C66] hover:bg-[#151821]"
+                            : "w-full justify-start gap-2 border-white/10 bg-white/5 hover:bg-white/10",
+                    className
                 )}
                 onClick={() => setOpen(true)}
             >
-                <Search className="h-4 w-4" />
+                <Search
+                    className={cn(
+                        "h-4 w-4",
+                        isHeaderVariant ? "text-[#71717A]" : "text-current"
+                    )}
+                />
                 {isIconVariant ? (
                     <span className="sr-only">Tìm kiếm</span>
                 ) : (
                     <>
-                        <span className="flex-1 text-left text-sm">Tìm phim, diễn viên...</span>
-                        <span className="hidden text-xs text-white/60 md:inline">⌘K</span>
+                        <span
+                            className={cn(
+                                "flex-1 text-left text-sm",
+                                isHeaderVariant
+                                    ? "font-semibold uppercase tracking-[0.08em] text-[#A1A1AA]"
+                                    : "text-current"
+                            )}
+                        >
+                            Tìm phim, diễn viên...
+                        </span>
+                        <span
+                            className={cn(
+                                "hidden text-xs md:inline",
+                                isHeaderVariant
+                                    ? "border-l border-[#2D2F35] pl-3 font-bold uppercase tracking-[0.12em] text-[#71717A]"
+                                    : "text-white/60"
+                            )}
+                        >
+                            ⌘K
+                        </span>
                     </>
                 )}
             </Button>

@@ -1,105 +1,148 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import { Play } from "lucide-react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
+import type React from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 
 interface CursorProps {
-  enabled?: boolean;
+	enabled?: boolean;
 }
 
+const HOVER_SELECTORS = [
+	"a",
+	"button",
+	'[role="button"]',
+	"[data-cursor-pointer]",
+	".cursor-pointer",
+	".magnetic",
+	"input",
+	"textarea",
+	"select",
+	'[tabindex]:not([tabindex="-1"])',
+];
+
 const Cursor: React.FC<CursorProps> = ({ enabled = true }) => {
-  const [isHovering, setIsHovering] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+	const [cursorMode, setCursorMode] = useState<"default" | "hover" | "play">(
+		"default",
+	);
+	const [isVisible, setIsVisible] = useState(false);
+	const isVisibleRef = useRef(false);
 
-  const cursorX = useMotionValue(-100);
-  const cursorY = useMotionValue(-100);
-  const followerX = useMotionValue(-100);
-  const followerY = useMotionValue(-100);
+	const cursorX = useMotionValue(-100);
+	const cursorY = useMotionValue(-100);
+	const followerX = useMotionValue(-100);
+	const followerY = useMotionValue(-100);
 
-  // Spring physics for smooth movement
-  const springConfig = { damping: 25, stiffness: 700 };
-  const cursorSpringX = useSpring(cursorX, springConfig);
-  const cursorSpringY = useSpring(cursorY, springConfig);
-  const followerSpringX = useSpring(followerX, { damping: 20, stiffness: 300 });
-  const followerSpringY = useSpring(followerY, { damping: 20, stiffness: 300 });
+	// Spring physics - cursor dot: fast, follower: smooth delay
+	const cursorSpringX = useSpring(cursorX, { damping: 15, stiffness: 1000 });
+	const cursorSpringY = useSpring(cursorY, { damping: 15, stiffness: 1000 });
+	const followerSpringX = useSpring(followerX, { damping: 15, stiffness: 400 });
+	const followerSpringY = useSpring(followerY, { damping: 15, stiffness: 400 });
 
-  useEffect(() => {
-    if (!enabled) return;
+	const checkHover = useCallback((target: HTMLElement | null) => {
+		if (!target) {
+			setCursorMode("default");
+			return;
+		}
+		const isHoverable = HOVER_SELECTORS.some((selector) =>
+			Boolean(target.closest(selector)),
+		);
+		const isPlayTarget = Boolean(target.closest("[data-cursor-play]"));
+		if (isPlayTarget && isHoverable) {
+			setCursorMode("play");
+			return;
+		}
+		setCursorMode(isHoverable ? "hover" : "default");
+	}, []);
 
-    const handleMouseMove = (e: MouseEvent) => {
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
-      followerX.set(e.clientX);
-      followerY.set(e.clientY);
-      if (!isVisible) setIsVisible(true);
-    };
+	useEffect(() => {
+		if (!enabled) return;
 
-    const handleMouseEnter = () => setIsVisible(true);
-    const handleMouseLeave = () => setIsVisible(false);
+		// Skip on touch devices
+		if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
+			return;
+		}
 
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const isHoverable =
-        target.tagName === "A" ||
-        target.tagName === "BUTTON" ||
-        target.closest("a") ||
-        target.closest("button") ||
-        target.classList.contains("cursor-pointer") ||
-        target.classList.contains("magnetic");
+		const handlePointerMove = (e: PointerEvent) => {
+			cursorX.set(e.clientX);
+			cursorY.set(e.clientY);
+			followerX.set(e.clientX);
+			followerY.set(e.clientY);
+			checkHover(e.target instanceof HTMLElement ? e.target : null);
 
-      setIsHovering(!!isHoverable);
-    };
+			if (!isVisibleRef.current) {
+				isVisibleRef.current = true;
+				setIsVisible(true);
+			}
+		};
 
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseenter", handleMouseEnter);
-    document.addEventListener("mouseleave", handleMouseLeave);
-    document.addEventListener("mouseover", handleMouseOver);
+		const handlePointerLeave = () => {
+			setCursorMode("default");
+			setIsVisible(false);
+			isVisibleRef.current = false;
+		};
 
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseenter", handleMouseEnter);
-      document.removeEventListener("mouseleave", handleMouseLeave);
-      document.removeEventListener("mouseover", handleMouseOver);
-    };
-  }, [enabled, isVisible, cursorX, cursorY, followerX, followerY]);
+		document.addEventListener("pointermove", handlePointerMove, {
+			passive: true,
+		});
+		document.addEventListener("pointerleave", handlePointerLeave);
 
-  if (!enabled) return null;
+		return () => {
+			document.removeEventListener("pointermove", handlePointerMove);
+			document.removeEventListener("pointerleave", handlePointerLeave);
+		};
+	}, [enabled, cursorX, cursorY, followerX, followerY, checkHover]);
 
-  return (
-    <>
-      {/* Main cursor dot */}
-      <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[9999] mix-blend-difference"
-        style={{
-          x: cursorSpringX,
-          y: cursorSpringY,
-          opacity: isVisible ? 1 : 0,
-        }}
-        animate={{ scale: isHovering ? 1.5 : 1 }}
-        transition={{ duration: 0.15 }}
-      >
-        <div className="w-3 h-3 bg-[#DFE104] rounded-full" />
-      </motion.div>
+	// Don't render on server or if disabled
+	if (typeof window === "undefined" || !enabled) return null;
 
-      {/* Follower circle */}
-      <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[9998] mix-blend-difference"
-        style={{
-          x: followerSpringX,
-          y: followerSpringY,
-          opacity: isVisible ? 1 : 0,
-        }}
-        animate={{
-          scale: isHovering ? 1.5 : 1,
-          borderColor: isHovering ? "#DFE104" : "#DFE104",
-          opacity: isHovering ? 0.5 : 1,
-        }}
-        transition={{ duration: 0.3 }}
-      >
-        <div className="w-10 h-10 border-2 border-[#DFE104] rounded-full" />
-      </motion.div>
-    </>
-  );
-};
+	// Don't show on touch devices
+	if ("ontouchstart" in window || navigator.maxTouchPoints > 0) return null;
+
+	return (
+		<>
+			{/* Main cursor dot */}
+			<motion.div
+				className="fixed pointer-events-none z-[9999] hidden md:block"
+				style={{
+					x: cursorSpringX,
+					y: cursorSpringY,
+					opacity: isVisible ? 1 : 0,
+				}}
+				animate={{ scale: cursorMode === "default" ? 1 : cursorMode === "hover" ? 0.65 : 0 }}
+				transition={{ duration: 0.15 }}
+			>
+				<div className="-translate-x-1/2 -translate-y-1/2 rounded-full border border-[#09090B] bg-[#DFE104] shadow-[0_0_0_1px_rgba(223,225,4,0.4)] h-2.5 w-2.5" />
+			</motion.div>
+
+			{/* Follower circle */}
+				<motion.div
+					className="fixed pointer-events-none z-[9998] hidden md:block"
+					style={{
+						x: followerSpringX,
+						y: followerSpringY,
+						opacity: isVisible ? 1 : 0,
+				}}
+				animate={{
+					scale:
+						cursorMode === "play" ? 1.7 : cursorMode === "hover" ? 1.25 : 1,
+					opacity: cursorMode === "default" ? 0.75 : 0.95,
+				}}
+				transition={{ duration: 0.2, ease: "easeOut" }}
+				>
+					<div
+						className={`-translate-x-1/2 -translate-y-1/2 relative flex h-8 w-8 items-center justify-center rounded-full border border-[#DFE104] ${
+							cursorMode === "play" ? "bg-[#DFE104]" : "bg-transparent"
+						}`}
+					>
+						{cursorMode === "play" ? (
+							<Play className="h-3.5 w-3.5 fill-current text-[#09090B]" />
+						) : null}
+					</div>
+				</motion.div>
+			</>
+		);
+	};
 
 export default Cursor;

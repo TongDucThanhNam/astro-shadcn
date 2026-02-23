@@ -1,120 +1,40 @@
 ---
-import { Image } from "astro:assets";
-import { resolveImageUrl } from "@/lib/wsrv";
-import { formatYear, getSectionData } from "./section-utils";
+import { getSectionData } from "./section-utils";
+import SectionListCarousel from "@/components/ui/SectionListCarousel";
 
 const { config } = Astro.props;
 
 const section = await getSectionData(config);
 ---
 
-<section class="flex flex-col gap-6" id={section.key}>
-    <div class="flex flex-wrap items-baseline justify-between gap-3">
-        <div>
-            <h2 class="text-xl font-semibold tracking-tight sm:text-2xl">
+<section class="flex flex-col gap-5 border-t border-[#27272A] pt-8 sm:gap-6 sm:pt-10" id={section.key}>
+    <div class="flex flex-wrap items-end justify-between gap-3">
+        <div class="space-y-1">
+            <h2 class="text-2xl font-bold uppercase tracking-tighter text-[#FAFAFA] sm:text-[2rem]">
                 {section.title}
             </h2>
-            <p class="text-sm text-white/60">
+            <p class="text-xs uppercase tracking-[0.14em] text-[#A1A1AA] sm:text-sm">
                 {section.subtitle}
             </p>
         </div>
         <a
             href={`/danh-sach/${section.typeList}`}
-            class="text-sm font-medium text-sky-300 transition hover:text-sky-100"
+            class="group/link inline-flex items-center gap-1 border border-[#3F3F46] bg-[#09090B] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-[#FAFAFA] transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]"
         >
-            Xem tất cả →
+            Xem tất cả
+            <span class="inline-block transition-transform duration-300 group-hover/link:translate-x-1">→</span>
         </a>
     </div>
 
     {
         section.items.length ? (
-            <div
-                class={`-mx-2 flex gap-4 overflow-x-auto pb-2 pl-2 pr-4 ${
-                    section.layout === "landscape"
-                        ? "snap-x snap-mandatory"
-                        : ""
-                }`}
-            >
-                {section.items.map((item) => {
-                    const isLandscape = section.layout === "landscape";
-                    const baseWidth = isLandscape ? 350 : 230;
-                    const baseHeight = isLandscape
-                        ? Math.round((baseWidth * 9) / 16)
-                        : Math.round((baseWidth * 4) / 3);
-                    const imageUrl =
-                        section.layout === "landscape"
-                            ? item.thumb_url || item.poster_url
-                            : item.poster_url || item.thumb_url;
-
-                    const imageSource = resolveImageUrl(imageUrl);
-                    const widthCandidates = Array.from(new Set([baseWidth, baseWidth * 2]));
-
-                    const sizes = isLandscape
-                        ? "(max-width: 768px) 80vw, 350px"
-                        : "(max-width: 768px) 60vw, 230px";
-
-                    return (
-                        <article
-                            class={`group relative shrink-0 overflow-hidden rounded-xl bg-slate-900/60 ring-white/10 transition duration-200 hover:ring-2 hover:ring-white/30 mt-2 ${
-                                section.layout === "landscape"
-                                    ? "w-[350px] snap-start"
-                                    : "w-[230px]"
-                            }`}
-                        >
-                            <a href={`/phim/${item.slug}`} class="block h-full">
-                                <div
-                                    class={`${
-                                        section.layout === "landscape"
-                                            ? "aspect-[16/9]"
-                                            : "aspect-[3/4]"
-                                    } relative`}
-                                >
-                                    {imageSource ? (
-                                        <Image
-                                            src={imageSource}
-                                            alt={item.name}
-                                            loading="lazy"
-                                            decoding="async"
-                                            width={baseWidth}
-                                            height={baseHeight}
-                                            widths={widthCandidates}
-                                            sizes={sizes}
-                                            quality={85}
-                                            fit="cover"
-                                            transition:name={`${
-                                                section.layout === "landscape"
-                                                    ? "poster"
-                                                    : "image"
-                                            }-${item.slug}`}
-                                            class="h-full w-full object-cover"
-                                        />
-                                    ) : (
-                                        <div class="flex h-full w-full items-center justify-center bg-slate-800 text-xs text-white/50">
-                                            No Image
-                                        </div>
-                                    )}
-                                    <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/10" />
-                                    <div class="pointer-events-none absolute left-3 top-3 rounded-full bg-slate-950/70 px-3 py-1 text-xs font-medium text-white/80">
-                                        {formatYear(item) ?? "N/A"}
-                                    </div>
-                                </div>
-                                {section.layout === "landscape" ? null : (
-                                    <div class="space-y-1 px-4 py-4">
-                                        <h3 class="line-clamp-2 text-sm font-semibold text-white transition group-hover:text-sky-200">
-                                            {item.name}
-                                        </h3>
-                                        <p class="text-xs text-white/60 line-clamp-1">
-                                            {item.origin_name}
-                                        </p>
-                                    </div>
-                                )}
-                            </a>
-                        </article>
-                    );
-                })}
-            </div>
+            <SectionListCarousel
+                client:visible
+                items={section.items}
+                layout={section.layout}
+            />
         ) : (
-            <div class="rounded-2xl border border-white/10 bg-slate-900/60 px-6 py-12 text-center text-sm text-white/70">
+            <div class="border-2 border-[#3F3F46] bg-[#09090B] px-6 py-12 text-center text-sm text-[#A1A1AA]">
                 {section.error ?? "Không có dữ liệu để hiển thị."}
             </div>
         )

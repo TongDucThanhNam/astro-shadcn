@@ -90,22 +90,17 @@ const activeFilters = [
 ---
 
 <div
-    class="relative w-full overflow-hidden rounded-3xl border border-slate-800/60 bg-slate-950/70 p-[1px] shadow-xl"
+    class="relative w-full overflow-hidden border-2 border-[#3F3F46] bg-[#09090B]"
 >
-    <div
-        class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.25),_transparent_60%)] opacity-80"
-    >
-    </div>
-
-    <div class="relative rounded-3xl bg-slate-950/80 p-6 md:p-8">
+    <div class="relative p-6 md:p-8">
         <div
             class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
         >
             <div class="space-y-1">
-                <h3 class="text-xl font-semibold text-white">
+                <h3 class="text-xl font-bold uppercase tracking-tighter text-[#FAFAFA]">
                     Bộ lọc nâng cao
                 </h3>
-                <p class="text-sm text-slate-400">
+                <p class="text-sm text-[#A1A1AA]">
                     Tinh chỉnh danh sách phim để tìm nội dung phù hợp nhất với
                     bạn.
                 </p>
@@ -114,15 +109,15 @@ const activeFilters = [
                 {
                     activeFilters.length ? (
                         activeFilters.map(({ label, value }) => (
-                            <span class="flex items-center gap-2 rounded-full border border-slate-800/60 bg-slate-900/80 px-3 py-1 text-xs text-slate-200">
-                                <span class="font-semibold uppercase text-slate-400">
+                            <span class="flex items-center gap-2 border border-[#3F3F46] bg-[#27272A] px-3 py-1 text-xs text-[#FAFAFA]">
+                                <span class="font-semibold uppercase text-[#A1A1AA]">
                                     {label}
                                 </span>
-                                <span class="text-slate-100">{value}</span>
+                                <span class="text-[#FAFAFA]">{value}</span>
                             </span>
                         ))
                     ) : (
-                        <span class="text-xs uppercase tracking-wide text-slate-500">
+                        <span class="text-xs uppercase tracking-widest text-[#A1A1AA]">
                             Chưa áp dụng bộ lọc bổ sung
                         </span>
                     )
@@ -132,14 +127,14 @@ const activeFilters = [
 
         <div class="mt-6 flex items-center justify-between gap-3">
             <span
-                class="text-xs font-semibold uppercase tracking-wide text-slate-400"
+                class="text-xs font-semibold uppercase tracking-widest text-[#A1A1AA]"
             >
                 Tuỳ chỉnh nhanh
             </span>
             <button
                 id="filterToggle"
                 type="button"
-                class="inline-flex items-center gap-2 rounded-full border border-slate-800/60 bg-slate-900/70 px-3 py-2 text-xs font-medium text-slate-200 transition hover:border-slate-600 hover:bg-slate-900/90 md:hidden"
+                class="inline-flex items-center gap-2 border-2 border-[#3F3F46] bg-transparent px-3 py-2 text-xs font-bold uppercase tracking-tighter text-[#FAFAFA] transition hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-black md:hidden"
                 aria-expanded="false"
                 aria-controls="filterForm"
             >
@@ -163,7 +158,7 @@ const activeFilters = [
         <form id="filterForm" class="mt-4 hidden space-y-8 md:mt-8 md:block">
             <fieldset class="space-y-4">
                 <legend
-                    class="text-xs font-semibold uppercase tracking-wide text-slate-400"
+                    class="text-xs font-bold uppercase tracking-widest text-[#A1A1AA]"
                 >
                     Sắp xếp & hiển thị
                 </legend>
@@ -173,14 +168,14 @@ const activeFilters = [
                     <div class="flex flex-col gap-2">
                         <label
                             for="sortField"
-                            class="text-sm font-medium text-slate-200"
+                            class="text-sm font-bold uppercase tracking-tighter text-[#FAFAFA]"
                             >Sắp xếp theo</label
                         >
                         <select
                             id="sortField"
                             name="sortField"
                             value={sortField}
-                            class="w-full rounded-xl border border-slate-800/70 bg-slate-900/70 px-4 py-3 text-sm text-slate-100 transition focus:border-primary/70 focus:outline-none focus:ring-2 focus:ring-primary/40"
+                            class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-4 py-3 text-sm text-[#FAFAFA] transition focus:border-[#DFE104] focus:outline-none"
                         >
                             <option value="modified.time">Ngày cập nhật</option>
                             <option value="_id">ID phim</option>
@@ -191,14 +186,14 @@ const activeFilters = [
                     <div class="flex flex-col gap-2">
                         <label
                             for="sortType"
-                            class="text-sm font-medium text-slate-200"
+                            class="text-sm font-bold uppercase tracking-tighter text-[#FAFAFA]"
                             >Thứ tự</label
                         >
                         <select
                             id="sortType"
                             name="sortType"
                             value={sortType}
-                            class="w-full rounded-xl border border-slate-800/70 bg-slate-900/70 px-4 py-3 text-sm text-slate-100 transition focus:border-primary/70 focus:outline-none focus:ring-2 focus:ring-primary/40"
+                            class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-4 py-3 text-sm text-[#FAFAFA] transition focus:border-[#DFE104] focus:outline-none"
                         >
                             <option value="desc">Mới nhất</option>
                             <option value="asc">Cũ nhất</option>
@@ -208,14 +203,14 @@ const activeFilters = [
                     <div class="flex flex-col gap-2">
                         <label
                             for="year"
-                            class="text-sm font-medium text-slate-200"
+                            class="text-sm font-bold uppercase tracking-tighter text-[#FAFAFA]"
                             >Năm phát hành</label
                         >
                         <select
                             id="year"
                             name="year"
                             value={year}
-                            class="w-full rounded-xl border border-slate-800/70 bg-slate-900/70 px-4 py-3 text-sm text-slate-100 transition focus:border-primary/70 focus:outline-none focus:ring-2 focus:ring-primary/40"
+                            class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-4 py-3 text-sm text-[#FAFAFA] transition focus:border-[#DFE104] focus:outline-none"
                         >
                             <option value="">Tất cả</option>
                             {
@@ -229,14 +224,14 @@ const activeFilters = [
                     <div class="flex flex-col gap-2">
                         <label
                             for="limit"
-                            class="text-sm font-medium text-slate-200"
+                            class="text-sm font-bold uppercase tracking-tighter text-[#FAFAFA]"
                             >Số lượng/trang</label
                         >
                         <select
                             id="limit"
                             name="limit"
                             value={limit}
-                            class="w-full rounded-xl border border-slate-800/70 bg-slate-900/70 px-4 py-3 text-sm text-slate-100 transition focus:border-primary/70 focus:outline-none focus:ring-2 focus:ring-primary/40"
+                            class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-4 py-3 text-sm text-[#FAFAFA] transition focus:border-[#DFE104] focus:outline-none"
                         >
                             <option value="10">10</option>
                             <option value="20">20</option>
@@ -251,7 +246,7 @@ const activeFilters = [
 
             <fieldset class="space-y-4">
                 <legend
-                    class="text-xs font-semibold uppercase tracking-wide text-slate-400"
+                    class="text-xs font-bold uppercase tracking-widest text-[#A1A1AA]"
                 >
                     Bộ lọc nội dung
                 </legend>
@@ -261,14 +256,14 @@ const activeFilters = [
                     <div class="flex flex-col gap-2">
                         <label
                             for="category"
-                            class="text-sm font-medium text-slate-200"
+                            class="text-sm font-bold uppercase tracking-tighter text-[#FAFAFA]"
                             >Thể loại</label
                         >
                         <select
                             id="category"
                             name="category"
                             value={category}
-                            class="w-full rounded-xl border border-slate-800/70 bg-slate-900/70 px-4 py-3 text-sm text-slate-100 transition focus:border-primary/70 focus:outline-none focus:ring-2 focus:ring-primary/40"
+                            class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-4 py-3 text-sm text-[#FAFAFA] transition focus:border-[#DFE104] focus:outline-none"
                         >
                             <option value="">Tất cả</option>
                             {
@@ -284,14 +279,14 @@ const activeFilters = [
                     <div class="flex flex-col gap-2">
                         <label
                             for="country"
-                            class="text-sm font-medium text-slate-200"
+                            class="text-sm font-bold uppercase tracking-tighter text-[#FAFAFA]"
                             >Quốc gia</label
                         >
                         <select
                             id="country"
                             name="country"
                             value={country}
-                            class="w-full rounded-xl border border-slate-800/70 bg-slate-900/70 px-4 py-3 text-sm text-slate-100 transition focus:border-primary/70 focus:outline-none focus:ring-2 focus:ring-primary/40"
+                            class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-4 py-3 text-sm text-[#FAFAFA] transition focus:border-[#DFE104] focus:outline-none"
                         >
                             <option value="">Tất cả</option>
                             {
@@ -307,13 +302,13 @@ const activeFilters = [
                     <div class="flex flex-col gap-2">
                         <label
                             for="language"
-                            class="text-sm font-medium text-slate-200"
+                            class="text-sm font-bold uppercase tracking-tighter text-[#FAFAFA]"
                             >Ngôn ngữ (sắp ra mắt)</label
                         >
                         <select
                             id="language"
                             disabled
-                            class="w-full cursor-not-allowed rounded-xl border border-slate-800/40 bg-slate-900/40 px-4 py-3 text-sm text-slate-500"
+                            class="w-full cursor-not-allowed border-2 border-[#3F3F46]/40 bg-[#27272A]/40 px-4 py-3 text-sm text-[#A1A1AA]"
                         >
                             <option value="">Tất cả</option>
                         </select>
@@ -326,13 +321,13 @@ const activeFilters = [
             >
                 <button
                     type="reset"
-                    class="inline-flex w-full items-center justify-center rounded-xl border border-slate-700/80 px-5 py-3 text-sm font-medium text-slate-200 transition hover:border-slate-500 hover:bg-slate-900/70 sm:w-auto"
+                    class="inline-flex w-full items-center justify-center border-2 border-[#3F3F46] bg-transparent px-5 py-3 text-sm font-bold uppercase tracking-tighter text-[#FAFAFA] transition hover:border-white hover:bg-white hover:text-black sm:w-auto"
                 >
                     Đặt lại
                 </button>
                 <button
                     type="submit"
-                    class="inline-flex w-full items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 sm:w-auto"
+                    class="inline-flex w-full items-center justify-center bg-[#DFE104] px-5 py-3 text-sm font-bold uppercase tracking-tighter text-black transition hover:scale-105 sm:w-auto"
                 >
                     Áp dụng bộ lọc
                 </button>

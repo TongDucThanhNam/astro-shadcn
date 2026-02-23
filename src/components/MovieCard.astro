@@ -16,7 +16,12 @@ const imageSource = resolveImageUrl(image);
 const thumbnailPreset = imagePresets.thumbnail;
 ---
 
-<a href={`/phim/${slug}`} class="group block" data-astro-prefetch="hover">
+<a
+	href={`/phim/${slug}`}
+	class="group block"
+	data-astro-prefetch="hover"
+	data-cursor-play
+>
     <Card
         className="overflow-hidden border border-transparent bg-slate-900/60 transition-all duration-300 ease-in-out group-hover:ring-4 group-hover:ring-slate-700/50 shadow-lg hover:shadow-2xl"
     >
