@@ -178,50 +178,6 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
     });
   }, [episodes]);
 
-  // Auto-select the first playable episode on mount
-  const hasAutoSelected = useRef(false);
-  useEffect(() => {
-    if (hasAutoSelected.current || selectedEpisode || !episodes.length) return;
-    const server = episodes[0];
-    if (!server?.server_data?.length) return;
-
-    const defaultSort = getDefaultSortOrder(episodes);
-    const sorted = [...server.server_data].sort((a, b) => {
-      const numA = getEpisodeNumber(a.slug) || getEpisodeNumber(a.name);
-      const numB = getEpisodeNumber(b.slug) || getEpisodeNumber(b.name);
-      if (!Number.isNaN(numA) && !Number.isNaN(numB)) {
-        return defaultSort === 'asc' ? numA - numB : numB - numA;
-      }
-      return defaultSort === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
-    });
-
-    const first = sorted[0];
-    if (first && (first.link_m3u8 || first.link_embed)) {
-      hasAutoSelected.current = true;
-      setSelectedEpisode({
-        id: first.slug,
-        label: first.name,
-        linkEmbed: first.link_embed,
-        linkM3u8: first.link_m3u8,
-      });
-      // Defer dispatch so VideoPlayer's listener is registered first
-      requestAnimationFrame(() => {
-        window.dispatchEvent(
-          new CustomEvent('episodeSelected', {
-            detail: {
-              ep: first.slug,
-              label: first.name,
-              linkEmbed: first.link_embed,
-              linkM3u8: first.link_m3u8,
-              serverName: server.server_name,
-              autoSelect: true,
-            },
-          }),
-        );
-      });
-    }
-  }, [episodes]);
-
   return (
     <Card className="mt-6 border-2 border-[#3F3F46] bg-[#09090B]">
       <CardHeader className="flex flex-col gap-3 border-b-2 border-[#3F3F46] px-4 py-4 sm:flex-row sm:items-center sm:justify-between">

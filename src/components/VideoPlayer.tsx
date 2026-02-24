@@ -88,6 +88,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
   const [isEmbedLoading, setIsEmbedLoading] = useState(false);
   const [isTheaterMode, setIsTheaterMode] = useState(false);
   const [autoAdvance, setAutoAdvance] = useState(true);
+  const [shouldAutoPlay, setShouldAutoPlay] = useState(false);
+  const hasInitialized = useRef(false);
 
   const videoSectionRef = useRef<HTMLDivElement>(null);
   const playerFrameRef = useRef<HTMLDivElement>(null);
@@ -461,14 +463,34 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
     return () => window.removeEventListener('unhandledrejection', handleUnhandledRejection);
   }, [activateEmbedFallback, playbackMode]);
 
+  // Auto-select the first episode on mount (no autoplay, no scroll)
+  useEffect(() => {
+    if (hasInitialized.current || !playlist.length) return;
+    const first = playlist[0];
+    if (!first || !hasPlayableSource(first)) return;
+    hasInitialized.current = true;
+    applyEpisodeSelection(first);
+    // Sync EpisodeSelector UI
+    window.dispatchEvent(
+      new CustomEvent('episodeSelected', {
+        detail: { ...first, autoSelect: true },
+      }),
+    );
+  }, [playlist, applyEpisodeSelection]);
+
   useEffect(() => {
     const onEpisodeSelected = (event: Event) => {
       const detail = (event as CustomEvent<EpisodeSelectionDetail & { autoSelect?: boolean }>)
         .detail;
       if (!detail?.ep || !hasPlayableSource(detail)) return;
+
+      // Skip if this is the init echo from ourselves
+      if (detail.autoSelect) return;
+
+      setShouldAutoPlay(true);
       applyEpisodeSelection(detail);
 
-      if (videoSectionRef.current && !detail.autoSelect) {
+      if (videoSectionRef.current) {
         window.setTimeout(() => {
           const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
           videoSectionRef.current?.scrollIntoView({
@@ -718,7 +740,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
               crossOrigin="anonymous"
               googleCast={{ receiverApplicationId: 'CC1AD845' }}
               playsInline
-              autoPlay
+              autoPlay={shouldAutoPlay}
               onProviderChange={onProviderChange}
               className="group/player relative h-full w-full cursor-auto bg-[#09090B] text-[#FAFAFA]"
             >
