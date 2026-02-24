@@ -694,11 +694,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
                   'h-full w-full transition-opacity duration-300',
                   isEmbedLoading ? 'opacity-0' : 'opacity-100',
                 )}
-              ></iframe>
+              />
               {isEmbedLoading ? (
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[#09090B] text-[#A1A1AA]">
                   <div className="h-1 w-36 overflow-hidden rounded-sm bg-[#27272A]">
-                    <div className="h-full w-1/2 animate-pulse bg-[#DFE104]"></div>
+                    <div className="h-full w-1/2 animate-pulse bg-[#DFE104]" />
                   </div>
                   <p className="text-xs font-bold uppercase tracking-[0.24em]">
                     Đang tải nguồn dự phòng
