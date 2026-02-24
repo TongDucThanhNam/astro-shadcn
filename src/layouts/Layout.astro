@@ -27,6 +27,14 @@ const genreLinks = [
   { label: 'Phiêu Lưu', href: '/danh-sach/the-loai/phieu-luu' },
   { label: 'Bí Ẩn', href: '/danh-sach/the-loai/bi-an' },
 ];
+
+const yearLinks = [
+  { label: '2026', href: '/danh-sach/nam/2026' },
+  { label: '2025', href: '/danh-sach/nam/2025' },
+  { label: '2024', href: '/danh-sach/nam/2024' },
+  { label: '2023', href: '/danh-sach/nam/2023' },
+  { label: '2022', href: '/danh-sach/nam/2022' },
+];
 ---
 
 <!doctype html>
@@ -89,7 +97,7 @@ const genreLinks = [
                                         <h3 class="text-xs sm:text-xs md:text-sm font-black uppercase tracking-tighter text-[#DFE104] mb-2 sm:mb-3 md:mb-4 pb-2 border-b-2 border-[#27272A]">
                                             Thể loại nổi bật
                                         </h3>
-                                        <div class="grid grid-cols-2 gap-1.5 sm:gap-2 md:gap-2.5 mb-2 sm:mb-3 md:mb-4">
+                                        <div class="grid grid-cols-2 gap-1.5 sm:gap-2 md:gap-2.5 mb-3 sm:mb-4 md:mb-5">
                                             {
                                                 genreLinks.map((genre) => (
                                                     <a
@@ -97,6 +105,21 @@ const genreLinks = [
                                                         class="border-2 border-[#3F3F46] bg-[#09090B] px-2 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2.5 text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-tighter text-[#FAFAFA] transition-all duration-300 hover:bg-[#DFE104] hover:border-[#DFE104] hover:text-black hover:scale-105"
                                                     >
                                                         {genre.label}
+                                                    </a>
+                                                ))
+                                            }
+                                        </div>
+                                        <h3 class="text-xs sm:text-xs md:text-sm font-black uppercase tracking-tighter text-[#DFE104] mb-2 sm:mb-3 md:mb-4 pb-2 border-b-2 border-[#27272A]">
+                                            Năm
+                                        </h3>
+                                        <div class="grid grid-cols-5 gap-1.5 sm:gap-2 md:gap-2.5 mb-2 sm:mb-3 md:mb-4">
+                                            {
+                                                yearLinks.map((year) => (
+                                                    <a
+                                                        href={year.href}
+                                                        class="border-2 border-[#3F3F46] bg-[#09090B] px-2 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2.5 text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-tighter text-[#FAFAFA] transition-all duration-300 hover:bg-[#DFE104] hover:border-[#DFE104] hover:text-black hover:scale-105"
+                                                    >
+                                                        {year.label}
                                                     </a>
                                                 ))
                                             }

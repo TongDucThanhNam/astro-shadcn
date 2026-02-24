@@ -38,8 +38,6 @@ interface SectionListCarouselProps {
 
 const SectionListCarousel: React.FC<SectionListCarouselProps> = ({ items, layout }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const startSentinelRef = useRef<HTMLDivElement>(null);
-  const endSentinelRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
@@ -78,11 +76,11 @@ const SectionListCarousel: React.FC<SectionListCarouselProps> = ({ items, layout
     resizeObserver.observe(container);
 
     const images = Array.from(container.querySelectorAll('img'));
-    images.forEach((img) => {
+    for (const img of images) {
       if (!img.complete) {
         img.addEventListener('load', updateScrollState, { once: true });
       }
-    });
+    }
 
     return () => {
       container.removeEventListener('scroll', onScroll);
@@ -92,40 +90,7 @@ const SectionListCarousel: React.FC<SectionListCarouselProps> = ({ items, layout
         rafRef.current = null;
       }
     };
-  }, [items.length, layout, updateScrollState]);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    const start = startSentinelRef.current;
-    const end = endSentinelRef.current;
-    if (!container || !start || !end || typeof IntersectionObserver === 'undefined') {
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.target === start) {
-            setCanScrollPrev(!entry.isIntersecting);
-          }
-          if (entry.target === end) {
-            setCanScrollNext(!entry.isIntersecting);
-          }
-        }
-      },
-      {
-        root: container,
-        threshold: 0.99,
-      },
-    );
-
-    observer.observe(start);
-    observer.observe(end);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [items.length, layout]);
+  }, [updateScrollState]);
 
   const scrollByStep = (direction: 1 | -1) => {
     const container = containerRef.current;
@@ -148,28 +113,28 @@ const SectionListCarousel: React.FC<SectionListCarouselProps> = ({ items, layout
     <div className="relative">
       {canScrollPrev && (
         <>
-          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-[#09090B] to-transparent sm:w-16 md:w-16" />
+          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-4 bg-gradient-to-r from-[#09090B] to-transparent sm:w-6 md:w-6" />
           <button
             type="button"
             aria-label="Cuộn trái"
-            className="absolute left-0 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center border-2 border-[#3F3F46] bg-[#27272A] text-[#FAFAFA] backdrop-blur-sm transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B] hover:scale-110 mx-2 sm:h-12 sm:w-12 sm:mx-2 md:mx-4"
+            className="absolute left-4 top-1/2 z-20 flex h-6 w-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center border-2 border-[#3F3F46] bg-[#27272A] text-[#FAFAFA] backdrop-blur-sm transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B] hover:scale-105 sm:left-6 sm:h-7 sm:w-7 md:left-6"
             onClick={() => scrollByStep(-1)}
           >
-            <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
+            <ChevronLeft className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
           </button>
         </>
       )}
 
       {canScrollNext && (
         <>
-          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-[#09090B] to-transparent sm:w-16 md:w-16" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-4 bg-gradient-to-l from-[#09090B] to-transparent sm:w-6 md:w-6" />
           <button
             type="button"
             aria-label="Cuộn phải"
-            className="absolute right-0 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center border-2 border-[#3F3F46] bg-[#27272A] text-[#FAFAFA] backdrop-blur-sm transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B] hover:scale-110 mx-2 sm:h-12 sm:w-12 sm:mx-2 md:mx-4"
+            className="absolute right-4 top-1/2 z-20 flex h-6 w-6 translate-x-1/2 -translate-y-1/2 items-center justify-center border-2 border-[#3F3F46] bg-[#27272A] text-[#FAFAFA] backdrop-blur-sm transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B] hover:scale-105 sm:right-6 sm:h-7 sm:w-7 md:right-6"
             onClick={() => scrollByStep(1)}
           >
-            <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
+            <ChevronRight className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
           </button>
         </>
       )}
@@ -181,7 +146,6 @@ const SectionListCarousel: React.FC<SectionListCarouselProps> = ({ items, layout
         }`}
         style={{ WebkitOverflowScrolling: 'touch' }}
       >
-        <div ref={startSentinelRef} className="h-px w-px shrink-0" aria-hidden="true" />
         {items.map((item, index) => {
           const imageUrl =
             layout === 'landscape'
@@ -262,7 +226,6 @@ const SectionListCarousel: React.FC<SectionListCarouselProps> = ({ items, layout
             </motion.article>
           );
         })}
-        <div ref={endSentinelRef} className="h-px w-px shrink-0" aria-hidden="true" />
       </div>
     </div>
   );

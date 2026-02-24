@@ -77,9 +77,11 @@ for (const episode of episodes) {
 }
 
 const firstPlayableEpisode = playableEpisodes[0];
+const lastPlayableEpisode = playableEpisodes[playableEpisodes.length - 1];
 const hasEpisodes = totalEpisodeCount > 0;
 const hasPlayableEpisodes = playableEpisodes.length > 0;
 const firstPlayableLabel = firstPlayableEpisode?.label ?? 'Chọn tập để phát';
+const lastPlayableLabel = lastPlayableEpisode?.label ?? 'Chọn tập để phát';
 ---
 
 <!-- Hero Section -->
@@ -268,6 +270,26 @@ const firstPlayableLabel = firstPlayableEpisode?.label ?? 'Chọn tập để ph
                         {firstPlayableEpisode ? "Xem ngay" : "Chưa có tập"}
                     </button>
 
+                    {isSeries && hasPlayableEpisodes && (
+                        <button
+                            id="watchLatestBtn"
+                            type="button"
+                            class="flex-1 sm:flex-none uppercase tracking-tighter font-bold border-2 border-[#DFE104] text-[#DFE104] bg-transparent px-5 py-2.5 md:px-6 md:py-3 hover:bg-[#DFE104] hover:text-black transition-all inline-flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B] min-w-[140px]"
+                            data-latest-ep={lastPlayableEpisode?.ep ?? ""}
+                            data-latest-label={lastPlayableEpisode?.label ?? ""}
+                            data-latest-link={lastPlayableEpisode?.linkEmbed ?? ""}
+                            data-latest-m3u8={lastPlayableEpisode?.linkM3u8 ?? ""}
+                            data-latest-server={lastPlayableEpisode?.serverName ?? ""}
+                            disabled={!lastPlayableEpisode}
+                            aria-disabled={!lastPlayableEpisode}
+                        >
+                            <svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+                            </svg>
+                            Xem mới nhất
+                        </button>
+                    )}
+
                     <ShareButtonWrapper client:load movie={movie} />
                 </div>
 
@@ -354,6 +376,7 @@ const firstPlayableLabel = firstPlayableEpisode?.label ?? 'Chọn tập để ph
     };
 
     const watchBtn = document.getElementById("watchBtn") as HTMLButtonElement | null;
+    const watchLatestBtn = document.getElementById("watchLatestBtn") as HTMLButtonElement | null;
     const playerHeading = document.getElementById("playerHeading");
     const playerStatus = document.getElementById("playerStatus");
     const playerShell = document.getElementById("playerShell");
@@ -415,6 +438,23 @@ const firstPlayableLabel = firstPlayableEpisode?.label ?? 'Chọn tập để ph
         return { ep, label, linkEmbed, linkM3u8, serverName };
     };
 
+    const getLatestEpisode = (): EpisodeSelectionDetail | null => {
+        if (!watchLatestBtn) {
+            return null;
+        }
+
+        const ep = watchLatestBtn.dataset.latestEp;
+        const label = watchLatestBtn.dataset.latestLabel;
+        const linkEmbed = watchLatestBtn.dataset.latestLink;
+        const linkM3u8 = watchLatestBtn.dataset.latestM3u8 || undefined;
+        const serverName = watchLatestBtn.dataset.latestServer || undefined;
+        if (!ep || (!linkEmbed && !linkM3u8)) {
+            return null;
+        }
+
+        return { ep, label, linkEmbed, linkM3u8, serverName };
+    };
+
     const playEpisode = (detail: EpisodeSelectionDetail) => {
         window.dispatchEvent(new CustomEvent("episodeSelected", { detail }));
         playerSection?.scrollIntoView({ behavior: scrollBehavior, block: "start" });
@@ -444,6 +484,20 @@ const firstPlayableLabel = firstPlayableEpisode?.label ?? 'Chọn tập để ph
                 return;
             }
             playEpisode(defaultEpisode);
+        });
+    }
+
+    const latestEpisode = getLatestEpisode();
+    if (watchLatestBtn) {
+        watchLatestBtn.addEventListener("click", () => {
+            if (!latestEpisode) {
+                document.getElementById("episode-selection")?.scrollIntoView({
+                    behavior: scrollBehavior,
+                    block: "start",
+                });
+                return;
+            }
+            playEpisode(latestEpisode);
         });
     }
 

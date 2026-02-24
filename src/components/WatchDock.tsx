@@ -33,11 +33,10 @@ const contentSpring = {
 
 const WatchDock: React.FC<WatchDockProps> = ({ defaultEpisode, firstPlayableLabel }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [isNearPlayer, setIsNearPlayer] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [currentLabel, setCurrentLabel] = useState(firstPlayableLabel);
 
-  const isExpanded = useMemo(() => !isNearPlayer || isHovering, [isNearPlayer, isHovering]);
+  const isExpanded = useMemo(() => isVisible || isHovering, [isVisible, isHovering]);
 
   // Track dock visibility + proximity in one scroll pipeline
   useEffect(() => {
@@ -49,18 +48,18 @@ const WatchDock: React.FC<WatchDockProps> = ({ defaultEpisode, firstPlayableLabe
     const updateDockState = () => {
       cancelAnimationFrame(raf);
       raf = window.requestAnimationFrame(() => {
-        const heroBottom = heroRoot.getBoundingClientRect().bottom;
-        const shouldShow = heroBottom < window.innerHeight * 0.4;
-        setIsVisible(shouldShow);
-
-        if (!shouldShow) {
-          setIsNearPlayer(false);
-          return;
-        }
+        const heroRect = heroRoot.getBoundingClientRect();
+        const heroBottom = heroRect.bottom;
+        const heroTop = heroRect.top;
+        const viewportHeight = window.innerHeight;
 
         const playerRect = playerSection.getBoundingClientRect();
-        const nearPlayer = playerRect.top < window.innerHeight * 0.8 && playerRect.bottom > 0;
-        setIsNearPlayer(nearPlayer);
+        const nearPlayer = playerRect.top < viewportHeight * 0.8 && playerRect.bottom > 0;
+
+        // Show dock when hero section is visible AND not near player
+        const isHeroVisible = heroTop < viewportHeight && heroBottom > 0;
+        const shouldShow = isHeroVisible && !nearPlayer;
+        setIsVisible(shouldShow);
       });
     };
 
