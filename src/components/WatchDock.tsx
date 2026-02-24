@@ -1,8 +1,8 @@
 'use client';
 
+import { cn } from '@/lib/utils';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { cn } from '@/lib/utils';
 
 type EpisodeDetail = {
   ep: string;
@@ -56,9 +56,11 @@ const WatchDock: React.FC<WatchDockProps> = ({ defaultEpisode, firstPlayableLabe
         const playerRect = playerSection.getBoundingClientRect();
         const nearPlayer = playerRect.top < viewportHeight * 0.8 && playerRect.bottom > 0;
 
-        // Show dock when hero section is visible AND not near player
-        const isHeroVisible = heroTop < viewportHeight && heroBottom > 0;
-        const shouldShow = isHeroVisible && !nearPlayer;
+        // Show dock when hero action buttons have scrolled out of view
+        // (heroBottom < 50% viewport ≈ "Xem ngay" button is off-screen)
+        // AND user is not already near the video player section
+        const heroActionsHidden = heroBottom < viewportHeight * 0.5;
+        const shouldShow = heroActionsHidden && !nearPlayer;
         setIsVisible(shouldShow);
       });
     };
