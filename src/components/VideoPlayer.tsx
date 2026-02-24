@@ -463,11 +463,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
 
   useEffect(() => {
     const onEpisodeSelected = (event: Event) => {
-      const detail = (event as CustomEvent<EpisodeSelectionDetail>).detail;
+      const detail = (event as CustomEvent<EpisodeSelectionDetail & { autoSelect?: boolean }>)
+        .detail;
       if (!detail?.ep || !hasPlayableSource(detail)) return;
       applyEpisodeSelection(detail);
 
-      if (videoSectionRef.current) {
+      if (videoSectionRef.current && !detail.autoSelect) {
         window.setTimeout(() => {
           const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
           videoSectionRef.current?.scrollIntoView({

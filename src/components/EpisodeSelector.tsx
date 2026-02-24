@@ -198,12 +198,23 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
     const first = sorted[0];
     if (first && (first.link_m3u8 || first.link_embed)) {
       hasAutoSelected.current = true;
-      handleEpisodeSelect(
-        first.slug,
-        first.name,
-        first.link_embed,
-        first.link_m3u8,
-        server.server_name,
+      setSelectedEpisode({
+        id: first.slug,
+        label: first.name,
+        linkEmbed: first.link_embed,
+        linkM3u8: first.link_m3u8,
+      });
+      window.dispatchEvent(
+        new CustomEvent('episodeSelected', {
+          detail: {
+            ep: first.slug,
+            label: first.name,
+            linkEmbed: first.link_embed,
+            linkM3u8: first.link_m3u8,
+            serverName: server.server_name,
+            autoSelect: true,
+          },
+        }),
       );
     }
   }, [episodes]);
