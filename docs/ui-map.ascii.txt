@@ -1,0 +1,2 @@
+[VideoPlayer] - src/components/VideoPlayer.tsx
+└── [PlayerControlLayer] - src/components/video-player/PlayerControlLayer.tsx

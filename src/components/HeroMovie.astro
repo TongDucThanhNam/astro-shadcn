@@ -1,9 +1,12 @@
 ---
 import { Image } from "astro:assets";
-
+import {
+	getLatestMovies,
+	type LatestFeedVersion,
+	parseFeedVersion,
+} from "@/lib/phimapi";
 import { getCachedValue, setCachedValue } from "@/lib/server-cache";
-import { getLatestMovies, parseFeedVersion, type LatestFeedVersion } from "@/lib/phimapi";
-import { resolveImageUrl, imagePresets } from "@/lib/wsrv";
+import { imagePresets, resolveImageUrl } from "@/lib/wsrv";
 
 interface Props {
 	feedVersion?: LatestFeedVersion;
@@ -54,7 +57,11 @@ const getHeroMetaTokens = (item: FeaturedItem) => {
 		const runtime = normalizeHeroToken(item.time);
 		if (runtime) tokens.push(runtime);
 	}
-	if ("category" in item && Array.isArray(item.category) && item.category.length) {
+	if (
+		"category" in item &&
+		Array.isArray(item.category) &&
+		item.category.length
+	) {
 		const primaryCategory = normalizeHeroToken(item.category[0]?.name);
 		if (primaryCategory) tokens.push(primaryCategory);
 	}
@@ -65,9 +72,10 @@ const getHeroMetaTokens = (item: FeaturedItem) => {
 <section
     class="relative mx-auto flex w-full flex-col gap-6 px-0 pb-8 pt-3 sm:gap-8 sm:pb-10"
 >
+    {/* Quick play latest button */}
     {
         hasFeatured ? (
-            <div class="relative overflow-hidden border-x-2 border-b-2 border-[#3F3F46] bg-[#09090B]" data-carousel="hero">
+            <div class="relative overflow-hidden border-2 border-[#3F3F46] bg-[#09090B]" data-carousel="hero">
                 <div class="relative min-h-[22rem] overflow-hidden sm:min-h-[28rem] md:min-h-[32rem] lg:min-h-[34rem]">
                     {featured.map((item, index) => (
                         <article
@@ -138,15 +146,17 @@ const getHeroMetaTokens = (item: FeaturedItem) => {
 
                                 <div class="flex flex-wrap items-center justify-center gap-3 sm:justify-start sm:gap-4">
                                     <a
-                                        href={`/phim/${item.slug}`}
-                                        class="inline-flex items-center justify-center gap-2 border-2 border-[#DFE104] bg-[#DFE104] px-6 py-2.5 text-xs font-bold uppercase tracking-[0.2em] text-[#09090B] transition-all duration-300 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-[#DFE104] focus:ring-offset-2 focus:ring-offset-[#09090B] sm:px-8 sm:py-3 sm:text-sm"
-                                        tabindex={index === 0 ? "0" : "-1"}
-                                    >
-                                        <span class="inline-flex h-4 w-4 items-center justify-center border border-[#09090B] text-[10px]">▶</span>
-                                        Xem ngay
-                                    </a>
+                        id="watchBtn"
+                        type="button"
+                        class="flex-1 sm:flex-none uppercase tracking-tighter font-bold bg-[#DFE104] text-black px-5 py-2.5 md:px-6 md:py-3 hover:scale-105 transition-all inline-flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B] min-w-[140px]"
+                    >
+                        <svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                        Xem ngay
+                    </a>
                                     <a
-                                        href={`/phim/${item.slug}`}
+                                        href={`/phim/${item.slug}?autoplay=1`}
                                         class="inline-flex items-center justify-center gap-2 border-2 border-[#3F3F46] bg-[#09090B]/74 px-6 py-2.5 text-xs font-bold uppercase tracking-[0.2em] text-[#FAFAFA] transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B] focus:outline-none focus:ring-2 focus:ring-[#DFE104] focus:ring-offset-2 focus:ring-offset-[#09090B] sm:px-8 sm:py-3 sm:text-sm"
                                         tabindex={index === 0 ? "0" : "-1"}
                                     >

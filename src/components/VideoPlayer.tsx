@@ -1,50 +1,27 @@
 import {
-	CaptionButton,
-	Controls,
-	FullscreenButton,
-	GoogleCastButton,
 	isHLSProvider,
 	MediaPlayer,
 	type MediaPlayerInstance,
 	MediaProvider,
 	type MediaProviderAdapter,
-	MuteButton,
-	PlayButton,
 	type PlayerSrc,
-	SeekButton,
-	Spinner,
-	Time,
-	TimeSlider,
-	useCaptionOptions,
 	useMediaStore,
-	usePlaybackRateOptions,
-	useVideoQualityOptions,
-	VolumeSlider,
 } from "@vidstack/react";
 import type React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { motion, useSpring, useTransform } from "framer-motion";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import PlayerControlLayer from "@/components/video-player/PlayerControlLayer";
 import { cn } from "@/lib/utils";
 import "@vidstack/react/player/styles/base.css";
 import {
-	Cast,
-	Expand,
-	Gauge,
 	LayoutPanelTop,
 	Maximize2,
-	MessageSquareText,
 	Minimize2,
-	MonitorPlay,
-	Pause,
-	Play,
 	RefreshCw,
 	Server,
 	SkipBack,
 	SkipForward,
-	SlidersHorizontal,
-	Tv,
-	Volume2,
-	VolumeX,
 } from "lucide-react";
 
 type EpisodeSelectionDetail = {
@@ -64,12 +41,6 @@ type PlaybackMode = "idle" | "vidstack" | "embed";
 
 const TOP_ICON_BUTTON_CLASS =
 	"inline-flex h-8 w-8 items-center justify-center rounded-sm border border-[#3F3F46] bg-[#09090B]/90 text-[#FAFAFA] transition-all duration-200 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B] disabled:cursor-not-allowed disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B]";
-const VIDSTACK_ICON_BUTTON_CLASS =
-	"inline-flex h-8 w-8 items-center justify-center rounded-sm border border-[#3F3F46] bg-[#09090B]/90 text-[#FAFAFA] transition-all duration-200 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B] disabled:cursor-not-allowed disabled:opacity-40";
-const VIDSTACK_SELECT_WRAP_CLASS =
-	"inline-flex h-8 items-center gap-1 rounded-sm border border-[#3F3F46] bg-[#09090B]/95 px-2";
-const VIDSTACK_SELECT_CLASS =
-	"h-6 rounded-sm border border-[#3F3F46] bg-[#27272A] px-1 text-[10px] font-bold uppercase tracking-wide text-[#FAFAFA] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] disabled:opacity-50";
 
 const isEditableTarget = (target: EventTarget | null) => {
 	if (!(target instanceof HTMLElement)) return false;
@@ -107,11 +78,6 @@ const getEpisodeLabel = (episode: EpisodeSelectionDetail | null) =>
 	episode?.label?.trim() ||
 	(episode?.ep ? `Tập ${episode.ep}` : "Chưa chọn tập");
 
-const normalizeSelectValue = (value: string) => {
-	const normalized = value.replace(/\s+/g, " ").trim();
-	return normalized;
-};
-
 const extractReasonMessage = (reason: unknown) => {
 	if (typeof reason === "string") return reason;
 	if (reason instanceof Error) return reason.message;
@@ -124,327 +90,6 @@ const extractReasonMessage = (reason: unknown) => {
 		}
 	}
 	return "";
-};
-
-type PlayerControlLayerProps = {
-	allowFallback: boolean;
-	onFallback?: () => void;
-	onTogglePiP?: () => void;
-};
-
-const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
-	allowFallback,
-	onFallback,
-	onTogglePiP,
-}) => {
-	const [isQuickPanelOpen, setIsQuickPanelOpen] = useState(false);
-	const {
-		paused,
-		muted,
-		fullscreen,
-		waiting,
-		canGoogleCast,
-		canSetVolume,
-		canSetPlaybackRate,
-		canSetQuality,
-		remotePlaybackState,
-		remotePlaybackType,
-		error,
-	} = useMediaStore();
-	const qualityOptions = useVideoQualityOptions({
-		auto: true,
-		sort: "descending",
-	});
-	const playbackRateOptions = usePlaybackRateOptions({
-		rates: [0.75, 1, 1.25, 1.5, 2],
-		normalLabel: "1x",
-	});
-	const captionOptions = useCaptionOptions({ off: "Tắt" });
-	const isGoogleCast = remotePlaybackType === "google-cast";
-	const isCastConnecting = isGoogleCast && remotePlaybackState === "connecting";
-	const isCastConnected = isGoogleCast && remotePlaybackState === "connected";
-	const castAriaLabel = isCastConnected
-		? "Google Cast đang kết nối"
-		: isCastConnecting
-			? "Google Cast đang kết nối thiết bị"
-			: "Google Cast";
-	const castTitle = isCastConnected
-		? "Google Cast: Đã kết nối"
-		: isCastConnecting
-			? "Google Cast: Đang kết nối"
-			: "Google Cast";
-
-	const selectOption = useCallback(
-		(
-			options: Array<{
-				value: string;
-				select: (trigger?: Event) => void;
-			}>,
-			selectedValue: string,
-		) => {
-			const normalizedValue = normalizeSelectValue(selectedValue);
-			const matched = options.find(
-				(option) => normalizeSelectValue(option.value) === normalizedValue,
-			);
-			if (matched) {
-				matched.select();
-			}
-		},
-		[],
-	);
-
-	return (
-		<>
-			<Controls.Root className="absolute inset-0 z-[2] flex flex-col justify-end bg-gradient-to-t from-[#09090B]/96 via-[#09090B]/55 to-transparent px-1.5 pb-1.5 pt-12 opacity-0 transition-opacity duration-200 group-hover/player:opacity-100 group-data-[paused]/player:opacity-100 group-data-[waiting]/player:opacity-100 group-data-[seeking]/player:opacity-100">
-				{isQuickPanelOpen ? (
-					<div className="absolute bottom-14 right-1.5 z-10 flex min-w-[220px] flex-col gap-1 border-2 border-[#3F3F46] bg-[#09090B]/98 p-2 backdrop-blur-sm">
-						<label className={VIDSTACK_SELECT_WRAP_CLASS} title="Tốc độ phát">
-							<Gauge className="h-3.5 w-3.5 text-[#A1A1AA]" />
-							<select
-								value={playbackRateOptions.selectedValue ?? ""}
-								onChange={(event) =>
-									selectOption(playbackRateOptions, event.target.value)
-								}
-								disabled={playbackRateOptions.disabled || !canSetPlaybackRate}
-								className={cn(VIDSTACK_SELECT_CLASS, "w-full")}
-								aria-label="Chọn tốc độ phát"
-							>
-								{playbackRateOptions.map((option) => (
-									<option key={option.value} value={option.value}>
-										{option.label}
-									</option>
-								))}
-							</select>
-						</label>
-
-						<label
-							className={VIDSTACK_SELECT_WRAP_CLASS}
-							title="Chất lượng phát"
-						>
-							<Tv className="h-3.5 w-3.5 text-[#A1A1AA]" />
-							<select
-								value={qualityOptions.selectedValue ?? ""}
-								onChange={(event) =>
-									selectOption(qualityOptions, event.target.value)
-								}
-								disabled={qualityOptions.disabled || !canSetQuality}
-								className={cn(VIDSTACK_SELECT_CLASS, "w-full")}
-								aria-label="Chọn chất lượng phát"
-							>
-								{qualityOptions.map((option) => (
-									<option key={option.value} value={option.value}>
-										{option.label}
-									</option>
-								))}
-							</select>
-						</label>
-
-						<label className={VIDSTACK_SELECT_WRAP_CLASS} title="Phụ đề">
-							<MessageSquareText className="h-3.5 w-3.5 text-[#A1A1AA]" />
-							<select
-								value={captionOptions.selectedValue ?? ""}
-								onChange={(event) =>
-									selectOption(captionOptions, event.target.value)
-								}
-								disabled={captionOptions.disabled}
-								className={cn(VIDSTACK_SELECT_CLASS, "w-full")}
-								aria-label="Chọn phụ đề"
-							>
-								{captionOptions.map((option) => (
-									<option key={option.value} value={option.value}>
-										{option.label}
-									</option>
-								))}
-							</select>
-						</label>
-
-						{allowFallback && onFallback ? (
-							<button
-								type="button"
-								onClick={onFallback}
-								className="inline-flex h-8 items-center justify-center gap-1 border border-[#3F3F46] bg-[#27272A] px-2 text-[10px] font-bold uppercase tracking-wide text-[#FAFAFA] transition hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]"
-								aria-label="Chuyển sang nguồn dự phòng"
-								title="Chuyển sang nguồn dự phòng"
-							>
-								<Server className="h-3.5 w-3.5" />
-								Embed Fallback
-							</button>
-						) : null}
-					</div>
-				) : null}
-
-				<Controls.Group className="w-full">
-					<TimeSlider.Root className="group/time relative flex h-5 w-full cursor-pointer items-center">
-						<TimeSlider.Track className="absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 overflow-hidden rounded-sm bg-[#27272A] transition-all duration-200 group-hover/time:h-1 group-data-[dragging]/time:h-1">
-							<TimeSlider.Progress className="absolute inset-y-0 left-0 w-[var(--slider-progress)] bg-[#A1A1AA]/50" />
-							<TimeSlider.TrackFill className="absolute inset-y-0 left-0 w-[var(--slider-fill)] bg-[#DFE104]" />
-						</TimeSlider.Track>
-						<TimeSlider.Thumb
-							style={{ left: "var(--slider-fill)" }}
-							className="pointer-events-none absolute top-1/2 z-[3] block h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#09090B] bg-[#DFE104] opacity-0 transition-opacity group-data-[active]/time:opacity-100 group-data-[dragging]/time:opacity-100 group-hover/time:opacity-100"
-						/>
-					</TimeSlider.Root>
-				</Controls.Group>
-
-				<Controls.Group className="mt-1.5 flex items-center justify-between gap-1.5">
-					<div className="flex min-w-0 flex-1 items-center gap-1">
-						<PlayButton
-							className={VIDSTACK_ICON_BUTTON_CLASS}
-							aria-label="Phát hoặc tạm dừng"
-							title="Phát/Tạm dừng (K)"
-						>
-							{paused ? (
-								<Play className="h-3.5 w-3.5" />
-							) : (
-								<Pause className="h-3.5 w-3.5" />
-							)}
-						</PlayButton>
-
-						<SeekButton
-							seconds={-10}
-							className={cn(
-								VIDSTACK_ICON_BUTTON_CLASS,
-								"hidden lg:inline-flex",
-							)}
-							aria-label="Tua lùi 10 giây"
-							title="Lùi 10 giây"
-						>
-							<SkipBack className="h-3.5 w-3.5" />
-						</SeekButton>
-						<SeekButton
-							seconds={10}
-							className={cn(
-								VIDSTACK_ICON_BUTTON_CLASS,
-								"hidden lg:inline-flex",
-							)}
-							aria-label="Tua tới 10 giây"
-							title="Tới 10 giây"
-						>
-							<SkipForward className="h-3.5 w-3.5" />
-						</SeekButton>
-
-						<MuteButton
-							className={VIDSTACK_ICON_BUTTON_CLASS}
-							aria-label="Bật hoặc tắt tiếng"
-							title="Mute (M)"
-						>
-							{muted ? (
-								<VolumeX className="h-3.5 w-3.5" />
-							) : (
-								<Volume2 className="h-3.5 w-3.5" />
-							)}
-						</MuteButton>
-
-						{canSetVolume ? (
-							<VolumeSlider.Root className="group/volume hidden h-8 w-20 cursor-pointer items-center px-1 md:flex">
-								<VolumeSlider.Track className="relative h-1 w-full overflow-hidden rounded-sm bg-[#27272A]">
-									<VolumeSlider.TrackFill className="absolute inset-y-0 left-0 w-[var(--slider-fill)] bg-[#DFE104]" />
-								</VolumeSlider.Track>
-								<VolumeSlider.Thumb className="mt-[-4px] block h-2.5 w-2.5 border border-[#09090B] bg-[#DFE104] opacity-0 transition-opacity group-data-[dragging]/volume:opacity-100 group-hover/volume:opacity-100" />
-							</VolumeSlider.Root>
-						) : null}
-
-						<div className="ml-0.5 inline-flex min-w-[88px] items-center gap-1 border border-[#3F3F46] bg-[#09090B]/95 px-1.5 py-0.5 text-[11px] font-bold tracking-tight text-[#FAFAFA] sm:min-w-[118px]">
-							<Time type="current" className="inline tabular-nums" />
-							<span className="hidden text-[#A1A1AA] sm:inline">/</span>
-							<Time
-								type="duration"
-								className="hidden tabular-nums text-[#A1A1AA] sm:inline"
-							/>
-						</div>
-					</div>
-
-					<div className="flex shrink-0 items-center gap-1">
-						<CaptionButton
-							className={VIDSTACK_ICON_BUTTON_CLASS}
-							aria-label="Bật hoặc tắt phụ đề"
-							title="Bật/Tắt phụ đề"
-						>
-							<MessageSquareText className="h-3.5 w-3.5" />
-						</CaptionButton>
-
-						<GoogleCastButton
-							className={cn(
-								VIDSTACK_ICON_BUTTON_CLASS,
-								!canGoogleCast && "opacity-45",
-								isCastConnecting && "border-[#DFE104] text-[#DFE104]",
-								isCastConnected &&
-									"border-[#DFE104] bg-[#DFE104] text-[#09090B] hover:bg-[#DFE104] hover:text-[#09090B]",
-							)}
-							aria-label={
-								canGoogleCast ? castAriaLabel : "Google Cast chưa khả dụng"
-							}
-							title={
-								canGoogleCast
-									? castTitle
-									: "Google Cast chưa khả dụng trên trình duyệt hoặc thiết bị hiện tại"
-							}
-							disabled={!canGoogleCast}
-						>
-							<Cast
-								className={cn(
-									"h-3.5 w-3.5",
-									isCastConnecting && "animate-pulse",
-								)}
-							/>
-						</GoogleCastButton>
-
-						<button
-							type="button"
-							onClick={onTogglePiP}
-							className={cn(
-								VIDSTACK_ICON_BUTTON_CLASS,
-								"hidden sm:inline-flex",
-							)}
-							aria-label="Picture-in-Picture"
-							title="Picture-in-Picture (P)"
-						>
-							<MonitorPlay className="h-3.5 w-3.5" />
-						</button>
-
-						<button
-							type="button"
-							className={cn(
-								VIDSTACK_ICON_BUTTON_CLASS,
-								isQuickPanelOpen &&
-									"border-[#DFE104] bg-[#DFE104] text-[#09090B] hover:bg-[#DFE104] hover:text-[#09090B]",
-							)}
-							onClick={() => setIsQuickPanelOpen((prev) => !prev)}
-							aria-label="Mở cài đặt nhanh"
-							aria-pressed={isQuickPanelOpen}
-							title="Cài đặt nhanh"
-						>
-							<SlidersHorizontal className="h-3.5 w-3.5" />
-						</button>
-
-						<FullscreenButton
-							className={VIDSTACK_ICON_BUTTON_CLASS}
-							aria-label="Toàn màn hình"
-							title="Toàn màn hình (F)"
-						>
-							{fullscreen ? (
-								<Minimize2 className="h-3.5 w-3.5" />
-							) : (
-								<Expand className="h-3.5 w-3.5" />
-							)}
-						</FullscreenButton>
-					</div>
-				</Controls.Group>
-			</Controls.Root>
-
-			{(waiting || error) && (
-				<div className="pointer-events-none absolute inset-0 z-[1] flex flex-col items-center justify-center gap-3 bg-[#09090B]/70">
-					<Spinner.Root className="h-8 w-8 text-[#DFE104]">
-						<Spinner.Track className="stroke-[#27272A]" />
-						<Spinner.TrackFill className="stroke-[#DFE104]" />
-					</Spinner.Root>
-					<p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#FAFAFA]">
-						{error ? "Nguồn phát gặp lỗi." : "Đang tải nguồn phát"}
-					</p>
-				</div>
-			)}
-		</>
-	);
 };
 
 const WATCHED_THRESHOLD = 0.85; // consider watched at 85%
@@ -472,6 +117,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 	const videoRef = useRef<HTMLVideoElement | null>(null);
 	const lastSavedTimeRef = useRef<number>(0);
 	const hlsFallbackEpisodeRef = useRef<string | null>(null);
+	const {
+		fullscreen: isPlayerFullscreen,
+		pictureInPicture: isPlayerPiP,
+		canOrientScreen: canRootOrientScreen,
+		pointer: rootPointer,
+	} = useMediaStore(mediaPlayerRef);
 
 	const currentEpisodeIndex = useMemo(() => {
 		if (!selectedEpisode) return -1;
@@ -608,6 +259,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
 	const toggleFullscreen = useCallback(async () => {
 		try {
+			const player = mediaPlayerRef.current;
+			if (player) {
+				if (isPlayerFullscreen) {
+					await player.exitFullscreen();
+				} else {
+					await player.enterFullscreen();
+				}
+				return;
+			}
 			if (document.fullscreenElement) {
 				await document.exitFullscreen();
 				return;
@@ -618,7 +278,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 		} catch {
 			// Ignore Fullscreen API errors.
 		}
-	}, []);
+	}, [isPlayerFullscreen]);
 
 	const onProviderChange = useCallback(
 		(provider: MediaProviderAdapter | null) => {
@@ -750,20 +410,20 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 		}, 3000);
 	}, [autoAdvance, hasNextEpisode, goToNextEpisode]);
 
-	// Toggle Picture-in-Picture
+	// Toggle Picture-in-Picture via Vidstack API.
 	const togglePiP = useCallback(async () => {
+		const player = mediaPlayerRef.current;
+		if (!player) return;
 		try {
-			if (!videoRef.current) return;
-
-			if (document.pictureInPictureElement) {
-				await document.exitPictureInPicture();
+			if (isPlayerPiP) {
+				await player.exitPictureInPicture();
 			} else {
-				await videoRef.current.requestPictureInPicture();
+				await player.enterPictureInPicture();
 			}
 		} catch {
-			// PiP not supported or failed
+			// PiP not supported or failed.
 		}
-	}, []);
+	}, [isPlayerPiP]);
 
 	useEffect(() => {
 		const player = mediaPlayerRef.current;
@@ -947,6 +607,35 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 		};
 	}, [isTheaterMode]);
 
+	useEffect(() => {
+		if (playbackMode !== "vidstack") return;
+		const player = mediaPlayerRef.current;
+		if (!player || !canRootOrientScreen || rootPointer !== "coarse") return;
+
+		const syncOrientation = async () => {
+			try {
+				if (isPlayerFullscreen) {
+					await player.orientation.lock("landscape");
+				} else {
+					await player.orientation.unlock();
+				}
+			} catch {
+				// Ignore orientation lock/unlock failures.
+			}
+		};
+
+		void syncOrientation();
+		return () => {
+			void player.orientation.unlock().catch(() => undefined);
+		};
+	}, [
+		playbackMode,
+		isPlayerFullscreen,
+		canRootOrientScreen,
+		rootPointer,
+		playerSrc,
+	]);
+
 	// Handle video events for progress tracking
 	useEffect(() => {
 		const player = mediaPlayerRef.current;
@@ -1039,6 +728,16 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 				? "Embed Fallback"
 				: "No Source";
 
+	// Spring animation for theater mode - proper spring physics from Motion docs
+	const theaterSpring = useSpring(0, { stiffness: 300, damping: 30 });
+	const theaterScale = useTransform(theaterSpring, [0, 1], [0.95, 1]);
+	const theaterBlur = useTransform(theaterSpring, [0, 1], [8, 0]);
+	const theaterFilter = useTransform(theaterBlur, (v) => `blur(${v}px)`);
+
+	useEffect(() => {
+		theaterSpring.set(isTheaterMode ? 1 : 0);
+	}, [isTheaterMode, theaterSpring]);
+
 	return (
 		<div
 			ref={videoSectionRef}
@@ -1047,6 +746,84 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 				isTheaterMode && "fixed inset-0 z-[75] bg-[#050507]/95 p-2 sm:p-5",
 			)}
 		>
+			<motion.div
+				ref={playerFrameRef}
+				data-cursor-disabled
+				style={{
+					scale: isTheaterMode ? theaterScale : 1,
+					filter: isTheaterMode ? theaterFilter : "none",
+				}}
+				onPointerEnter={() =>
+					window.dispatchEvent(new Event("cursor:disable-zone"))
+				}
+				onPointerLeave={() =>
+					window.dispatchEvent(new Event("cursor:enable-zone"))
+				}
+				className={cn(
+					"relative overflow-hidden border-2 border-[#3F3F46] bg-[#09090B] cursor-auto",
+					isTheaterMode && "mx-auto w-full max-w-6xl",
+				)}
+			>
+				<AspectRatio ratio={16 / 9} className="overflow-hidden bg-[#09090B]">
+					{!selectedEpisode ? (
+						<div className="flex h-full items-center justify-center p-6 text-center text-sm uppercase tracking-wide text-[#A1A1AA]">
+							Chọn tập để bắt đầu phát
+						</div>
+					) : playbackMode === "embed" ? (
+						<div className="relative h-full w-full">
+							<iframe
+								src={iframeSrc || selectedEpisode.linkEmbed}
+								title={`Trình phát ${getEpisodeLabel(selectedEpisode)}`}
+								loading="lazy"
+								referrerPolicy="strict-origin-when-cross-origin"
+								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+								allowFullScreen
+								onLoad={() => setIsEmbedLoading(false)}
+								className={cn(
+									"h-full w-full transition-opacity duration-300",
+									isEmbedLoading ? "opacity-0" : "opacity-100",
+								)}
+							></iframe>
+							{isEmbedLoading ? (
+								<div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[#09090B] text-[#A1A1AA]">
+									<div className="h-1 w-36 overflow-hidden rounded-sm bg-[#27272A]">
+										<div className="h-full w-1/2 animate-pulse bg-[#DFE104]"></div>
+									</div>
+									<p className="text-xs font-bold uppercase tracking-[0.24em]">
+										Đang tải nguồn dự phòng
+									</p>
+								</div>
+							) : null}
+						</div>
+					) : playbackMode === "vidstack" && playerSrc ? (
+						<MediaPlayer
+							ref={mediaPlayerRef}
+							title={getEpisodeLabel(selectedEpisode)}
+							artist="AstroFlim"
+							src={playerSrc}
+							load="visible"
+							preload="metadata"
+							crossOrigin="anonymous"
+							googleCast={{ receiverApplicationId: "CC1AD845" }}
+							playsInline
+							autoPlay
+							onProviderChange={onProviderChange}
+							className="group/player relative h-full w-full cursor-auto bg-[#09090B] text-[#FAFAFA]"
+						>
+							<MediaProvider className="h-full w-full bg-[#09090B]" />
+							<PlayerControlLayer
+								allowFallback={Boolean(selectedEpisode.linkEmbed)}
+								onFallback={switchToEmbedFallback}
+							/>
+						</MediaPlayer>
+					) : (
+						<div className="flex h-full items-center justify-center p-6 text-center text-sm uppercase tracking-wide text-[#A1A1AA]">
+							Tập hiện tại chưa có nguồn phát khả dụng.
+						</div>
+					)}
+				</AspectRatio>
+			</motion.div>
+
 			<div
 				className={cn(
 					"flex flex-wrap items-center justify-between gap-1.5 border-2 border-[#3F3F46] bg-[#09090B] px-2 py-1.5",
@@ -1148,73 +925,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 				</div>
 			</div>
 
-			<div
-				ref={playerFrameRef}
-				className={cn(
-					"relative overflow-hidden border-2 border-[#3F3F46] bg-[#09090B]",
-					isTheaterMode && "mx-auto w-full max-w-6xl",
-				)}
-			>
-				<AspectRatio ratio={16 / 9} className="overflow-hidden bg-[#09090B]">
-					{!selectedEpisode ? (
-						<div className="flex h-full items-center justify-center p-6 text-center text-sm uppercase tracking-wide text-[#A1A1AA]">
-							Chọn tập để bắt đầu phát
-						</div>
-					) : playbackMode === "embed" ? (
-						<div className="relative h-full w-full">
-							<iframe
-								src={iframeSrc || selectedEpisode.linkEmbed}
-								title={`Trình phát ${getEpisodeLabel(selectedEpisode)}`}
-								loading="lazy"
-								referrerPolicy="strict-origin-when-cross-origin"
-								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-								allowFullScreen
-								onLoad={() => setIsEmbedLoading(false)}
-								className={cn(
-									"h-full w-full transition-opacity duration-300",
-									isEmbedLoading ? "opacity-0" : "opacity-100",
-								)}
-							></iframe>
-							{isEmbedLoading ? (
-								<div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[#09090B] text-[#A1A1AA]">
-									<div className="h-1 w-36 overflow-hidden rounded-sm bg-[#27272A]">
-										<div className="h-full w-1/2 animate-pulse bg-[#DFE104]"></div>
-									</div>
-									<p className="text-xs font-bold uppercase tracking-[0.24em]">
-										Đang tải nguồn dự phòng
-									</p>
-								</div>
-							) : null}
-						</div>
-					) : playbackMode === "vidstack" && playerSrc ? (
-						<MediaPlayer
-							ref={mediaPlayerRef}
-							title={getEpisodeLabel(selectedEpisode)}
-							src={playerSrc}
-							load="visible"
-							preload="metadata"
-							crossOrigin="anonymous"
-							googleCast={{ receiverApplicationId: "CC1AD845" }}
-							playsInline
-							autoPlay
-							onProviderChange={onProviderChange}
-							className="group/player relative h-full w-full bg-[#09090B] text-[#FAFAFA]"
-						>
-							<MediaProvider className="h-full w-full bg-[#09090B]" />
-							<PlayerControlLayer
-								allowFallback={Boolean(selectedEpisode.linkEmbed)}
-								onFallback={switchToEmbedFallback}
-								onTogglePiP={togglePiP}
-							/>
-						</MediaPlayer>
-					) : (
-						<div className="flex h-full items-center justify-center p-6 text-center text-sm uppercase tracking-wide text-[#A1A1AA]">
-							Tập hiện tại chưa có nguồn phát khả dụng.
-						</div>
-					)}
-				</AspectRatio>
-			</div>
-
 			{streamHint ? (
 				<p
 					className={cn(
@@ -1225,16 +935,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 					{streamHint}
 				</p>
 			) : null}
-
-			<p
-				className={cn(
-					"hidden text-[10px] uppercase tracking-[0.12em] text-[#A1A1AA] md:block",
-					isTheaterMode && "mx-auto w-full max-w-6xl",
-				)}
-			>
-				Hotkeys: J/L đổi tập, R reload, F full screen, T theater, P PiP.
-				Autoadvance: {autoAdvance ? "bật" : "tắt"} (click để đổi).
-			</p>
 		</div>
 	);
 };

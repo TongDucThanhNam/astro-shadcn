@@ -1,0 +1,9 @@
+# Strict UI Architecture Rules
+
+- DO NOT hardcode width/height in leaf components.
+- Every component must accept className and forward ...props.
+- Always preserve parent container layout contract (flex/grid/overflow).
+- Keep formatting deterministic with Biome.
+- Ban: w-[...], h-[...], bg-[#...], @apply (unless spec.md exception).
+- Add or maintain Breadcrumb + JSDoc metadata tags in each component.
+- Before editing, consult docs/ui-map.ascii.txt and docs/spec.md.

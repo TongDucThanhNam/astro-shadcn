@@ -1,27 +1,29 @@
 ---
 import { Image } from "astro:assets";
+import { imagePresets, resolveImageUrl } from "@/lib/wsrv";
 import EpisodeSelector from "./EpisodeSelector";
 import VideoPlayer from "./VideoPlayer";
-import { resolveImageUrl, imagePresets } from "@/lib/wsrv";
+import WatchDock from "./WatchDock";
+import ShareButtonWrapper from "./ui/ShareButtonWrapper";
 
 type EpisodeServerData = {
-    slug: string;
-    name: string;
-    link_embed?: string;
-    link_m3u8?: string;
+	slug: string;
+	name: string;
+	link_embed?: string;
+	link_m3u8?: string;
 };
 
 type EpisodeServer = {
-    server_name: string;
-    server_data: EpisodeServerData[];
+	server_name: string;
+	server_data: EpisodeServerData[];
 };
 
 type PlayableEpisode = {
-    ep: string;
-    label: string;
-    linkEmbed?: string;
-    linkM3u8?: string;
-    serverName: string;
+	ep: string;
+	label: string;
+	linkEmbed?: string;
+	linkM3u8?: string;
+	serverName: string;
 };
 
 const { data, slug: routeSlug } = Astro.props;
@@ -36,61 +38,64 @@ const posterPreset = imagePresets.poster;
 const heroSource = resolveImageUrl(movie.thumb_url ?? movie.poster_url);
 const posterSource = resolveImageUrl(movie.poster_url ?? movie.thumb_url);
 
-const rating = movie.tmdb?.vote_average ? Number(movie.tmdb.vote_average).toFixed(1) : "0.0";
+const rating = movie.tmdb?.vote_average
+	? Number(movie.tmdb.vote_average).toFixed(1)
+	: "0.0";
 const toEpisodeCount = (value: string | number | null | undefined) => {
-    const count = Number.parseInt(String(value ?? "").replace(/\D/g, ""), 10);
-    return Number.isFinite(count) ? count : 0;
+	const count = Number.parseInt(String(value ?? "").replace(/\D/g, ""), 10);
+	return Number.isFinite(count) ? count : 0;
 };
-const totalEpisodeCount = episodes.reduce((sum, episode) => sum + episode.server_data.length, 0);
+const totalEpisodeCount = episodes.reduce(
+	(sum, episode) => sum + episode.server_data.length,
+	0,
+);
 const episodeTotal = toEpisodeCount(movie.episode_total);
 const episodeCurrent = toEpisodeCount(movie.episode_current);
 const isSeries = Math.max(totalEpisodeCount, episodeTotal) > 1;
 const episodeProgress = isSeries
-    ? `${movie.episode_current || episodeCurrent}/${movie.episode_total || episodeTotal} tập`
-    : movie.time || "N/A";
+	? `${movie.episode_current || episodeCurrent}/${movie.episode_total || episodeTotal} tập`
+	: movie.time || "N/A";
 const episodeAvailability = isSeries
-    ? `${movie.episode_current || episodeCurrent}/${movie.episode_total || episodeTotal} tập đã cập nhật`
-    : "Hoàn tất";
+	? `${movie.episode_current || episodeCurrent}/${movie.episode_total || episodeTotal} tập đã cập nhật`
+	: "Hoàn tất";
 
 const playableEpisodes: PlayableEpisode[] = [];
 const seenPlayable = new Set<string>();
 for (const episode of episodes) {
-    for (const serverData of episode.server_data) {
-        if (!serverData.link_m3u8 && !serverData.link_embed) {
-            continue;
-        }
-        const key = `${episode.server_name}:${serverData.slug}:${serverData.link_m3u8 ?? ""}:${serverData.link_embed ?? ""}`;
-        if (seenPlayable.has(key)) {
-            continue;
-        }
-        seenPlayable.add(key);
-        playableEpisodes.push({
-            ep: serverData.slug,
-            label: serverData.name,
-            linkEmbed: serverData.link_embed,
-            linkM3u8: serverData.link_m3u8,
-            serverName: episode.server_name,
-        });
-    }
+	for (const serverData of episode.server_data) {
+		if (!serverData.link_m3u8 && !serverData.link_embed) {
+			continue;
+		}
+		const key = `${episode.server_name}:${serverData.slug}:${serverData.link_m3u8 ?? ""}:${serverData.link_embed ?? ""}`;
+		if (seenPlayable.has(key)) {
+			continue;
+		}
+		seenPlayable.add(key);
+		playableEpisodes.push({
+			ep: serverData.slug,
+			label: serverData.name,
+			linkEmbed: serverData.link_embed,
+			linkM3u8: serverData.link_m3u8,
+			serverName: episode.server_name,
+		});
+	}
 }
 
 const firstPlayableEpisode = playableEpisodes[0];
 const hasEpisodes = totalEpisodeCount > 0;
 const hasPlayableEpisodes = playableEpisodes.length > 0;
 const firstPlayableLabel = firstPlayableEpisode?.label ?? "Chọn tập để phát";
-const actionButtonClass =
-    "uppercase tracking-tighter font-bold border-2 border-[#3F3F46] bg-transparent px-4 py-2 text-[#FAFAFA] hover:bg-[#FAFAFA] hover:text-[#09090B] hover:border-[#FAFAFA] transition-all inline-flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B]";
 ---
 
 <!-- Hero Section -->
-<section id="movie-hero" class="relative min-h-[88svh] overflow-hidden md:min-h-[92svh]">
+<section id="movie-hero" class="relative min-h-[70svh] overflow-hidden md:min-h-[80svh] lg:min-h-[92svh]">
     <!-- Background Number Effect -->
     <div class="absolute inset-0 pointer-events-none overflow-hidden">
         <span
             data-parallax-layer
             data-speed="0.8"
             data-shift="80"
-            class="parallax-layer absolute -right-16 -top-24 hidden text-[20rem] font-bold text-[#27272A] opacity-50 select-none uppercase tracking-tighter md:block md:text-[28rem]"
+            class="parallax-layer absolute -right-4 -top-8 hidden md:block lg:-right-16 lg:-top-24 text-[16rem] md:text-[20rem] lg:text-[28rem] font-bold text-[#27272A] opacity-50 select-none uppercase tracking-tighter"
         >
             {isSeries ? "SERIES" : "MOVIE"}
         </span>
@@ -119,22 +124,22 @@ const actionButtonClass =
                 transition:name={`poster-${slug}`}
             />
         ) : null}
-        <div class="absolute inset-0 bg-gradient-to-r from-[#09090B] via-[#09090B]/95 to-transparent"></div>
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_18%_26%,rgba(223,225,4,0.2),transparent_42%),radial-gradient(circle_at_82%_20%,rgba(255,255,255,0.08),transparent_35%)]"></div>
+        <div class="absolute inset-0 bg-linear-to-b from-[#09090B]/60 via-[#09090B]/85 to-[#09090B] md:bg-gradient-to-r md:from-[#09090B] md:via-[#09090B]/95 md:to-transparent"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(223,225,4,0.15),transparent_50%),radial-gradient(circle_at_82%_20%,rgba(255,255,255,0.06),transparent_35%)] md:bg-[radial-gradient(circle_at_18%_26%,rgba(223,225,4,0.2),transparent_42%),radial-gradient(circle_at_82%_20%,rgba(255,255,255,0.08),transparent_35%)]"></div>
         <!-- Shine effect -->
         <div class="absolute inset-0 shine-effect pointer-events-none"></div>
     </div>
 
     <!-- Content -->
-    <div class="relative z-10 container mx-auto px-4 lg:px-8 py-12 lg:py-20">
-        <div class="flex flex-col lg:flex-row gap-8 lg:gap-16 items-start">
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12 lg:py-20">
+        <div class="flex flex-col lg:flex-row gap-6 md:gap-8 lg:gap-16 items-start">
             <!-- Poster -->
             <div
                 data-parallax-layer
                 data-speed="1.3"
                 data-shift="44"
                 data-pointer="true"
-                class="parallax-layer w-full max-w-[280px] lg:max-w-[320px] mx-auto lg:mx-0 flex-shrink-0"
+                class="parallax-layer w-full max-w-[160px] sm:max-w-[200px] md:max-w-[240px] lg:max-w-[320px] mx-auto lg:mx-0 flex-shrink-0 order-1 lg:order-1 mt-6 md:mt-0"
             >
                 <div
                     class="poster-card border-2 border-[#3F3F46] bg-[#09090B] overflow-hidden transition-all duration-300 hover:scale-[1.02] group"
@@ -149,13 +154,13 @@ const actionButtonClass =
                             width={posterPreset.dimension.width}
                             height={posterPreset.dimension.height}
                             widths={posterPreset.widths}
-                            sizes="(max-width: 768px) 60vw, 320px"
+                            sizes="(max-width: 640px) 45vw, (max-width: 768px) 60vw, 320px"
                             quality={posterPreset.quality}
                             fit="cover"
                             class="h-full w-full object-cover group-hover:opacity-80 transition-opacity"
                         />
                     ) : (
-                        <div class="flex aspect-[2/3] w-full items-center justify-center bg-[#27272A] text-sm text-[#A1A1AA]">
+                        <div class="flex aspect-[2/3] w-full items-center justify-center bg-[#27272A] text-xs sm:text-sm text-[#A1A1AA]">
                             No Image
                         </div>
                     )}
@@ -167,35 +172,35 @@ const actionButtonClass =
                 data-parallax-layer
                 data-speed="0.6"
                 data-shift="28"
-                class="parallax-layer flex-1 space-y-6"
+                class="parallax-layer flex-1 space-y-4 md:space-y-6 order-2 lg:order-2"
             >
                 <!-- Meta -->
-                <div class="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.35em] text-[#A1A1AA]">
+                <div class="flex items-center gap-2 md:gap-3 text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] md:tracking-[0.35em] text-[#A1A1AA]">
                     <span>{isSeries ? "Series" : "Movie"}</span>
-                    <span class="w-6 h-[1px] bg-[#3F3F46]"></span>
+                    <span class="w-4 md:w-6 h-[1px] bg-[#3F3F46]"></span>
                     <span class="text-[#DFE104]">{movie.status}</span>
                 </div>
 
                 <!-- Title -->
-                <div class="space-y-2">
-                    <h1 class="text-3xl font-bold uppercase tracking-tighter text-[#FAFAFA] sm:text-4xl md:text-5xl lg:text-6xl">
+                <div class="space-y-1 md:space-y-2">
+                    <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold uppercase tracking-tighter text-[#FAFAFA] leading-tight">
                         {movie.name}
                     </h1>
-                    <p class="text-lg text-[#A1A1AA] uppercase tracking-wide">
+                    <p class="text-sm sm:text-base md:text-lg text-[#A1A1AA] uppercase tracking-wide">
                         {movie.origin_name}
                     </p>
                 </div>
 
                 <!-- Stats Row -->
-                <div class="flex flex-wrap items-center gap-6">
+                <div class="flex flex-wrap items-center gap-4 md:gap-6">
                     <!-- Rating -->
-                    <div class="flex items-center gap-2">
-                        <span class="text-[#DFE104] font-bold text-xl">★ {rating}</span>
-                        <span class="text-[#A1A1AA] text-sm">/10</span>
+                    <div class="flex items-center gap-1 md:gap-2">
+                        <span class="text-[#DFE104] font-bold text-lg md:text-xl">★ {rating}</span>
+                        <span class="text-[#A1A1AA] text-xs md:text-sm">/10</span>
                     </div>
 
                     <!-- Other Stats -->
-                    <div class="flex flex-wrap items-center gap-4 text-sm text-[#A1A1AA]">
+                    <div class="flex flex-wrap items-center gap-2 md:gap-4 text-xs md:text-sm text-[#A1A1AA]">
                         <span class="uppercase tracking-wider">{movie.year}</span>
                         <span class="w-1 h-1 bg-[#3F3F46]"></span>
                         <span>{episodeProgress}</span>
@@ -205,17 +210,17 @@ const actionButtonClass =
                 </div>
 
                 <!-- Categories -->
-                <div class="flex flex-wrap gap-2">
+                <div class="flex flex-wrap gap-1.5 md:gap-2">
                     {movie.category?.map((cat: { name: string; slug?: string }) =>
                         cat.slug ? (
                             <a
                                 href={`/danh-sach/the-loai/${cat.slug}`}
-                                class="border border-[#3F3F46] bg-[#09090B] px-3 py-1 text-xs uppercase tracking-wider text-[#FAFAFA] hover:bg-[#DFE104] hover:text-[#000] hover:border-[#DFE104] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B]"
+                                class="border border-[#3F3F46] bg-[#09090B] px-2 py-0.5 md:px-3 md:py-1 text-[10px] md:text-xs uppercase tracking-wider text-[#FAFAFA] hover:bg-[#DFE104] hover:text-[#000] hover:border-[#DFE104] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B]"
                             >
                                 {cat.name}
                             </a>
                         ) : (
-                            <span class="border border-[#3F3F46] bg-[#09090B] px-3 py-1 text-xs uppercase tracking-wider text-[#FAFAFA]">
+                            <span class="border border-[#3F3F46] bg-[#09090B] px-2 py-0.5 md:px-3 md:py-1 text-[10px] md:text-xs uppercase tracking-wider text-[#FAFAFA]">
                                 {cat.name}
                             </span>
                         ),
@@ -224,12 +229,12 @@ const actionButtonClass =
                         country.slug ? (
                             <a
                                 href={`/danh-sach/quoc-gia/${country.slug}`}
-                                class="border border-[#DFE104] bg-[#DFE104]/10 px-3 py-1 text-xs uppercase tracking-wider text-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B]"
+                                class="border border-[#DFE104] bg-[#DFE104]/10 px-2 py-0.5 md:px-3 md:py-1 text-[10px] md:text-xs uppercase tracking-wider text-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B]"
                             >
                                 {country.name}
                             </a>
                         ) : (
-                            <span class="border border-[#DFE104] bg-[#DFE104]/10 px-3 py-1 text-xs uppercase tracking-wider text-[#DFE104]">
+                            <span class="border border-[#DFE104] bg-[#DFE104]/10 px-2 py-0.5 md:px-3 md:py-1 text-[10px] md:text-xs uppercase tracking-wider text-[#DFE104]">
                                 {country.name}
                             </span>
                         ),
@@ -237,7 +242,7 @@ const actionButtonClass =
                 </div>
 
                 <!-- Crew -->
-                <div class="flex flex-col gap-1 text-sm text-[#A1A1AA]">
+                <div class="flex flex-col gap-1 text-xs md:text-sm text-[#A1A1AA]">
                     <span>
                         <strong class="text-[#FAFAFA] font-medium">Đạo diễn:</strong>
                         {movie.director?.length ? ` ${movie.director.join(", ")}` : " Đang cập nhật"}
@@ -249,11 +254,11 @@ const actionButtonClass =
                 </div>
 
                 <!-- Actions -->
-                <div class="flex flex-wrap items-center gap-4 pt-2">
+                <div class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2 md:gap-4 pt-2">
                     <button
                         id="watchBtn"
                         type="button"
-                        class="uppercase tracking-tighter font-bold bg-[#DFE104] text-black px-6 py-3 hover:scale-105 transition-all inline-flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B]"
+                        class="flex-1 sm:flex-none uppercase tracking-tighter font-bold bg-[#DFE104] text-black px-5 py-2.5 md:px-6 md:py-3 hover:scale-105 transition-all inline-flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B] min-w-[140px]"
                         data-default-ep={firstPlayableEpisode?.ep ?? ""}
                         data-default-label={firstPlayableEpisode?.label ?? ""}
                         data-default-link={firstPlayableEpisode?.linkEmbed ?? ""}
@@ -262,89 +267,39 @@ const actionButtonClass =
                         disabled={!firstPlayableEpisode}
                         aria-disabled={!firstPlayableEpisode}
                     >
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M8 5v14l11-7z"/>
                         </svg>
                         {firstPlayableEpisode ? "Xem ngay" : "Chưa có tập"}
                     </button>
 
-                    <button
-                        id="bookmarkBtn"
-                        type="button"
-                        class={actionButtonClass}
-                        aria-pressed="false"
-                    >
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                        </svg>
-                        Lưu phim
-                    </button>
-                    <button
-                        id="likeBtn"
-                        type="button"
-                        class={actionButtonClass}
-                        aria-pressed="false"
-                    >
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
-                        </svg>
-                        Yêu thích
-                    </button>
-                    <button
-                        id="shareBtn"
-                        type="button"
-                        class={actionButtonClass}
-                    >
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
-                        </svg>
-                        Chia sẻ
-                    </button>
+                    <ShareButtonWrapper client:load movie={movie} />
                 </div>
 
                 <!-- Synopsis -->
-                <div class="max-w-2xl pt-4">
-                    <p class="text-base leading-relaxed text-[#A1A1AA]">
+                <div class="max-w-2xl pt-3 md:pt-4">
+                    <p id="synopsisText" class="text-sm md:text-base leading-relaxed text-[#A1A1AA] line-clamp-3 md:line-clamp-5 transition-all duration-300">
                         {movie.content}
                     </p>
+                    <button
+                        id="toggleSynopsisBtn"
+                        type="button"
+                        class="hidden mt-2 text-xs md:text-sm font-semibold uppercase tracking-wider text-[#DFE104] hover:text-[#FAFAFA] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B]"
+                    >
+                        <span id="expandText">Đọc thêm</span>
+                        <span id="collapseText" class="hidden">Thu gọn</span>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<div
-    id="watchDock"
-    class="watch-dock fixed inset-x-4 bottom-4 z-40 mx-auto flex max-w-[26rem] translate-y-8 items-center justify-between gap-3 border-2 border-[#3F3F46] bg-[#09090B]/95 px-4 py-3 opacity-0 shadow-[0_18px_45px_rgba(0,0,0,0.55)] backdrop-blur-sm pointer-events-none transition-all duration-300 md:inset-x-auto md:right-8 md:left-auto"
-    aria-hidden="true"
->
-    <div class="min-w-0">
-        <p class="text-[10px] font-bold uppercase tracking-[0.28em] text-[#A1A1AA]">Cinema Mode</p>
-        <p id="watchDockLabel" class="truncate text-sm font-bold uppercase tracking-wide text-[#FAFAFA]">
-            {firstPlayableLabel}
-        </p>
-    </div>
-    <div class="flex items-center gap-2">
-        <button
-            id="watchDockPlay"
-            type="button"
-            class="inline-flex items-center gap-2 border-2 border-[#DFE104] bg-[#DFE104] px-3 py-2 text-xs font-bold uppercase tracking-wide text-[#09090B] transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B] disabled:cursor-not-allowed disabled:opacity-40"
-            disabled={!firstPlayableEpisode}
-            aria-disabled={!firstPlayableEpisode}
-        >
-            <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z"></path>
-            </svg>
-            Phát
-        </button>
-        <a
-            href="#episode-selection"
-            class="inline-flex items-center border-2 border-[#3F3F46] px-3 py-2 text-xs font-bold uppercase tracking-wide text-[#FAFAFA] transition hover:border-[#DFE104] hover:text-[#DFE104] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B]"
-        >
-            Tập
-        </a>
-    </div>
-</div>
+<WatchDock
+    client:load
+    defaultEpisode={firstPlayableEpisode}
+    firstPlayableLabel={firstPlayableLabel}
+/>
 
 <!-- Episode Selection -->
 <section class="py-12 lg:py-16 bg-[#09090B]" id="episode-selection">
@@ -404,12 +359,6 @@ const actionButtonClass =
     };
 
     const watchBtn = document.getElementById("watchBtn") as HTMLButtonElement | null;
-    const bookmarkBtn = document.getElementById("bookmarkBtn") as HTMLButtonElement | null;
-    const likeBtn = document.getElementById("likeBtn") as HTMLButtonElement | null;
-    const shareBtn = document.getElementById("shareBtn") as HTMLButtonElement | null;
-    const watchDock = document.getElementById("watchDock");
-    const watchDockPlay = document.getElementById("watchDockPlay") as HTMLButtonElement | null;
-    const watchDockLabel = document.getElementById("watchDockLabel");
     const playerHeading = document.getElementById("playerHeading");
     const playerStatus = document.getElementById("playerStatus");
     const playerShell = document.getElementById("playerShell");
@@ -439,9 +388,6 @@ const actionButtonClass =
         const episodeLabel = detail.label?.trim() || `Tập ${detail.ep}`;
         if (playerHeading) {
             playerHeading.textContent = `Đang phát: ${episodeLabel}`;
-        }
-        if (watchDockLabel) {
-            watchDockLabel.textContent = episodeLabel;
         }
         setPlayerStatus(`Đã sẵn sàng phát ${episodeLabel}.`, true);
     };
@@ -479,53 +425,19 @@ const actionButtonClass =
         playerSection?.scrollIntoView({ behavior: scrollBehavior, block: "start" });
     };
 
-    const setWatchDockVisibility = () => {
-        if (!watchDock || !heroRoot) {
-            return;
-        }
-        const hasPlayableEpisode = Boolean(defaultEpisode);
-        const heroBottom = heroRoot.getBoundingClientRect().bottom;
-        const shouldShow = hasPlayableEpisode && heroBottom < window.innerHeight * 0.4;
-        watchDock.classList.toggle("watch-dock-visible", shouldShow);
-        watchDock.setAttribute("aria-hidden", String(!shouldShow));
-    };
-
-    const applyToggleState = (button: HTMLButtonElement, active: boolean) => {
-        button.setAttribute("aria-pressed", String(active));
-        button.classList.toggle("bg-[#DFE104]", active);
-        button.classList.toggle("text-black", active);
-        button.classList.toggle("border-[#DFE104]", active);
-        button.classList.toggle("bg-transparent", !active);
-        button.classList.toggle("text-[#FAFAFA]", !active);
-        button.classList.toggle("border-[#3F3F46]", !active);
-    };
-
-    const bindToggleAction = (button: HTMLButtonElement | null, key: string) => {
-        if (!button) {
-            return;
-        }
-
-        let active = false;
-        try {
-            active = localStorage.getItem(key) === "1";
-        } catch {
-            active = false;
-        }
-        applyToggleState(button, active);
-
-        button.addEventListener("click", () => {
-            active = !active;
-            applyToggleState(button, active);
-            try {
-                localStorage.setItem(key, active ? "1" : "0");
-            } catch {
-                // Ignore write failures for private mode / blocked storage.
-            }
-        });
-    };
-
     const defaultEpisode = getDefaultEpisode();
-    let activeEpisode: EpisodeSelectionDetail | null = defaultEpisode;
+    // activeEpisode is managed by WatchDock component
+
+    // Auto-play on page load if autoplay=1 query param is present
+    const urlParams = new URLSearchParams(window.location.search);
+    const shouldAutoplay = urlParams.get("autoplay") === "1";
+
+    if (shouldAutoplay && defaultEpisode) {
+        // Delay to ensure VideoPlayer component is mounted
+        window.setTimeout(() => {
+            playEpisode(defaultEpisode);
+        }, 300);
+    }
 
     if (watchBtn) {
         watchBtn.addEventListener("click", () => {
@@ -540,39 +452,16 @@ const actionButtonClass =
         });
     }
 
-    if (watchDockPlay) {
-        watchDockPlay.addEventListener("click", () => {
-            const episodeToPlay = activeEpisode ?? defaultEpisode;
-            if (!episodeToPlay) {
-                document.getElementById("episode-selection")?.scrollIntoView({
-                    behavior: scrollBehavior,
-                    block: "start",
-                });
-                return;
-            }
-            playEpisode(episodeToPlay);
-        });
-    }
-
     const onEpisodeSelected = (event: Event) => {
         const detail = (event as CustomEvent<EpisodeSelectionDetail>).detail;
         if (!detail?.ep || (!detail.linkEmbed && !detail.linkM3u8)) {
             return;
         }
-        activeEpisode = detail;
         updatePlayerMeta(detail);
         pulsePlayerShell();
     };
     window.addEventListener("episodeSelected", onEpisodeSelected);
     cleanupTasks.push(() => window.removeEventListener("episodeSelected", onEpisodeSelected));
-
-    const onWindowScroll = () => setWatchDockVisibility();
-    const onWindowResize = () => setWatchDockVisibility();
-    window.addEventListener("scroll", onWindowScroll, { passive: true });
-    window.addEventListener("resize", onWindowResize);
-    cleanupTasks.push(() => window.removeEventListener("scroll", onWindowScroll));
-    cleanupTasks.push(() => window.removeEventListener("resize", onWindowResize));
-    setWatchDockVisibility();
 
     if (!prefersReducedMotion && heroRoot && parallaxLayers.length) {
         let pointerX = 0;
@@ -639,30 +528,36 @@ const actionButtonClass =
         requestParallaxFrame();
     }
 
-    const storageScope = `movie-detail:${window.location.pathname}`;
-    bindToggleAction(bookmarkBtn, `${storageScope}:bookmark`);
-    bindToggleAction(likeBtn, `${storageScope}:like`);
+    const synopsisText = document.getElementById("synopsisText") as HTMLParagraphElement | null;
+    const toggleSynopsisBtn = document.getElementById("toggleSynopsisBtn") as HTMLButtonElement | null;
+    const expandText = document.getElementById("expandText");
+    const collapseText = document.getElementById("collapseText");
 
-    if (shareBtn) {
-        shareBtn.addEventListener("click", async () => {
-            const shareData = {
-                title: document.title,
-                text: "Xem phim trên AstroFlim",
-                url: window.location.href,
-            };
+    if (synopsisText && toggleSynopsisBtn && expandText && collapseText) {
+        const checkSynopsisHeight = () => {
+            const lineHeight = parseFloat(window.getComputedStyle(synopsisText).lineHeight);
+            const maxLines = window.innerWidth >= 768 ? 5 : 3;
+            const maxHeight = lineHeight * maxLines;
 
-            try {
-                if (navigator.share) {
-                    await navigator.share(shareData);
-                    setPlayerStatus("Đã mở bảng chia sẻ.", true);
-                    return;
-                }
-                await navigator.clipboard.writeText(window.location.href);
-                setPlayerStatus("Đã sao chép link vào clipboard.", true);
-            } catch {
-                setPlayerStatus("Không thể chia sẻ ngay lúc này.", false);
+            if (synopsisText.scrollHeight > maxHeight) {
+                toggleSynopsisBtn.classList.remove("hidden");
+            } else {
+                toggleSynopsisBtn.classList.add("hidden");
+                synopsisText.classList.remove("line-clamp-3", "md:line-clamp-5");
             }
+        };
+
+        checkSynopsisHeight();
+        window.addEventListener("resize", checkSynopsisHeight);
+
+        toggleSynopsisBtn.addEventListener("click", () => {
+            const isExpanded = synopsisText.classList.toggle("line-clamp-3", !synopsisText.classList.contains("line-clamp-3"));
+            synopsisText.classList.toggle("md:line-clamp-5", !synopsisText.classList.contains("md:line-clamp-5"));
+            expandText.classList.toggle("hidden", !isExpanded);
+            collapseText.classList.toggle("hidden", isExpanded);
         });
+
+        cleanupTasks.push(() => window.removeEventListener("resize", checkSynopsisHeight));
     }
 
     window.addEventListener(
@@ -682,16 +577,6 @@ const actionButtonClass =
 
     .poster-card {
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
-    }
-
-    .watch-dock {
-        will-change: transform, opacity;
-    }
-
-    .watch-dock.watch-dock-visible {
-        transform: translateY(0);
-        opacity: 1;
-        pointer-events: auto;
     }
 
     .player-shell {
@@ -767,13 +652,29 @@ const actionButtonClass =
         }
     }
 
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+        .md\:line-clamp-5 {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 5;
+            overflow: hidden;
+        }
+    }
+
+    .opacity-100 {
+        opacity: 1;
+    }
+
     @media (prefers-reduced-motion: reduce) {
         .parallax-layer {
             transform: none !important;
-        }
-
-        .watch-dock {
-            transition: none;
         }
 
         .player-shell::before {

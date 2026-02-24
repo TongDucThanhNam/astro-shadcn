@@ -1,3 +1,29 @@
+# AI CONTEXT PACK
+GeneratedAt: 2026-02-24T11:11:42.830Z
+
+
+# UI TREE (ASCII)
+
+[VideoPlayer] - src/components/VideoPlayer.tsx
+└── [PlayerControlLayer] - src/components/video-player/PlayerControlLayer.tsx
+
+
+# UI GRAPH (Mermaid)
+
+```mermaid
+graph TD
+  NavigationMenuDemo_e96fd89f["NavigationMenuDemo<br/>src/components/NavigationMenuDemo.tsx"] --> ListItem_e57c5d06["ListItem<br/>src/components/NavigationMenuDemo.tsx"]
+  SearchForm_d8a5bbc4["SearchForm<br/>src/components/SearchForm.tsx"] --> CommandDialog_4f474eee["CommandDialog<br/>src/components/ui/command.tsx"]
+  SearchForm_d8a5bbc4["SearchForm<br/>src/components/SearchForm.tsx"] --> CommandShortcut_a2d81ea1["CommandShortcut<br/>src/components/ui/command.tsx"]
+  VideoPlayer_edd2de7d["VideoPlayer<br/>src/components/VideoPlayer.tsx"] --> PlayerControlLayer_aa87dc6d["PlayerControlLayer<br/>src/components/video-player/PlayerControlLayer.tsx"]
+  ShareButtonWrapper_b5e6fd4d["ShareButtonWrapper<br/>src/components/ui/ShareButtonWrapper.tsx"] --> ShareButton_ef724d8b["ShareButton<br/>src/components/ui/share-button.tsx"]
+  PaginationPrevious_7f1f54c2["PaginationPrevious<br/>src/components/ui/pagination.tsx"] --> PaginationLink_df80325e["PaginationLink<br/>src/components/ui/pagination.tsx"]
+  PaginationNext_af5c94a7["PaginationNext<br/>src/components/ui/pagination.tsx"] --> PaginationLink_df80325e["PaginationLink<br/>src/components/ui/pagination.tsx"]
+```
+
+
+# PROJECT AI RULES
+
 # Agents instructions
 You are an AI coding assistant working on the AstroFlim codebase. Keep responses short, actionable, and specific to this repository. NEVER CREATE DOCS OR TESTS.
 You have given 2 MCP tool to help you:
@@ -242,3 +268,44 @@ When feedback arrives:
 1. If fail, patch with minimal diff and preserve contracts.
 2. If regression, fix regression first.
 3. Return changed files and rerun commands.
+
+
+# CURSOR RULES
+
+# Strict UI Architecture Rules
+
+- DO NOT hardcode width/height in leaf components.
+- Every component must accept className and forward ...props.
+- Always preserve parent container layout contract (flex/grid/overflow).
+- Keep formatting deterministic with Biome.
+- Ban: w-[...], h-[...], bg-[#...], @apply (unless spec.md exception).
+- Add or maintain Breadcrumb + JSDoc metadata tags in each component.
+- Before editing, consult docs/ui-map.ascii.txt and docs/spec.md.
+
+
+# BIOME CONFIG
+
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100
+  },
+  "linter": {
+    "enabled": true
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "semicolons": "always",
+      "trailingCommas": "all"
+    }
+  },
+  "json": {
+    "formatter": {
+      "enabled": true
+    }
+  }
+}

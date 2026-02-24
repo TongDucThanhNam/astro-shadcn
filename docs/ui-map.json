@@ -1,0 +1,494 @@
+{
+  "generatedAt": "2026-02-24T11:10:38.483Z",
+  "rootKey": "VideoPlayer@src/components/VideoPlayer.tsx",
+  "nodes": [
+    {
+      "key": "ListItem@src/components/NavigationMenuDemo.tsx",
+      "name": "ListItem",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/NavigationMenuDemo.tsx",
+      "fileRel": "src/components/NavigationMenuDemo.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "NavigationMenuLink",
+        "Icon"
+      ],
+      "mermaidId": "ListItem_e57c5d06"
+    },
+    {
+      "key": "NavigationMenuDemo@src/components/NavigationMenuDemo.tsx",
+      "name": "NavigationMenuDemo",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/NavigationMenuDemo.tsx",
+      "fileRel": "src/components/NavigationMenuDemo.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "NavigationMenu",
+        "NavigationMenuItem",
+        "NavigationMenuContent",
+        "NavigationMenuLink",
+        "NavigationMenuTrigger",
+        "ListItem",
+        "Film"
+      ],
+      "mermaidId": "NavigationMenuDemo_e96fd89f"
+    },
+    {
+      "key": "SearchForm@src/components/SearchForm.tsx",
+      "name": "SearchForm",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/SearchForm.tsx",
+      "fileRel": "src/components/SearchForm.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "CommandDialog",
+        "CommandList",
+        "CommandGroup",
+        "CommandItem",
+        "CommandShortcut",
+        "Search",
+        "CommandInput",
+        "Button"
+      ],
+      "mermaidId": "SearchForm_d8a5bbc4"
+    },
+    {
+      "key": "ComboboxDemo@src/components/Combobox.tsx",
+      "name": "ComboboxDemo",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/Combobox.tsx",
+      "fileRel": "src/components/Combobox.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "Popover",
+        "PopoverContent",
+        "Command",
+        "CommandList",
+        "CommandGroup",
+        "CommandEmpty",
+        "CommandInput",
+        "PopoverTrigger",
+        "Button",
+        "ChevronsUpDown"
+      ],
+      "mermaidId": "ComboboxDemo_b220e84a"
+    },
+    {
+      "key": "AdvancedPlayer@src/components/AdvancedPlayer.tsx",
+      "name": "AdvancedPlayer",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/AdvancedPlayer.tsx",
+      "fileRel": "src/components/AdvancedPlayer.tsx",
+      "wrapperClass": "advanced-player",
+      "renders": [],
+      "mermaidId": "AdvancedPlayer_c886e4f7"
+    },
+    {
+      "key": "MenuItemComponent@src/components/MobileMenu.tsx",
+      "name": "MenuItemComponent",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/MobileMenu.tsx",
+      "fileRel": "src/components/MobileMenu.tsx",
+      "wrapperClass": null,
+      "renders": [],
+      "mermaidId": "MenuItemComponent_2951ee3c"
+    },
+    {
+      "key": "MobileMenu@src/components/MobileMenu.tsx",
+      "name": "MobileMenu",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/MobileMenu.tsx",
+      "fileRel": "src/components/MobileMenu.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "Sheet",
+        "SheetContent",
+        "SheetTrigger",
+        "Button",
+        "Menu"
+      ],
+      "mermaidId": "MobileMenu_5b56bd69"
+    },
+    {
+      "key": "ModeToggle@src/components/ModeToggle.tsx",
+      "name": "ModeToggle",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ModeToggle.tsx",
+      "fileRel": "src/components/ModeToggle.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "DropdownMenu",
+        "DropdownMenuContent",
+        "DropdownMenuItem",
+        "DropdownMenuTrigger",
+        "Button",
+        "Moon",
+        "Sun"
+      ],
+      "mermaidId": "ModeToggle_d72ce61c"
+    },
+    {
+      "key": "MovieTypeSelector@src/components/MovieTypeSelector.tsx",
+      "name": "MovieTypeSelector",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/MovieTypeSelector.tsx",
+      "fileRel": "src/components/MovieTypeSelector.tsx",
+      "wrapperClass": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4",
+      "renders": [],
+      "mermaidId": "MovieTypeSelector_957a436a"
+    },
+    {
+      "key": "WatchDock@src/components/WatchDock.tsx",
+      "name": "WatchDock",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/WatchDock.tsx",
+      "fileRel": "src/components/WatchDock.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "AnimatePresence"
+      ],
+      "mermaidId": "WatchDock_66a65384"
+    },
+    {
+      "key": "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "name": "EpisodeSelector",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/EpisodeSelector.tsx",
+      "fileRel": "src/components/EpisodeSelector.tsx",
+      "wrapperClass": "mt-6 border-2 border-[#3F3F46] bg-[#09090B]",
+      "renders": [
+        "Card",
+        "CardContent",
+        "Tabs",
+        "Toggle",
+        "ArrowUpDown",
+        "Input",
+        "Search",
+        "TabsList",
+        "CardHeader",
+        "Play",
+        "CardTitle",
+        "Film"
+      ],
+      "mermaidId": "EpisodeSelector_3201ab1a"
+    },
+    {
+      "key": "VideoPlayer@src/components/VideoPlayer.tsx",
+      "name": "VideoPlayer",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/VideoPlayer.tsx",
+      "fileRel": "src/components/VideoPlayer.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "LayoutPanelTop",
+        "Minimize2",
+        "Maximize2",
+        "RefreshCw",
+        "SkipForward",
+        "SkipBack",
+        "Server",
+        "AspectRatio",
+        "MediaPlayer",
+        "PlayerControlLayer",
+        "MediaProvider"
+      ],
+      "mermaidId": "VideoPlayer_edd2de7d"
+    },
+    {
+      "key": "Badge@src/components/ui/badge.tsx",
+      "name": "Badge",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/badge.tsx",
+      "fileRel": "src/components/ui/badge.tsx",
+      "wrapperClass": null,
+      "renders": [],
+      "mermaidId": "Badge_a2598bc8"
+    },
+    {
+      "key": "DropdownMenuShortcut@src/components/ui/dropdown-menu.tsx",
+      "name": "DropdownMenuShortcut",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dropdown-menu.tsx",
+      "fileRel": "src/components/ui/dropdown-menu.tsx",
+      "wrapperClass": null,
+      "renders": [],
+      "mermaidId": "DropdownMenuShortcut_24f3bcba"
+    },
+    {
+      "key": "ShareButton@src/components/ui/share-button.tsx",
+      "name": "ShareButton",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/share-button.tsx",
+      "fileRel": "src/components/ui/share-button.tsx",
+      "wrapperClass": "relative inline-flex w-full sm:w-auto overflow-hidden [--share-slot:42px] md:[--share-slot:48px] [--share-closed:100%] sm:[--share-closed:148px] [--share-open:100%] sm:[--share-open:calc(var(--share-slot)*var(--share-count))] border-2 border-[#3F3F46] bg-[#09090B]/98 shadow-[0_14px_28px_rgba(0,0,0,0.45)] backdrop-blur-sm",
+      "renders": [],
+      "mermaidId": "ShareButton_ef724d8b"
+    },
+    {
+      "key": "NumberCounter@src/components/ui/NumberCounter.tsx",
+      "name": "NumberCounter",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/NumberCounter.tsx",
+      "fileRel": "src/components/ui/NumberCounter.tsx",
+      "wrapperClass": null,
+      "renders": [],
+      "mermaidId": "NumberCounter_7f9595cb"
+    },
+    {
+      "key": "MagneticButton@src/components/ui/MagneticButton.tsx",
+      "name": "MagneticButton",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/MagneticButton.tsx",
+      "fileRel": "src/components/ui/MagneticButton.tsx",
+      "wrapperClass": null,
+      "renders": [],
+      "mermaidId": "MagneticButton_7f2197e9"
+    },
+    {
+      "key": "FacebookIcon@src/components/ui/ShareButtonWrapper.tsx",
+      "name": "FacebookIcon",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/ShareButtonWrapper.tsx",
+      "fileRel": "src/components/ui/ShareButtonWrapper.tsx",
+      "wrapperClass": null,
+      "renders": [],
+      "mermaidId": "FacebookIcon_9ae2620c"
+    },
+    {
+      "key": "InstagramIcon@src/components/ui/ShareButtonWrapper.tsx",
+      "name": "InstagramIcon",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/ShareButtonWrapper.tsx",
+      "fileRel": "src/components/ui/ShareButtonWrapper.tsx",
+      "wrapperClass": null,
+      "renders": [],
+      "mermaidId": "InstagramIcon_ffde0e49"
+    },
+    {
+      "key": "ShareButtonWrapper@src/components/ui/ShareButtonWrapper.tsx",
+      "name": "ShareButtonWrapper",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/ShareButtonWrapper.tsx",
+      "fileRel": "src/components/ui/ShareButtonWrapper.tsx",
+      "wrapperClass": "relative inline-flex w-full items-center sm:w-auto",
+      "renders": [
+        "ShareButton",
+        "Link2"
+      ],
+      "mermaidId": "ShareButtonWrapper_b5e6fd4d"
+    },
+    {
+      "key": "CommandDialog@src/components/ui/command.tsx",
+      "name": "CommandDialog",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/command.tsx",
+      "fileRel": "src/components/ui/command.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "Dialog",
+        "DialogContent",
+        "Command"
+      ],
+      "mermaidId": "CommandDialog_4f474eee"
+    },
+    {
+      "key": "CommandShortcut@src/components/ui/command.tsx",
+      "name": "CommandShortcut",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/command.tsx",
+      "fileRel": "src/components/ui/command.tsx",
+      "wrapperClass": null,
+      "renders": [],
+      "mermaidId": "CommandShortcut_a2d81ea1"
+    },
+    {
+      "key": "TextReveal@src/components/ui/TextReveal.tsx",
+      "name": "TextReveal",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/TextReveal.tsx",
+      "fileRel": "src/components/ui/TextReveal.tsx",
+      "wrapperClass": null,
+      "renders": [],
+      "mermaidId": "TextReveal_554f4d57"
+    },
+    {
+      "key": "SectionListCarousel@src/components/ui/SectionListCarousel.tsx",
+      "name": "SectionListCarousel",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/SectionListCarousel.tsx",
+      "fileRel": "src/components/ui/SectionListCarousel.tsx",
+      "wrapperClass": "relative",
+      "renders": [
+        "ChevronRight",
+        "ChevronLeft"
+      ],
+      "mermaidId": "SectionListCarousel_9bebe7d2"
+    },
+    {
+      "key": "SheetHeader@src/components/ui/sheet.tsx",
+      "name": "SheetHeader",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/sheet.tsx",
+      "fileRel": "src/components/ui/sheet.tsx",
+      "wrapperClass": null,
+      "renders": [],
+      "mermaidId": "SheetHeader_622628f8"
+    },
+    {
+      "key": "SheetFooter@src/components/ui/sheet.tsx",
+      "name": "SheetFooter",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/sheet.tsx",
+      "fileRel": "src/components/ui/sheet.tsx",
+      "wrapperClass": null,
+      "renders": [],
+      "mermaidId": "SheetFooter_b84e31af"
+    },
+    {
+      "key": "Cursor@src/components/ui/Cursor.tsx",
+      "name": "Cursor",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/Cursor.tsx",
+      "fileRel": "src/components/ui/Cursor.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "Play"
+      ],
+      "mermaidId": "Cursor_d80bb73c"
+    },
+    {
+      "key": "ScrollReveal@src/components/ui/ScrollReveal.tsx",
+      "name": "ScrollReveal",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/ScrollReveal.tsx",
+      "fileRel": "src/components/ui/ScrollReveal.tsx",
+      "wrapperClass": null,
+      "renders": [],
+      "mermaidId": "ScrollReveal_fd975d50"
+    },
+    {
+      "key": "Pagination@src/components/ui/pagination.tsx",
+      "name": "Pagination",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/pagination.tsx",
+      "fileRel": "src/components/ui/pagination.tsx",
+      "wrapperClass": null,
+      "renders": [],
+      "mermaidId": "Pagination_3ccc7dd6"
+    },
+    {
+      "key": "PaginationLink@src/components/ui/pagination.tsx",
+      "name": "PaginationLink",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/pagination.tsx",
+      "fileRel": "src/components/ui/pagination.tsx",
+      "wrapperClass": null,
+      "renders": [],
+      "mermaidId": "PaginationLink_df80325e"
+    },
+    {
+      "key": "PaginationPrevious@src/components/ui/pagination.tsx",
+      "name": "PaginationPrevious",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/pagination.tsx",
+      "fileRel": "src/components/ui/pagination.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "PaginationLink",
+        "ChevronLeft"
+      ],
+      "mermaidId": "PaginationPrevious_7f1f54c2"
+    },
+    {
+      "key": "PaginationNext@src/components/ui/pagination.tsx",
+      "name": "PaginationNext",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/pagination.tsx",
+      "fileRel": "src/components/ui/pagination.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "PaginationLink",
+        "ChevronRight"
+      ],
+      "mermaidId": "PaginationNext_af5c94a7"
+    },
+    {
+      "key": "PaginationEllipsis@src/components/ui/pagination.tsx",
+      "name": "PaginationEllipsis",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/pagination.tsx",
+      "fileRel": "src/components/ui/pagination.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "MoreHorizontal"
+      ],
+      "mermaidId": "PaginationEllipsis_9c6a11bd"
+    },
+    {
+      "key": "DialogHeader@src/components/ui/dialog.tsx",
+      "name": "DialogHeader",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dialog.tsx",
+      "fileRel": "src/components/ui/dialog.tsx",
+      "wrapperClass": null,
+      "renders": [],
+      "mermaidId": "DialogHeader_a0371821"
+    },
+    {
+      "key": "DialogFooter@src/components/ui/dialog.tsx",
+      "name": "DialogFooter",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dialog.tsx",
+      "fileRel": "src/components/ui/dialog.tsx",
+      "wrapperClass": null,
+      "renders": [],
+      "mermaidId": "DialogFooter_2edacabf"
+    },
+    {
+      "key": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "name": "PlayerControlLayer",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/video-player/PlayerControlLayer.tsx",
+      "fileRel": "src/components/video-player/PlayerControlLayer.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "AnimatePresence",
+        "RefreshCw",
+        "Spinner.Root",
+        "Spinner.TrackFill",
+        "Spinner.Track",
+        "Airplay",
+        "Cast",
+        "Play",
+        "Controls.Root",
+        "Controls.Group",
+        "FullscreenButton",
+        "Expand",
+        "Minimize2",
+        "SlidersHorizontal",
+        "PIPButton",
+        "MonitorPlay",
+        "AirPlayButton",
+        "GoogleCastButton",
+        "CaptionButton",
+        "MessageSquareText",
+        "Time",
+        "VolumeSlider.Root",
+        "VolumeSlider.Thumb",
+        "VolumeSlider.Track",
+        "VolumeSlider.TrackFill",
+        "MuteButton",
+        "Volume2",
+        "VolumeX",
+        "SeekButton",
+        "SkipForward",
+        "SkipBack",
+        "PlayButton",
+        "Pause",
+        "TimeSlider.Root",
+        "TimeSlider.Thumb",
+        "TimeSlider.Track",
+        "TimeSlider.TrackFill",
+        "TimeSlider.Progress",
+        "Server",
+        "Tv",
+        "Gauge"
+      ],
+      "mermaidId": "PlayerControlLayer_aa87dc6d"
+    }
+  ],
+  "edges": [
+    [
+      "NavigationMenuDemo@src/components/NavigationMenuDemo.tsx",
+      "ListItem@src/components/NavigationMenuDemo.tsx"
+    ],
+    [
+      "SearchForm@src/components/SearchForm.tsx",
+      "CommandDialog@src/components/ui/command.tsx"
+    ],
+    [
+      "SearchForm@src/components/SearchForm.tsx",
+      "CommandShortcut@src/components/ui/command.tsx"
+    ],
+    [
+      "VideoPlayer@src/components/VideoPlayer.tsx",
+      "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx"
+    ],
+    [
+      "ShareButtonWrapper@src/components/ui/ShareButtonWrapper.tsx",
+      "ShareButton@src/components/ui/share-button.tsx"
+    ],
+    [
+      "PaginationPrevious@src/components/ui/pagination.tsx",
+      "PaginationLink@src/components/ui/pagination.tsx"
+    ],
+    [
+      "PaginationNext@src/components/ui/pagination.tsx",
+      "PaginationLink@src/components/ui/pagination.tsx"
+    ]
+  ]
+}

@@ -71,55 +71,179 @@ const findOptionLabel = (value: string, options: Option[]) =>
 
 const activeFilters = [
     {
+        key: "sort",
         label: "Sắp xếp",
         value: `${sortFieldLabels[sortField] || sortField} • ${
             sortTypeLabels[sortType] || sortType
         }`,
+        removable: false,
     },
     category && {
+        key: "category",
         label: "Thể loại",
         value: findOptionLabel(category, categoryOptions),
+        removable: true,
     },
     country && {
+        key: "country",
         label: "Quốc gia",
         value: findOptionLabel(country, countryOptions),
+        removable: true,
     },
-    year && { label: "Năm", value: year },
-    limit !== 10 && { label: "Kết quả", value: `${limit}/trang` },
-].filter(Boolean) as { label: string; value: string }[];
+    year && { 
+        key: "year",
+        label: "Năm", 
+        value: year,
+        removable: true,
+    },
+    limit !== 10 && { 
+        key: "limit",
+        label: "Kết quả", 
+        value: `${limit}/trang`,
+        removable: true,
+    },
+].filter(Boolean) as { key: string; label: string; value: string; removable: boolean }[];
 ---
 
 <div
     class="relative w-full overflow-hidden border-2 border-[#3F3F46] bg-[#09090B]"
 >
-    <div class="relative p-6 md:p-8">
+    <div class="relative p-4 md:p-6 lg:p-8">
         <div
-            class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
+            class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between"
         >
-            <div class="space-y-1">
-                <h3 class="text-xl font-bold uppercase tracking-tighter text-[#FAFAFA]">
-                    Bộ lọc nâng cao
-                </h3>
+            <div class="space-y-2">
+                <div class="flex items-center gap-3">
+                    <h3 class="text-xl font-bold uppercase tracking-tighter text-[#FAFAFA]">
+                        Bộ lọc
+                    </h3>
+                    {
+                        activeFilters.length > 0 && (
+                            <span class="flex h-5 items-center justify-center bg-[#DFE104] px-2 text-xs font-bold uppercase tracking-tighter text-black">
+                                {activeFilters.length}
+                            </span>
+                        )
+                    }
+                </div>
                 <p class="text-sm text-[#A1A1AA]">
                     Tinh chỉnh danh sách phim để tìm nội dung phù hợp nhất với
                     bạn.
                 </p>
             </div>
-            <div class="flex flex-wrap items-center gap-2">
+            <div class="flex flex-wrap items-center gap-2 md:hidden">
                 {
                     activeFilters.length ? (
-                        activeFilters.map(({ label, value }) => (
-                            <span class="flex items-center gap-2 border border-[#3F3F46] bg-[#27272A] px-3 py-1 text-xs text-[#FAFAFA]">
-                                <span class="font-semibold uppercase text-[#A1A1AA]">
+                        activeFilters.slice(0, 2).map(({ key, label, value, removable }) => (
+                            <button
+                                type="button"
+                                data-filter-key={key}
+                                class={`flex items-center gap-2 border-2 border-[#3F3F46] bg-[#27272A] px-3 py-1.5 text-xs font-semibold uppercase tracking-tighter text-[#FAFAFA] transition-all duration-300 ${
+                                    removable
+                                        ? "hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-black"
+                                        : "cursor-default opacity-70"
+                                }`}
+                                {...(removable ? { "aria-label": `Xóa bộ lọc ${label}` } : {})}
+                            >
+                                <span class="text-[#A1A1AA] transition-colors group-hover:text-black/70">
                                     {label}
                                 </span>
-                                <span class="text-[#FAFAFA]">{value}</span>
-                            </span>
+                                <span class="font-bold">{value}</span>
+                                {
+                                    removable && (
+                                        <svg
+                                            class="h-3 w-3 opacity-50 transition-opacity group-hover:opacity-100"
+                                            viewBox="0 0 10 10"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                d="M1 1L9 9M1 9L9 1"
+                                                stroke="currentColor"
+                                                stroke-width="1.5"
+                                                stroke-linecap="round"
+                                            ></path>
+                                        </svg>
+                                    )
+                                }
+                            </button>
                         ))
                     ) : (
                         <span class="text-xs uppercase tracking-widest text-[#A1A1AA]">
-                            Chưa áp dụng bộ lọc bổ sung
+                            Chưa áp dụng bộ lọc
                         </span>
+                    )
+                }
+                {
+                    activeFilters.length > 2 && (
+                        <span class="text-xs font-bold uppercase tracking-tighter text-[#DFE104]">
+                            +{activeFilters.length - 2}
+                        </span>
+                    )
+                }
+                {
+                    activeFilters.some((f) => f.removable) && (
+                        <button
+                            type="button"
+                            id="clearAllFilters"
+                            class="border-2 border-transparent px-3 py-1.5 text-xs font-bold uppercase tracking-tighter text-[#DFE104] transition-all hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-black"
+                        >
+                            Xóa
+                        </button>
+                    )
+                }
+            </div>
+            <div class="hidden md:flex flex-wrap items-center gap-2">
+                {
+                    activeFilters.length ? (
+                        activeFilters.map(({ key, label, value, removable }) => (
+                            <button
+                                type="button"
+                                data-filter-key={key}
+                                class={`flex items-center gap-2 border-2 border-[#3F3F46] bg-[#27272A] px-3 py-1.5 text-xs font-semibold uppercase tracking-tighter text-[#FAFAFA] transition-all duration-300 ${
+                                    removable
+                                        ? "hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-black"
+                                        : "cursor-default opacity-70"
+                                }`}
+                                {...(removable ? { "aria-label": `Xóa bộ lọc ${label}` } : {})}
+                            >
+                                <span class="text-[#A1A1AA] transition-colors group-hover:text-black/70">
+                                    {label}
+                                </span>
+                                <span class="font-bold">{value}</span>
+                                {
+                                    removable && (
+                                        <svg
+                                            class="h-3 w-3 opacity-50 transition-opacity group-hover:opacity-100"
+                                            viewBox="0 0 10 10"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                d="M1 1L9 9M1 9L9 1"
+                                                stroke="currentColor"
+                                                stroke-width="1.5"
+                                                stroke-linecap="round"
+                                            ></path>
+                                        </svg>
+                                    )
+                                }
+                            </button>
+                        ))
+                    ) : (
+                        <span class="text-xs uppercase tracking-widest text-[#A1A1AA]">
+                            Chưa áp dụng bộ lọc
+                        </span>
+                    )
+                }
+                {
+                    activeFilters.some((f) => f.removable) && (
+                        <button
+                            type="button"
+                            id="clearAllFilters"
+                            class="ml-2 border-2 border-transparent px-3 py-1.5 text-xs font-bold uppercase tracking-tighter text-[#DFE104] transition-all hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-black"
+                        >
+                            Xóa tất cả
+                        </button>
                     )
                 }
             </div>
@@ -129,18 +253,18 @@ const activeFilters = [
             <span
                 class="text-xs font-semibold uppercase tracking-widest text-[#A1A1AA]"
             >
-                Tuỳ chỉnh nhanh
+                Tuỳ chỉnh
             </span>
             <button
                 id="filterToggle"
                 type="button"
-                class="inline-flex items-center gap-2 border-2 border-[#3F3F46] bg-transparent px-3 py-2 text-xs font-bold uppercase tracking-tighter text-[#FAFAFA] transition hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-black md:hidden"
+                class="inline-flex items-center gap-2 border-2 border-[#3F3F46] bg-[#27272A] px-4 py-2.5 text-xs font-bold uppercase tracking-tighter text-[#FAFAFA] transition-all duration-300 active:scale-95 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-black md:hidden"
                 aria-expanded="false"
                 aria-controls="filterForm"
             >
                 <span data-collapsible-label>Hiện bộ lọc</span>
                 <svg
-                    class="h-3 w-3 transition-transform"
+                    class="h-3 w-3 transition-transform duration-300"
                     viewBox="0 0 10 6"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -155,27 +279,30 @@ const activeFilters = [
             </button>
         </div>
 
-        <form id="filterForm" class="mt-4 hidden space-y-8 md:mt-8 md:block">
-            <fieldset class="space-y-4">
+        <form
+            id="filterForm"
+            class="mt-4 max-h-0 overflow-hidden space-y-6 transition-all duration-300 md:mt-8 md:max-h-none md:overflow-visible md:block"
+        >
+            <fieldset class="space-y-3">
                 <legend
                     class="text-xs font-bold uppercase tracking-widest text-[#A1A1AA]"
                 >
                     Sắp xếp & hiển thị
                 </legend>
                 <div
-                    class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
+                    class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4"
                 >
                     <div class="flex flex-col gap-2">
                         <label
                             for="sortField"
-                            class="text-sm font-bold uppercase tracking-tighter text-[#FAFAFA]"
+                            class="text-xs font-bold uppercase tracking-tighter text-[#FAFAFA]"
                             >Sắp xếp theo</label
                         >
                         <select
                             id="sortField"
                             name="sortField"
                             value={sortField}
-                            class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-4 py-3 text-sm text-[#FAFAFA] transition focus:border-[#DFE104] focus:outline-none"
+                            class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-3 py-3.5 text-sm text-[#FAFAFA] transition-all duration-300 focus:border-[#DFE104] focus:shadow-[0_0_0_2px_rgba(223,225,4,0.3)] focus:outline-none active:scale-[0.99]"
                         >
                             <option value="modified.time">Ngày cập nhật</option>
                             <option value="_id">ID phim</option>
@@ -186,14 +313,14 @@ const activeFilters = [
                     <div class="flex flex-col gap-2">
                         <label
                             for="sortType"
-                            class="text-sm font-bold uppercase tracking-tighter text-[#FAFAFA]"
+                            class="text-xs font-bold uppercase tracking-tighter text-[#FAFAFA]"
                             >Thứ tự</label
                         >
                         <select
                             id="sortType"
                             name="sortType"
                             value={sortType}
-                            class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-4 py-3 text-sm text-[#FAFAFA] transition focus:border-[#DFE104] focus:outline-none"
+                            class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-3 py-3.5 text-sm text-[#FAFAFA] transition-all duration-300 focus:border-[#DFE104] focus:shadow-[0_0_0_2px_rgba(223,225,4,0.3)] focus:outline-none active:scale-[0.99]"
                         >
                             <option value="desc">Mới nhất</option>
                             <option value="asc">Cũ nhất</option>
@@ -203,14 +330,14 @@ const activeFilters = [
                     <div class="flex flex-col gap-2">
                         <label
                             for="year"
-                            class="text-sm font-bold uppercase tracking-tighter text-[#FAFAFA]"
+                            class="text-xs font-bold uppercase tracking-tighter text-[#FAFAFA]"
                             >Năm phát hành</label
                         >
                         <select
                             id="year"
                             name="year"
                             value={year}
-                            class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-4 py-3 text-sm text-[#FAFAFA] transition focus:border-[#DFE104] focus:outline-none"
+                            class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-3 py-3.5 text-sm text-[#FAFAFA] transition-all duration-300 focus:border-[#DFE104] focus:shadow-[0_0_0_2px_rgba(223,225,4,0.3)] focus:outline-none active:scale-[0.99]"
                         >
                             <option value="">Tất cả</option>
                             {
@@ -224,14 +351,14 @@ const activeFilters = [
                     <div class="flex flex-col gap-2">
                         <label
                             for="limit"
-                            class="text-sm font-bold uppercase tracking-tighter text-[#FAFAFA]"
+                            class="text-xs font-bold uppercase tracking-tighter text-[#FAFAFA]"
                             >Số lượng/trang</label
                         >
                         <select
                             id="limit"
                             name="limit"
                             value={limit}
-                            class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-4 py-3 text-sm text-[#FAFAFA] transition focus:border-[#DFE104] focus:outline-none"
+                            class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-3 py-3.5 text-sm text-[#FAFAFA] transition-all duration-300 focus:border-[#DFE104] focus:shadow-[0_0_0_2px_rgba(223,225,4,0.3)] focus:outline-none active:scale-[0.99]"
                         >
                             <option value="10">10</option>
                             <option value="20">20</option>
@@ -244,26 +371,26 @@ const activeFilters = [
                 </div>
             </fieldset>
 
-            <fieldset class="space-y-4">
+            <fieldset class="space-y-3">
                 <legend
                     class="text-xs font-bold uppercase tracking-widest text-[#A1A1AA]"
                 >
                     Bộ lọc nội dung
                 </legend>
                 <div
-                    class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+                    class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3"
                 >
                     <div class="flex flex-col gap-2">
                         <label
                             for="category"
-                            class="text-sm font-bold uppercase tracking-tighter text-[#FAFAFA]"
+                            class="text-xs font-bold uppercase tracking-tighter text-[#FAFAFA]"
                             >Thể loại</label
                         >
                         <select
                             id="category"
                             name="category"
                             value={category}
-                            class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-4 py-3 text-sm text-[#FAFAFA] transition focus:border-[#DFE104] focus:outline-none"
+                            class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-3 py-3.5 text-sm text-[#FAFAFA] transition-all duration-300 focus:border-[#DFE104] focus:shadow-[0_0_0_2px_rgba(223,225,4,0.3)] focus:outline-none active:scale-[0.99]"
                         >
                             <option value="">Tất cả</option>
                             {
@@ -279,14 +406,14 @@ const activeFilters = [
                     <div class="flex flex-col gap-2">
                         <label
                             for="country"
-                            class="text-sm font-bold uppercase tracking-tighter text-[#FAFAFA]"
+                            class="text-xs font-bold uppercase tracking-tighter text-[#FAFAFA]"
                             >Quốc gia</label
                         >
                         <select
                             id="country"
                             name="country"
                             value={country}
-                            class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-4 py-3 text-sm text-[#FAFAFA] transition focus:border-[#DFE104] focus:outline-none"
+                            class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-3 py-3.5 text-sm text-[#FAFAFA] transition-all duration-300 focus:border-[#DFE104] focus:shadow-[0_0_0_2px_rgba(223,225,4,0.3)] focus:outline-none active:scale-[0.99]"
                         >
                             <option value="">Tất cả</option>
                             {
@@ -302,15 +429,15 @@ const activeFilters = [
                     <div class="flex flex-col gap-2">
                         <label
                             for="language"
-                            class="text-sm font-bold uppercase tracking-tighter text-[#FAFAFA]"
-                            >Ngôn ngữ (sắp ra mắt)</label
+                            class="text-xs font-bold uppercase tracking-tighter text-[#71717A]"
+                            >Ngôn ngữ</label
                         >
                         <select
                             id="language"
                             disabled
-                            class="w-full cursor-not-allowed border-2 border-[#3F3F46]/40 bg-[#27272A]/40 px-4 py-3 text-sm text-[#A1A1AA]"
+                            class="relative w-full cursor-not-allowed border-2 border-dashed border-[#3F3F46]/50 bg-[#18181B] px-3 py-3.5 text-sm text-[#52525B]"
                         >
-                            <option value="">Tất cả</option>
+                            <option value="">Sắp ra mắt...</option>
                         </select>
                     </div>
                 </div>
@@ -321,13 +448,13 @@ const activeFilters = [
             >
                 <button
                     type="reset"
-                    class="inline-flex w-full items-center justify-center border-2 border-[#3F3F46] bg-transparent px-5 py-3 text-sm font-bold uppercase tracking-tighter text-[#FAFAFA] transition hover:border-white hover:bg-white hover:text-black sm:w-auto"
+                    class="inline-flex w-full items-center justify-center border-2 border-[#3F3F46] bg-transparent px-4 py-3.5 text-sm font-bold uppercase tracking-tighter text-[#FAFAFA] transition-all duration-300 hover:border-white hover:bg-white hover:text-black active:scale-95 sm:w-auto"
                 >
                     Đặt lại
                 </button>
                 <button
                     type="submit"
-                    class="inline-flex w-full items-center justify-center bg-[#DFE104] px-5 py-3 text-sm font-bold uppercase tracking-tighter text-black transition hover:scale-105 sm:w-auto"
+                    class="inline-flex w-full items-center justify-center bg-[#DFE104] px-4 py-3.5 text-sm font-bold uppercase tracking-tighter text-black transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(223,225,4,0.5)] active:scale-[0.98] sm:w-auto"
                 >
                     Áp dụng bộ lọc
                 </button>
@@ -353,12 +480,14 @@ const activeFilters = [
 
     const applyBreakpointState = () => {
         if (mediaQuery.matches) {
-            form.classList.remove("hidden");
+            form.style.maxHeight = "";
+            form.style.overflow = "";
             toggleButton?.setAttribute("aria-expanded", "true");
             if (toggleLabel) toggleLabel.textContent = "Ẩn bộ lọc";
             toggleIcon?.classList.add("rotate-180");
         } else {
-            form.classList.add("hidden");
+            form.style.maxHeight = "0";
+            form.style.overflow = "hidden";
             toggleButton?.setAttribute("aria-expanded", "false");
             if (toggleLabel) toggleLabel.textContent = "Hiện bộ lọc";
             toggleIcon?.classList.remove("rotate-180");
@@ -369,21 +498,64 @@ const activeFilters = [
 
     if (toggleButton) {
         toggleButton.addEventListener("click", () => {
-            const isHidden = form.classList.toggle("hidden");
-            const expanded = !isHidden;
+            const isExpanded = toggleButton.getAttribute("aria-expanded") === "true";
+            const expanded = !isExpanded;
             toggleButton.setAttribute("aria-expanded", expanded.toString());
-            if (toggleLabel)
-                toggleLabel.textContent = expanded
-                    ? "Ẩn bộ lọc"
-                    : "Hiện bộ lọc";
-            toggleIcon?.classList.toggle("rotate-180", expanded);
+
+            if (expanded) {
+                form.style.overflow = "hidden";
+                const scrollHeight = form.scrollHeight;
+                form.style.maxHeight = scrollHeight + "px";
+                
+                if (toggleLabel) toggleLabel.textContent = "Ẩn bộ lọc";
+                toggleIcon?.classList.add("rotate-180");
+            } else {
+                form.style.maxHeight = "0";
+                
+                if (toggleLabel) toggleLabel.textContent = "Hiện bộ lọc";
+                toggleIcon?.classList.remove("rotate-180");
+            }
         });
     }
 
-    if (typeof mediaQuery.addEventListener === "function") {
-        mediaQuery.addEventListener("change", applyBreakpointState);
-    } else if (typeof mediaQuery.addListener === "function") {
-        mediaQuery.addListener(applyBreakpointState);
+    mediaQuery.addEventListener("change", applyBreakpointState);
+
+    const buildUrlWithoutFilter = (excludeKey) => {
+        const url = new URL(window.location.href);
+        const params = new URLSearchParams(url.search);
+
+        if (excludeKey) {
+            params.delete(excludeKey);
+        } else {
+            params.delete("category");
+            params.delete("country");
+            params.delete("year");
+            params.delete("limit");
+        }
+
+        params.set("page", "1");
+
+        const queryString = params.toString();
+        return queryString
+            ? `${basePath}/${currentType}?${queryString}`
+            : `${basePath}/${currentType}`;
+    };
+
+    document.querySelectorAll("button[data-filter-key]").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+            const target = e.currentTarget;
+            const filterKey = target.getAttribute("data-filter-key");
+            if (filterKey && filterKey !== "sort") {
+                navigate(buildUrlWithoutFilter(filterKey));
+            }
+        });
+    });
+
+    const clearAllButton = document.getElementById("clearAllFilters");
+    if (clearAllButton) {
+        clearAllButton.addEventListener("click", () => {
+            navigate(buildUrlWithoutFilter());
+        });
     }
 
     form.addEventListener("submit", (e) => {

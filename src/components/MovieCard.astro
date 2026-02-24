@@ -1,13 +1,13 @@
 ---
 import { Image } from "astro:assets";
-import { Card } from "@/components/ui/card";
-import { resolveImageUrl, imagePresets } from "@/lib/wsrv";
+import { imagePresets, resolveImageUrl } from "@/lib/wsrv";
+
 interface Props {
-    index: number;
-    slug: string;
-    name: string;
-    year: string;
-    image: string;
+	index: number;
+	slug: string;
+	name: string;
+	year: string;
+	image: string;
 }
 
 const { index, slug, name, image, year } = Astro.props;
@@ -18,13 +18,11 @@ const thumbnailPreset = imagePresets.thumbnail;
 
 <a
 	href={`/phim/${slug}`}
-	class="group block"
+	class="group block w-full"
 	data-cursor-play
 >
-    <Card
-        className="overflow-hidden border border-transparent bg-slate-900/60 transition-all duration-300 ease-in-out group-hover:ring-4 group-hover:ring-slate-700/50 shadow-lg hover:shadow-2xl"
-    >
-        <div class="relative aspect-[2/3]">
+    <div class="relative overflow-hidden border-2 border-[#3F3F46] bg-[#09090B] transition-all duration-300 group-hover:border-[#DFE104]">
+        <div class="relative aspect-[2/3] overflow-hidden">
             {
                 imageSource ? (
                     <Image
@@ -38,27 +36,34 @@ const thumbnailPreset = imagePresets.thumbnail;
                         fit="cover"
                         loading={index === 0 ? "eager" : "lazy"}
                         transition:name={`image-${slug}`}
-                        class="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+                        class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                 ) : (
-                    <div class="flex h-full w-full items-center justify-center bg-slate-800 text-xs text-white/60">
-                        No Image
+                    <div class="flex h-full w-full items-center justify-center bg-[#27272A]">
+                        <div class="text-center">
+                            <svg class="mx-auto mb-2 h-12 w-12 text-[#71717A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+                            </svg>
+                            <p class="text-xs font-bold uppercase tracking-tighter text-[#71717A]">No Image</p>
+                        </div>
                     </div>
                 )
             }
+
+            <div class="absolute top-2 right-2 flex flex-col items-center gap-2">
+                <span class="border-2 border-[#3F3F46] bg-[#27272A] px-2 py-1 text-xs font-bold uppercase tracking-tighter text-[#FAFAFA] transition-colors duration-300 group-hover:border-[#DFE104] group-hover:bg-[#DFE104]/10 group-hover:text-[#DFE104]">
+                    {year}
+                </span>
+            </div>
         </div>
-        <div class="space-y-1 px-4 py-3">
+
+        <div class="border-t-2 border-[#3F3F46] bg-[#09090B] px-4 py-4 transition-colors duration-300 group-hover:bg-[#27272A]">
             <h2
-                class="text-base font-semibold text-white line-clamp-1 transition-colors duration-200 group-hover:text-sky-300"
+                class="text-sm font-bold uppercase tracking-tighter text-[#FAFAFA] line-clamp-1 transition-colors duration-300 group-hover:text-[#DFE104]"
                 transition:name={`title-${slug}`}
             >
                 {name}
             </h2>
-            <p
-                class="text-sm text-slate-300 transition-colors duration-200 group-hover:text-slate-200"
-            >
-                {year}
-            </p>
         </div>
-    </Card>
+    </div>
 </a>

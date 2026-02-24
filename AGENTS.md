@@ -161,3 +161,43 @@ Enforced in `src/lib/phimapi/query.ts`:
 - Upstream `status` type is inconsistent across endpoints (string/boolean); handled in schemas.
 - Search can return `items: null`; normalized to `[]`.
 - No Auth/Favorites subsystem yet.
+
+---
+
+## Bun AI Workflow (Manual Test + Feedback Loop)
+
+### Canonical commands
+```bash
+bun run format
+bun run ui:map
+bun run ai:check || true
+bun run tw:check || true
+bun run ai:pack
+```
+
+### Manual test flow (human)
+1. Start app: `bun run dev`.
+2. Open one target route and note expected behavior before editing.
+3. Ask AI to change one component only, attach `.ai/context.txt` + target file path.
+4. Re-run: `bun run ui:map` and `bun run ai:pack`.
+5. Refresh route and verify:
+   - Layout unchanged outside requested scope
+   - No broken spacing/overflow/flex/grid behavior
+   - Component still composes via `className` and forwarded props
+
+### Feedback packet format (for fast iteration)
+Use this exact template when reporting result back to AI:
+```txt
+[RESULT] pass|fail
+[ROUTE] /example-route
+[COMPONENT] src/components/Example.tsx
+[OBSERVED] what happened
+[EXPECTED] what should happen
+[REGRESSION] yes|no
+[SCREENLESS_HINT] one concrete DOM/class clue (text-only)
+```
+
+### AI behavior on feedback
+1. If `[RESULT]=fail`, apply minimal diff and keep previous contracts.
+2. If `[REGRESSION]=yes`, prioritize rollback-safe fix before enhancement.
+3. Always output exact changed files and commands to re-check.

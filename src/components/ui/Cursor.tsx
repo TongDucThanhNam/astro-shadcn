@@ -21,6 +21,31 @@ const HOVER_SELECTORS = [
 	"select",
 	'[tabindex]:not([tabindex="-1"])',
 ];
+const CURSOR_DISABLED_SELECTOR = "[data-cursor-disabled]";
+const isCursorDisabledTarget = (
+	target: HTMLElement | null,
+	path: EventTarget[],
+) => {
+	if (target?.closest(CURSOR_DISABLED_SELECTOR)) return true;
+	return path.some((node) => {
+		if (!(node instanceof Element)) return false;
+		return (
+			node.matches(CURSOR_DISABLED_SELECTOR) ||
+			Boolean(node.closest(CURSOR_DISABLED_SELECTOR))
+		);
+	});
+};
+const hideCustomCursor = (
+	setCursorMode: React.Dispatch<React.SetStateAction<"default" | "hover" | "play">>,
+	isVisibleRef: React.MutableRefObject<boolean>,
+	setIsVisible: React.Dispatch<React.SetStateAction<boolean>>,
+) => {
+	setCursorMode("default");
+	if (isVisibleRef.current) {
+		setIsVisible(false);
+		isVisibleRef.current = false;
+	}
+};
 
 const Cursor: React.FC<CursorProps> = ({ enabled = true }) => {
 	const [cursorMode, setCursorMode] = useState<"default" | "hover" | "play">(
@@ -28,6 +53,7 @@ const Cursor: React.FC<CursorProps> = ({ enabled = true }) => {
 	);
 	const [isVisible, setIsVisible] = useState(false);
 	const isVisibleRef = useRef(false);
+	const isBlockedRef = useRef(false);
 
 	const cursorX = useMotionValue(-100);
 	const cursorY = useMotionValue(-100);
@@ -42,6 +68,10 @@ const Cursor: React.FC<CursorProps> = ({ enabled = true }) => {
 
 	const checkHover = useCallback((target: HTMLElement | null) => {
 		if (!target) {
+			setCursorMode("default");
+			return;
+		}
+		if (target.closest(CURSOR_DISABLED_SELECTOR)) {
 			setCursorMode("default");
 			return;
 		}
@@ -64,12 +94,52 @@ const Cursor: React.FC<CursorProps> = ({ enabled = true }) => {
 			return;
 		}
 
+		const disabledZones = Array.from(
+			document.querySelectorAll<HTMLElement>(CURSOR_DISABLED_SELECTOR),
+		);
+		const handleDisabledPointerEnter = () =>
+			hideCustomCursor(setCursorMode, isVisibleRef, setIsVisible);
+		const handleDisableZone = () => {
+			isBlockedRef.current = true;
+			hideCustomCursor(setCursorMode, isVisibleRef, setIsVisible);
+		};
+		const handleEnableZone = () => {
+			isBlockedRef.current = false;
+		};
+
+		for (const zone of disabledZones) {
+			zone.addEventListener("pointerenter", handleDisabledPointerEnter);
+			zone.addEventListener("pointermove", handleDisabledPointerEnter);
+		}
+
+		window.addEventListener("cursor:disable-zone", handleDisableZone);
+		window.addEventListener("cursor:enable-zone", handleEnableZone);
+
 		const handlePointerMove = (e: PointerEvent) => {
+			if (isBlockedRef.current) {
+				hideCustomCursor(setCursorMode, isVisibleRef, setIsVisible);
+				return;
+			}
+
+			const target = e.target instanceof HTMLElement ? e.target : null;
+			const elementAtPoint = document.elementFromPoint(
+				e.clientX,
+				e.clientY,
+			) as HTMLElement | null;
+			const isDisabledByPoint = Boolean(
+				elementAtPoint?.closest(CURSOR_DISABLED_SELECTOR),
+			);
+
+			if (isDisabledByPoint || isCursorDisabledTarget(target, e.composedPath())) {
+				hideCustomCursor(setCursorMode, isVisibleRef, setIsVisible);
+				return;
+			}
+
 			cursorX.set(e.clientX);
 			cursorY.set(e.clientY);
 			followerX.set(e.clientX);
 			followerY.set(e.clientY);
-			checkHover(e.target instanceof HTMLElement ? e.target : null);
+			checkHover(target);
 
 			if (!isVisibleRef.current) {
 				isVisibleRef.current = true;
@@ -85,12 +155,21 @@ const Cursor: React.FC<CursorProps> = ({ enabled = true }) => {
 
 		document.addEventListener("pointermove", handlePointerMove, {
 			passive: true,
+			capture: true,
 		});
 		document.addEventListener("pointerleave", handlePointerLeave);
 
 		return () => {
 			document.removeEventListener("pointermove", handlePointerMove);
 			document.removeEventListener("pointerleave", handlePointerLeave);
+
+			for (const zone of disabledZones) {
+				zone.removeEventListener("pointerenter", handleDisabledPointerEnter);
+				zone.removeEventListener("pointermove", handleDisabledPointerEnter);
+			}
+
+			window.removeEventListener("cursor:disable-zone", handleDisableZone);
+			window.removeEventListener("cursor:enable-zone", handleEnableZone);
 		};
 	}, [enabled, cursorX, cursorY, followerX, followerY, checkHover]);
 

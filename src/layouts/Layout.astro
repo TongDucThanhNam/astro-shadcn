@@ -48,69 +48,73 @@ const genreLinks = [
         <div class="noise-overlay" aria-hidden="true"></div>
 
         <header
-            class="sticky top-0 z-50 border-y border-[#2D2F35] bg-[#09090B]/92 backdrop-blur-xl"
+            class="sticky top-0 z-50 border-b border-[#2D2F35]/50 bg-[#09090B]/95"
             transition:persist
         >
-            <div class="mx-auto w-full max-w-[96rem] px-2 sm:px-3 lg:px-4">
-                <div class="flex h-[4.75rem] items-center justify-between gap-3">
-                    <div class="flex min-w-0 items-center gap-3 sm:gap-5">
+            <div class="mx-auto w-full max-w-[96rem] px-2 sm:px-4 lg:px-6">
+                <div class="flex h-14 sm:h-16 md:h-20 items-center justify-between gap-1 sm:gap-2 md:gap-3">
+                    <div class="flex min-w-0 items-center gap-2 sm:gap-3 md:gap-4">
                         <a
                             href="/"
-                            class="inline-flex shrink-0 items-center border-2 border-[#DFE104] bg-[#DFE104] px-4 py-2 text-sm font-black uppercase tracking-[0.08em] text-[#09090B] transition-all duration-300 hover:bg-[#F2F43A] hover:scale-105"
+                            class="inline-flex shrink-0 items-center border border-[#DFE104] bg-[#DFE104]/10 px-2.5 py-1.5 sm:px-3 sm:py-1.5 md:px-4 md:py-2 text-xs sm:text-sm md:text-base font-black uppercase tracking-tighter text-[#DFE104] transition-all duration-300 hover:bg-[#DFE104] hover:text-black hover:scale-105"
                             aria-label="AstroFlim Home"
                         >
-                            AstroFlim
+                            <span class="hidden sm:inline">AstroFlim</span>
+                            <span class="sm:hidden">AF</span>
                         </a>
 
-                        <nav class="hidden items-center gap-3 lg:flex lg:gap-4" aria-label="Điều hướng chính">
+                        <nav class="hidden items-center gap-1.5 sm:gap-2 md:flex md:gap-3 lg:gap-4" aria-label="Điều hướng chính">
                             {
-                                primaryLinks.map((link, index) => (
-                                    <div class="flex items-center gap-3 lg:gap-4">
-                                        <a
-                                            href={link.href}
-                                            class="text-sm font-bold uppercase tracking-[0.08em] text-[#FAFAFA] transition-all duration-200 hover:text-[#DFE104] hover:underline hover:underline-offset-4"
-                                        >
-                                            {link.label}
-                                        </a>
-                                        {index < primaryLinks.length - 1 && (
-                                            <span class="text-xs text-[#52525B]" aria-hidden="true">•</span>
-                                        )}
-                                    </div>
+                                primaryLinks.map((link) => (
+                                    <a
+                                        href={link.href}
+                                        class="relative text-xs sm:text-xs md:text-sm font-bold uppercase tracking-tighter text-[#A1A1AA] transition-all duration-300 hover:text-[#DFE104] hover:scale-105 after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 after:bg-[#DFE104] after:transition-all hover:after:w-full"
+                                    >
+                                        {link.label}
+                                    </a>
                                 ))
                             }
                             <div class="group relative">
                                 <button
                                     type="button"
-                                    class="inline-flex items-center gap-1 text-sm font-bold uppercase tracking-[0.08em] text-[#FAFAFA] transition-colors duration-200 hover:text-[#DFE104]"
+                                    class="inline-flex items-center gap-1 text-xs sm:text-xs md:text-sm font-bold uppercase tracking-tighter text-[#FAFAFA] transition-all duration-300 hover:text-[#DFE104] hover:scale-105"
                                 >
                                     Thể loại
-                                    <span class="text-xs text-[#71717A]">▾</span>
+                                    <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
                                 </button>
-                                <div class="pointer-events-none absolute left-0 top-full z-40 -translate-y-1 pt-3 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:translate-y-0 group-focus-within:opacity-100">
-                                    <div class="w-[22rem] border border-[#2D2F35] bg-[#0E1015] p-4 shadow-[0_14px_40px_rgba(0,0,0,0.45)]">
-                                        <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-[#71717A]">
+                                <div class="pointer-events-none absolute left-0 top-full z-40 -translate-y-1 pt-2 opacity-0 transition-all duration-300 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                                    <div class="w-[85vw] sm:w-80 md:w-96 max-w-[24rem] border-2 border-[#3F3F46] bg-[#09090B] p-3 sm:p-4 md:p-5">
+                                        <h3 class="text-xs sm:text-xs md:text-sm font-black uppercase tracking-tighter text-[#DFE104] mb-2 sm:mb-3 md:mb-4 pb-2 border-b-2 border-[#27272A]">
                                             Thể loại nổi bật
-                                        </p>
-                                        <div class="mt-3 grid grid-cols-2 gap-2">
+                                        </h3>
+                                        <div class="grid grid-cols-2 gap-1.5 sm:gap-2 md:gap-2.5 mb-2 sm:mb-3 md:mb-4">
                                             {
                                                 genreLinks.map((genre) => (
                                                     <a
                                                         href={genre.href}
-                                                        class="border-2 border-[#27272A] bg-[#12141B] px-3 py-2 text-xs font-bold uppercase tracking-[0.08em] text-[#A1A1AA] transition-all duration-200 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]"
+                                                        class="border-2 border-[#3F3F46] bg-[#09090B] px-2 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2.5 text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-tighter text-[#FAFAFA] transition-all duration-300 hover:bg-[#DFE104] hover:border-[#DFE104] hover:text-black hover:scale-105"
                                                     >
                                                         {genre.label}
                                                     </a>
                                                 ))
                                             }
                                         </div>
+                                        <a
+                                            href="/danh-sach"
+                                            class="block border-2 border-[#27272A] bg-[#27272A] px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-tighter text-[#A1A1AA] transition-all duration-300 hover:bg-[#FAFAFA] hover:text-black hover:scale-105"
+                                        >
+                                            Xem tất cả thể loại
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         </nav>
                     </div>
 
-                    <div class="flex items-center gap-2">
-                        <div class="hidden w-[15rem] md:block lg:w-[20rem]">
+                    <div class="flex items-center gap-1 sm:gap-2">
+                        <div class="hidden w-32 md:w-56 lg:w-72">
                             <SearchForm client:load variant="header" />
                         </div>
                         <div class="md:hidden">
@@ -123,101 +127,16 @@ const genreLinks = [
         </header>
         <slot />
         <footer class="border-t border-[#1F2126] bg-[#09090B]">
-            <div class="mx-auto w-full max-w-[96rem] px-2 sm:px-3 lg:px-4 py-10 md:py-14">
-                <div class="grid grid-cols-2 gap-8 md:gap-6 lg:grid-cols-4 xl:gap-8">
-                    <a href="/danh-sach/phim-le" class="group relative overflow-hidden rounded-lg border border-[#1F2126] bg-[#0E1015] p-5 transition-all duration-300 hover:border-[#DFE104]/50 hover:shadow-[0_0_30px_rgba(223,225,4,0.15)]">
-                        <div class="absolute inset-0 bg-gradient-to-br from-[#DFE104]/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                        <h3 class="relative text-lg md:text-xl font-black uppercase tracking-tight text-[#FAFAFA] transition-colors duration-300 group-hover:text-[#DFE104]">
-                            Phim Lẻ
-                        </h3>
-                        <p class="relative mt-1.5 text-[10px] font-medium uppercase tracking-wider text-[#52525B] transition-colors duration-300 group-hover:text-[#71717A]">
-                            Hành động • Phiêu lưu • Hài
-                        </p>
-                    </a>
-
-                    <a href="/danh-sach/phim-bo" class="group relative overflow-hidden rounded-lg border border-[#1F2126] bg-[#0E1015] p-5 transition-all duration-300 hover:border-[#DFE104]/50 hover:shadow-[0_0_30px_rgba(223,225,4,0.15)]">
-                        <div class="absolute inset-0 bg-gradient-to-br from-[#DFE104]/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                        <h3 class="relative text-lg md:text-xl font-black uppercase tracking-tight text-[#FAFAFA] transition-colors duration-300 group-hover:text-[#DFE104]">
-                            Phim Bộ
-                        </h3>
-                        <p class="relative mt-1.5 text-[10px] font-medium uppercase tracking-wider text-[#52525B] transition-colors duration-300 group-hover:text-[#71717A]">
-                            Series • TV Shows • Chiếu rạp
-                        </p>
-                    </a>
-
-                    <a href="/danh-sach/the-loai/hanh-dong" class="group relative overflow-hidden rounded-lg border border-[#1F2126] bg-[#0E1015] p-5 transition-all duration-300 hover:border-[#DFE104]/50 hover:shadow-[0_0_30px_rgba(223,225,4,0.15)]">
-                        <div class="absolute inset-0 bg-gradient-to-br from-[#DFE104]/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                        <h3 class="relative text-lg md:text-xl font-black uppercase tracking-tight text-[#FAFAFA] transition-colors duration-300 group-hover:text-[#DFE104]">
-                            Thể Loại
-                        </h3>
-                        <p class="relative mt-1.5 text-[10px] font-medium uppercase tracking-wider text-[#52525B] transition-colors duration-300 group-hover:text-[#71717A]">
-                            Kinh dị • Viễn tưởng • Tình cảm
-                        </p>
-                    </a>
-
-                    <a href="/danh-sach/nam/2025" class="group relative overflow-hidden rounded-lg border border-[#1F2126] bg-[#0E1015] p-5 transition-all duration-300 hover:border-[#DFE104]/50 hover:shadow-[0_0_30px_rgba(223,225,4,0.15)]">
-                        <div class="absolute inset-0 bg-gradient-to-br from-[#DFE104]/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                        <h3 class="relative text-lg md:text-xl font-black uppercase tracking-tight text-[#FAFAFA] transition-colors duration-300 group-hover:text-[#DFE104]">
-                            Phim Mới
-                        </h3>
-                        <p class="relative mt-1.5 text-[10px] font-medium uppercase tracking-wider text-[#52525B] transition-colors duration-300 group-hover:text-[#71717A]">
-                            2025 • 2024 • 2023
-                        </p>
-                    </a>
-                </div>
-
-                <div class="mt-8 grid grid-cols-2 gap-8 border-t border-[#1F2126] pt-8 md:grid-cols-4">
-                    <div>
-                        <h4 class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#52525B] mb-3">Quick Links</h4>
-                        <ul class="space-y-2">
-                            <li><a href="/" class="text-xs font-semibold uppercase tracking-wide text-[#A1A1AA] transition-colors duration-200 hover:text-[#DFE104]">Trang chủ</a></li>
-                            <li><a href="/danh-sach/phim-moi-cap-nhat" class="text-xs font-semibold uppercase tracking-wide text-[#A1A1AA] transition-colors duration-200 hover:text-[#DFE104]">Phim mới</a></li>
-                            <li><a href="/danh-sach/phim-le" class="text-xs font-semibold uppercase tracking-wide text-[#A1A1AA] transition-colors duration-200 hover:text-[#DFE104]">Phim lẻ</a></li>
-                            <li><a href="/danh-sach/phim-bo" class="text-xs font-semibold uppercase tracking-wide text-[#A1A1AA] transition-colors duration-200 hover:text-[#DFE104]">Phim bộ</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#52525B] mb-3">Thể Loại</h4>
-                        <ul class="space-y-2">
-                            <li><a href="/danh-sach/the-loai/hanh-dong" class="text-xs font-semibold uppercase tracking-wide text-[#A1A1AA] transition-colors duration-200 hover:text-[#DFE104]">Hành động</a></li>
-                            <li><a href="/danh-sach/the-loai/tinh-cam" class="text-xs font-semibold uppercase tracking-wide text-[#A1A1AA] transition-colors duration-200 hover:text-[#DFE104]">Tình cảm</a></li>
-                            <li><a href="/danh-sach/the-loai/kinh-di" class="text-xs font-semibold uppercase tracking-wide text-[#A1A1AA] transition-colors duration-200 hover:text-[#DFE104]">Kinh dị</a></li>
-                            <li><a href="/danh-sach/the-loai/phieu-luu" class="text-xs font-semibold uppercase tracking-wide text-[#A1A1AA] transition-colors duration-200 hover:text-[#DFE104]">Phiêu lưu</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#52525B] mb-3">Năm</h4>
-                        <ul class="space-y-2">
-                            <li><a href="/danh-sach/nam/2025" class="text-xs font-semibold uppercase tracking-wide text-[#A1A1AA] transition-colors duration-200 hover:text-[#DFE104]">2025</a></li>
-                            <li><a href="/danh-sach/nam/2024" class="text-xs font-semibold uppercase tracking-wide text-[#A1A1AA] transition-colors duration-200 hover:text-[#DFE104]">2024</a></li>
-                            <li><a href="/danh-sach/nam/2023" class="text-xs font-semibold uppercase tracking-wide text-[#A1A1AA] transition-colors duration-200 hover:text-[#DFE104]">2023</a></li>
-                            <li><a href="/danh-sach/nam/2022" class="text-xs font-semibold uppercase tracking-wide text-[#A1A1AA] transition-colors duration-200 hover:text-[#DFE104]">2022</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#52525B] mb-3">Quốc Gia</h4>
-                        <ul class="space-y-2">
-                            <li><a href="/danh-sach/quoc-gia/han-quoc" class="text-xs font-semibold uppercase tracking-wide text-[#A1A1AA] transition-colors duration-200 hover:text-[#DFE104]">Hàn Quốc</a></li>
-                            <li><a href="/danh-sach/quoc-gia/trung-quoc" class="text-xs font-semibold uppercase tracking-wide text-[#A1A1AA] transition-colors duration-200 hover:text-[#DFE104]">Trung Quốc</a></li>
-                            <li><a href="/danh-sach/quoc-gia/my" class="text-xs font-semibold uppercase tracking-wide text-[#A1A1AA] transition-colors duration-200 hover:text-[#DFE104]">Mỹ</a></li>
-                            <li><a href="/danh-sach/quoc-gia/nhat-ban" class="text-xs font-semibold uppercase tracking-wide text-[#A1A1AA] transition-colors duration-200 hover:text-[#DFE104]">Nhật Bản</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="mt-8 flex flex-col items-center justify-between gap-4 border-t border-[#1F2126] pt-6 sm:flex-row">
-                    <div class="flex items-center gap-3">
-                        <span class="inline-flex items-center gap-1.5 bg-[#DFE104] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#09090B]">
-                            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M4 4h16v16H4z" fill="none" stroke="currentColor" stroke-width="2"/>
-                                <path d="M8 8l8 4-8 4V8z" fill="currentColor"/>
-                            </svg>
+            <div class="mx-auto px-4 py-6 text-center sm:px-6 sm:py-8">
+                <div class="flex flex-col items-center gap-3 sm:flex-row sm:justify-between sm:gap-4">
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center gap-1 bg-[#DFE104] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#09090B]">
                             AstroFlim
                         </span>
-                        <span class="text-[10px] font-bold uppercase tracking-widest text-[#52525B]">© 2025</span>
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-[#52525B]">© 2026</span>
                     </div>
-                    <p class="text-[10px] font-semibold uppercase tracking-[0.25em] text-[#52525B]">
-                        Built for <span class="text-[#DFE104]">learning</span> • Not for profit
+                    <p class="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#52525B]">
+                        Built for learning • Not commercial
                     </p>
                 </div>
             </div>

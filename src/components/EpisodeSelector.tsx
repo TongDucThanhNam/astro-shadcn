@@ -10,16 +10,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { ArrowUpDown, Play, Search } from "lucide-react";
+import { ArrowUpDown, ChevronLeft, ChevronRight, Film, Play, Search, SkipBack, SkipForward } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Toggle } from "@/components/ui/toggle";
 
@@ -119,8 +116,11 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
   };
 
   useEffect(() => {
-    userSortOverrideRef.current = false
-  }, [episodes]);
+    userSortOverrideRef.current = false;
+    if (!userSortOverrideRef.current) {
+      setSortOrder(getDefaultSortOrder(episodes));
+    }
+  }, [episodes.length, episodes]);
 
   useEffect(() => {
     const handleExternalEpisodeSelection = (event: Event) => {
@@ -170,11 +170,6 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
   }, [episodes, selectedServer]);
 
   useEffect(() => {
-    if (userSortOverrideRef.current) return;
-    setSortOrder(getDefaultSortOrder(episodes));
-  }, [episodes]);
-
-  useEffect(() => {
     setPageByServer((prev) => {
       const next = { ...prev };
       episodes.forEach((episode) => {
@@ -193,80 +188,89 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
 
   return (
     <Card className="mt-6 border-2 border-[#3F3F46] bg-[#09090B]">
-      <CardHeader className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <CardTitle className="text-lg font-bold uppercase tracking-tighter text-[#FAFAFA]">
-            Các tập
-          </CardTitle>
-          <p className="text-sm text-[#A1A1AA]">
-            Chọn nguồn phát và tập muốn xem. Tổng cộng {totalEpisodes} tập.
-          </p>
+      <CardHeader className="flex flex-col gap-3 border-b-2 border-[#3F3F46] px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center border-2 border-[#DFE104] bg-[#DFE104]">
+            <Film className="h-5 w-5 text-[#09090B]" />
+          </div>
+          <div>
+            <CardTitle className="text-xl font-bold uppercase tracking-tighter text-[#FAFAFA]">
+              Danh sách tập
+            </CardTitle>
+            <p className="text-xs font-bold uppercase tracking-wide text-[#A1A1AA]">
+              {totalEpisodes} tập có sẵn
+            </p>
+          </div>
         </div>
         {selectedEpisode && (
-          <div className="flex items-center gap-2 border-2 border-[#DFE104] bg-[#DFE104]/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-[#DFE104]">
-            <Play className="h-4 w-4" /> Đang phát {selectedEpisode.label}
+          <div className="flex items-center gap-2 border-2 border-[#DFE104] bg-[#DFE104]/10 px-4 py-2">
+            <Play className="h-4 w-4 text-[#DFE104]" />
+            <span className="text-xs font-bold uppercase tracking-tighter text-[#DFE104]">
+              Đang phát: {selectedEpisode.label}
+            </span>
           </div>
         )}
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="p-4">
         <Tabs
           value={selectedServer || firstServer}
           onValueChange={setSelectedServer}
-          className="space-y-6"
+          className="space-y-4"
         >
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <TooltipProvider delayDuration={150}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="flex w-full items-center gap-2 overflow-x-auto border-2 border-[#3F3F46] bg-[#27272A] p-1 lg:w-auto">
-                    <TabsList className="flex w-max gap-1 bg-transparent p-0">
-                      {episodes.map((episode) => (
+          <div className="flex flex-col gap-3 border-b-2 border-[#3F3F46] pb-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="w-full overflow-x-auto lg:w-auto">
+              <TabsList className="flex w-max gap-1 bg-transparent p-0">
+                {episodes.map((episode) => (
+                  <TooltipProvider key={episode.server_name} delayDuration={150}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
                         <TabsTrigger
-                          key={episode.server_name}
                           value={episode.server_name}
-                          className="px-4 py-2 text-sm font-bold uppercase tracking-wide data-[state=active]:bg-[#DFE104] data-[state=active]:text-[#09090B]"
+                          className="border-2 border-[#3F3F46] bg-[#27272A] px-4 py-2 text-xs font-bold uppercase tracking-tight text-[#FAFAFA] transition-all duration-300 data-[state=active]:border-[#DFE104] data-[state=active]:bg-[#DFE104] data-[state=active]:text-[#09090B] hover:border-[#DFE104]/50"
                         >
                           {episode.server_name}
                         </TabsTrigger>
-                      ))}
-                    </TabsList>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent className="border-2 border-[#3F3F46] bg-[#27272A] text-[#FAFAFA]">
-                  Chuyển giữa các nguồn phát khi gặp lỗi hoặc muốn tốc độ tốt hơn.
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+                      </TooltipTrigger>
+                      <TooltipContent className="border-2 border-[#3F3F46] bg-[#27272A] text-xs font-bold uppercase tracking-tight text-[#FAFAFA]">
+                        Chuyển nguồn {episode.server_name}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                ))}
+              </TabsList>
+            </div>
 
-            <label className="relative w-full lg:max-w-xs">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#A1A1AA]" />
-              <Input
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Tìm theo tên tập hoặc số tập"
-                className="w-full border-2 border-[#3F3F46] bg-[#27272A] pl-10 text-sm text-[#FAFAFA] placeholder:text-[#A1A1AA]"
-              />
-            </label>
+            <div className="flex w-full flex-wrap items-center gap-2 lg:w-auto">
+              <div className="relative flex-1 lg:max-w-48">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#A1A1AA]" />
+                <Input
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Tìm tập..."
+                  className="w-full border-2 border-[#3F3F46] bg-[#27272A] pl-10 text-xs font-bold uppercase tracking-tight text-[#FAFAFA] placeholder:text-[#A1A1AA] transition-colors focus:border-[#DFE104]"
+                />
+              </div>
 
-            <Toggle
-              pressed={sortOrder === "desc"}
-              onPressedChange={(pressed) => {
-                userSortOverrideRef.current = true;
-                const nextOrder = pressed ? "desc" : "asc";
-                setSortOrder(nextOrder);
-                if (selectedServer) {
-                  setPageByServer((prev) => ({
-                    ...prev,
-                    [selectedServer]: 1,
-                  }));
-                }
-              }}
-              className="flex w-full items-center justify-center gap-2 border-2 border-[#3F3F46] bg-[#27272A] px-4 py-2 text-sm font-bold uppercase tracking-wide text-[#FAFAFA] transition hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B] lg:w-auto"
-              aria-label="Đổi thứ tự tập"
-            >
-              <ArrowUpDown className="h-4 w-4" />
-              {sortOrder === "desc" ? "Tập mới → cũ" : "Tập cũ → mới"}
-            </Toggle>
+              <Toggle
+                pressed={sortOrder === "desc"}
+                onPressedChange={(pressed) => {
+                  userSortOverrideRef.current = true;
+                  const nextOrder = pressed ? "desc" : "asc";
+                  setSortOrder(nextOrder);
+                  if (selectedServer) {
+                    setPageByServer((prev) => ({
+                      ...prev,
+                      [selectedServer]: 1,
+                    }));
+                  }
+                }}
+                className="flex items-center justify-center gap-2 border-2 border-[#3F3F46] bg-[#27272A] px-3 py-2 text-xs font-bold uppercase tracking-tight text-[#FAFAFA] transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]"
+                aria-label="Đổi thứ tự tập"
+              >
+                <ArrowUpDown className="h-4 w-4" />
+                {sortOrder === "desc" ? "Mới → cũ" : "Cũ → mới"}
+              </Toggle>
+            </div>
           </div>
 
           {episodes.map((episode) => {
@@ -314,25 +318,93 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
                 ? paginatedServerData
                 : filteredServerData;
 
+            const firstEpisode = sortedServerData[0];
+            const lastEpisode = sortedServerData[sortedServerData.length - 1];
+
             return (
               <TabsContent
                 key={episode.server_name}
                 value={episode.server_name}
                 className={cn("space-y-4", isActiveServer ? "block" : "hidden")}
               >
-                <div className="flex items-center gap-2">
-                  <Badge className="bg-[#27272A] text-xs font-bold uppercase tracking-wide text-[#FAFAFA]">
-                    {totalEpisodeCount} tập
-                  </Badge>
-                  {normalizedQuery && (
-                    <span className="text-sm text-[#A1A1AA]">
-                      {filteredServerData.length} kết quả khớp với "{query}"
-                    </span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Badge className="border-2 border-[#DFE104] bg-[#DFE104]/10 px-3 py-1 text-xs font-bold uppercase tracking-tighter text-[#DFE104]">
+                      {totalEpisodeCount} TẬP
+                    </Badge>
+                    {normalizedQuery && (
+                      <span className="text-xs font-bold uppercase tracking-tight text-[#A1A1AA]">
+                        {filteredServerData.length} kết quả
+                      </span>
+                    )}
+                    {!normalizedQuery && shouldPaginate && (
+                      <span className="text-xs font-bold uppercase tracking-tight text-[#A1A1AA]">
+                        Trang {activePage} / {totalPages}
+                      </span>
+                    )}
+                  </div>
+                  {!normalizedQuery && totalEpisodeCount > 1 && (
+                    <div className="flex items-center gap-1">
+                      <TooltipProvider delayDuration={150}>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              className="h-8 w-8 border-2 border-[#3F3F46] bg-[#27272A] text-[#FAFAFA] transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]"
+                              onClick={() => {
+                                if (firstEpisode) {
+                                  handleEpisodeSelect(
+                                    firstEpisode.slug,
+                                    firstEpisode.name,
+                                    firstEpisode.link_embed,
+                                    firstEpisode.link_m3u8,
+                                    episode.server_name,
+                                  );
+                                }
+                              }}
+                            >
+                              <SkipBack className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent className="border-2 border-[#3F3F46] bg-[#27272A] text-xs font-bold uppercase tracking-tight text-[#FAFAFA]">
+                            Tập đầu tiên
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                      <TooltipProvider delayDuration={150}>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              className="h-8 w-8 border-2 border-[#3F3F46] bg-[#27272A] text-[#FAFAFA] transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]"
+                              onClick={() => {
+                                if (lastEpisode) {
+                                  handleEpisodeSelect(
+                                    lastEpisode.slug,
+                                    lastEpisode.name,
+                                    lastEpisode.link_embed,
+                                    lastEpisode.link_m3u8,
+                                    episode.server_name,
+                                  );
+                                }
+                              }}
+                            >
+                              <SkipForward className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent className="border-2 border-[#3F3F46] bg-[#27272A] text-xs font-bold uppercase tracking-tight text-[#FAFAFA]">
+                            Tập cuối cùng
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
                   )}
                 </div>
 
                 {visibleServerData.length ? (
-                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+                  <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7">
                     {visibleServerData.map((serverData) => {
                       const isSelected = selectedEpisode?.id === serverData.slug;
                       const canPlay = Boolean(
@@ -353,121 +425,126 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
                           }
                           disabled={!canPlay}
                           className={cn(
-                            "h-11 w-full justify-between border-2 border-[#3F3F46] bg-[#27272A] px-4 text-sm font-bold uppercase tracking-wide text-[#FAFAFA] transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]",
+                            "group relative h-12 w-full border-2 border-[#3F3F46] bg-[#27272A] px-3 text-xs font-bold uppercase tracking-tighter text-[#FAFAFA] transition-all duration-300 hover:scale-105 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]",
                             isSelected &&
-                              "border-[#DFE104] bg-[#DFE104]/15 text-[#DFE104] hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]",
+                              "border-[#DFE104] bg-[#DFE104]/15 text-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]",
                             !canPlay &&
-                              "cursor-not-allowed border-[#3F3F46]/60 text-[#71717A] opacity-50 hover:border-[#3F3F46]/60 hover:bg-[#27272A] hover:text-[#71717A]",
+                              "cursor-not-allowed border-[#3F3F46]/60 text-[#71717A] opacity-50 hover:border-[#3F3F46]/60 hover:bg-[#27272A] hover:text-[#71717A] hover:scale-100",
                           )}
                           variant="ghost"
                         >
-                          <span className="truncate">
-                            {serverData.name}
-                          </span>
-                          {isSelected ? (
-                            <Badge className="bg-[#DFE104]/20 text-xs font-bold uppercase tracking-wide text-[#DFE104]">
-                              Đang xem
-                            </Badge>
-                          ) : (
-                            <Badge
-                              variant="outline"
-                              className="border-[#3F3F46] bg-transparent text-xs text-[#A1A1AA]"
-                            >
-                              {serverData.slug.replace(/^[^\d]*/g, "") || "#"}
-                            </Badge>
+                          <span className="truncate">{serverData.name}</span>
+                          {isSelected && (
+                            <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                              <Play className="h-3 w-3 fill-[#DFE104] text-[#DFE104]" />
+                            </div>
                           )}
                         </Button>
                       );
                     })}
                   </div>
                 ) : (
-                  <div className="border-2 border-[#3F3F46] bg-[#27272A]/50 p-6 text-center text-sm text-[#A1A1AA]">
-                    Không tìm thấy tập nào khớp với "{query}" trong nguồn {episode.server_name}.
+                  <div className="flex flex-col items-center justify-center gap-3 border-2 border-[#3F3F46] bg-[#27272A]/50 py-8">
+                    <Film className="h-10 w-10 text-[#71717A]" />
+                    <div className="text-center">
+                      <p className="text-sm font-bold uppercase tracking-tight text-[#A1A1AA]">
+                        Không tìm thấy tập nào
+                      </p>
+                      <p className="text-xs text-[#71717A]">
+                        Thử từ khóa khác hoặc chọn nguồn khác
+                      </p>
+                    </div>
                   </div>
                 )}
 
                 {shouldPaginate && !normalizedQuery && (
-                  <Pagination className="pt-2">
-                    <PaginationContent>
-                      <PaginationItem>
-                        <PaginationPrevious
-                          href="#"
-                          onClick={(event) => {
-                            event.preventDefault();
-                            if (activePage === 1) return;
-                            setPageByServer((prev) => ({
-                              ...prev,
-                              [episode.server_name]: Math.max(activePage - 1, 1),
-                            }));
-                          }}
-                          className="text-sm text-[#FAFAFA] border-[#3F3F46]"
-                          aria-disabled={activePage === 1}
-                          tabIndex={activePage === 1 ? -1 : 0}
-                        />
-                      </PaginationItem>
+                  <div className="flex items-center justify-center border-t-2 border-[#3F3F46] pt-4">
+                    <Pagination className="w-full">
+                      <PaginationContent className="gap-1">
+                        <PaginationItem>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            className="h-9 w-9 border-2 border-[#3F3F46] bg-[#27272A] text-[#FAFAFA] transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]"
+                            onClick={() => {
+                              if (activePage === 1) return;
+                              setPageByServer((prev) => ({
+                                ...prev,
+                                [episode.server_name]: Math.max(activePage - 1, 1),
+                              }));
+                            }}
+                            disabled={activePage === 1}
+                          >
+                            <ChevronLeft className="h-4 w-4" />
+                          </Button>
+                        </PaginationItem>
 
-                      {Array.from({ length: totalPages }).map((_, index) => {
-                        const pageNumber = index + 1;
-                        const showNumber =
-                          pageNumber === 1 ||
-                          pageNumber === totalPages ||
-                          Math.abs(pageNumber - activePage) <= 1;
+                        {Array.from({ length: totalPages }).map((_, index) => {
+                          const pageNumber = index + 1;
+                          const showNumber =
+                            pageNumber === 1 ||
+                            pageNumber === totalPages ||
+                            Math.abs(pageNumber - activePage) <= 1;
 
-                        if (!showNumber) {
-                          if (
-                            pageNumber === activePage - 2 ||
-                            pageNumber === activePage + 2
-                          ) {
-                            return (
-                              <PaginationItem key={`ellipsis-${pageNumber}`}>
-                                <PaginationEllipsis />
-                              </PaginationItem>
-                            );
+                          if (!showNumber) {
+                            if (
+                              pageNumber === activePage - 2 ||
+                              pageNumber === activePage + 2
+                            ) {
+                              return (
+                                <PaginationItem key={`ellipsis-${pageNumber}`}>
+                                  <PaginationEllipsis className="border-2 border-[#3F3F46] bg-[#27272A] text-[#A1A1AA]" />
+                                </PaginationItem>
+                              );
+                            }
+                            return null;
                           }
-                          return null;
-                        }
 
-                        return (
-                          <PaginationItem key={pageNumber}>
-                            <PaginationLink
-                              href="#"
-                              isActive={pageNumber === activePage}
-                              onClick={(event) => {
-                                event.preventDefault();
-                                setPageByServer((prev) => ({
-                                  ...prev,
-                                  [episode.server_name]: pageNumber,
-                                }));
-                              }}
-                              className={pageNumber === activePage ? "bg-[#DFE104] text-[#09090B]" : "text-[#FAFAFA] border-[#3F3F46]"}
-                            >
-                              {pageNumber}
-                            </PaginationLink>
-                          </PaginationItem>
-                        );
-                      })}
+                          return (
+                            <PaginationItem key={pageNumber}>
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className={cn(
+                                  "h-9 w-9 border-2 border-[#3F3F46] bg-[#27272A] text-xs font-bold uppercase tracking-tighter text-[#FAFAFA] transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]",
+                                  pageNumber === activePage && "border-[#DFE104] bg-[#DFE104] text-[#09090B]",
+                                )}
+                                onClick={() => {
+                                  setPageByServer((prev) => ({
+                                    ...prev,
+                                    [episode.server_name]: pageNumber,
+                                  }));
+                                }}
+                              >
+                                {pageNumber}
+                              </Button>
+                            </PaginationItem>
+                          );
+                        })}
 
-                      <PaginationItem>
-                        <PaginationNext
-                          href="#"
-                          onClick={(event) => {
-                            event.preventDefault();
-                            if (activePage === totalPages) return;
-                            setPageByServer((prev) => ({
-                              ...prev,
-                              [episode.server_name]: Math.min(
-                                activePage + 1,
-                                totalPages,
-                              ),
-                            }));
-                          }}
-                          className="text-sm text-[#FAFAFA] border-[#3F3F46]"
-                          aria-disabled={activePage === totalPages}
-                          tabIndex={activePage === totalPages ? -1 : 0}
-                        />
-                      </PaginationItem>
-                    </PaginationContent>
-                  </Pagination>
+                        <PaginationItem>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            className="h-9 w-9 border-2 border-[#3F3F46] bg-[#27272A] text-[#FAFAFA] transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]"
+                            onClick={() => {
+                              if (activePage === totalPages) return;
+                              setPageByServer((prev) => ({
+                                ...prev,
+                                [episode.server_name]: Math.min(
+                                  activePage + 1,
+                                  totalPages,
+                                ),
+                              }));
+                            }}
+                            disabled={activePage === totalPages}
+                          >
+                            <ChevronRight className="h-4 w-4" />
+                          </Button>
+                        </PaginationItem>
+                      </PaginationContent>
+                    </Pagination>
+                  </div>
                 )}
               </TabsContent>
             );
