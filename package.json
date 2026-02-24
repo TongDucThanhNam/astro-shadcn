@@ -11,7 +11,7 @@
     "ui:map": "bun scripts/generate-ui-map.ts --src src --entry src/components/VideoPlayer.tsx --out docs/ui-map --alias @=src",
     "ai:check": "bun scripts/check-ai-contracts.ts --src src",
     "tw:check": "bun scripts/check-tailwind-safety.ts --src src",
-    "ai:pack": "bun scripts/context-pack.ts --out .ai/context.txt",
+    "ai:pack": "bun scripts/context-pack.ts --out .ai/context.txt --inlineRules=false",
     "format": "biome format --write --files-ignore-unknown=true .",
     "lint:biome": "biome check --files-ignore-unknown=true .",
     "lint:ai": "bun run ai:check && bun run tw:check"

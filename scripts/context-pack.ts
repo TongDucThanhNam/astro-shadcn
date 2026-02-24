@@ -7,6 +7,11 @@ import { hideBin } from 'yargs/helpers';
 
 const argv = yargs(hideBin(process.argv))
   .option('out', { type: 'string', default: '.ai/context.txt' })
+  .option('inlineRules', {
+    type: 'boolean',
+    default: false,
+    describe: 'Inline CLAUDE.md contents into context pack',
+  })
   .help()
   .parseSync();
 
@@ -37,8 +42,10 @@ async function main() {
 
   parts.push(buildSection('UI TREE (ASCII)', await readIfExists('docs/ui-map.ascii.txt')));
   parts.push(buildSection('UI GRAPH (Mermaid)', await readIfExists('docs/ui-map.mmd')));
-  parts.push(buildSection('PROJECT AI RULES', await readIfExists('CLAUDE.md')));
-  parts.push(buildSection('CURSOR RULES', await readIfExists('.cursorrules')));
+
+  if (argv.inlineRules) {
+    parts.push(buildSection('PROJECT AI RULES', await readIfExists('CLAUDE.md')));
+  }
   parts.push(buildSection('SPEC', await readIfExists('docs/spec.md')));
   parts.push(buildSection('TAILWIND CONFIG', await readIfExists('tailwind.config.ts')));
   parts.push(
