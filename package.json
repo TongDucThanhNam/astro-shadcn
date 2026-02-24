@@ -8,19 +8,18 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "ui:map": "bun scripts/generate-ui-map.ts --src src --entry src/pages/index.astro --out docs/ui-map --alias @=src",
+    "ui:map": "bun scripts/generate-ui-map.ts --src src --entry src/pages/index.astro --alias @=src --format ascii",
     "ai:check": "bun scripts/check-ai-contracts.ts --src src",
     "tw:check": "bun scripts/check-tailwind-safety.ts --src src",
-    "ai:pack": "bun scripts/context-pack.ts --out .ai/context.txt --inlineRules=false",
+    "ai:pack": "bun scripts/context-pack.ts --out .ai/context.txt",
     "format": "biome format --write --files-ignore-unknown=true .",
     "lint:biome": "biome check --files-ignore-unknown=true .",
     "lint:ai": "bun run ai:check && bun run tw:check"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
     "@babel/parser": "^7.28.4",
     "@babel/traverse": "^7.28.4",
-    "yargs": "^17.7.2"
+    "@biomejs/biome": "^1.9.4"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",

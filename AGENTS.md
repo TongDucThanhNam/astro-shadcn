@@ -21,25 +21,38 @@ Movie discovery app — **Astro 5 + React 18 + Tailwind 4 + shadcn/ui**, data fr
 2. Run this command with that **real file path** (NOT the URL):
 
 ```bash
-bun scripts/generate-ui-map.ts --src src --entry src/pages/PAGE_FILE.astro --out docs/ui-map --alias @=src
+bun scripts/generate-ui-map.ts --src src --entry src/pages/PAGE_FILE.astro --alias @=src --format ascii
 ```
 
 ⚠️ `--entry` must be an **actual file on disk** (e.g. `src/pages/danh-sach/[type].astro`), NOT a URL route (~~`src/pages/danh-sach/phim-le`~~). Astro uses dynamic params like `[type]`, `[slug]`, `[page]` in filenames.
 
-3. **Read the output**:
-```bash
-cat docs/ui-map.ascii.txt
-```
+**Optional flags:**
+- `--focus ComponentName` — show only ancestor chain + subtree of that component (much smaller output)
+- `--layoutOnly` — strip decorative classes, show only layout-relevant ones (position, sizing, flex, grid, spacing, z-index)
 
-This gives you the parent→child component tree with Tailwind wrapper classes at each level. Example:
+3. **Read the output**:
+The command prints the hierarchy directly to stdout.
+Do **not** write `docs/ui-map.*` files in normal UI edit flow.
+
+This gives you the parent→child component tree with Tailwind wrapper classes at each level. `⊞` marks components that accept children (Astro `<slot>` / React `{children}`). Example:
 ```
-[Layout] (flex flex-col min-h-screen)
+[Layout] (flex flex-col min-h-screen) ⊞
 └── [FilterPanel] (sticky top-16 z-30 border-b)
     ├── [Combobox] (relative w-full)
     └── [Button] (inline-flex items-center gap-2)
 ```
 
 **WHY this is mandatory:** Without this tree, you don't know the parent's layout strategy (flex? grid? fixed? relative?) and will generate Tailwind classes that conflict with the container. This is the #1 cause of broken UI from AI edits.
+
+If you need machine-readable output during debugging:
+```bash
+bun scripts/generate-ui-map.ts --src src --entry src/pages/PAGE_FILE.astro --alias @=src --format json
+```
+
+Only write artifacts when explicitly requested by human:
+```bash
+bun scripts/generate-ui-map.ts --src src --entry src/pages/PAGE_FILE.astro --alias @=src --format all --out /tmp/ui-map
+```
 
 **Only after reading and understanding the hierarchy tree, proceed to edit code.**
 

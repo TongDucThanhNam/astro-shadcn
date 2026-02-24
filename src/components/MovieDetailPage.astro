@@ -356,12 +356,12 @@ const lastPlayableLabel = lastPlayableEpisode?.label ?? 'Chọn tập để phá
                             : "Đợi nhà phát hành cập nhật tập mới."}
                 </span>
             </div>
-            <div
+            <!-- <div
                 id="playerShell"
-                class="player-shell relative overflow-hidden rounded-2xl border border-[#27272A] bg-[linear-gradient(145deg,rgba(8,8,10,0.96),rgba(14,14,18,0.88))] p-2 sm:p-3"
-            >
+                class="player-shell relative overflow-hidden"
+            > -->
                 <VideoPlayer client:load playlist={playableEpisodes} movieSlug={slug} />
-            </div>
+            <!-- </div> -->
         </div>
     </div>
 </section>

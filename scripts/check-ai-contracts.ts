@@ -1,16 +1,23 @@
 #!/usr/bin/env bun
 import path from 'node:path';
+import { parseArgs } from 'node:util';
 
-import yargs from 'yargs/yargs';
-import { hideBin } from 'yargs/helpers';
+const { values } = parseArgs({
+  args: process.argv.slice(2),
+  options: {
+    src: { type: 'string', default: 'src' },
+    help: { type: 'boolean', short: 'h', default: false },
+  },
+  strict: true,
+});
 
-const argv = yargs(hideBin(process.argv))
-  .option('src', { type: 'string', default: 'src' })
-  .help()
-  .parseSync();
+if (values.help) {
+  console.log('Usage: bun scripts/check-ai-contracts.ts [--src <path>]');
+  process.exit(0);
+}
 
 const projectRoot = process.cwd();
-const srcDir = path.resolve(projectRoot, argv.src);
+const srcDir = path.resolve(projectRoot, values.src ?? 'src');
 
 function rel(filePath) {
   return path.relative(projectRoot, filePath).split(path.sep).join('/');

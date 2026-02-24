@@ -1,9 +1,9 @@
 'use client';
 
-import { Play } from 'lucide-react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { Play } from 'lucide-react';
 import type React from 'react';
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface CursorProps {
   enabled?: boolean;
@@ -46,6 +46,7 @@ const hideCustomCursor = (
 const Cursor: React.FC<CursorProps> = ({ enabled = true }) => {
   const [cursorMode, setCursorMode] = useState<'default' | 'hover' | 'play'>('default');
   const [isVisible, setIsVisible] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const isVisibleRef = useRef(false);
   const isBlockedRef = useRef(false);
 
@@ -80,11 +81,13 @@ const Cursor: React.FC<CursorProps> = ({ enabled = true }) => {
 
   useEffect(() => {
     if (!enabled) return;
-
     // Skip on touch devices
-    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
-      return;
-    }
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return;
+    setIsMounted(true);
+  }, [enabled]);
+
+  useEffect(() => {
+    if (!enabled || !isMounted) return;
 
     const disabledZones = Array.from(
       document.querySelectorAll<HTMLElement>(CURSOR_DISABLED_SELECTOR),
@@ -158,13 +161,10 @@ const Cursor: React.FC<CursorProps> = ({ enabled = true }) => {
       window.removeEventListener('cursor:disable-zone', handleDisableZone);
       window.removeEventListener('cursor:enable-zone', handleEnableZone);
     };
-  }, [enabled, cursorX, cursorY, followerX, followerY, checkHover]);
+  }, [enabled, isMounted, cursorX, cursorY, followerX, followerY, checkHover]);
 
-  // Don't render on server or if disabled
-  if (typeof window === 'undefined' || !enabled) return null;
-
-  // Don't show on touch devices
-  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return null;
+  // Don't render until mounted on client (prevents hydration mismatch)
+  if (!isMounted) return null;
 
   return (
     <>

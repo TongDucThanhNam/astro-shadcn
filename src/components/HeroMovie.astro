@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import { getLatestMovies, type LatestFeedVersion, parseFeedVersion } from '@/lib/phimapi';
+import { type LatestFeedVersion, getLatestMovies, parseFeedVersion } from '@/lib/phimapi';
 import { getCachedValue, setCachedValue } from '@/lib/server-cache';
 import { imagePresets, resolveImageUrl } from '@/lib/wsrv';
 
@@ -138,6 +138,7 @@ const getHeroMetaTokens = (item: FeaturedItem) => {
 
                                 <div class="flex flex-wrap items-center justify-center gap-3 sm:justify-start sm:gap-4">
                                     <a
+                                        href={`/phim/${item.slug}?autoplay=1`}
                         id="watchBtn"
                         type="button"
                         class="flex-1 sm:flex-none uppercase tracking-tighter font-bold bg-[#DFE104] text-black px-5 py-2.5 md:px-6 md:py-3 hover:scale-105 transition-all inline-flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B] min-w-[140px]"

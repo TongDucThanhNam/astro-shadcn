@@ -1,28 +1,20 @@
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+import PlayerControlLayer from '@/components/video-player/PlayerControlLayer';
+import { cn } from '@/lib/utils';
 import {
-  isHLSProvider,
   MediaPlayer,
   type MediaPlayerInstance,
   MediaProvider,
   type MediaProviderAdapter,
   type PlayerSrc,
+  isHLSProvider,
   useMediaStore,
 } from '@vidstack/react';
+import { motion, useSpring, useTransform } from 'framer-motion';
 import type React from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { motion, useSpring, useTransform } from 'framer-motion';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
-import PlayerControlLayer from '@/components/video-player/PlayerControlLayer';
-import { cn } from '@/lib/utils';
+import { createPortal } from 'react-dom';
 import '@vidstack/react/player/styles/base.css';
-import {
-  LayoutPanelTop,
-  Maximize2,
-  Minimize2,
-  RefreshCw,
-  Server,
-  SkipBack,
-  SkipForward,
-} from 'lucide-react';
 
 type EpisodeSelectionDetail = {
   ep: string;
@@ -38,9 +30,6 @@ type VideoPlayerProps = {
 };
 
 type PlaybackMode = 'idle' | 'vidstack' | 'embed';
-
-const TOP_ICON_BUTTON_CLASS =
-  'inline-flex h-8 w-8 items-center justify-center rounded-sm border border-[#3F3F46] bg-[#09090B]/90 text-[#FAFAFA] transition-all duration-200 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B] disabled:cursor-not-allowed disabled:opacity-35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B]';
 
 const isEditableTarget = (target: EventTarget | null) => {
   if (!(target instanceof HTMLElement)) return false;
@@ -542,7 +531,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
 
   useEffect(() => {
     if (!isTheaterMode) return;
-    const previousOverflow = document.documentElement.style.overflow;
     document.documentElement.style.overflow = 'hidden';
     const onEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -551,7 +539,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
     };
     window.addEventListener('keydown', onEscape);
     return () => {
-      document.documentElement.style.overflow = previousOverflow;
+      document.documentElement.style.overflow = '';
       window.removeEventListener('keydown', onEscape);
     };
   }, [isTheaterMode]);
@@ -674,14 +662,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
     theaterSpring.set(isTheaterMode ? 1 : 0);
   }, [isTheaterMode, theaterSpring]);
 
-  return (
-    <div
-      ref={videoSectionRef}
-      className={cn(
-        'w-full space-y-1.5 px-0',
-        isTheaterMode && 'fixed inset-0 z-[75] bg-[#050507]/95 p-2 sm:p-5',
-      )}
-    >
+  const playerContent = (
+    <div ref={videoSectionRef} className="w-full space-y-1.5 px-0">
       <motion.div
         ref={playerFrameRef}
         data-cursor-disabled
@@ -691,10 +673,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
         }}
         onPointerEnter={() => window.dispatchEvent(new Event('cursor:disable-zone'))}
         onPointerLeave={() => window.dispatchEvent(new Event('cursor:enable-zone'))}
-        className={cn(
-          'relative overflow-hidden border-2 border-[#3F3F46] bg-[#09090B] cursor-auto',
-          isTheaterMode && 'mx-auto w-full max-w-6xl',
-        )}
+        className="relative overflow-hidden border-2 border-[#3F3F46] bg-[#09090B] cursor-auto w-full"
       >
         <AspectRatio ratio={16 / 9} className="overflow-hidden bg-[#09090B]">
           {!selectedEpisode ? (
@@ -746,6 +725,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
               <PlayerControlLayer
                 allowFallback={Boolean(selectedEpisode.linkEmbed)}
                 onFallback={switchToEmbedFallback}
+                episodeLabel={getEpisodeLabel(selectedEpisode)}
+                sourceLabel={sourceLabel}
+                serverName={selectedEpisode.serverName}
+                isTheaterMode={isTheaterMode}
+                hasPreviousEpisode={hasPreviousEpisode}
+                hasNextEpisode={hasNextEpisode}
+                autoAdvance={autoAdvance}
+                onAutoAdvanceChange={setAutoAdvance}
               />
             </MediaPlayer>
           ) : (
@@ -756,112 +743,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
         </AspectRatio>
       </motion.div>
 
-      <div
-        className={cn(
-          'flex flex-wrap items-center justify-between gap-1.5 border-2 border-[#3F3F46] bg-[#09090B] px-2 py-1.5',
-          isTheaterMode && 'mx-auto w-full max-w-6xl',
-        )}
-      >
-        <div className="min-w-0">
-          <p className="truncate text-sm font-bold uppercase tracking-tighter text-[#FAFAFA] sm:text-[15px]">
-            {getEpisodeLabel(selectedEpisode)}
-          </p>
-        </div>
-
-        <div className="flex items-center gap-1.5">
-          <span className="inline-flex items-center gap-1 border border-[#3F3F46] bg-[#09090B] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#A1A1AA]">
-            <Server className="h-3 w-3" />
-            {sourceLabel}
-          </span>
-          {selectedEpisode?.serverName ? (
-            <span className="border border-[#DFE104] bg-[#DFE104]/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#DFE104]">
-              {selectedEpisode.serverName}
-            </span>
-          ) : null}
-          {hasNextEpisode && playbackMode === 'vidstack' && (
-            <button
-              type="button"
-              onClick={() => setAutoAdvance((prev) => !prev)}
-              className={cn(
-                'inline-flex items-center gap-1 border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide transition',
-                autoAdvance
-                  ? 'border-[#DFE104] bg-[#DFE104] text-[#09090B]'
-                  : 'border-[#3F3F46] bg-[#09090B] text-[#A1A1AA]',
-              )}
-              title={
-                autoAdvance
-                  ? 'Auto-advance đang bật - click để tắt'
-                  : 'Auto-advance đang tắt - click để bật'
-              }
-            >
-              {autoAdvance ? 'Auto' : 'Auto ✕'}
-            </button>
-          )}
-        </div>
-
-        <div className="flex flex-wrap items-center gap-1.5">
-          <button
-            type="button"
-            onClick={goToPreviousEpisode}
-            className={TOP_ICON_BUTTON_CLASS}
-            disabled={!hasPreviousEpisode}
-            aria-label="Tập trước"
-            title="Tập trước (J)"
-          >
-            <SkipBack className="h-3.5 w-3.5" />
-          </button>
-          <button
-            type="button"
-            onClick={goToNextEpisode}
-            className={TOP_ICON_BUTTON_CLASS}
-            disabled={!hasNextEpisode}
-            aria-label="Tập tiếp theo"
-            title="Tập tiếp theo (L)"
-          >
-            <SkipForward className="h-3.5 w-3.5" />
-          </button>
-          <button
-            type="button"
-            onClick={reloadCurrentSource}
-            className={TOP_ICON_BUTTON_CLASS}
-            disabled={!selectedEpisode}
-            aria-label="Tải lại nguồn phát"
-            title="Reload nguồn (R)"
-          >
-            <RefreshCw className="h-3.5 w-3.5" />
-          </button>
-          <button
-            type="button"
-            onClick={toggleFullscreen}
-            className={TOP_ICON_BUTTON_CLASS}
-            disabled={!selectedEpisode}
-            aria-label="Toàn màn hình"
-            title="Toàn màn hình (F)"
-          >
-            <Maximize2 className="h-3.5 w-3.5" />
-          </button>
-          <button
-            type="button"
-            onClick={() => setIsTheaterMode((prev) => !prev)}
-            className={TOP_ICON_BUTTON_CLASS}
-            disabled={!selectedEpisode}
-            aria-label="Bật chế độ rạp"
-            title={isTheaterMode ? 'Thoát chế độ rạp (T)' : 'Chế độ rạp (T)'}
-          >
-            {isTheaterMode ? (
-              <Minimize2 className="h-3.5 w-3.5" />
-            ) : (
-              <LayoutPanelTop className="h-3.5 w-3.5" />
-            )}
-          </button>
-        </div>
-      </div>
-
       {streamHint ? (
         <p
           className={cn(
             'border border-[#DFE104] bg-[#DFE104]/10 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#DFE104]',
-            isTheaterMode && 'mx-auto w-full max-w-6xl',
           )}
         >
           {streamHint}
@@ -869,6 +754,22 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
       ) : null}
     </div>
   );
+
+  if (isTheaterMode) {
+    return createPortal(
+      <div
+        className="fixed inset-0 z-[9998] flex items-center justify-center bg-black p-4 sm:p-8"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) setIsTheaterMode(false);
+        }}
+      >
+        {playerContent}
+      </div>,
+      document.body,
+    );
+  }
+
+  return playerContent;
 };
 
 export default VideoPlayer;

@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-24T13:00:16.821Z",
-  "rootKey": "Layout@src/layouts/Layout.astro",
+  "generatedAt": "2026-02-24T17:25:16.100Z",
+  "rootKey": "Pages@src/pages/index.astro",
   "nodes": [
     {
       "key": "AdvancedPlayer@src/components/AdvancedPlayer.tsx",
@@ -9,7 +9,8 @@
       "fileRel": "src/components/AdvancedPlayer.tsx",
       "wrapperClass": null,
       "renders": [],
-      "mermaidId": "AdvancedPlayer_c886e4f7"
+      "acceptsChildren": false,
+      "mermaidId": "AdvancedPlayer_9a6ea429"
     },
     {
       "key": "Card@src/components/Card.astro",
@@ -18,7 +19,8 @@
       "fileRel": "src/components/Card.astro",
       "wrapperClass": "link-card",
       "renders": [],
-      "mermaidId": "Card_deb52676"
+      "acceptsChildren": false,
+      "mermaidId": "Card_9f71aef6"
     },
     {
       "key": "ComboboxDemo@src/components/Combobox.tsx",
@@ -40,7 +42,8 @@
         "Button",
         "ChevronsUpDown"
       ],
-      "mermaidId": "ComboboxDemo_b220e84a"
+      "acceptsChildren": false,
+      "mermaidId": "ComboboxDemo_f7b8a612"
     },
     {
       "key": "EpisodeSelector@src/components/EpisodeSelector.tsx",
@@ -78,7 +81,8 @@
         "CardHeader",
         "CardTitle"
       ],
-      "mermaidId": "EpisodeSelector_3201ab1a"
+      "acceptsChildren": false,
+      "mermaidId": "EpisodeSelector_91ac411f"
     },
     {
       "key": "FilterPanel@src/components/FilterPanel.astro",
@@ -89,7 +93,8 @@
       "renders": [
         "FilterPanelMobile"
       ],
-      "mermaidId": "FilterPanel_5bf99664"
+      "acceptsChildren": false,
+      "mermaidId": "FilterPanel_a3faebee"
     },
     {
       "key": "FilterPanelMobile@src/components/FilterPanelMobile.tsx",
@@ -100,7 +105,8 @@
       "renders": [
         "FilterSheet"
       ],
-      "mermaidId": "FilterPanelMobile_cb158b15"
+      "acceptsChildren": false,
+      "mermaidId": "FilterPanelMobile_4fbe73f0"
     },
     {
       "key": "FilterSheet@src/components/FilterSheet.tsx",
@@ -114,7 +120,8 @@
         "SheetHeader",
         "SheetTitle"
       ],
-      "mermaidId": "FilterSheet_d50a544a"
+      "acceptsChildren": true,
+      "mermaidId": "FilterSheet_940315f6"
     },
     {
       "key": "HeroMovie@src/components/HeroMovie.astro",
@@ -125,7 +132,8 @@
       "renders": [
         "Image"
       ],
-      "mermaidId": "HeroMovie_25627ca5"
+      "acceptsChildren": false,
+      "mermaidId": "HeroMovie_6ec71b52"
     },
     {
       "key": "MenuItemComponent@src/components/MobileMenu.tsx",
@@ -141,7 +149,8 @@
         "ChevronRight",
         "ChevronDown"
       ],
-      "mermaidId": "MenuItemComponent_2951ee3c"
+      "acceptsChildren": false,
+      "mermaidId": "MenuItemComponent_66d1cece"
     },
     {
       "key": "MobileMenu@src/components/MobileMenu.tsx",
@@ -157,7 +166,8 @@
         "Button",
         "Menu"
       ],
-      "mermaidId": "MobileMenu_5b56bd69"
+      "acceptsChildren": false,
+      "mermaidId": "MobileMenu_f04ff9fb"
     },
     {
       "key": "ModeToggle@src/components/ModeToggle.tsx",
@@ -174,7 +184,8 @@
         "Moon",
         "Sun"
       ],
-      "mermaidId": "ModeToggle_d72ce61c"
+      "acceptsChildren": false,
+      "mermaidId": "ModeToggle_2173c49c"
     },
     {
       "key": "MovieCard@src/components/MovieCard.astro",
@@ -185,7 +196,8 @@
       "renders": [
         "Image"
       ],
-      "mermaidId": "MovieCard_2af17c6a"
+      "acceptsChildren": false,
+      "mermaidId": "MovieCard_bbc9c46a"
     },
     {
       "key": "MovieDetailPage@src/components/MovieDetailPage.astro",
@@ -200,7 +212,8 @@
         "EpisodeSelector",
         "VideoPlayer"
       ],
-      "mermaidId": "MovieDetailPage_b419a2bd"
+      "acceptsChildren": false,
+      "mermaidId": "MovieDetailPage_2137c20d"
     },
     {
       "key": "MovieGrid@src/components/MovieGrid.astro",
@@ -217,7 +230,8 @@
         "PaginationLink",
         "PaginationNext"
       ],
-      "mermaidId": "MovieGrid_054a9e5d"
+      "acceptsChildren": false,
+      "mermaidId": "MovieGrid_b96898bb"
     },
     {
       "key": "MovieTypeSelector@src/components/MovieTypeSelector.tsx",
@@ -233,7 +247,8 @@
         "CardHeader",
         "CardTitle"
       ],
-      "mermaidId": "MovieTypeSelector_957a436a"
+      "acceptsChildren": false,
+      "mermaidId": "MovieTypeSelector_89f69edf"
     },
     {
       "key": "ListItem@src/components/NavigationMenuDemo.tsx",
@@ -245,7 +260,8 @@
         "NavigationMenuLink",
         "Icon"
       ],
-      "mermaidId": "ListItem_e57c5d06"
+      "acceptsChildren": true,
+      "mermaidId": "ListItem_26055b87"
     },
     {
       "key": "NavigationMenuDemo@src/components/NavigationMenuDemo.tsx",
@@ -262,7 +278,8 @@
         "ListItem",
         "Film"
       ],
-      "mermaidId": "NavigationMenuDemo_e96fd89f"
+      "acceptsChildren": false,
+      "mermaidId": "NavigationMenuDemo_a78fbb7f"
     },
     {
       "key": "SearchForm@src/components/SearchForm.tsx",
@@ -281,7 +298,8 @@
         "CommandInput",
         "Button"
       ],
-      "mermaidId": "SearchForm_d8a5bbc4"
+      "acceptsChildren": false,
+      "mermaidId": "SearchForm_74021603"
     },
     {
       "key": "Icon@src/components/SearchForm.tsx",
@@ -292,7 +310,8 @@
       "renders": [
         "link.icon"
       ],
-      "mermaidId": "Icon_1c40e2f4"
+      "acceptsChildren": false,
+      "mermaidId": "Icon_81d9ebab"
     },
     {
       "key": "SearchMovieGrid@src/components/SearchMovieGrid.astro",
@@ -303,7 +322,8 @@
       "renders": [
         "MovieCard"
       ],
-      "mermaidId": "SearchMovieGrid_01386542"
+      "acceptsChildren": false,
+      "mermaidId": "SearchMovieGrid_320084c2"
     },
     {
       "key": "AspectRatio@src/components/ui/aspect-ratio.tsx",
@@ -314,7 +334,8 @@
       "renders": [
         "AspectRatioPrimitive.Root"
       ],
-      "mermaidId": "AspectRatio_9977c3f1"
+      "acceptsChildren": false,
+      "mermaidId": "AspectRatio_2e8d7710"
     },
     {
       "key": "Badge@src/components/ui/badge.tsx",
@@ -323,7 +344,8 @@
       "fileRel": "src/components/ui/badge.tsx",
       "wrapperClass": "inline-flex items-center border px-3 py-1 text-xs font-bold uppercase tracking-widest transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
       "renders": [],
-      "mermaidId": "Badge_a2598bc8"
+      "acceptsChildren": false,
+      "mermaidId": "Badge_5d542415"
     },
     {
       "key": "Button@src/components/ui/button.tsx",
@@ -334,7 +356,8 @@
       "renders": [
         "Comp"
       ],
-      "mermaidId": "Button_f874be33"
+      "acceptsChildren": false,
+      "mermaidId": "Button_ffefdd8a"
     },
     {
       "key": "Card@src/components/ui/card.tsx",
@@ -343,7 +366,8 @@
       "fileRel": "src/components/ui/card.tsx",
       "wrapperClass": "border-2 border-border bg-card text-card-foreground transition-all duration-300 hover:border-accent",
       "renders": [],
-      "mermaidId": "Card_dbd77aef"
+      "acceptsChildren": false,
+      "mermaidId": "Card_59b4e320"
     },
     {
       "key": "CardHeader@src/components/ui/card.tsx",
@@ -352,7 +376,8 @@
       "fileRel": "src/components/ui/card.tsx",
       "wrapperClass": "flex flex-col space-y-2 p-6",
       "renders": [],
-      "mermaidId": "CardHeader_ccd1e665"
+      "acceptsChildren": false,
+      "mermaidId": "CardHeader_7785ecec"
     },
     {
       "key": "CardTitle@src/components/ui/card.tsx",
@@ -361,7 +386,8 @@
       "fileRel": "src/components/ui/card.tsx",
       "wrapperClass": "font-bold uppercase tracking-tighter text-lg",
       "renders": [],
-      "mermaidId": "CardTitle_605d83c8"
+      "acceptsChildren": false,
+      "mermaidId": "CardTitle_ad627b22"
     },
     {
       "key": "CardDescription@src/components/ui/card.tsx",
@@ -370,7 +396,8 @@
       "fileRel": "src/components/ui/card.tsx",
       "wrapperClass": "text-sm text-muted-foreground",
       "renders": [],
-      "mermaidId": "CardDescription_d00d4c9b"
+      "acceptsChildren": false,
+      "mermaidId": "CardDescription_94380c10"
     },
     {
       "key": "CardContent@src/components/ui/card.tsx",
@@ -379,7 +406,8 @@
       "fileRel": "src/components/ui/card.tsx",
       "wrapperClass": "p-6 pt-0",
       "renders": [],
-      "mermaidId": "CardContent_f4fb2ea5"
+      "acceptsChildren": false,
+      "mermaidId": "CardContent_1b4b0070"
     },
     {
       "key": "CardFooter@src/components/ui/card.tsx",
@@ -388,7 +416,8 @@
       "fileRel": "src/components/ui/card.tsx",
       "wrapperClass": "flex items-center p-6 pt-0",
       "renders": [],
-      "mermaidId": "CardFooter_8de238d5"
+      "acceptsChildren": false,
+      "mermaidId": "CardFooter_cfc7f89f"
     },
     {
       "key": "Collapsible@src/components/ui/collapsible.tsx",
@@ -399,7 +428,8 @@
       "renders": [
         "CollapsiblePrimitive.Root"
       ],
-      "mermaidId": "Collapsible_46e39845"
+      "acceptsChildren": false,
+      "mermaidId": "Collapsible_b87e6466"
     },
     {
       "key": "CollapsibleTrigger@src/components/ui/collapsible.tsx",
@@ -410,7 +440,8 @@
       "renders": [
         "CollapsiblePrimitive.CollapsibleTrigger"
       ],
-      "mermaidId": "CollapsibleTrigger_06c857c1"
+      "acceptsChildren": false,
+      "mermaidId": "CollapsibleTrigger_a25c8a87"
     },
     {
       "key": "CollapsibleContent@src/components/ui/collapsible.tsx",
@@ -421,7 +452,8 @@
       "renders": [
         "CollapsiblePrimitive.CollapsibleContent"
       ],
-      "mermaidId": "CollapsibleContent_09f6919f"
+      "acceptsChildren": false,
+      "mermaidId": "CollapsibleContent_4f3f2fde"
     },
     {
       "key": "Command@src/components/ui/command.tsx",
@@ -432,7 +464,8 @@
       "renders": [
         "CommandPrimitive"
       ],
-      "mermaidId": "Command_d286c5b8"
+      "acceptsChildren": false,
+      "mermaidId": "Command_464849c3"
     },
     {
       "key": "CommandDialog@src/components/ui/command.tsx",
@@ -445,7 +478,8 @@
         "DialogContent",
         "Command"
       ],
-      "mermaidId": "CommandDialog_4f474eee"
+      "acceptsChildren": true,
+      "mermaidId": "CommandDialog_703ef5f7"
     },
     {
       "key": "CommandInput@src/components/ui/command.tsx",
@@ -457,7 +491,8 @@
         "CommandPrimitive.Input",
         "Search"
       ],
-      "mermaidId": "CommandInput_bf8c31fe"
+      "acceptsChildren": false,
+      "mermaidId": "CommandInput_68de7263"
     },
     {
       "key": "CommandList@src/components/ui/command.tsx",
@@ -468,7 +503,8 @@
       "renders": [
         "CommandPrimitive.List"
       ],
-      "mermaidId": "CommandList_02640111"
+      "acceptsChildren": false,
+      "mermaidId": "CommandList_f37c3a8c"
     },
     {
       "key": "CommandEmpty@src/components/ui/command.tsx",
@@ -479,7 +515,8 @@
       "renders": [
         "CommandPrimitive.Empty"
       ],
-      "mermaidId": "CommandEmpty_dc08ee73"
+      "acceptsChildren": false,
+      "mermaidId": "CommandEmpty_b829586b"
     },
     {
       "key": "CommandGroup@src/components/ui/command.tsx",
@@ -490,7 +527,8 @@
       "renders": [
         "CommandPrimitive.Group"
       ],
-      "mermaidId": "CommandGroup_61170081"
+      "acceptsChildren": false,
+      "mermaidId": "CommandGroup_c69f27ec"
     },
     {
       "key": "CommandSeparator@src/components/ui/command.tsx",
@@ -501,7 +539,8 @@
       "renders": [
         "CommandPrimitive.Separator"
       ],
-      "mermaidId": "CommandSeparator_30072097"
+      "acceptsChildren": false,
+      "mermaidId": "CommandSeparator_f57b8831"
     },
     {
       "key": "CommandItem@src/components/ui/command.tsx",
@@ -512,7 +551,8 @@
       "renders": [
         "CommandPrimitive.Item"
       ],
-      "mermaidId": "CommandItem_b5435fa3"
+      "acceptsChildren": false,
+      "mermaidId": "CommandItem_e7f7c660"
     },
     {
       "key": "CommandShortcut@src/components/ui/command.tsx",
@@ -521,7 +561,8 @@
       "fileRel": "src/components/ui/command.tsx",
       "wrapperClass": "ml-auto text-xs tracking-widest text-muted-foreground",
       "renders": [],
-      "mermaidId": "CommandShortcut_a2d81ea1"
+      "acceptsChildren": false,
+      "mermaidId": "CommandShortcut_e2cba14f"
     },
     {
       "key": "Cursor@src/components/ui/Cursor.tsx",
@@ -532,7 +573,8 @@
       "renders": [
         "Play"
       ],
-      "mermaidId": "Cursor_d80bb73c"
+      "acceptsChildren": false,
+      "mermaidId": "Cursor_752e8e1f"
     },
     {
       "key": "Dialog@src/components/ui/dialog.tsx",
@@ -543,7 +585,8 @@
       "renders": [
         "DialogPrimitive.Root"
       ],
-      "mermaidId": "Dialog_95f26fd3"
+      "acceptsChildren": false,
+      "mermaidId": "Dialog_5fd7d158"
     },
     {
       "key": "DialogTrigger@src/components/ui/dialog.tsx",
@@ -554,7 +597,8 @@
       "renders": [
         "DialogPrimitive.Trigger"
       ],
-      "mermaidId": "DialogTrigger_832cf36a"
+      "acceptsChildren": false,
+      "mermaidId": "DialogTrigger_a8f35ebb"
     },
     {
       "key": "DialogPortal@src/components/ui/dialog.tsx",
@@ -565,7 +609,8 @@
       "renders": [
         "DialogPrimitive.Portal"
       ],
-      "mermaidId": "DialogPortal_f7e86d96"
+      "acceptsChildren": false,
+      "mermaidId": "DialogPortal_66db62d6"
     },
     {
       "key": "DialogClose@src/components/ui/dialog.tsx",
@@ -576,7 +621,8 @@
       "renders": [
         "DialogPrimitive.Close"
       ],
-      "mermaidId": "DialogClose_a3fd5810"
+      "acceptsChildren": false,
+      "mermaidId": "DialogClose_7544ee3f"
     },
     {
       "key": "DialogOverlay@src/components/ui/dialog.tsx",
@@ -587,7 +633,8 @@
       "renders": [
         "DialogPrimitive.Overlay"
       ],
-      "mermaidId": "DialogOverlay_7d036781"
+      "acceptsChildren": false,
+      "mermaidId": "DialogOverlay_dc4a6164"
     },
     {
       "key": "DialogContent@src/components/ui/dialog.tsx",
@@ -602,7 +649,8 @@
         "X",
         "DialogOverlay"
       ],
-      "mermaidId": "DialogContent_bc707520"
+      "acceptsChildren": true,
+      "mermaidId": "DialogContent_16f731ef"
     },
     {
       "key": "DialogHeader@src/components/ui/dialog.tsx",
@@ -611,7 +659,8 @@
       "fileRel": "src/components/ui/dialog.tsx",
       "wrapperClass": "flex flex-col space-y-1.5 text-center sm:text-left",
       "renders": [],
-      "mermaidId": "DialogHeader_a0371821"
+      "acceptsChildren": false,
+      "mermaidId": "DialogHeader_2d4b4f3c"
     },
     {
       "key": "DialogFooter@src/components/ui/dialog.tsx",
@@ -620,7 +669,8 @@
       "fileRel": "src/components/ui/dialog.tsx",
       "wrapperClass": "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
       "renders": [],
-      "mermaidId": "DialogFooter_2edacabf"
+      "acceptsChildren": false,
+      "mermaidId": "DialogFooter_ecd04892"
     },
     {
       "key": "DialogTitle@src/components/ui/dialog.tsx",
@@ -631,7 +681,8 @@
       "renders": [
         "DialogPrimitive.Title"
       ],
-      "mermaidId": "DialogTitle_7ae7b9fb"
+      "acceptsChildren": false,
+      "mermaidId": "DialogTitle_92bf57d3"
     },
     {
       "key": "DialogDescription@src/components/ui/dialog.tsx",
@@ -642,7 +693,8 @@
       "renders": [
         "DialogPrimitive.Description"
       ],
-      "mermaidId": "DialogDescription_cc02536f"
+      "acceptsChildren": false,
+      "mermaidId": "DialogDescription_8fd45321"
     },
     {
       "key": "DropdownMenu@src/components/ui/dropdown-menu.tsx",
@@ -653,7 +705,8 @@
       "renders": [
         "DropdownMenuPrimitive.Root"
       ],
-      "mermaidId": "DropdownMenu_9163a007"
+      "acceptsChildren": false,
+      "mermaidId": "DropdownMenu_8dcca3ef"
     },
     {
       "key": "DropdownMenuTrigger@src/components/ui/dropdown-menu.tsx",
@@ -664,7 +717,8 @@
       "renders": [
         "DropdownMenuPrimitive.Trigger"
       ],
-      "mermaidId": "DropdownMenuTrigger_fc55342a"
+      "acceptsChildren": false,
+      "mermaidId": "DropdownMenuTrigger_a0c3eae7"
     },
     {
       "key": "DropdownMenuGroup@src/components/ui/dropdown-menu.tsx",
@@ -675,7 +729,8 @@
       "renders": [
         "DropdownMenuPrimitive.Group"
       ],
-      "mermaidId": "DropdownMenuGroup_4e194c65"
+      "acceptsChildren": false,
+      "mermaidId": "DropdownMenuGroup_8b15f4b1"
     },
     {
       "key": "DropdownMenuPortal@src/components/ui/dropdown-menu.tsx",
@@ -686,7 +741,8 @@
       "renders": [
         "DropdownMenuPrimitive.Portal"
       ],
-      "mermaidId": "DropdownMenuPortal_2ecbaed1"
+      "acceptsChildren": false,
+      "mermaidId": "DropdownMenuPortal_411a1f93"
     },
     {
       "key": "DropdownMenuSub@src/components/ui/dropdown-menu.tsx",
@@ -697,7 +753,8 @@
       "renders": [
         "DropdownMenuPrimitive.Sub"
       ],
-      "mermaidId": "DropdownMenuSub_812fab98"
+      "acceptsChildren": false,
+      "mermaidId": "DropdownMenuSub_adf8a268"
     },
     {
       "key": "DropdownMenuRadioGroup@src/components/ui/dropdown-menu.tsx",
@@ -708,7 +765,8 @@
       "renders": [
         "DropdownMenuPrimitive.RadioGroup"
       ],
-      "mermaidId": "DropdownMenuRadioGroup_7d8c15fb"
+      "acceptsChildren": false,
+      "mermaidId": "DropdownMenuRadioGroup_57a0a05d"
     },
     {
       "key": "DropdownMenuSubTrigger@src/components/ui/dropdown-menu.tsx",
@@ -720,7 +778,8 @@
         "DropdownMenuPrimitive.SubTrigger",
         "ChevronRight"
       ],
-      "mermaidId": "DropdownMenuSubTrigger_80849fb4"
+      "acceptsChildren": true,
+      "mermaidId": "DropdownMenuSubTrigger_f7b2c12d"
     },
     {
       "key": "DropdownMenuSubContent@src/components/ui/dropdown-menu.tsx",
@@ -731,7 +790,8 @@
       "renders": [
         "DropdownMenuPrimitive.SubContent"
       ],
-      "mermaidId": "DropdownMenuSubContent_54f8c460"
+      "acceptsChildren": false,
+      "mermaidId": "DropdownMenuSubContent_278ec887"
     },
     {
       "key": "DropdownMenuContent@src/components/ui/dropdown-menu.tsx",
@@ -743,7 +803,8 @@
         "DropdownMenuPrimitive.Portal",
         "DropdownMenuPrimitive.Content"
       ],
-      "mermaidId": "DropdownMenuContent_59b70b7c"
+      "acceptsChildren": false,
+      "mermaidId": "DropdownMenuContent_4d0336a2"
     },
     {
       "key": "DropdownMenuItem@src/components/ui/dropdown-menu.tsx",
@@ -754,7 +815,8 @@
       "renders": [
         "DropdownMenuPrimitive.Item"
       ],
-      "mermaidId": "DropdownMenuItem_9a9c378e"
+      "acceptsChildren": false,
+      "mermaidId": "DropdownMenuItem_a976ec95"
     },
     {
       "key": "DropdownMenuCheckboxItem@src/components/ui/dropdown-menu.tsx",
@@ -767,7 +829,8 @@
         "DropdownMenuPrimitive.ItemIndicator",
         "Check"
       ],
-      "mermaidId": "DropdownMenuCheckboxItem_e8b13849"
+      "acceptsChildren": true,
+      "mermaidId": "DropdownMenuCheckboxItem_c61377f7"
     },
     {
       "key": "DropdownMenuRadioItem@src/components/ui/dropdown-menu.tsx",
@@ -780,7 +843,8 @@
         "DropdownMenuPrimitive.ItemIndicator",
         "Circle"
       ],
-      "mermaidId": "DropdownMenuRadioItem_d13c8706"
+      "acceptsChildren": true,
+      "mermaidId": "DropdownMenuRadioItem_c9e556e0"
     },
     {
       "key": "DropdownMenuLabel@src/components/ui/dropdown-menu.tsx",
@@ -791,7 +855,8 @@
       "renders": [
         "DropdownMenuPrimitive.Label"
       ],
-      "mermaidId": "DropdownMenuLabel_9bf8a1f0"
+      "acceptsChildren": false,
+      "mermaidId": "DropdownMenuLabel_f488baf2"
     },
     {
       "key": "DropdownMenuSeparator@src/components/ui/dropdown-menu.tsx",
@@ -802,7 +867,8 @@
       "renders": [
         "DropdownMenuPrimitive.Separator"
       ],
-      "mermaidId": "DropdownMenuSeparator_1da02b97"
+      "acceptsChildren": false,
+      "mermaidId": "DropdownMenuSeparator_88649015"
     },
     {
       "key": "DropdownMenuShortcut@src/components/ui/dropdown-menu.tsx",
@@ -811,7 +877,8 @@
       "fileRel": "src/components/ui/dropdown-menu.tsx",
       "wrapperClass": "ml-auto text-xs tracking-widest opacity-60",
       "renders": [],
-      "mermaidId": "DropdownMenuShortcut_24f3bcba"
+      "acceptsChildren": false,
+      "mermaidId": "DropdownMenuShortcut_5cfb8398"
     },
     {
       "key": "Input@src/components/ui/input.tsx",
@@ -820,7 +887,8 @@
       "fileRel": "src/components/ui/input.tsx",
       "wrapperClass": "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
       "renders": [],
-      "mermaidId": "Input_1d5749d7"
+      "acceptsChildren": false,
+      "mermaidId": "Input_91041748"
     },
     {
       "key": "MagneticButton@src/components/ui/MagneticButton.tsx",
@@ -829,7 +897,8 @@
       "fileRel": "src/components/ui/MagneticButton.tsx",
       "wrapperClass": "magnetic cursor-pointer",
       "renders": [],
-      "mermaidId": "MagneticButton_7f2197e9"
+      "acceptsChildren": true,
+      "mermaidId": "MagneticButton_18ad839f"
     },
     {
       "key": "NavigationMenu@src/components/ui/navigation-menu.tsx",
@@ -841,7 +910,8 @@
         "NavigationMenuPrimitive.Root",
         "NavigationMenuViewport"
       ],
-      "mermaidId": "NavigationMenu_b7aaa325"
+      "acceptsChildren": true,
+      "mermaidId": "NavigationMenu_70e6682a"
     },
     {
       "key": "NavigationMenuList@src/components/ui/navigation-menu.tsx",
@@ -852,7 +922,8 @@
       "renders": [
         "NavigationMenuPrimitive.List"
       ],
-      "mermaidId": "NavigationMenuList_eb111d17"
+      "acceptsChildren": false,
+      "mermaidId": "NavigationMenuList_32dcb272"
     },
     {
       "key": "NavigationMenuItem@src/components/ui/navigation-menu.tsx",
@@ -863,7 +934,8 @@
       "renders": [
         "NavigationMenuPrimitive.Item"
       ],
-      "mermaidId": "NavigationMenuItem_4c0eca65"
+      "acceptsChildren": false,
+      "mermaidId": "NavigationMenuItem_73e95cd7"
     },
     {
       "key": "NavigationMenuTrigger@src/components/ui/navigation-menu.tsx",
@@ -875,7 +947,8 @@
         "NavigationMenuPrimitive.Trigger",
         "ChevronDown"
       ],
-      "mermaidId": "NavigationMenuTrigger_5bedd529"
+      "acceptsChildren": true,
+      "mermaidId": "NavigationMenuTrigger_5f5411c3"
     },
     {
       "key": "NavigationMenuContent@src/components/ui/navigation-menu.tsx",
@@ -886,7 +959,8 @@
       "renders": [
         "NavigationMenuPrimitive.Content"
       ],
-      "mermaidId": "NavigationMenuContent_94adb5dc"
+      "acceptsChildren": false,
+      "mermaidId": "NavigationMenuContent_78de374a"
     },
     {
       "key": "NavigationMenuLink@src/components/ui/navigation-menu.tsx",
@@ -897,7 +971,8 @@
       "renders": [
         "NavigationMenuPrimitive.Link"
       ],
-      "mermaidId": "NavigationMenuLink_05f65cae"
+      "acceptsChildren": false,
+      "mermaidId": "NavigationMenuLink_3b4d3b02"
     },
     {
       "key": "NavigationMenuViewport@src/components/ui/navigation-menu.tsx",
@@ -908,7 +983,8 @@
       "renders": [
         "NavigationMenuPrimitive.Viewport"
       ],
-      "mermaidId": "NavigationMenuViewport_952bbe2e"
+      "acceptsChildren": false,
+      "mermaidId": "NavigationMenuViewport_ff815d16"
     },
     {
       "key": "NavigationMenuIndicator@src/components/ui/navigation-menu.tsx",
@@ -919,7 +995,8 @@
       "renders": [
         "NavigationMenuPrimitive.Indicator"
       ],
-      "mermaidId": "NavigationMenuIndicator_f9733a84"
+      "acceptsChildren": false,
+      "mermaidId": "NavigationMenuIndicator_c73aee16"
     },
     {
       "key": "NumberCounter@src/components/ui/NumberCounter.tsx",
@@ -928,7 +1005,8 @@
       "fileRel": "src/components/ui/NumberCounter.tsx",
       "wrapperClass": null,
       "renders": [],
-      "mermaidId": "NumberCounter_7f9595cb"
+      "acceptsChildren": false,
+      "mermaidId": "NumberCounter_756f481e"
     },
     {
       "key": "Pagination@src/components/ui/pagination.tsx",
@@ -937,7 +1015,8 @@
       "fileRel": "src/components/ui/pagination.tsx",
       "wrapperClass": "mx-auto flex w-full justify-center",
       "renders": [],
-      "mermaidId": "Pagination_3ccc7dd6"
+      "acceptsChildren": false,
+      "mermaidId": "Pagination_56b18946"
     },
     {
       "key": "PaginationContent@src/components/ui/pagination.tsx",
@@ -946,7 +1025,8 @@
       "fileRel": "src/components/ui/pagination.tsx",
       "wrapperClass": "flex flex-row items-center gap-1",
       "renders": [],
-      "mermaidId": "PaginationContent_5f52bded"
+      "acceptsChildren": false,
+      "mermaidId": "PaginationContent_a9fe4ec3"
     },
     {
       "key": "PaginationItem@src/components/ui/pagination.tsx",
@@ -955,7 +1035,8 @@
       "fileRel": "src/components/ui/pagination.tsx",
       "wrapperClass": null,
       "renders": [],
-      "mermaidId": "PaginationItem_6c83c5c9"
+      "acceptsChildren": false,
+      "mermaidId": "PaginationItem_fffc8d4e"
     },
     {
       "key": "PaginationLink@src/components/ui/pagination.tsx",
@@ -964,7 +1045,8 @@
       "fileRel": "src/components/ui/pagination.tsx",
       "wrapperClass": "inline-flex items-center justify-center gap-2 whitespace-nowrap uppercase tracking-wider text-sm font-bold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
       "renders": [],
-      "mermaidId": "PaginationLink_df80325e"
+      "acceptsChildren": false,
+      "mermaidId": "PaginationLink_b5303898"
     },
     {
       "key": "PaginationPrevious@src/components/ui/pagination.tsx",
@@ -976,7 +1058,8 @@
         "PaginationLink",
         "ChevronLeft"
       ],
-      "mermaidId": "PaginationPrevious_7f1f54c2"
+      "acceptsChildren": false,
+      "mermaidId": "PaginationPrevious_44855b55"
     },
     {
       "key": "PaginationNext@src/components/ui/pagination.tsx",
@@ -988,7 +1071,8 @@
         "PaginationLink",
         "ChevronRight"
       ],
-      "mermaidId": "PaginationNext_af5c94a7"
+      "acceptsChildren": false,
+      "mermaidId": "PaginationNext_1dc5ad47"
     },
     {
       "key": "PaginationEllipsis@src/components/ui/pagination.tsx",
@@ -999,7 +1083,8 @@
       "renders": [
         "MoreHorizontal"
       ],
-      "mermaidId": "PaginationEllipsis_9c6a11bd"
+      "acceptsChildren": false,
+      "mermaidId": "PaginationEllipsis_99a32f42"
     },
     {
       "key": "Popover@src/components/ui/popover.tsx",
@@ -1010,7 +1095,8 @@
       "renders": [
         "PopoverPrimitive.Root"
       ],
-      "mermaidId": "Popover_2b8755e6"
+      "acceptsChildren": false,
+      "mermaidId": "Popover_876ba71d"
     },
     {
       "key": "PopoverTrigger@src/components/ui/popover.tsx",
@@ -1021,7 +1107,8 @@
       "renders": [
         "PopoverPrimitive.Trigger"
       ],
-      "mermaidId": "PopoverTrigger_66db3bbd"
+      "acceptsChildren": false,
+      "mermaidId": "PopoverTrigger_a563f52a"
     },
     {
       "key": "PopoverAnchor@src/components/ui/popover.tsx",
@@ -1032,7 +1119,8 @@
       "renders": [
         "PopoverPrimitive.Anchor"
       ],
-      "mermaidId": "PopoverAnchor_44d57092"
+      "acceptsChildren": false,
+      "mermaidId": "PopoverAnchor_42486531"
     },
     {
       "key": "PopoverContent@src/components/ui/popover.tsx",
@@ -1044,7 +1132,8 @@
         "PopoverPrimitive.Portal",
         "PopoverPrimitive.Content"
       ],
-      "mermaidId": "PopoverContent_d9c6b03d"
+      "acceptsChildren": false,
+      "mermaidId": "PopoverContent_1f6231f6"
     },
     {
       "key": "ScrollReveal@src/components/ui/ScrollReveal.tsx",
@@ -1053,7 +1142,8 @@
       "fileRel": "src/components/ui/ScrollReveal.tsx",
       "wrapperClass": null,
       "renders": [],
-      "mermaidId": "ScrollReveal_fd975d50"
+      "acceptsChildren": true,
+      "mermaidId": "ScrollReveal_9cacd42d"
     },
     {
       "key": "SectionListCarousel@src/components/ui/SectionListCarousel.tsx",
@@ -1066,7 +1156,8 @@
         "ChevronRight",
         "ChevronLeft"
       ],
-      "mermaidId": "SectionListCarousel_9bebe7d2"
+      "acceptsChildren": false,
+      "mermaidId": "SectionListCarousel_cc0f4ad8"
     },
     {
       "key": "BatchedHomeSections@src/components/ui/sections/BatchedHomeSections.astro",
@@ -1077,7 +1168,8 @@
       "renders": [
         "SectionList"
       ],
-      "mermaidId": "BatchedHomeSections_bb9e8285"
+      "acceptsChildren": false,
+      "mermaidId": "BatchedHomeSections_ce34cc35"
     },
     {
       "key": "HoatHinhSection@src/components/ui/sections/HoatHinhSection.astro",
@@ -1088,7 +1180,8 @@
       "renders": [
         "SectionList"
       ],
-      "mermaidId": "HoatHinhSection_31cfc439"
+      "acceptsChildren": false,
+      "mermaidId": "HoatHinhSection_5a610469"
     },
     {
       "key": "PhimBoSection@src/components/ui/sections/PhimBoSection.astro",
@@ -1099,7 +1192,8 @@
       "renders": [
         "SectionList"
       ],
-      "mermaidId": "PhimBoSection_fb2f2aa0"
+      "acceptsChildren": false,
+      "mermaidId": "PhimBoSection_efd42936"
     },
     {
       "key": "PhimLeSection@src/components/ui/sections/PhimLeSection.astro",
@@ -1110,18 +1204,20 @@
       "renders": [
         "SectionList"
       ],
-      "mermaidId": "PhimLeSection_61a117aa"
+      "acceptsChildren": false,
+      "mermaidId": "PhimLeSection_123a0caf"
     },
     {
       "key": "SectionList@src/components/ui/sections/SectionList.astro",
       "name": "SectionList",
       "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/sections/SectionList.astro",
       "fileRel": "src/components/ui/sections/SectionList.astro",
-      "wrapperClass": "flex flex-col gap-5 border-t border-[#27272A] pt-8 sm:gap-6 sm:pt-10",
+      "wrapperClass": "flex flex-col gap-5 border-t border-[#27272A] px-0 sm:px-2 md:px-4 lg:px-6 pt-8 sm:gap-6 sm:pt-10",
       "renders": [
         "SectionListCarousel"
       ],
-      "mermaidId": "SectionList_d3b87405"
+      "acceptsChildren": false,
+      "mermaidId": "SectionList_2de6e095"
     },
     {
       "key": "TvShowsSection@src/components/ui/sections/TvShowsSection.astro",
@@ -1132,7 +1228,8 @@
       "renders": [
         "SectionList"
       ],
-      "mermaidId": "TvShowsSection_f5e30337"
+      "acceptsChildren": false,
+      "mermaidId": "TvShowsSection_e49b0205"
     },
     {
       "key": "Select@src/components/ui/select.tsx",
@@ -1143,7 +1240,8 @@
       "renders": [
         "SelectPrimitive.Root"
       ],
-      "mermaidId": "Select_b07a5f1b"
+      "acceptsChildren": false,
+      "mermaidId": "Select_ad5ec719"
     },
     {
       "key": "SelectGroup@src/components/ui/select.tsx",
@@ -1154,7 +1252,8 @@
       "renders": [
         "SelectPrimitive.Group"
       ],
-      "mermaidId": "SelectGroup_5a082ba9"
+      "acceptsChildren": false,
+      "mermaidId": "SelectGroup_2e139b15"
     },
     {
       "key": "SelectValue@src/components/ui/select.tsx",
@@ -1165,7 +1264,8 @@
       "renders": [
         "SelectPrimitive.Value"
       ],
-      "mermaidId": "SelectValue_24d02a7f"
+      "acceptsChildren": false,
+      "mermaidId": "SelectValue_38a2222d"
     },
     {
       "key": "SelectTrigger@src/components/ui/select.tsx",
@@ -1178,7 +1278,8 @@
         "SelectPrimitive.Icon",
         "ChevronDown"
       ],
-      "mermaidId": "SelectTrigger_f132389b"
+      "acceptsChildren": true,
+      "mermaidId": "SelectTrigger_c31d91c5"
     },
     {
       "key": "SelectScrollUpButton@src/components/ui/select.tsx",
@@ -1190,7 +1291,8 @@
         "SelectPrimitive.ScrollUpButton",
         "ChevronUp"
       ],
-      "mermaidId": "SelectScrollUpButton_f90847e2"
+      "acceptsChildren": false,
+      "mermaidId": "SelectScrollUpButton_6b27a44e"
     },
     {
       "key": "SelectScrollDownButton@src/components/ui/select.tsx",
@@ -1202,7 +1304,8 @@
         "SelectPrimitive.ScrollDownButton",
         "ChevronDown"
       ],
-      "mermaidId": "SelectScrollDownButton_d9aaab7f"
+      "acceptsChildren": false,
+      "mermaidId": "SelectScrollDownButton_254810b0"
     },
     {
       "key": "SelectContent@src/components/ui/select.tsx",
@@ -1217,7 +1320,8 @@
         "SelectPrimitive.Viewport",
         "SelectScrollUpButton"
       ],
-      "mermaidId": "SelectContent_6b5a1e60"
+      "acceptsChildren": true,
+      "mermaidId": "SelectContent_24c558c7"
     },
     {
       "key": "SelectLabel@src/components/ui/select.tsx",
@@ -1228,7 +1332,8 @@
       "renders": [
         "SelectPrimitive.Label"
       ],
-      "mermaidId": "SelectLabel_98d713b9"
+      "acceptsChildren": false,
+      "mermaidId": "SelectLabel_f0837afc"
     },
     {
       "key": "SelectItem@src/components/ui/select.tsx",
@@ -1242,7 +1347,8 @@
         "SelectPrimitive.ItemIndicator",
         "Check"
       ],
-      "mermaidId": "SelectItem_d1144928"
+      "acceptsChildren": true,
+      "mermaidId": "SelectItem_60bf3cc0"
     },
     {
       "key": "SelectSeparator@src/components/ui/select.tsx",
@@ -1253,7 +1359,8 @@
       "renders": [
         "SelectPrimitive.Separator"
       ],
-      "mermaidId": "SelectSeparator_00e7ac61"
+      "acceptsChildren": false,
+      "mermaidId": "SelectSeparator_b634774a"
     },
     {
       "key": "Separator@src/components/ui/separator.tsx",
@@ -1264,7 +1371,8 @@
       "renders": [
         "SeparatorPrimitive.Root"
       ],
-      "mermaidId": "Separator_136526f1"
+      "acceptsChildren": false,
+      "mermaidId": "Separator_bf2a7a6e"
     },
     {
       "key": "ShareButton@src/components/ui/share-button.tsx",
@@ -1275,7 +1383,8 @@
       "renders": [
         "Icon"
       ],
-      "mermaidId": "ShareButton_ef724d8b"
+      "acceptsChildren": true,
+      "mermaidId": "ShareButton_c8a1dd27"
     },
     {
       "key": "Icon@src/components/ui/share-button.tsx",
@@ -1286,7 +1395,8 @@
       "renders": [
         "link.icon"
       ],
-      "mermaidId": "Icon_b3ffbee6"
+      "acceptsChildren": false,
+      "mermaidId": "Icon_6205e34b"
     },
     {
       "key": "FacebookIcon@src/components/ui/ShareButtonWrapper.tsx",
@@ -1295,7 +1405,8 @@
       "fileRel": "src/components/ui/ShareButtonWrapper.tsx",
       "wrapperClass": null,
       "renders": [],
-      "mermaidId": "FacebookIcon_9ae2620c"
+      "acceptsChildren": false,
+      "mermaidId": "FacebookIcon_4cd48cbb"
     },
     {
       "key": "InstagramIcon@src/components/ui/ShareButtonWrapper.tsx",
@@ -1304,7 +1415,8 @@
       "fileRel": "src/components/ui/ShareButtonWrapper.tsx",
       "wrapperClass": null,
       "renders": [],
-      "mermaidId": "InstagramIcon_ffde0e49"
+      "acceptsChildren": false,
+      "mermaidId": "InstagramIcon_8561ef66"
     },
     {
       "key": "ShareButtonWrapper@src/components/ui/ShareButtonWrapper.tsx",
@@ -1316,7 +1428,8 @@
         "ShareButton",
         "Link2"
       ],
-      "mermaidId": "ShareButtonWrapper_b5e6fd4d"
+      "acceptsChildren": false,
+      "mermaidId": "ShareButtonWrapper_312d0332"
     },
     {
       "key": "Sheet@src/components/ui/sheet.tsx",
@@ -1327,7 +1440,8 @@
       "renders": [
         "SheetPrimitive.Root"
       ],
-      "mermaidId": "Sheet_341a71ec"
+      "acceptsChildren": false,
+      "mermaidId": "Sheet_c6fb1544"
     },
     {
       "key": "SheetTrigger@src/components/ui/sheet.tsx",
@@ -1338,7 +1452,8 @@
       "renders": [
         "SheetPrimitive.Trigger"
       ],
-      "mermaidId": "SheetTrigger_f416e93c"
+      "acceptsChildren": false,
+      "mermaidId": "SheetTrigger_df43e807"
     },
     {
       "key": "SheetClose@src/components/ui/sheet.tsx",
@@ -1349,7 +1464,8 @@
       "renders": [
         "SheetPrimitive.Close"
       ],
-      "mermaidId": "SheetClose_ee771ae7"
+      "acceptsChildren": false,
+      "mermaidId": "SheetClose_7a7834f5"
     },
     {
       "key": "SheetPortal@src/components/ui/sheet.tsx",
@@ -1360,7 +1476,8 @@
       "renders": [
         "SheetPrimitive.Portal"
       ],
-      "mermaidId": "SheetPortal_c1d2a481"
+      "acceptsChildren": false,
+      "mermaidId": "SheetPortal_ee2a2069"
     },
     {
       "key": "SheetOverlay@src/components/ui/sheet.tsx",
@@ -1371,7 +1488,8 @@
       "renders": [
         "SheetPrimitive.Overlay"
       ],
-      "mermaidId": "SheetOverlay_705832c0"
+      "acceptsChildren": false,
+      "mermaidId": "SheetOverlay_76b022f3"
     },
     {
       "key": "SheetContent@src/components/ui/sheet.tsx",
@@ -1386,7 +1504,8 @@
         "X",
         "SheetOverlay"
       ],
-      "mermaidId": "SheetContent_0547b244"
+      "acceptsChildren": true,
+      "mermaidId": "SheetContent_8c056fe4"
     },
     {
       "key": "SheetHeader@src/components/ui/sheet.tsx",
@@ -1395,7 +1514,8 @@
       "fileRel": "src/components/ui/sheet.tsx",
       "wrapperClass": "flex flex-col space-y-2 text-center sm:text-left",
       "renders": [],
-      "mermaidId": "SheetHeader_622628f8"
+      "acceptsChildren": false,
+      "mermaidId": "SheetHeader_d718b17c"
     },
     {
       "key": "SheetFooter@src/components/ui/sheet.tsx",
@@ -1404,7 +1524,8 @@
       "fileRel": "src/components/ui/sheet.tsx",
       "wrapperClass": "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
       "renders": [],
-      "mermaidId": "SheetFooter_b84e31af"
+      "acceptsChildren": false,
+      "mermaidId": "SheetFooter_e29e3b7c"
     },
     {
       "key": "SheetTitle@src/components/ui/sheet.tsx",
@@ -1415,7 +1536,8 @@
       "renders": [
         "SheetPrimitive.Title"
       ],
-      "mermaidId": "SheetTitle_4c51796d"
+      "acceptsChildren": false,
+      "mermaidId": "SheetTitle_f36f3be9"
     },
     {
       "key": "SheetDescription@src/components/ui/sheet.tsx",
@@ -1426,7 +1548,8 @@
       "renders": [
         "SheetPrimitive.Description"
       ],
-      "mermaidId": "SheetDescription_bccb75b7"
+      "acceptsChildren": false,
+      "mermaidId": "SheetDescription_f9a4c5c7"
     },
     {
       "key": "Slider@src/components/ui/slider.tsx",
@@ -1440,7 +1563,8 @@
         "SliderPrimitive.Track",
         "SliderPrimitive.Range"
       ],
-      "mermaidId": "Slider_6d526c36"
+      "acceptsChildren": false,
+      "mermaidId": "Slider_e1d221b0"
     },
     {
       "key": "Switch@src/components/ui/switch.tsx",
@@ -1452,7 +1576,8 @@
         "SwitchPrimitives.Root",
         "SwitchPrimitives.Thumb"
       ],
-      "mermaidId": "Switch_1dfe93f2"
+      "acceptsChildren": false,
+      "mermaidId": "Switch_61e31c86"
     },
     {
       "key": "Tabs@src/components/ui/tabs.tsx",
@@ -1463,7 +1588,8 @@
       "renders": [
         "TabsPrimitive.Root"
       ],
-      "mermaidId": "Tabs_3f34b9f2"
+      "acceptsChildren": false,
+      "mermaidId": "Tabs_23eed1a4"
     },
     {
       "key": "TabsList@src/components/ui/tabs.tsx",
@@ -1474,7 +1600,8 @@
       "renders": [
         "TabsPrimitive.List"
       ],
-      "mermaidId": "TabsList_10d25ff5"
+      "acceptsChildren": false,
+      "mermaidId": "TabsList_d21fd0ff"
     },
     {
       "key": "TabsTrigger@src/components/ui/tabs.tsx",
@@ -1485,7 +1612,8 @@
       "renders": [
         "TabsPrimitive.Trigger"
       ],
-      "mermaidId": "TabsTrigger_666f478b"
+      "acceptsChildren": false,
+      "mermaidId": "TabsTrigger_66190268"
     },
     {
       "key": "TabsContent@src/components/ui/tabs.tsx",
@@ -1496,7 +1624,8 @@
       "renders": [
         "TabsPrimitive.Content"
       ],
-      "mermaidId": "TabsContent_30843403"
+      "acceptsChildren": false,
+      "mermaidId": "TabsContent_44be3e03"
     },
     {
       "key": "TextReveal@src/components/ui/TextReveal.tsx",
@@ -1505,7 +1634,8 @@
       "fileRel": "src/components/ui/TextReveal.tsx",
       "wrapperClass": null,
       "renders": [],
-      "mermaidId": "TextReveal_554f4d57"
+      "acceptsChildren": false,
+      "mermaidId": "TextReveal_7d2fffcd"
     },
     {
       "key": "ToggleGroup@src/components/ui/toggle-group.tsx",
@@ -1517,7 +1647,8 @@
         "ToggleGroupPrimitive.Root",
         "ToggleGroupContext.Provider"
       ],
-      "mermaidId": "ToggleGroup_0edfb31a"
+      "acceptsChildren": true,
+      "mermaidId": "ToggleGroup_ede0e063"
     },
     {
       "key": "ToggleGroupItem@src/components/ui/toggle-group.tsx",
@@ -1528,7 +1659,8 @@
       "renders": [
         "ToggleGroupPrimitive.Item"
       ],
-      "mermaidId": "ToggleGroupItem_07331033"
+      "acceptsChildren": true,
+      "mermaidId": "ToggleGroupItem_8cd9310c"
     },
     {
       "key": "Toggle@src/components/ui/toggle.tsx",
@@ -1539,7 +1671,8 @@
       "renders": [
         "TogglePrimitive.Root"
       ],
-      "mermaidId": "Toggle_c374f87e"
+      "acceptsChildren": false,
+      "mermaidId": "Toggle_c0f895a2"
     },
     {
       "key": "TooltipProvider@src/components/ui/tooltip.tsx",
@@ -1550,7 +1683,8 @@
       "renders": [
         "TooltipPrimitive.Provider"
       ],
-      "mermaidId": "TooltipProvider_a21fecea"
+      "acceptsChildren": false,
+      "mermaidId": "TooltipProvider_4481f77b"
     },
     {
       "key": "Tooltip@src/components/ui/tooltip.tsx",
@@ -1561,7 +1695,8 @@
       "renders": [
         "TooltipPrimitive.Root"
       ],
-      "mermaidId": "Tooltip_a052a868"
+      "acceptsChildren": false,
+      "mermaidId": "Tooltip_6512e259"
     },
     {
       "key": "TooltipTrigger@src/components/ui/tooltip.tsx",
@@ -1572,7 +1707,8 @@
       "renders": [
         "TooltipPrimitive.Trigger"
       ],
-      "mermaidId": "TooltipTrigger_d5f27522"
+      "acceptsChildren": false,
+      "mermaidId": "TooltipTrigger_ffe135ed"
     },
     {
       "key": "TooltipContent@src/components/ui/tooltip.tsx",
@@ -1584,7 +1720,8 @@
         "TooltipPrimitive.Portal",
         "TooltipPrimitive.Content"
       ],
-      "mermaidId": "TooltipContent_75ba978f"
+      "acceptsChildren": false,
+      "mermaidId": "TooltipContent_1415ad4d"
     },
     {
       "key": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
@@ -1598,32 +1735,34 @@
         "Spinner.Root",
         "Spinner.TrackFill",
         "Spinner.Track",
-        "Airplay",
-        "Cast",
+        "MonitorPlay",
+        "Tv",
         "Play",
+        "Info",
+        "Server",
+        "Copy",
+        "Link2",
+        "Check",
+        "Repeat",
         "Controls.Root",
         "Controls.Group",
         "FullscreenButton",
         "Expand",
         "Minimize2",
-        "SlidersHorizontal",
         "PIPButton",
-        "MonitorPlay",
-        "AirPlayButton",
-        "GoogleCastButton",
-        "CaptionButton",
+        "ChevronRight",
         "MessageSquareText",
+        "Volume2",
+        "Gauge",
+        "Settings",
+        "CaptionButton",
         "Time",
         "VolumeSlider.Root",
         "VolumeSlider.Thumb",
         "VolumeSlider.Track",
         "VolumeSlider.TrackFill",
         "MuteButton",
-        "Volume2",
-        "VolumeX",
-        "SeekButton",
-        "SkipForward",
-        "SkipBack",
+        "VolumeIcon",
         "PlayButton",
         "Pause",
         "TimeSlider.Root",
@@ -1631,11 +1770,10 @@
         "TimeSlider.Track",
         "TimeSlider.TrackFill",
         "TimeSlider.Progress",
-        "Server",
-        "Tv",
-        "Gauge"
+        "Gesture"
       ],
-      "mermaidId": "PlayerControlLayer_aa87dc6d"
+      "acceptsChildren": false,
+      "mermaidId": "PlayerControlLayer_a57dcfda"
     },
     {
       "key": "VideoPlayer@src/components/VideoPlayer.tsx",
@@ -1656,7 +1794,8 @@
         "PlayerControlLayer",
         "MediaProvider"
       ],
-      "mermaidId": "VideoPlayer_edd2de7d"
+      "acceptsChildren": false,
+      "mermaidId": "VideoPlayer_3ab333d2"
     },
     {
       "key": "WatchDock@src/components/WatchDock.tsx",
@@ -1667,7 +1806,8 @@
       "renders": [
         "AnimatePresence"
       ],
-      "mermaidId": "WatchDock_66a65384"
+      "acceptsChildren": false,
+      "mermaidId": "WatchDock_15b02e2c"
     },
     {
       "key": "Layout@src/layouts/Layout.astro",
@@ -1681,7 +1821,8 @@
         "SearchForm",
         "MobileMenu"
       ],
-      "mermaidId": "Layout_9258f67b"
+      "acceptsChildren": true,
+      "mermaidId": "Layout_e651f969"
     },
     {
       "key": "Page@src/pages/[page].astro",
@@ -1694,7 +1835,8 @@
         "MovieTypeSelector",
         "MovieGrid"
       ],
-      "mermaidId": "Page_24b8cbc9"
+      "acceptsChildren": false,
+      "mermaidId": "Page_aedafcd6"
     },
     {
       "key": "Astro404@src/pages/404.astro",
@@ -1712,7 +1854,8 @@
         "CardFooter",
         "Button"
       ],
-      "mermaidId": "Astro404_ed259820"
+      "acceptsChildren": false,
+      "mermaidId": "Astro404_57924195"
     },
     {
       "key": "Astro500@src/pages/500.astro",
@@ -1730,7 +1873,8 @@
         "CardFooter",
         "Button"
       ],
-      "mermaidId": "Astro500_c8d6fe54"
+      "acceptsChildren": false,
+      "mermaidId": "Astro500_70266bd7"
     },
     {
       "key": "GET@src/pages/api/sections/[typeList].ts",
@@ -1739,7 +1883,8 @@
       "fileRel": "src/pages/api/sections/[typeList].ts",
       "wrapperClass": null,
       "renders": [],
-      "mermaidId": "GET_6351d41d"
+      "acceptsChildren": false,
+      "mermaidId": "GET_76348051"
     },
     {
       "key": "GET@src/pages/api/tmdb/[type]/[id].ts",
@@ -1748,7 +1893,8 @@
       "fileRel": "src/pages/api/tmdb/[type]/[id].ts",
       "wrapperClass": null,
       "renders": [],
-      "mermaidId": "GET_ce28874d"
+      "acceptsChildren": false,
+      "mermaidId": "GET_fd7533ab"
     },
     {
       "key": "Type@src/pages/danh-sach/[type].astro",
@@ -1766,7 +1912,8 @@
         "PaginationLink",
         "PaginationNext"
       ],
-      "mermaidId": "Type_959ac5b5"
+      "acceptsChildren": false,
+      "mermaidId": "Type_1a36bb30"
     },
     {
       "key": "Page@src/pages/danh-sach/[type]/[page].astro",
@@ -1784,7 +1931,8 @@
         "PaginationLink",
         "PaginationNext"
       ],
-      "mermaidId": "Page_06eb2577"
+      "acceptsChildren": false,
+      "mermaidId": "Page_5480440e"
     },
     {
       "key": "Year@src/pages/danh-sach/nam/[year].astro",
@@ -1803,7 +1951,8 @@
         "PaginationLink",
         "PaginationNext"
       ],
-      "mermaidId": "Year_f8f9ffd7"
+      "acceptsChildren": false,
+      "mermaidId": "Year_5d481f00"
     },
     {
       "key": "Type@src/pages/danh-sach/quoc-gia/[type].astro",
@@ -1822,7 +1971,8 @@
         "PaginationLink",
         "PaginationNext"
       ],
-      "mermaidId": "Type_a0625843"
+      "acceptsChildren": false,
+      "mermaidId": "Type_75dc17c6"
     },
     {
       "key": "Type@src/pages/danh-sach/the-loai/[type].astro",
@@ -1841,7 +1991,8 @@
         "PaginationLink",
         "PaginationNext"
       ],
-      "mermaidId": "Type_9491cf8c"
+      "acceptsChildren": false,
+      "mermaidId": "Type_ec306b08"
     },
     {
       "key": "Pages@src/pages/index.astro",
@@ -1854,7 +2005,8 @@
         "HeroMovie",
         "BatchedHomeSections"
       ],
-      "mermaidId": "Pages_c7586bc0"
+      "acceptsChildren": false,
+      "mermaidId": "Pages_fbee6b1f"
     },
     {
       "key": "Slug@src/pages/phim/[slug].astro",
@@ -1866,7 +2018,8 @@
         "Layout",
         "MovieDetailPage"
       ],
-      "mermaidId": "Slug_334145aa"
+      "acceptsChildren": false,
+      "mermaidId": "Slug_796a0837"
     },
     {
       "key": "Keyword@src/pages/tim-kiem/[keyword].astro",
@@ -1878,7 +2031,8 @@
         "Layout",
         "SearchMovieGrid"
       ],
-      "mermaidId": "Keyword_4d6a1dd1"
+      "acceptsChildren": false,
+      "mermaidId": "Keyword_187c8a45"
     }
   ],
   "edges": [
@@ -3728,7 +3882,7 @@
       "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
       "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
       "fromComponent": "PlayerControlLayer",
-      "renderedName": "Airplay",
+      "renderedName": "MonitorPlay",
       "reason": "external_component_reference",
       "detail": "lucide-react"
     },
@@ -3736,7 +3890,7 @@
       "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
       "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
       "fromComponent": "PlayerControlLayer",
-      "renderedName": "Cast",
+      "renderedName": "Tv",
       "reason": "external_component_reference",
       "detail": "lucide-react"
     },
@@ -3745,6 +3899,54 @@
       "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
       "fromComponent": "PlayerControlLayer",
       "renderedName": "Play",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Info",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Server",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Copy",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Link2",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Check",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Repeat",
       "reason": "external_component_reference",
       "detail": "lucide-react"
     },
@@ -3792,14 +3994,6 @@
       "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
       "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
       "fromComponent": "PlayerControlLayer",
-      "renderedName": "SlidersHorizontal",
-      "reason": "external_component_reference",
-      "detail": "lucide-react"
-    },
-    {
-      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
-      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
-      "fromComponent": "PlayerControlLayer",
       "renderedName": "PIPButton",
       "reason": "external_component_reference",
       "detail": "@vidstack/react"
@@ -3808,33 +4002,9 @@
       "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
       "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
       "fromComponent": "PlayerControlLayer",
-      "renderedName": "MonitorPlay",
+      "renderedName": "ChevronRight",
       "reason": "external_component_reference",
       "detail": "lucide-react"
-    },
-    {
-      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
-      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
-      "fromComponent": "PlayerControlLayer",
-      "renderedName": "AirPlayButton",
-      "reason": "external_component_reference",
-      "detail": "@vidstack/react"
-    },
-    {
-      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
-      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
-      "fromComponent": "PlayerControlLayer",
-      "renderedName": "GoogleCastButton",
-      "reason": "external_component_reference",
-      "detail": "@vidstack/react"
-    },
-    {
-      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
-      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
-      "fromComponent": "PlayerControlLayer",
-      "renderedName": "CaptionButton",
-      "reason": "external_component_reference",
-      "detail": "@vidstack/react"
     },
     {
       "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
@@ -3843,6 +4013,38 @@
       "renderedName": "MessageSquareText",
       "reason": "external_component_reference",
       "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Volume2",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Gauge",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Settings",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "CaptionButton",
+      "reason": "external_component_reference",
+      "detail": "@vidstack/react"
     },
     {
       "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
@@ -3896,41 +4098,9 @@
       "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
       "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
       "fromComponent": "PlayerControlLayer",
-      "renderedName": "Volume2",
-      "reason": "external_component_reference",
-      "detail": "lucide-react"
-    },
-    {
-      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
-      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
-      "fromComponent": "PlayerControlLayer",
-      "renderedName": "VolumeX",
-      "reason": "external_component_reference",
-      "detail": "lucide-react"
-    },
-    {
-      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
-      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
-      "fromComponent": "PlayerControlLayer",
-      "renderedName": "SeekButton",
-      "reason": "external_component_reference",
-      "detail": "@vidstack/react"
-    },
-    {
-      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
-      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
-      "fromComponent": "PlayerControlLayer",
-      "renderedName": "SkipForward",
-      "reason": "external_component_reference",
-      "detail": "lucide-react"
-    },
-    {
-      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
-      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
-      "fromComponent": "PlayerControlLayer",
-      "renderedName": "SkipBack",
-      "reason": "external_component_reference",
-      "detail": "lucide-react"
+      "renderedName": "VolumeIcon",
+      "reason": "component_not_found",
+      "detail": "VolumeIcon"
     },
     {
       "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
@@ -3992,25 +4162,9 @@
       "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
       "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
       "fromComponent": "PlayerControlLayer",
-      "renderedName": "Server",
+      "renderedName": "Gesture",
       "reason": "external_component_reference",
-      "detail": "lucide-react"
-    },
-    {
-      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
-      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
-      "fromComponent": "PlayerControlLayer",
-      "renderedName": "Tv",
-      "reason": "external_component_reference",
-      "detail": "lucide-react"
-    },
-    {
-      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
-      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
-      "fromComponent": "PlayerControlLayer",
-      "renderedName": "Gauge",
-      "reason": "external_component_reference",
-      "detail": "lucide-react"
+      "detail": "@vidstack/react"
     },
     {
       "fromKey": "VideoPlayer@src/components/VideoPlayer.tsx",
@@ -4107,13 +4261,13 @@
     "totalRenderedRefs": 366,
     "resolvedRefs": 178,
     "unresolvedRefs": 188,
-    "unresolvedInternalRefs": 4,
-    "externalRefs": 184,
+    "unresolvedInternalRefs": 5,
+    "externalRefs": 183,
     "unresolvedByReason": {
-      "external_component_reference": 78,
+      "external_component_reference": 77,
       "namespace_import_not_found": 3,
       "external_namespace_reference": 106,
-      "component_not_found": 1
+      "component_not_found": 2
     }
   }
 }

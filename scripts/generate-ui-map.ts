@@ -1,32 +1,76 @@
 #!/usr/bin/env bun
-import crypto from 'node:crypto';
-import { mkdir, stat } from 'node:fs/promises';
+import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
+
+import { parseArgs } from 'node:util';
 
 import { parse } from '@babel/parser';
 import traverseModule from '@babel/traverse';
-import { hideBin } from 'yargs/helpers';
-import yargs from 'yargs/yargs';
 
 const traverse = traverseModule.default ?? traverseModule;
 
-const argv = yargs(hideBin(process.argv))
-  .option('src', { type: 'string', default: 'src' })
-  .option('entry', { type: 'string', demandOption: true })
-  .option('out', { type: 'string', default: 'docs/ui-map' })
-  .option('rootComponent', { type: 'string' })
-  .option('alias', {
-    type: 'array',
-    default: [],
-    describe: 'Path aliases like --alias @=src --alias ~=src',
-  })
-  .help()
-  .parseSync();
+const HELP_TEXT = `Usage: bun scripts/generate-ui-map.ts [options]
+
+Options:
+  --src <path>             Source directory (default: src)
+  --entry <path>           Entry file (required)
+  --out <path>             Optional output base path (writes .ascii/.mmd/.json)
+  --format <kind>          stdout format: ascii|mermaid|json|all (default: ascii)
+  --rootComponent <name>   Root component name override
+  --alias <key=value>      Path aliases, repeatable (e.g. --alias @=src)
+  --focus <name>           Show only ancestor chain + subtree of this component
+  --layoutOnly             Strip decorative classes, keep layout-relevant only
+  -h, --help               Show this help
+`;
+
+const { values: cliValues } = parseArgs({
+  args: process.argv.slice(2),
+  options: {
+    src: { type: 'string', default: 'src' },
+    entry: { type: 'string' },
+    out: { type: 'string' },
+    format: { type: 'string', default: 'ascii' },
+    rootComponent: { type: 'string' },
+    alias: { type: 'string', multiple: true, default: [] },
+    focus: { type: 'string' },
+    layoutOnly: { type: 'boolean', default: false },
+    help: { type: 'boolean', short: 'h', default: false },
+  },
+  strict: true,
+});
+
+if (cliValues.help) {
+  console.log(HELP_TEXT);
+  process.exit(0);
+}
+
+if (!cliValues.entry) {
+  console.error('Error: --entry is required\n');
+  console.log(HELP_TEXT);
+  process.exit(1);
+}
+
+const argv = {
+  src: cliValues.src ?? 'src',
+  entry: cliValues.entry,
+  out: cliValues.out,
+  format: cliValues.format ?? 'ascii',
+  rootComponent: cliValues.rootComponent,
+  alias: cliValues.alias ?? [],
+  focus: cliValues.focus,
+  layoutOnly: cliValues.layoutOnly ?? false,
+};
+
+const validFormats = new Set(['ascii', 'mermaid', 'json', 'all']);
+if (!validFormats.has(argv.format)) {
+  console.error(`Error: --format must be one of: ${[...validFormats].join(', ')}`);
+  process.exit(1);
+}
 
 const projectRoot = process.cwd();
 const srcDir = path.resolve(projectRoot, argv.src);
 const entryFile = path.resolve(projectRoot, argv.entry);
-const outBase = path.resolve(projectRoot, argv.out);
+const outBase = argv.out ? path.resolve(projectRoot, argv.out) : null;
 
 const aliasMap = Object.fromEntries(
   (argv.alias ?? []).map((value) => {
@@ -51,11 +95,7 @@ function isComponentName(name) {
 }
 
 function stableId(value) {
-  return crypto.createHash('sha1').update(value).digest('hex').slice(0, 8);
-}
-
-async function fileExists(filePath) {
-  return Bun.file(filePath).exists();
+  return Bun.hash(value).toString(16).slice(0, 8);
 }
 
 function parseAst(code, filename, allowReturnOutsideFunction = false) {
@@ -122,31 +162,23 @@ async function resolveImportToFile(fromFile, source) {
     return null;
   }
 
-  if (await fileExists(basePath)) {
-    const stats = await stat(basePath);
-    if (stats.isFile()) {
-      return basePath;
-    }
-    if (stats.isDirectory()) {
-      for (const indexFile of INDEX_FILES) {
-        const candidate = path.join(basePath, indexFile);
-        if (await fileExists(candidate)) {
-          return candidate;
-        }
-      }
-    }
+  // Exact path (files with extension) — Bun.file().exists() returns false for directories
+  if (await Bun.file(basePath).exists()) {
+    return basePath;
   }
 
+  // Try appending known extensions (e.g. import './utils' → './utils.ts')
   for (const ext of EXTENSIONS) {
     const candidate = `${basePath}${ext}`;
-    if (await fileExists(candidate)) {
+    if (await Bun.file(candidate).exists()) {
       return candidate;
     }
   }
 
+  // Try index files (basePath may be a directory, e.g. '@/components/ui')
   for (const indexFile of INDEX_FILES) {
     const candidate = path.join(basePath, indexFile);
-    if (await fileExists(candidate)) {
+    if (await Bun.file(candidate).exists()) {
       return candidate;
     }
   }
@@ -873,13 +905,39 @@ function inferAstroComponentName(filePath) {
 }
 
 function splitAstroSource(source) {
-  const frontmatterMatch = source.match(/^---\s*\n([\s\S]*?)\n---\s*\n?/);
-  if (!frontmatterMatch) {
+  const firstLineEnd = source.indexOf('\n');
+  if (firstLineEnd < 0) {
     return { frontmatter: '', template: source };
   }
-  const frontmatter = frontmatterMatch[1] ?? '';
-  const template = source.slice(frontmatterMatch[0].length);
-  return { frontmatter, template };
+
+  const openingFence = source.slice(0, firstLineEnd).trim();
+  if (openingFence !== '---') {
+    return { frontmatter: '', template: source };
+  }
+
+  let cursor = firstLineEnd + 1;
+  while (cursor <= source.length) {
+    const nextLineEnd = source.indexOf('\n', cursor);
+    const lineEnd = nextLineEnd === -1 ? source.length : nextLineEnd;
+    const rawLine = source.slice(cursor, lineEnd);
+    const line = rawLine.endsWith('\r') ? rawLine.slice(0, -1) : rawLine;
+
+    if (line === '---') {
+      const frontmatter = source.slice(firstLineEnd + 1, cursor).replace(/\r?\n$/, '');
+      const templateStart = nextLineEnd === -1 ? source.length : nextLineEnd + 1;
+      return {
+        frontmatter,
+        template: source.slice(templateStart),
+      };
+    }
+
+    if (nextLineEnd === -1) {
+      break;
+    }
+    cursor = nextLineEnd + 1;
+  }
+
+  return { frontmatter: '', template: source };
 }
 
 function collectRenderedComponentsFromAstroTemplate(template) {
@@ -1287,6 +1345,7 @@ async function analyzeJsLikeFile(filePath, externalCvaClassMap) {
         name,
         wrapperClass: returnJsx ? getRootWrapperClassFromJsx(returnJsx, cvaClassMap) : null,
         renders: returnJsx ? collectRenderedComponentsFromJsx(returnJsx) : [],
+        acceptsChildren: hasChildrenParam(nodePath.node),
       });
     },
 
@@ -1307,6 +1366,7 @@ async function analyzeJsLikeFile(filePath, externalCvaClassMap) {
           name,
           wrapperClass: returnJsx ? getRootWrapperClassFromJsx(returnJsx, cvaClassMap) : null,
           renders: returnJsx ? collectRenderedComponentsFromJsx(returnJsx) : [],
+          acceptsChildren: hasChildrenParam(componentFunction),
         });
         return;
       }
@@ -1319,6 +1379,7 @@ async function analyzeJsLikeFile(filePath, externalCvaClassMap) {
           name,
           wrapperClass: null,
           renders: aliasRef ? [aliasRef] : [],
+          acceptsChildren: false,
         });
       }
     },
@@ -1362,6 +1423,7 @@ async function analyzeAstroFile(filePath) {
         name: componentName,
         wrapperClass: getRootWrapperClassFromAstroTemplate(template, filePath),
         renders: collectRenderedComponentsFromAstroTemplate(template),
+        acceptsChildren: hasSlotInAstroTemplate(template),
       },
     ],
     cvaClassMap: new Map(),
@@ -1376,39 +1438,241 @@ async function analyzeFile(filePath) {
   return analyzeJsLikeFile(filePath);
 }
 
-function buildAsciiTree({ rootKey, nodesByKey, childrenByKey }) {
-  const lines = [];
+const LAYOUT_CLASS_EXACT = new Set([
+  'relative',
+  'absolute',
+  'fixed',
+  'sticky',
+  'static',
+  'flex',
+  'grid',
+  'block',
+  'inline',
+  'hidden',
+  'table',
+  'contents',
+  'grow',
+  'shrink',
+]);
+
+const LAYOUT_CLASS_PREFIXES = [
+  'top-',
+  'right-',
+  'bottom-',
+  'left-',
+  'inset-',
+  '-top-',
+  '-right-',
+  '-bottom-',
+  '-left-',
+  '-inset-',
+  'items-',
+  'justify-',
+  'self-',
+  'place-',
+  'content-',
+  'order-',
+  'inline-',
+  'table-',
+  'basis-',
+  'flex-',
+  'grow-',
+  'shrink-',
+  'col-',
+  'row-',
+  'auto-cols-',
+  'auto-rows-',
+  'grid-',
+  'gap-',
+  'space-x-',
+  'space-y-',
+  'w-',
+  'h-',
+  'min-w-',
+  'min-h-',
+  'max-w-',
+  'max-h-',
+  'size-',
+  'p-',
+  'px-',
+  'py-',
+  'pt-',
+  'pr-',
+  'pb-',
+  'pl-',
+  'ps-',
+  'pe-',
+  'm-',
+  'mx-',
+  'my-',
+  'mt-',
+  'mr-',
+  'mb-',
+  'ml-',
+  'ms-',
+  'me-',
+  '-m-',
+  '-mx-',
+  '-my-',
+  '-mt-',
+  '-mr-',
+  '-mb-',
+  '-ml-',
+  'overflow-',
+  'overscroll-',
+  'z-',
+  '-z-',
+  'aspect-',
+];
+
+function isLayoutClass(token) {
+  const base = token.replace(/^(?:[a-zA-Z0-9_-]+:)+/, '');
+  if (LAYOUT_CLASS_EXACT.has(base)) {
+    return true;
+  }
+  for (const prefix of LAYOUT_CLASS_PREFIXES) {
+    if (base.startsWith(prefix)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function filterLayoutClasses(classString) {
+  if (!classString) {
+    return null;
+  }
+  const filtered = classString.split(/\s+/).filter(Boolean).filter(isLayoutClass);
+  return filtered.length > 0 ? filtered.join(' ') : null;
+}
+
+function hasSlotInAstroTemplate(template) {
+  const sanitized = template
+    .replace(/<!--[\s\S]*?-->/g, ' ')
+    .replace(/<script\b[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style\b[\s\S]*?<\/style>/gi, ' ');
+  return /<slot[\s/>]/i.test(sanitized);
+}
+
+function hasChildrenParam(funcNode) {
+  for (const param of funcNode?.params ?? []) {
+    if (param.type !== 'ObjectPattern') {
+      continue;
+    }
+    for (const prop of param.properties ?? []) {
+      if (
+        prop.type === 'ObjectProperty' &&
+        prop.key?.type === 'Identifier' &&
+        prop.key.name === 'children'
+      ) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+function findPathToNode(rootKey, targetKey, childrenByKey) {
+  if (rootKey === targetKey) {
+    return [rootKey];
+  }
   const visited = new Set();
+  const parentMap = new Map();
+  const queue = [rootKey];
+  let head = 0;
+  visited.add(rootKey);
+  while (head < queue.length) {
+    const current = queue[head];
+    head += 1;
+    for (const child of childrenByKey.get(current) ?? []) {
+      if (visited.has(child)) {
+        continue;
+      }
+      visited.add(child);
+      parentMap.set(child, current);
+      if (child === targetKey) {
+        const nodePath = [];
+        let cursor = targetKey;
+        while (cursor !== undefined) {
+          nodePath.unshift(cursor);
+          cursor = parentMap.get(cursor);
+        }
+        return nodePath;
+      }
+      queue.push(child);
+    }
+  }
+  return null;
+}
+
+function buildFocusedAsciiTree({ rootKey, focusKey, nodesByKey, childrenByKey, layoutOnly }) {
+  const lines = [];
+
+  function classStr(node) {
+    if (!node?.wrapperClass) {
+      return '';
+    }
+    const cls = layoutOnly ? filterLayoutClasses(node.wrapperClass) : node.wrapperClass;
+    return cls ? ` (${cls})` : '';
+  }
+
+  const ancestorPath = findPathToNode(rootKey, focusKey, childrenByKey);
+  if (ancestorPath && ancestorPath.length > 1) {
+    lines.push('Ancestor chain (layout context):');
+    for (let index = 0; index < ancestorPath.length; index += 1) {
+      const node = nodesByKey.get(ancestorPath[index]);
+      if (!node) {
+        continue;
+      }
+      const indent = '  '.repeat(index + 1);
+      const connector = index === 0 ? '' : '└ ';
+      const marker = index === ancestorPath.length - 1 ? '★ ' : '';
+      lines.push(`${indent}${connector}${marker}[${node.name}]${classStr(node)} - ${node.fileRel}`);
+    }
+    lines.push('');
+  }
+
+  const subtree = buildAsciiTree({ rootKey: focusKey, nodesByKey, childrenByKey, layoutOnly });
+  lines.push(subtree);
+  return lines.join('\n');
+}
+
+function buildAsciiTree({ rootKey, nodesByKey, childrenByKey, layoutOnly = false }) {
+  const lines = [];
 
   function labelForKey(key) {
     const node = nodesByKey.get(key);
     if (!node) {
       return key;
     }
-    const classSuffix = node.wrapperClass ? ` (${node.wrapperClass})` : '';
-    return `[${node.name}] - ${node.fileRel}${classSuffix}`;
+    const rawClass = layoutOnly ? filterLayoutClasses(node.wrapperClass) : node.wrapperClass;
+    const classSuffix = rawClass ? ` (${rawClass})` : '';
+    const slotMark = node.acceptsChildren ? ' ⊞' : '';
+    return `[${node.name}] - ${node.fileRel}${classSuffix}${slotMark}`;
   }
 
-  function walk(key, prefix, isLast, depth) {
+  function walk(key, prefix, isLast, depth, pathVisited) {
     const connector = depth === 0 ? '' : isLast ? '└── ' : '├── ';
     lines.push(`${prefix}${connector}${labelForKey(key)}`);
 
-    if (visited.has(key)) {
-      lines.push(`${prefix}${isLast ? '    ' : '│   '}↳ (cycle or duplicate omitted)`);
+    if (pathVisited.has(key)) {
+      lines.push(`${prefix}${isLast ? '    ' : '│   '}↳ (recursive cycle omitted)`);
       return;
     }
-    visited.add(key);
+    pathVisited.add(key);
 
     const children = childrenByKey.get(key) ?? [];
     for (let index = 0; index < children.length; index += 1) {
       const child = children[index];
       const childIsLast = index === children.length - 1;
       const childPrefix = depth === 0 ? '' : `${prefix}${isLast ? '    ' : '│   '}`;
-      walk(child, childPrefix, childIsLast, depth + 1);
+      walk(child, childPrefix, childIsLast, depth + 1, pathVisited);
     }
+
+    pathVisited.delete(key);
   }
 
-  walk(rootKey, '', true, 0);
+  walk(rootKey, '', true, 0, new Set());
   return lines.join('\n');
 }
 
@@ -1509,7 +1773,16 @@ async function main() {
   }
   files.sort((a, b) => a.localeCompare(b));
 
-  const analyses = await Promise.all(files.map((file) => analyzeFile(file)));
+  const analyses = [];
+  const batchSizeRaw = Number(process.env.UI_MAP_ANALYZE_BATCH_SIZE ?? 40);
+  const analyzeBatchSize =
+    Number.isFinite(batchSizeRaw) && batchSizeRaw > 0 ? Math.floor(batchSizeRaw) : 40;
+
+  for (let index = 0; index < files.length; index += analyzeBatchSize) {
+    const batchFiles = files.slice(index, index + analyzeBatchSize);
+    const batchAnalyses = await Promise.all(batchFiles.map((file) => analyzeFile(file)));
+    analyses.push(...batchAnalyses);
+  }
 
   const exportsIndex = new Map();
   const componentsIndex = new Map();
@@ -1538,6 +1811,7 @@ async function main() {
         fileRel: analysis.relPath,
         wrapperClass: component.wrapperClass ?? null,
         renders: component.renders,
+        acceptsChildren: component.acceptsChildren ?? false,
         mermaidId,
       });
       keysByFileAndName.set(`${analysis.absPath}::${component.name}`, key);
@@ -1799,9 +2073,43 @@ async function main() {
     throw new Error('Cannot determine root component. Provide --rootComponent or check --entry.');
   }
 
-  await mkdir(path.dirname(outBase), { recursive: true });
+  if (outBase) {
+    await mkdir(path.dirname(outBase), { recursive: true });
+  }
 
-  const ascii = buildAsciiTree({ rootKey, nodesByKey, childrenByKey });
+  let ascii;
+  if (argv.focus) {
+    let focusKey = null;
+    for (const [key, node] of nodesByKey.entries()) {
+      if (node.name === argv.focus) {
+        const reachable = findPathToNode(rootKey, key, childrenByKey);
+        if (reachable) {
+          focusKey = key;
+          break;
+        }
+        if (!focusKey) {
+          focusKey = key;
+        }
+      }
+    }
+    if (!focusKey) {
+      throw new Error(`Focus component "${argv.focus}" not found in the component tree.`);
+    }
+    ascii = buildFocusedAsciiTree({
+      rootKey,
+      focusKey,
+      nodesByKey,
+      childrenByKey,
+      layoutOnly: argv.layoutOnly,
+    });
+  } else {
+    ascii = buildAsciiTree({
+      rootKey,
+      nodesByKey,
+      childrenByKey,
+      layoutOnly: argv.layoutOnly,
+    });
+  }
   const mermaid = buildMermaidGraph({ nodesByKey, edges });
   const unresolvedByReason = summarizeUnresolvedRefs(unresolvedRefs);
   const externalRefs = unresolvedRefs.filter((entry) => isExternalRefReason(entry.reason)).length;
@@ -1824,15 +2132,32 @@ async function main() {
     },
   };
 
-  await Bun.write(`${outBase}.ascii.txt`, `${ascii}\n`);
-  await Bun.write(`${outBase}.mmd`, `${mermaid}\n`);
-  await Bun.write(`${outBase}.json`, `${JSON.stringify(graphJson, null, 2)}\n`);
+  if (outBase) {
+    await Bun.write(`${outBase}.ascii.txt`, `${ascii}\n`);
+    await Bun.write(`${outBase}.mmd`, `${mermaid}\n`);
+    await Bun.write(`${outBase}.json`, `${JSON.stringify(graphJson, null, 2)}\n`);
+  }
 
-  console.log(`Wrote:\n- ${rel(outBase)}.ascii.txt\n- ${rel(outBase)}.mmd\n- ${rel(outBase)}.json`);
-  if (unresolvedRefs.length > 0) {
-    console.log(
-      `Unresolved refs: ${unresolvedRefs.length} (inspect ${rel(outBase)}.json > unresolvedRefs)`,
-    );
+  if (argv.format === 'ascii') {
+    console.log(ascii);
+    return;
+  }
+  if (argv.format === 'mermaid') {
+    console.log(mermaid);
+    return;
+  }
+  if (argv.format === 'json') {
+    console.log(JSON.stringify(graphJson, null, 2));
+    return;
+  }
+
+  if (argv.format === 'all') {
+    console.log('=== UI_MAP_ASCII ===');
+    console.log(ascii);
+    console.log('\n=== UI_MAP_MERMAID ===');
+    console.log(mermaid);
+    console.log('\n=== UI_MAP_JSON ===');
+    console.log(JSON.stringify(graphJson, null, 2));
   }
 }
 
