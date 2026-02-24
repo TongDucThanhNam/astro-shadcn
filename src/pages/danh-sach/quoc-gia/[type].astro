@@ -1,7 +1,7 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import MovieCard from "@/components/MovieCard.astro";
-import FilterPanel from "@/components/FilterPanel.astro";
+import Layout from '@/layouts/Layout.astro';
+import MovieCard from '@/components/MovieCard.astro';
+import FilterPanel from '@/components/FilterPanel.astro';
 import {
   Pagination,
   PaginationContent,
@@ -9,18 +9,18 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
+} from '@/components/ui/pagination';
 import {
   getByCountry,
   listQueryFromRequest,
   parseListQuery,
   toListSearchParams,
   type ListItem,
-} from "@/lib/phimapi";
+} from '@/lib/phimapi';
 
 const { type } = Astro.params;
 if (!type) {
-  throw new Error("Missing country slug.");
+  throw new Error('Missing country slug.');
 }
 
 const requestUrl = new URL(Astro.request.url);

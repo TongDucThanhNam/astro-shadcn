@@ -1,20 +1,16 @@
-import type { APIRoute } from "astro";
+import type { APIRoute } from 'astro';
 
-import { CACHE_CONFIGS, getCacheHeaders } from "@/lib/cache";
-import {
-  PhimApiClientError,
-  getListByType,
-  listQueryFromRequest,
-} from "@/lib/phimapi";
+import { CACHE_CONFIGS, getCacheHeaders } from '@/lib/cache';
+import { PhimApiClientError, getListByType, listQueryFromRequest } from '@/lib/phimapi';
 
 export const GET: APIRoute = async ({ params, request }) => {
   const { typeList } = params;
 
   if (!typeList) {
-    return new Response(JSON.stringify({ error: "Missing typeList parameter" }), {
+    return new Response(JSON.stringify({ error: 'Missing typeList parameter' }), {
       status: 400,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
   }
@@ -32,28 +28,25 @@ export const GET: APIRoute = async ({ params, request }) => {
       {
         status: 200,
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...getCacheHeaders(CACHE_CONFIGS.SECTION_DATA),
         },
       },
     );
   } catch (error: unknown) {
     if (error instanceof PhimApiClientError) {
-      return new Response(
-        JSON.stringify({ error: error.message, code: error.code, items: [] }),
-        {
-          status: error.status,
-          headers: {
-            "Content-Type": "application/json",
-          },
+      return new Response(JSON.stringify({ error: error.message, code: error.code, items: [] }), {
+        status: error.status,
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
+      });
     }
 
-    return new Response(JSON.stringify({ error: "Failed to fetch data", items: [] }), {
+    return new Response(JSON.stringify({ error: 'Failed to fetch data', items: [] }), {
       status: 500,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
   }

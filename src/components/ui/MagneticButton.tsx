@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React, { useRef, useEffect, type ReactNode } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import React, { useRef, useEffect, type ReactNode } from 'react';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 
 interface MagneticButtonProps {
   children: ReactNode;
@@ -9,11 +9,7 @@ interface MagneticButtonProps {
   onClick?: () => void;
 }
 
-const MagneticButton: React.FC<MagneticButtonProps> = ({
-  children,
-  className = "",
-  onClick,
-}) => {
+const MagneticButton: React.FC<MagneticButtonProps> = ({ children, className = '', onClick }) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const x = useMotionValue(0);
@@ -48,12 +44,12 @@ const MagneticButton: React.FC<MagneticButtonProps> = ({
       y.set(0);
     };
 
-    button.addEventListener("mousemove", handleMouseMove);
-    button.addEventListener("mouseleave", handleMouseLeave);
+    button.addEventListener('mousemove', handleMouseMove);
+    button.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
-      button.removeEventListener("mousemove", handleMouseMove);
-      button.removeEventListener("mouseleave", handleMouseLeave);
+      button.removeEventListener('mousemove', handleMouseMove);
+      button.removeEventListener('mouseleave', handleMouseLeave);
     };
   }, [x, y]);
 

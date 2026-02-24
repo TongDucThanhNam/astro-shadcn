@@ -16,18 +16,18 @@ export const CACHE_CONFIGS = {
   SEARCH_RESULTS: {
     maxAge: 7200, // 2 hours
     staleWhileRevalidate: 14400, // 4 hours
-  }
+  },
 } as const;
 
 export function getCacheHeaders(config: CacheConfig) {
   return {
-    "Cache-Control": `public, max-age=${config.maxAge}, s-maxage=${config.maxAge * 3}, stale-while-revalidate=${config.staleWhileRevalidate}`,
+    'Cache-Control': `public, max-age=${config.maxAge}, s-maxage=${config.maxAge * 3}, stale-while-revalidate=${config.staleWhileRevalidate}`,
   };
 }
 
 // Astro-specific cache utilities for SSR
 export function getAstroCacheHeaders() {
   return {
-    "CDN-Cache-Control": "public, max-age=3600, s-maxage=7200, stale-while-revalidate=86400",
+    'CDN-Cache-Control': 'public, max-age=3600, s-maxage=7200, stale-while-revalidate=86400',
   };
 }

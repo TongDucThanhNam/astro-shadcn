@@ -1,37 +1,41 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { ArrowUpDown, ChevronLeft, ChevronRight, Film, Play, Search, SkipBack, SkipForward } from "lucide-react";
-import { cn } from "@/lib/utils";
+  ArrowUpDown,
+  ChevronLeft,
+  ChevronRight,
+  Film,
+  Play,
+  Search,
+  SkipBack,
+  SkipForward,
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
 import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
-} from "@/components/ui/pagination";
-import { Toggle } from "@/components/ui/toggle";
+} from '@/components/ui/pagination';
+import { Toggle } from '@/components/ui/toggle';
 
 type Episode = {
-    server_name: string;
-    server_data: {
-        slug: string;
-        name: string;
-        link_embed?: string;
-        link_m3u8?: string;
-    }[];
+  server_name: string;
+  server_data: {
+    slug: string;
+    name: string;
+    link_embed?: string;
+    link_m3u8?: string;
+  }[];
 };
 
 type EpisodeSelectorProps = {
-    episodes: Episode[];
+  episodes: Episode[];
 };
 
 const EPISODE_PAGE_SIZE = 30;
@@ -42,15 +46,12 @@ const getEpisodeNumber = (value: string) => {
 };
 
 const getDefaultSortOrder = (episodes: Episode[]) => {
-  const total = episodes.reduce(
-    (sum, episode) => sum + (episode?.server_data?.length ?? 0),
-    0,
-  );
-  return total > 100 ? "desc" : "asc";
+  const total = episodes.reduce((sum, episode) => sum + (episode?.server_data?.length ?? 0), 0);
+  return total > 100 ? 'desc' : 'asc';
 };
 
 const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
-  const firstServer = episodes[0]?.server_name ?? "";
+  const firstServer = episodes[0]?.server_name ?? '';
   const [selectedServer, setSelectedServer] = useState<string>(firstServer);
   const [selectedEpisode, setSelectedEpisode] = useState<{
     id: string;
@@ -58,18 +59,16 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
     linkEmbed?: string;
     linkM3u8?: string;
   } | null>(null);
-  const [query, setQuery] = useState<string>("");
+  const [query, setQuery] = useState<string>('');
   const [pageByServer, setPageByServer] = useState<Record<string, number>>({});
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">(() =>
-    getDefaultSortOrder(episodes),
-  );
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>(() => getDefaultSortOrder(episodes));
   const userSortOverrideRef = useRef(false);
 
   const normalizedQuery = query.trim().toLowerCase();
 
   useEffect(() => {
     if (!episodes.length) {
-      setSelectedServer("");
+      setSelectedServer('');
       return;
     }
 
@@ -89,11 +88,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
   }, [normalizedQuery, selectedServer]);
 
   const totalEpisodes = useMemo(
-    () =>
-      episodes.reduce(
-        (total, episode) => total + (episode?.server_data?.length ?? 0),
-        0,
-      ),
+    () => episodes.reduce((total, episode) => total + (episode?.server_data?.length ?? 0), 0),
     [episodes],
   );
 
@@ -109,7 +104,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
     }
     setSelectedEpisode({ id, label, linkEmbed, linkM3u8 });
     window.dispatchEvent(
-      new CustomEvent("episodeSelected", {
+      new CustomEvent('episodeSelected', {
         detail: { ep: id, label, linkEmbed, linkM3u8, serverName },
       }),
     );
@@ -124,30 +119,29 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
 
   useEffect(() => {
     const handleExternalEpisodeSelection = (event: Event) => {
-      const detail = (event as CustomEvent<{
-        ep: string;
-        label?: string;
-        linkEmbed?: string;
-        linkM3u8?: string;
-        serverName?: string;
-      }>).detail;
+      const detail = (
+        event as CustomEvent<{
+          ep: string;
+          label?: string;
+          linkEmbed?: string;
+          linkM3u8?: string;
+          serverName?: string;
+        }>
+      ).detail;
 
       if (!detail?.ep || (!detail.linkEmbed && !detail.linkM3u8)) {
         return;
       }
 
       const matchedServerName =
-        detail.serverName &&
-        episodes.some((episode) => episode.server_name === detail.serverName)
+        detail.serverName && episodes.some((episode) => episode.server_name === detail.serverName)
           ? detail.serverName
           : episodes.find((episode) =>
               episode.server_data.some(
                 (serverData) =>
                   serverData.slug === detail.ep &&
-                  ((detail.linkM3u8 &&
-                    serverData.link_m3u8 === detail.linkM3u8) ||
-                    (detail.linkEmbed &&
-                      serverData.link_embed === detail.linkEmbed)),
+                  ((detail.linkM3u8 && serverData.link_m3u8 === detail.linkM3u8) ||
+                    (detail.linkEmbed && serverData.link_embed === detail.linkEmbed)),
               ),
             )?.server_name;
 
@@ -163,9 +157,9 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
       });
     };
 
-    window.addEventListener("episodeSelected", handleExternalEpisodeSelection);
+    window.addEventListener('episodeSelected', handleExternalEpisodeSelection);
     return () => {
-      window.removeEventListener("episodeSelected", handleExternalEpisodeSelection);
+      window.removeEventListener('episodeSelected', handleExternalEpisodeSelection);
     };
   }, [episodes, selectedServer]);
 
@@ -173,10 +167,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
     setPageByServer((prev) => {
       const next = { ...prev };
       episodes.forEach((episode) => {
-        const totalPages = Math.max(
-          1,
-          Math.ceil(episode.server_data.length / EPISODE_PAGE_SIZE),
-        );
+        const totalPages = Math.max(1, Math.ceil(episode.server_data.length / EPISODE_PAGE_SIZE));
         const current = next[episode.server_name] ?? 1;
         if (current > totalPages) {
           next[episode.server_name] = totalPages;
@@ -252,10 +243,10 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
               </div>
 
               <Toggle
-                pressed={sortOrder === "desc"}
+                pressed={sortOrder === 'desc'}
                 onPressedChange={(pressed) => {
                   userSortOverrideRef.current = true;
-                  const nextOrder = pressed ? "desc" : "asc";
+                  const nextOrder = pressed ? 'desc' : 'asc';
                   setSortOrder(nextOrder);
                   if (selectedServer) {
                     setPageByServer((prev) => ({
@@ -268,7 +259,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
                 aria-label="Đổi thứ tự tập"
               >
                 <ArrowUpDown className="h-4 w-4" />
-                {sortOrder === "desc" ? "Mới → cũ" : "Cũ → mới"}
+                {sortOrder === 'desc' ? 'Mới → cũ' : 'Cũ → mới'}
               </Toggle>
             </div>
           </div>
@@ -279,10 +270,10 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
               const numberB = getEpisodeNumber(b.slug) || getEpisodeNumber(b.name);
 
               if (!Number.isNaN(numberA) && !Number.isNaN(numberB)) {
-                return sortOrder === "asc" ? numberA - numberB : numberB - numberA;
+                return sortOrder === 'asc' ? numberA - numberB : numberB - numberA;
               }
 
-              return sortOrder === "asc"
+              return sortOrder === 'asc'
                 ? a.name.localeCompare(b.name)
                 : b.name.localeCompare(a.name);
             });
@@ -301,10 +292,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
             const totalPages = shouldPaginate
               ? Math.ceil(totalEpisodeCount / EPISODE_PAGE_SIZE)
               : 1;
-            const activePage = Math.min(
-              pageByServer[episode.server_name] ?? 1,
-              totalPages,
-            );
+            const activePage = Math.min(pageByServer[episode.server_name] ?? 1, totalPages);
             const paginatedServerData = shouldPaginate
               ? sortedServerData.slice(
                   (activePage - 1) * EPISODE_PAGE_SIZE,
@@ -325,7 +313,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
               <TabsContent
                 key={episode.server_name}
                 value={episode.server_name}
-                className={cn("space-y-4", isActiveServer ? "block" : "hidden")}
+                className={cn('space-y-4', isActiveServer ? 'block' : 'hidden')}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -407,9 +395,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
                   <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7">
                     {visibleServerData.map((serverData) => {
                       const isSelected = selectedEpisode?.id === serverData.slug;
-                      const canPlay = Boolean(
-                        serverData.link_m3u8 || serverData.link_embed,
-                      );
+                      const canPlay = Boolean(serverData.link_m3u8 || serverData.link_embed);
 
                       return (
                         <Button
@@ -425,11 +411,11 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
                           }
                           disabled={!canPlay}
                           className={cn(
-                            "group relative h-12 w-full border-2 border-[#3F3F46] bg-[#27272A] px-3 text-xs font-bold uppercase tracking-tighter text-[#FAFAFA] transition-all duration-300 hover:scale-105 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]",
+                            'group relative h-12 w-full border-2 border-[#3F3F46] bg-[#27272A] px-3 text-xs font-bold uppercase tracking-tighter text-[#FAFAFA] transition-all duration-300 hover:scale-105 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]',
                             isSelected &&
-                              "border-[#DFE104] bg-[#DFE104]/15 text-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]",
+                              'border-[#DFE104] bg-[#DFE104]/15 text-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]',
                             !canPlay &&
-                              "cursor-not-allowed border-[#3F3F46]/60 text-[#71717A] opacity-50 hover:border-[#3F3F46]/60 hover:bg-[#27272A] hover:text-[#71717A] hover:scale-100",
+                              'cursor-not-allowed border-[#3F3F46]/60 text-[#71717A] opacity-50 hover:border-[#3F3F46]/60 hover:bg-[#27272A] hover:text-[#71717A] hover:scale-100',
                           )}
                           variant="ghost"
                         >
@@ -487,10 +473,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
                             Math.abs(pageNumber - activePage) <= 1;
 
                           if (!showNumber) {
-                            if (
-                              pageNumber === activePage - 2 ||
-                              pageNumber === activePage + 2
-                            ) {
+                            if (pageNumber === activePage - 2 || pageNumber === activePage + 2) {
                               return (
                                 <PaginationItem key={`ellipsis-${pageNumber}`}>
                                   <PaginationEllipsis className="border-2 border-[#3F3F46] bg-[#27272A] text-[#A1A1AA]" />
@@ -506,8 +489,9 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
                                 size="icon"
                                 variant="ghost"
                                 className={cn(
-                                  "h-9 w-9 border-2 border-[#3F3F46] bg-[#27272A] text-xs font-bold uppercase tracking-tighter text-[#FAFAFA] transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]",
-                                  pageNumber === activePage && "border-[#DFE104] bg-[#DFE104] text-[#09090B]",
+                                  'h-9 w-9 border-2 border-[#3F3F46] bg-[#27272A] text-xs font-bold uppercase tracking-tighter text-[#FAFAFA] transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B]',
+                                  pageNumber === activePage &&
+                                    'border-[#DFE104] bg-[#DFE104] text-[#09090B]',
                                 )}
                                 onClick={() => {
                                   setPageByServer((prev) => ({
@@ -531,10 +515,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
                               if (activePage === totalPages) return;
                               setPageByServer((prev) => ({
                                 ...prev,
-                                [episode.server_name]: Math.min(
-                                  activePage + 1,
-                                  totalPages,
-                                ),
+                                [episode.server_name]: Math.min(activePage + 1, totalPages),
                               }));
                             }}
                             disabled={activePage === totalPages}

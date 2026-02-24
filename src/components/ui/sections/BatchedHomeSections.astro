@@ -1,77 +1,77 @@
 ---
-import type { SectionConfig } from "./section-utils";
-import { fetchBatchedSections } from "@/lib/api-service";
-import SectionList from "./SectionList.astro";
+import type { SectionConfig } from './section-utils';
+import { fetchBatchedSections } from '@/lib/api-service';
+import SectionList from './SectionList.astro';
 
 // Define all section configurations
 const sectionConfigs: SectionConfig[] = [
-    {
-        key: "phim-bo",
-        title: "Phim Bộ Hot",
-        subtitle: "Cập nhật từng giờ với các tập mới nhất",
-        typeList: "phim-bo",
-        layout: "landscape",
-        params: {
-            page: "1",
-            sort_type: "desc",
-            limit: "10",
-        },
+  {
+    key: 'phim-bo',
+    title: 'Phim Bộ Hot',
+    subtitle: 'Cập nhật từng giờ với các tập mới nhất',
+    typeList: 'phim-bo',
+    layout: 'landscape',
+    params: {
+      page: '1',
+      sort_type: 'desc',
+      limit: '10',
     },
-    {
-        key: "phim-le",
-        title: "Phim Lẻ Mới",
-        subtitle: "Những bộ phim lẻ hay nhất",
-        typeList: "phim-le",
-        layout: "portrait",
-        params: {
-            page: "1",
-            sort_type: "desc",
-            limit: "12",
-        },
+  },
+  {
+    key: 'phim-le',
+    title: 'Phim Lẻ Mới',
+    subtitle: 'Những bộ phim lẻ hay nhất',
+    typeList: 'phim-le',
+    layout: 'portrait',
+    params: {
+      page: '1',
+      sort_type: 'desc',
+      limit: '12',
     },
-    {
-        key: "tv-shows",
-        title: "TV Shows",
-        subtitle: "Chương trình truyền hình đặc sắc",
-        typeList: "tv-shows",
-        layout: "landscape",
-        params: {
-            page: "1",
-            sort_type: "desc",
-            limit: "10",
-        },
+  },
+  {
+    key: 'tv-shows',
+    title: 'TV Shows',
+    subtitle: 'Chương trình truyền hình đặc sắc',
+    typeList: 'tv-shows',
+    layout: 'landscape',
+    params: {
+      page: '1',
+      sort_type: 'desc',
+      limit: '10',
     },
-    {
-        key: "hoat-hinh",
-        title: "Hoạt Hình",
-        subtitle: "Thế giới hoạt hình đầy màu sắc",
-        typeList: "hoat-hinh",
-        layout: "landscape",
-        params: {
-            page: "1",
-            sort_type: "desc",
-            limit: "10",
-        },
+  },
+  {
+    key: 'hoat-hinh',
+    title: 'Hoạt Hình',
+    subtitle: 'Thế giới hoạt hình đầy màu sắc',
+    typeList: 'hoat-hinh',
+    layout: 'landscape',
+    params: {
+      page: '1',
+      sort_type: 'desc',
+      limit: '10',
     },
+  },
 ];
 
 // Fetch all sections in a single batched request
 const batchedRequests = sectionConfigs.map((config) => ({
-    key: config.key,
-    typeList: config.typeList,
-    params: config.params,
+  key: config.key,
+  typeList: config.typeList,
+  params: config.params,
 }));
 
 const batchedResponse = await fetchBatchedSections(batchedRequests);
 
 // Map responses back to section configs
 const sections = sectionConfigs.map((config) => {
-    const response = batchedResponse.sections.find((s) => s.key === config.key);
-    return {
-        ...config,
-        items: response?.items ?? [],
-        error: response?.error,
-    };
+  const response = batchedResponse.sections.find((s) => s.key === config.key);
+  return {
+    ...config,
+    items: response?.items ?? [],
+    error: response?.error,
+  };
 });
 ---
 

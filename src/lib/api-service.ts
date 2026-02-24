@@ -1,11 +1,6 @@
-import { CACHE_CONFIGS } from "./cache";
-import { getCachedValue, setCachedValue } from "./server-cache";
-import {
-  PhimApiClientError,
-  getListByType,
-  type ListItem,
-  type QueryInput,
-} from "@/lib/phimapi";
+import { CACHE_CONFIGS } from './cache';
+import { getCachedValue, setCachedValue } from './server-cache';
+import { PhimApiClientError, getListByType, type ListItem, type QueryInput } from '@/lib/phimapi';
 
 export interface SectionRequest {
   key: string;
@@ -23,9 +18,7 @@ export interface BatchedResponse {
   sections: SectionResponse[];
 }
 
-export async function fetchBatchedSections(
-  requests: SectionRequest[],
-): Promise<BatchedResponse> {
+export async function fetchBatchedSections(requests: SectionRequest[]): Promise<BatchedResponse> {
   const promises = requests.map(async (req) => {
     try {
       const query = req.params as QueryInput;
@@ -45,9 +38,7 @@ export async function fetchBatchedSections(
       return result;
     } catch (error: unknown) {
       const message =
-        error instanceof PhimApiClientError
-          ? error.message
-          : "Khong the tai du lieu.";
+        error instanceof PhimApiClientError ? error.message : 'Khong the tai du lieu.';
       return {
         key: req.key,
         items: [],
@@ -60,9 +51,7 @@ export async function fetchBatchedSections(
   return { sections };
 }
 
-export async function getOptimizedSectionData(
-  config: SectionRequest,
-): Promise<SectionResponse> {
+export async function getOptimizedSectionData(config: SectionRequest): Promise<SectionResponse> {
   const result = await fetchBatchedSections([config]);
   return result.sections[0];
 }

@@ -1,21 +1,17 @@
 ---
-import type { MovieResponseDetail } from "@/types";
-import MovieDetailPage from "@/components/MovieDetailPage.astro";
-import Layout from "@/layouts/Layout.astro";
-import "@/styles/globals.css";
+import type { MovieResponseDetail } from '@/types';
+import MovieDetailPage from '@/components/MovieDetailPage.astro';
+import Layout from '@/layouts/Layout.astro';
+import '@/styles/globals.css';
 
-import {
-  CACHE_CONFIGS,
-  getAstroCacheHeaders,
-  getCacheHeaders,
-} from "@/lib/cache";
-import { getCachedValue, setCachedValue } from "@/lib/server-cache";
-import { PhimApiClientError, getMovieDetail } from "@/lib/phimapi";
+import { CACHE_CONFIGS, getAstroCacheHeaders, getCacheHeaders } from '@/lib/cache';
+import { getCachedValue, setCachedValue } from '@/lib/server-cache';
+import { PhimApiClientError, getMovieDetail } from '@/lib/phimapi';
 
 const { slug } = Astro.params;
 
 if (!slug) {
-  return new Response("Not Found", { status: 404 });
+  return new Response('Not Found', { status: 404 });
 }
 
 const cacheKey = `movie-detail:${slug}`;
@@ -27,8 +23,8 @@ if (!data) {
     setCachedValue(cacheKey, data, CACHE_CONFIGS.MOVIE_DETAIL.maxAge);
   } catch (error: unknown) {
     if (error instanceof PhimApiClientError) {
-      if (error.code === "invalid_query" || error.status === 404) {
-        return new Response("Not Found", { status: 404 });
+      if (error.code === 'invalid_query' || error.status === 404) {
+        return new Response('Not Found', { status: 404 });
       }
     }
 

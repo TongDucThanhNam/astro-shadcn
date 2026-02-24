@@ -1,5 +1,5 @@
 ---
-import MovieCard from "./MovieCard.astro";
+import MovieCard from './MovieCard.astro';
 
 import {
   getLatestMovies,
@@ -8,7 +8,7 @@ import {
   type LatestMovieItemV1,
   type LatestMovieItemV2,
   type LatestMovieItemV3,
-} from "@/lib/phimapi";
+} from '@/lib/phimapi';
 import {
   Pagination,
   PaginationContent,
@@ -16,14 +16,14 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
+} from '@/components/ui/pagination';
 
 interface Props {
   page?: number | string;
   feedVersion?: LatestFeedVersion;
 }
 
-const { page = 1, feedVersion = "v1" } = Astro.props as Props;
+const { page = 1, feedVersion = 'v1' } = Astro.props as Props;
 const currentPage = Number(page) > 0 ? Number(page) : 1;
 const selectedFeed = parseFeedVersion(feedVersion);
 
@@ -33,15 +33,15 @@ const data = await getLatestMovies({
 });
 
 const movies = data.items;
-const firstMovieImage = movies.length > 0 ? movies[0].thumb_url : "";
+const firstMovieImage = movies.length > 0 ? movies[0].thumb_url : '';
 const totalPages = data.pagination.totalPages;
 
 type LatestMovie = LatestMovieItemV1 | LatestMovieItemV2 | LatestMovieItemV3;
 
 function getPageUrl(pageNum: number) {
-  const feedQuery = selectedFeed === "v1" ? "" : `?feed=${selectedFeed}`;
+  const feedQuery = selectedFeed === 'v1' ? '' : `?feed=${selectedFeed}`;
   if (pageNum === 1) {
-    return feedQuery ? `/${feedQuery}` : "/";
+    return feedQuery ? `/${feedQuery}` : '/';
   }
 
   return feedQuery ? `/${pageNum}${feedQuery}` : `/${pageNum}`;

@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React, { useEffect, useRef, useState } from "react";
-import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
+import React, { useEffect, useRef, useState } from 'react';
+import { motion, useInView, useMotionValue, useSpring, useTransform } from 'framer-motion';
 
 interface NumberCounterProps {
   value: number;
@@ -13,20 +13,20 @@ interface NumberCounterProps {
 
 const NumberCounter: React.FC<NumberCounterProps> = ({
   value,
-  suffix = "",
-  prefix = "",
+  suffix = '',
+  prefix = '',
   duration = 2,
-  className = "",
+  className = '',
 }) => {
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const isInView = useInView(ref, { once: true, margin: '-50px' });
   const motionValue = useMotionValue(0);
   const springValue = useSpring(motionValue, {
     damping: 30,
     stiffness: 100,
     duration: duration,
   });
-  const [displayValue, setDisplayValue] = useState("0");
+  const [displayValue, setDisplayValue] = useState('0');
 
   useEffect(() => {
     if (isInView) {
@@ -35,8 +35,8 @@ const NumberCounter: React.FC<NumberCounterProps> = ({
   }, [isInView, value, motionValue]);
 
   useEffect(() => {
-    const unsubscribe = springValue.on("change", (latest) => {
-      const formatted = Math.round(latest).toLocaleString("vi-VN");
+    const unsubscribe = springValue.on('change', (latest) => {
+      const formatted = Math.round(latest).toLocaleString('vi-VN');
       setDisplayValue(`${prefix}${formatted}${suffix}`);
     });
 

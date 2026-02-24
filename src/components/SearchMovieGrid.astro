@@ -1,13 +1,13 @@
 ---
-import MovieCard from "./MovieCard.astro";
-import { searchMovies, type ListItem, type QueryInput } from "@/lib/phimapi";
+import MovieCard from './MovieCard.astro';
+import { searchMovies, type ListItem, type QueryInput } from '@/lib/phimapi';
 
 interface Props {
   filters?: QueryInput;
 }
 
 const { filters = {} } = Astro.props as Props;
-const keyword = Astro.params.keyword ?? "";
+const keyword = Astro.params.keyword ?? '';
 
 const data = await searchMovies(keyword, filters);
 const movies = data.data.items;

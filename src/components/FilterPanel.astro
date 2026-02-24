@@ -1,112 +1,103 @@
 ---
-import {
-    getCategoryTaxonomy,
-    getCountryTaxonomy,
-    parseListQuery,
-} from "@/lib/phimapi";
+import { FilterPanelMobile } from '@/components/FilterPanelMobile';
+import { getCategoryTaxonomy, getCountryTaxonomy, parseListQuery } from '@/lib/phimapi';
 
 interface Props {
-    currentType: string;
-    currentPage?: number;
-    basePath?: string; // e.g., "/danh-sach/the-loai" or "/danh-sach"
+  currentType: string;
+  currentPage?: number;
+  basePath?: string;
 }
 
-const {
-    currentType,
-    currentPage = 1,
-    basePath = "/danh-sach/the-loai",
-} = Astro.props;
+const { currentType, currentPage = 1, basePath = '/danh-sach/the-loai' } = Astro.props;
 
-// Get query parameters from URL
 const url = new URL(Astro.request.url);
 const query = parseListQuery(url.searchParams, { limit: 10 });
 
 const sortField = query.sortField;
 const sortType = query.sortType;
-const category = query.category || "";
-const country = query.country || "";
-const year = query.year || "";
+const category = query.category || '';
+const country = query.country || '';
+const year = query.year || '';
 const limit = query.limit;
 
 type Option = {
-    name: string;
-    slug: string;
+  name: string;
+  slug: string;
 };
 
 const [categoryData, countryData] = await Promise.all([
-    getCategoryTaxonomy(),
-    getCountryTaxonomy(),
+  getCategoryTaxonomy(),
+  getCountryTaxonomy(),
 ]);
 
 const categoryOptions: Option[] = categoryData.map((item) => ({
-    name: item.name,
-    slug: item.slug,
+  name: item.name,
+  slug: item.slug,
 }));
 
 const countryOptions: Option[] = countryData.map((item) => ({
-    name: item.name,
-    slug: item.slug,
+  name: item.name,
+  slug: item.slug,
 }));
 
 const currentYear = new Date().getFullYear();
 const years = Array.from({ length: 55 }, (_, i) => currentYear - i);
 
 const sortFieldLabels: Record<string, string> = {
-    "modified.time": "Ngày cập nhật",
-    _id: "ID phim",
-    year: "Năm phát hành",
+  'modified.time': 'Ngày cập nhật',
+  _id: 'ID phim',
+  year: 'Năm phát hành',
 };
 
 const sortTypeLabels: Record<string, string> = {
-    desc: "Mới nhất",
-    asc: "Cũ nhất",
+  desc: 'Mới nhất',
+  asc: 'Cũ nhất',
 };
 
 const findOptionLabel = (value: string, options: Option[]) =>
-    options.find((item) => item.slug === value)?.name ||
-    value
-        .split("-")
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ");
+  options.find((item) => item.slug === value)?.name ||
+  value
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 
 const activeFilters = [
-    {
-        key: "sort",
-        label: "Sắp xếp",
-        value: `${sortFieldLabels[sortField] || sortField} • ${
-            sortTypeLabels[sortType] || sortType
-        }`,
-        removable: false,
-    },
-    category && {
-        key: "category",
-        label: "Thể loại",
-        value: findOptionLabel(category, categoryOptions),
-        removable: true,
-    },
-    country && {
-        key: "country",
-        label: "Quốc gia",
-        value: findOptionLabel(country, countryOptions),
-        removable: true,
-    },
-    year && { 
-        key: "year",
-        label: "Năm", 
-        value: year,
-        removable: true,
-    },
-    limit !== 10 && { 
-        key: "limit",
-        label: "Kết quả", 
-        value: `${limit}/trang`,
-        removable: true,
-    },
+  {
+    key: 'sort',
+    label: 'Sắp xếp',
+    value: `${sortFieldLabels[sortField] || sortField} • ${sortTypeLabels[sortType] || sortType}`,
+    removable: false,
+  },
+  category && {
+    key: 'category',
+    label: 'Thể loại',
+    value: findOptionLabel(category, categoryOptions),
+    removable: true,
+  },
+  country && {
+    key: 'country',
+    label: 'Quốc gia',
+    value: findOptionLabel(country, countryOptions),
+    removable: true,
+  },
+  year && {
+    key: 'year',
+    label: 'Năm',
+    value: year,
+    removable: true,
+  },
+  limit !== 10 && {
+    key: 'limit',
+    label: 'Kết quả',
+    value: `${limit}/trang`,
+    removable: true,
+  },
 ].filter(Boolean) as { key: string; label: string; value: string; removable: boolean }[];
 ---
 
 <div
     class="relative w-full overflow-hidden border-2 border-[#3F3F46] bg-[#09090B]"
+    id="filterPanelContainer"
 >
     <div class="relative p-4 md:p-6 lg:p-8">
         <div
@@ -114,12 +105,15 @@ const activeFilters = [
         >
             <div class="space-y-2">
                 <div class="flex items-center gap-3">
-                    <h3 class="text-xl font-bold uppercase tracking-tighter text-[#FAFAFA]">
-                        Bộ lọc
-                    </h3>
+                    <div class="relative">
+                        <h3 class="text-xl font-bold uppercase tracking-tighter text-[#FAFAFA]">
+                            Bộ lọc
+                        </h3>
+                        <div class="absolute -bottom-1 left-0 h-0.5 w-8 bg-[#DFE104]"></div>
+                    </div>
                     {
                         activeFilters.length > 0 && (
-                            <span class="flex h-5 items-center justify-center bg-[#DFE104] px-2 text-xs font-bold uppercase tracking-tighter text-black">
+                            <span class="flex h-5 items-center justify-center bg-[#DFE104] px-2 text-xs font-bold uppercase tracking-tighter text-black animate-pulse">
                                 {activeFilters.length}
                             </span>
                         )
@@ -137,9 +131,9 @@ const activeFilters = [
                             <button
                                 type="button"
                                 data-filter-key={key}
-                                class={`flex items-center gap-2 border-2 border-[#3F3F46] bg-[#27272A] px-3 py-1.5 text-xs font-semibold uppercase tracking-tighter text-[#FAFAFA] transition-all duration-300 ${
+                                class={`group flex items-center gap-2 border-2 border-[#3F3F46] bg-[#27272A] px-3 py-1.5 text-xs font-semibold uppercase tracking-tighter text-[#FAFAFA] transition-all duration-300 ${
                                     removable
-                                        ? "hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-black"
+                                        ? "hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-black hover:scale-105"
                                         : "cursor-default opacity-70"
                                 }`}
                                 {...(removable ? { "aria-label": `Xóa bộ lọc ${label}` } : {})}
@@ -151,7 +145,7 @@ const activeFilters = [
                                 {
                                     removable && (
                                         <svg
-                                            class="h-3 w-3 opacity-50 transition-opacity group-hover:opacity-100"
+                                            class="h-3 w-3 opacity-50 transition-all group-hover:opacity-100 group-hover:rotate-90"
                                             viewBox="0 0 10 10"
                                             fill="none"
                                             xmlns="http://www.w3.org/2000/svg"
@@ -168,14 +162,17 @@ const activeFilters = [
                             </button>
                         ))
                     ) : (
-                        <span class="text-xs uppercase tracking-widest text-[#A1A1AA]">
+                        <span class="flex items-center gap-2 text-xs uppercase tracking-widest text-[#A1A1AA]">
+                            <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
                             Chưa áp dụng bộ lọc
                         </span>
                     )
                 }
                 {
                     activeFilters.length > 2 && (
-                        <span class="text-xs font-bold uppercase tracking-tighter text-[#DFE104]">
+                        <span class="flex h-6 items-center justify-center rounded-sm bg-[#3F3F46] px-2 text-xs font-bold uppercase tracking-tighter text-[#FAFAFA]">
                             +{activeFilters.length - 2}
                         </span>
                     )
@@ -185,8 +182,11 @@ const activeFilters = [
                         <button
                             type="button"
                             id="clearAllFilters"
-                            class="border-2 border-transparent px-3 py-1.5 text-xs font-bold uppercase tracking-tighter text-[#DFE104] transition-all hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-black"
+                            class="group flex items-center gap-1.5 border-2 border-transparent px-3 py-1.5 text-xs font-bold uppercase tracking-tighter text-[#DFE104] transition-all hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-black"
                         >
+                            <svg class="h-3.5 w-3.5 transition-transform group-hover:rotate-180" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M2 8h12M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
                             Xóa
                         </button>
                     )
@@ -199,9 +199,9 @@ const activeFilters = [
                             <button
                                 type="button"
                                 data-filter-key={key}
-                                class={`flex items-center gap-2 border-2 border-[#3F3F46] bg-[#27272A] px-3 py-1.5 text-xs font-semibold uppercase tracking-tighter text-[#FAFAFA] transition-all duration-300 ${
+                                class={`group flex items-center gap-2 border-2 border-[#3F3F46] bg-[#27272A] px-3 py-1.5 text-xs font-semibold uppercase tracking-tighter text-[#FAFAFA] transition-all duration-300 ${
                                     removable
-                                        ? "hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-black"
+                                        ? "hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-black hover:scale-105"
                                         : "cursor-default opacity-70"
                                 }`}
                                 {...(removable ? { "aria-label": `Xóa bộ lọc ${label}` } : {})}
@@ -213,7 +213,7 @@ const activeFilters = [
                                 {
                                     removable && (
                                         <svg
-                                            class="h-3 w-3 opacity-50 transition-opacity group-hover:opacity-100"
+                                            class="h-3 w-3 opacity-50 transition-all group-hover:opacity-100 group-hover:rotate-90"
                                             viewBox="0 0 10 10"
                                             fill="none"
                                             xmlns="http://www.w3.org/2000/svg"
@@ -230,7 +230,10 @@ const activeFilters = [
                             </button>
                         ))
                     ) : (
-                        <span class="text-xs uppercase tracking-widest text-[#A1A1AA]">
+                        <span class="flex items-center gap-2 text-xs uppercase tracking-widest text-[#A1A1AA]">
+                            <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
                             Chưa áp dụng bộ lọc
                         </span>
                     )
@@ -240,8 +243,11 @@ const activeFilters = [
                         <button
                             type="button"
                             id="clearAllFilters"
-                            class="ml-2 border-2 border-transparent px-3 py-1.5 text-xs font-bold uppercase tracking-tighter text-[#DFE104] transition-all hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-black"
+                            class="group ml-2 flex items-center gap-1.5 border-2 border-transparent px-3 py-1.5 text-xs font-bold uppercase tracking-tighter text-[#DFE104] transition-all hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-black"
                         >
+                            <svg class="h-3.5 w-3.5 transition-transform group-hover:rotate-180" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M2 8h12M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
                             Xóa tất cả
                         </button>
                     )
@@ -250,43 +256,44 @@ const activeFilters = [
         </div>
 
         <div class="mt-6 flex items-center justify-between gap-3">
-            <span
-                class="text-xs font-semibold uppercase tracking-widest text-[#A1A1AA]"
-            >
-                Tuỳ chỉnh
-            </span>
-            <button
-                id="filterToggle"
-                type="button"
-                class="inline-flex items-center gap-2 border-2 border-[#3F3F46] bg-[#27272A] px-4 py-2.5 text-xs font-bold uppercase tracking-tighter text-[#FAFAFA] transition-all duration-300 active:scale-95 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-black md:hidden"
-                aria-expanded="false"
-                aria-controls="filterForm"
-            >
-                <span data-collapsible-label>Hiện bộ lọc</span>
-                <svg
-                    class="h-3 w-3 transition-transform duration-300"
-                    viewBox="0 0 10 6"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+            <div class="flex items-center gap-2">
+                <span
+                    class="text-xs font-semibold uppercase tracking-widest text-[#A1A1AA]"
                 >
-                    <path
-                        d="M1 1.25L5 4.75L9 1.25"
-                        stroke="currentColor"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"></path>
-                </svg>
-            </button>
+                    Tuỳ chỉnh
+                </span>
+                <div class="hidden h-px flex-1 bg-[#3F3F46] md:block"></div>
+            </div>
         </div>
 
-        <form
-            id="filterForm"
-            class="mt-4 max-h-0 overflow-hidden space-y-6 transition-all duration-300 md:mt-8 md:max-h-none md:overflow-visible md:block"
-        >
-            <fieldset class="space-y-3">
+        <div class="md:hidden mt-4">
+            <FilterPanelMobile client:load
+                basePath={basePath}
+                currentType={currentType}
+                years={years}
+                categoryOptions={categoryOptions}
+                countryOptions={countryOptions}
+                sortField={sortField}
+                sortType={sortType}
+                category={category}
+                country={country}
+                year={year}
+                limit={limit}
+            />
+        </div>
+
+        <div class="hidden md:block md:mt-8">
+            <form
+                id="filterFormDesktop"
+                class="space-y-6"
+            >
+            <fieldset class="space-y-3 border border-[#3F3F46]/50 bg-[#18181B]/30 p-4">
                 <legend
-                    class="text-xs font-bold uppercase tracking-widest text-[#A1A1AA]"
+                    class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#A1A1AA]"
                 >
+                    <svg class="h-4 w-4 text-[#DFE104]" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2 4h12M2 8h12M2 12h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
                     Sắp xếp & hiển thị
                 </legend>
                 <div
@@ -294,12 +301,12 @@ const activeFilters = [
                 >
                     <div class="flex flex-col gap-2">
                         <label
-                            for="sortField"
+                            for="sortFieldDesktop"
                             class="text-xs font-bold uppercase tracking-tighter text-[#FAFAFA]"
                             >Sắp xếp theo</label
                         >
                         <select
-                            id="sortField"
+                            id="sortFieldDesktop"
                             name="sortField"
                             value={sortField}
                             class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-3 py-3.5 text-sm text-[#FAFAFA] transition-all duration-300 focus:border-[#DFE104] focus:shadow-[0_0_0_2px_rgba(223,225,4,0.3)] focus:outline-none active:scale-[0.99]"
@@ -312,12 +319,12 @@ const activeFilters = [
 
                     <div class="flex flex-col gap-2">
                         <label
-                            for="sortType"
+                            for="sortTypeDesktop"
                             class="text-xs font-bold uppercase tracking-tighter text-[#FAFAFA]"
                             >Thứ tự</label
                         >
                         <select
-                            id="sortType"
+                            id="sortTypeDesktop"
                             name="sortType"
                             value={sortType}
                             class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-3 py-3.5 text-sm text-[#FAFAFA] transition-all duration-300 focus:border-[#DFE104] focus:shadow-[0_0_0_2px_rgba(223,225,4,0.3)] focus:outline-none active:scale-[0.99]"
@@ -329,12 +336,12 @@ const activeFilters = [
 
                     <div class="flex flex-col gap-2">
                         <label
-                            for="year"
+                            for="yearDesktop"
                             class="text-xs font-bold uppercase tracking-tighter text-[#FAFAFA]"
                             >Năm phát hành</label
                         >
                         <select
-                            id="year"
+                            id="yearDesktop"
                             name="year"
                             value={year}
                             class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-3 py-3.5 text-sm text-[#FAFAFA] transition-all duration-300 focus:border-[#DFE104] focus:shadow-[0_0_0_2px_rgba(223,225,4,0.3)] focus:outline-none active:scale-[0.99]"
@@ -350,12 +357,12 @@ const activeFilters = [
 
                     <div class="flex flex-col gap-2">
                         <label
-                            for="limit"
+                            for="limitDesktop"
                             class="text-xs font-bold uppercase tracking-tighter text-[#FAFAFA]"
                             >Số lượng/trang</label
                         >
                         <select
-                            id="limit"
+                            id="limitDesktop"
                             name="limit"
                             value={limit}
                             class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-3 py-3.5 text-sm text-[#FAFAFA] transition-all duration-300 focus:border-[#DFE104] focus:shadow-[0_0_0_2px_rgba(223,225,4,0.3)] focus:outline-none active:scale-[0.99]"
@@ -371,10 +378,15 @@ const activeFilters = [
                 </div>
             </fieldset>
 
-            <fieldset class="space-y-3">
+            <fieldset class="space-y-3 border border-[#3F3F46]/50 bg-[#18181B]/30 p-4">
                 <legend
-                    class="text-xs font-bold uppercase tracking-widest text-[#A1A1AA]"
+                    class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#A1A1AA]"
                 >
+                    <svg class="h-4 w-4 text-[#DFE104]" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="5" cy="5" r="2" stroke="currentColor" stroke-width="1.5"/>
+                        <circle cx="11" cy="11" r="2" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M7 5h2M9 11h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
                     Bộ lọc nội dung
                 </legend>
                 <div
@@ -382,12 +394,12 @@ const activeFilters = [
                 >
                     <div class="flex flex-col gap-2">
                         <label
-                            for="category"
+                            for="categoryDesktop"
                             class="text-xs font-bold uppercase tracking-tighter text-[#FAFAFA]"
                             >Thể loại</label
                         >
                         <select
-                            id="category"
+                            id="categoryDesktop"
                             name="category"
                             value={category}
                             class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-3 py-3.5 text-sm text-[#FAFAFA] transition-all duration-300 focus:border-[#DFE104] focus:shadow-[0_0_0_2px_rgba(223,225,4,0.3)] focus:outline-none active:scale-[0.99]"
@@ -405,12 +417,12 @@ const activeFilters = [
 
                     <div class="flex flex-col gap-2">
                         <label
-                            for="country"
+                            for="countryDesktop"
                             class="text-xs font-bold uppercase tracking-tighter text-[#FAFAFA]"
                             >Quốc gia</label
                         >
                         <select
-                            id="country"
+                            id="countryDesktop"
                             name="country"
                             value={country}
                             class="w-full border-2 border-[#3F3F46] bg-[#27272A] px-3 py-3.5 text-sm text-[#FAFAFA] transition-all duration-300 focus:border-[#DFE104] focus:shadow-[0_0_0_2px_rgba(223,225,4,0.3)] focus:outline-none active:scale-[0.99]"
@@ -428,12 +440,12 @@ const activeFilters = [
 
                     <div class="flex flex-col gap-2">
                         <label
-                            for="language"
+                            for="languageDesktop"
                             class="text-xs font-bold uppercase tracking-tighter text-[#71717A]"
                             >Ngôn ngữ</label
                         >
                         <select
-                            id="language"
+                            id="languageDesktop"
                             disabled
                             class="relative w-full cursor-not-allowed border-2 border-dashed border-[#3F3F46]/50 bg-[#18181B] px-3 py-3.5 text-sm text-[#52525B]"
                         >
@@ -448,141 +460,24 @@ const activeFilters = [
             >
                 <button
                     type="reset"
-                    class="inline-flex w-full items-center justify-center border-2 border-[#3F3F46] bg-transparent px-4 py-3.5 text-sm font-bold uppercase tracking-tighter text-[#FAFAFA] transition-all duration-300 hover:border-white hover:bg-white hover:text-black active:scale-95 sm:w-auto"
+                    class="group inline-flex w-full items-center justify-center gap-2 border-2 border-[#3F3F46] bg-transparent px-4 py-3.5 text-sm font-bold uppercase tracking-tighter text-[#FAFAFA] transition-all duration-300 hover:border-white hover:bg-white hover:text-black active:scale-95 sm:w-auto"
                 >
+                    <svg class="h-4 w-4 transition-transform group-hover:-rotate-180" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2 8h12M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                     Đặt lại
                 </button>
                 <button
                     type="submit"
-                    class="inline-flex w-full items-center justify-center bg-[#DFE104] px-4 py-3.5 text-sm font-bold uppercase tracking-tighter text-black transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(223,225,4,0.5)] active:scale-[0.98] sm:w-auto"
+                    class="group inline-flex w-full items-center justify-center gap-2 bg-[#DFE104] px-4 py-3.5 text-sm font-bold uppercase tracking-tighter text-black transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(223,225,4,0.5)] active:scale-[0.98] sm:w-auto"
                 >
+                    <svg class="h-4 w-4 transition-transform group-hover:scale-110" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                     Áp dụng bộ lọc
                 </button>
             </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
-
-<script define:vars={{ basePath, currentType, currentPage }}>
-    import { navigate } from "astro:transitions/client";
-
-    const form = document.getElementById("filterForm");
-
-    if (!(form instanceof HTMLFormElement)) {
-        console.warn("FilterPanel form not found");
-        return;
-    }
-
-    const toggleButton = document.getElementById("filterToggle");
-    const toggleLabel = toggleButton?.querySelector("[data-collapsible-label]");
-    const toggleIcon = toggleButton?.querySelector("svg");
-    const mediaQuery = window.matchMedia("(min-width: 768px)");
-
-    const applyBreakpointState = () => {
-        if (mediaQuery.matches) {
-            form.style.maxHeight = "";
-            form.style.overflow = "";
-            toggleButton?.setAttribute("aria-expanded", "true");
-            if (toggleLabel) toggleLabel.textContent = "Ẩn bộ lọc";
-            toggleIcon?.classList.add("rotate-180");
-        } else {
-            form.style.maxHeight = "0";
-            form.style.overflow = "hidden";
-            toggleButton?.setAttribute("aria-expanded", "false");
-            if (toggleLabel) toggleLabel.textContent = "Hiện bộ lọc";
-            toggleIcon?.classList.remove("rotate-180");
-        }
-    };
-
-    applyBreakpointState();
-
-    if (toggleButton) {
-        toggleButton.addEventListener("click", () => {
-            const isExpanded = toggleButton.getAttribute("aria-expanded") === "true";
-            const expanded = !isExpanded;
-            toggleButton.setAttribute("aria-expanded", expanded.toString());
-
-            if (expanded) {
-                form.style.overflow = "hidden";
-                const scrollHeight = form.scrollHeight;
-                form.style.maxHeight = scrollHeight + "px";
-                
-                if (toggleLabel) toggleLabel.textContent = "Ẩn bộ lọc";
-                toggleIcon?.classList.add("rotate-180");
-            } else {
-                form.style.maxHeight = "0";
-                
-                if (toggleLabel) toggleLabel.textContent = "Hiện bộ lọc";
-                toggleIcon?.classList.remove("rotate-180");
-            }
-        });
-    }
-
-    mediaQuery.addEventListener("change", applyBreakpointState);
-
-    const buildUrlWithoutFilter = (excludeKey) => {
-        const url = new URL(window.location.href);
-        const params = new URLSearchParams(url.search);
-
-        if (excludeKey) {
-            params.delete(excludeKey);
-        } else {
-            params.delete("category");
-            params.delete("country");
-            params.delete("year");
-            params.delete("limit");
-        }
-
-        params.set("page", "1");
-
-        const queryString = params.toString();
-        return queryString
-            ? `${basePath}/${currentType}?${queryString}`
-            : `${basePath}/${currentType}`;
-    };
-
-    document.querySelectorAll("button[data-filter-key]").forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-            const target = e.currentTarget;
-            const filterKey = target.getAttribute("data-filter-key");
-            if (filterKey && filterKey !== "sort") {
-                navigate(buildUrlWithoutFilter(filterKey));
-            }
-        });
-    });
-
-    const clearAllButton = document.getElementById("clearAllFilters");
-    if (clearAllButton) {
-        clearAllButton.addEventListener("click", () => {
-            navigate(buildUrlWithoutFilter());
-        });
-    }
-
-    form.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        const formData = new FormData(form);
-        const params = new URLSearchParams();
-
-        params.set("page", "1");
-        params.set("sort_field", formData.get("sortField"));
-        params.set("sort_type", formData.get("sortType"));
-
-        const category = formData.get("category");
-        const country = formData.get("country");
-        const year = formData.get("year");
-
-        if (category) params.set("category", category);
-        if (country) params.set("country", country);
-        if (year) params.set("year", year);
-
-        params.set("limit", formData.get("limit"));
-
-        navigate(`${basePath}/${currentType}?${params.toString()}`);
-    });
-
-    form.addEventListener("reset", (e) => {
-        e.preventDefault();
-        navigate(`${basePath}/${currentType}?page=1&sort_field=modified.time&sort_type=desc&limit=10`);
-    });
-</script>

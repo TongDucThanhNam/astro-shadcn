@@ -1,2 +1,30 @@
-[VideoPlayer] - src/components/VideoPlayer.tsx
-└── [PlayerControlLayer] - src/components/video-player/PlayerControlLayer.tsx
+[Layout] - src/layouts/Layout.astro
+├── [Cursor] - src/components/ui/Cursor.tsx
+├── [SearchForm] - src/components/SearchForm.tsx
+│   ├── [CommandDialog] - src/components/ui/command.tsx
+│   │   ├── [Dialog] - src/components/ui/dialog.tsx
+│   │   ├── [DialogContent] - src/components/ui/dialog.tsx
+│   │   │   ├── [DialogPortal] - src/components/ui/dialog.tsx
+│   │   │   └── [DialogOverlay] - src/components/ui/dialog.tsx (fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0)
+│   │   └── [Command] - src/components/ui/command.tsx (flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground)
+│   ├── [CommandList] - src/components/ui/command.tsx (max-h-[300px] overflow-y-auto overflow-x-hidden)
+│   ├── [CommandGroup] - src/components/ui/command.tsx (overflow-hidden p-1 text-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground)
+│   ├── [CommandItem] - src/components/ui/command.tsx (relative flex cursor-default gap-2 select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none data-[disabled=true]:pointer-events-none data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0)
+│   ├── [Icon] - src/components/SearchForm.tsx
+│   ├── [CommandShortcut] - src/components/ui/command.tsx (ml-auto text-xs tracking-widest text-muted-foreground)
+│   ├── [CommandInput] - src/components/ui/command.tsx (flex items-center border-b px-3)
+│   └── [Button] - src/components/ui/button.tsx (inline-flex items-center justify-center gap-2 whitespace-nowrap uppercase tracking-wider text-sm font-bold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0)
+└── [MobileMenu] - src/components/MobileMenu.tsx
+    ├── [Sheet] - src/components/ui/sheet.tsx
+    ├── [SheetContent] - src/components/ui/sheet.tsx
+    │   ├── [SheetPortal] - src/components/ui/sheet.tsx
+    │   └── [SheetOverlay] - src/components/ui/sheet.tsx (fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0)
+    ├── [MenuItemComponent] - src/components/MobileMenu.tsx
+    │   ├── [Collapsible] - src/components/ui/collapsible.tsx
+    │   ├── [CollapsibleContent] - src/components/ui/collapsible.tsx
+    │   ├── [MenuItemComponent] - src/components/MobileMenu.tsx
+    │   │   ↳ (cycle or duplicate omitted)
+    │   └── [CollapsibleTrigger] - src/components/ui/collapsible.tsx
+    ├── [SheetTrigger] - src/components/ui/sheet.tsx
+    └── [Button] - src/components/ui/button.tsx (inline-flex items-center justify-center gap-2 whitespace-nowrap uppercase tracking-wider text-sm font-bold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0)
+        ↳ (cycle or duplicate omitted)

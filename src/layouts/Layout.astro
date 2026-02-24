@@ -1,31 +1,31 @@
 ---
 interface Props {
-	title: string;
+  title: string;
 }
 const { title } = Astro.props;
 
-import { ClientRouter } from "astro:transitions";
+import { ClientRouter } from 'astro:transitions';
 
-import "@/styles/globals.css";
-import MobileMenu from "@/components/MobileMenu";
-import SearchForm from "@/components/SearchForm";
-import Cursor from "@/components/ui/Cursor";
+import '@/styles/globals.css';
+import MobileMenu from '@/components/MobileMenu';
+import SearchForm from '@/components/SearchForm';
+import Cursor from '@/components/ui/Cursor';
 
 const primaryLinks = [
-	{ label: "Phim lẻ", href: "/danh-sach/phim-le" },
-	{ label: "Phim bộ", href: "/danh-sach/phim-bo" },
-	{ label: "TV Shows", href: "/danh-sach/tv-shows" },
+  { label: 'Phim lẻ', href: '/danh-sach/phim-le' },
+  { label: 'Phim bộ', href: '/danh-sach/phim-bo' },
+  { label: 'TV Shows', href: '/danh-sach/tv-shows' },
 ];
 
 const genreLinks = [
-	{ label: "Hành Động", href: "/danh-sach/the-loai/hanh-dong" },
-	{ label: "Tình Cảm", href: "/danh-sach/the-loai/tinh-cam" },
-	{ label: "Cổ Trang", href: "/danh-sach/the-loai/co-trang" },
-	{ label: "Kinh Dị", href: "/danh-sach/the-loai/kinh-di" },
-	{ label: "Hài Hước", href: "/danh-sach/the-loai/hai-huoc" },
-	{ label: "Viễn Tưởng", href: "/danh-sach/the-loai/vien-tuong" },
-	{ label: "Phiêu Lưu", href: "/danh-sach/the-loai/phieu-luu" },
-	{ label: "Bí Ẩn", href: "/danh-sach/the-loai/bi-an" },
+  { label: 'Hành Động', href: '/danh-sach/the-loai/hanh-dong' },
+  { label: 'Tình Cảm', href: '/danh-sach/the-loai/tinh-cam' },
+  { label: 'Cổ Trang', href: '/danh-sach/the-loai/co-trang' },
+  { label: 'Kinh Dị', href: '/danh-sach/the-loai/kinh-di' },
+  { label: 'Hài Hước', href: '/danh-sach/the-loai/hai-huoc' },
+  { label: 'Viễn Tưởng', href: '/danh-sach/the-loai/vien-tuong' },
+  { label: 'Phiêu Lưu', href: '/danh-sach/the-loai/phieu-luu' },
+  { label: 'Bí Ẩn', href: '/danh-sach/the-loai/bi-an' },
 ];
 ---
 

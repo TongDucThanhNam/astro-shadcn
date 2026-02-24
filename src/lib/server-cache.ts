@@ -11,8 +11,8 @@ declare global {
   var __astroServerCache: Map<string, CacheEntry<unknown>> | undefined;
 }
 
-const cacheStore: Map<string, CacheEntry<unknown>> =
-  globalThis.__astroServerCache ?? (globalThis.__astroServerCache = new Map());
+const cacheStore: Map<string, CacheEntry<unknown>> = globalThis.__astroServerCache ??
+(globalThis.__astroServerCache = new Map());
 
 export function getCachedValue<T>(key: string): T | undefined {
   const entry = cacheStore.get(key) as CacheEntry<T> | undefined;

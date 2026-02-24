@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 const statusSchema = z.union([z.boolean(), z.string()]);
 const timestampSchema = z.object({ time: z.string() });
@@ -96,7 +96,10 @@ const listDataSchema = z.object({
 });
 
 const searchDataSchema = listDataSchema.extend({
-  items: z.array(listItemSchema).nullable().transform((items) => items ?? []),
+  items: z
+    .array(listItemSchema)
+    .nullable()
+    .transform((items) => items ?? []),
 });
 
 export const listResponseSchema = z.object({

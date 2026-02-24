@@ -1,36 +1,36 @@
 ---
-import { Image } from "astro:assets";
-import { imagePresets, resolveImageUrl } from "@/lib/wsrv";
-import EpisodeSelector from "./EpisodeSelector";
-import VideoPlayer from "./VideoPlayer";
-import WatchDock from "./WatchDock";
-import ShareButtonWrapper from "./ui/ShareButtonWrapper";
+import { Image } from 'astro:assets';
+import { imagePresets, resolveImageUrl } from '@/lib/wsrv';
+import EpisodeSelector from './EpisodeSelector';
+import VideoPlayer from './VideoPlayer';
+import WatchDock from './WatchDock';
+import ShareButtonWrapper from './ui/ShareButtonWrapper';
 
 type EpisodeServerData = {
-	slug: string;
-	name: string;
-	link_embed?: string;
-	link_m3u8?: string;
+  slug: string;
+  name: string;
+  link_embed?: string;
+  link_m3u8?: string;
 };
 
 type EpisodeServer = {
-	server_name: string;
-	server_data: EpisodeServerData[];
+  server_name: string;
+  server_data: EpisodeServerData[];
 };
 
 type PlayableEpisode = {
-	ep: string;
-	label: string;
-	linkEmbed?: string;
-	linkM3u8?: string;
-	serverName: string;
+  ep: string;
+  label: string;
+  linkEmbed?: string;
+  linkM3u8?: string;
+  serverName: string;
 };
 
 const { data, slug: routeSlug } = Astro.props;
 const movie = data.movie;
 const slug = routeSlug ?? movie.slug;
 const episodes = (data.episodes ?? []) as EpisodeServer[];
-const viewFormatter = new Intl.NumberFormat("vi-VN");
+const viewFormatter = new Intl.NumberFormat('vi-VN');
 
 const heroPreset = imagePresets.hero;
 const posterPreset = imagePresets.poster;
@@ -38,53 +38,48 @@ const posterPreset = imagePresets.poster;
 const heroSource = resolveImageUrl(movie.thumb_url ?? movie.poster_url);
 const posterSource = resolveImageUrl(movie.poster_url ?? movie.thumb_url);
 
-const rating = movie.tmdb?.vote_average
-	? Number(movie.tmdb.vote_average).toFixed(1)
-	: "0.0";
+const rating = movie.tmdb?.vote_average ? Number(movie.tmdb.vote_average).toFixed(1) : '0.0';
 const toEpisodeCount = (value: string | number | null | undefined) => {
-	const count = Number.parseInt(String(value ?? "").replace(/\D/g, ""), 10);
-	return Number.isFinite(count) ? count : 0;
+  const count = Number.parseInt(String(value ?? '').replace(/\D/g, ''), 10);
+  return Number.isFinite(count) ? count : 0;
 };
-const totalEpisodeCount = episodes.reduce(
-	(sum, episode) => sum + episode.server_data.length,
-	0,
-);
+const totalEpisodeCount = episodes.reduce((sum, episode) => sum + episode.server_data.length, 0);
 const episodeTotal = toEpisodeCount(movie.episode_total);
 const episodeCurrent = toEpisodeCount(movie.episode_current);
 const isSeries = Math.max(totalEpisodeCount, episodeTotal) > 1;
 const episodeProgress = isSeries
-	? `${movie.episode_current || episodeCurrent}/${movie.episode_total || episodeTotal} tập`
-	: movie.time || "N/A";
+  ? `${movie.episode_current || episodeCurrent}/${movie.episode_total || episodeTotal} tập`
+  : movie.time || 'N/A';
 const episodeAvailability = isSeries
-	? `${movie.episode_current || episodeCurrent}/${movie.episode_total || episodeTotal} tập đã cập nhật`
-	: "Hoàn tất";
+  ? `${movie.episode_current || episodeCurrent}/${movie.episode_total || episodeTotal} tập đã cập nhật`
+  : 'Hoàn tất';
 
 const playableEpisodes: PlayableEpisode[] = [];
 const seenPlayable = new Set<string>();
 for (const episode of episodes) {
-	for (const serverData of episode.server_data) {
-		if (!serverData.link_m3u8 && !serverData.link_embed) {
-			continue;
-		}
-		const key = `${episode.server_name}:${serverData.slug}:${serverData.link_m3u8 ?? ""}:${serverData.link_embed ?? ""}`;
-		if (seenPlayable.has(key)) {
-			continue;
-		}
-		seenPlayable.add(key);
-		playableEpisodes.push({
-			ep: serverData.slug,
-			label: serverData.name,
-			linkEmbed: serverData.link_embed,
-			linkM3u8: serverData.link_m3u8,
-			serverName: episode.server_name,
-		});
-	}
+  for (const serverData of episode.server_data) {
+    if (!serverData.link_m3u8 && !serverData.link_embed) {
+      continue;
+    }
+    const key = `${episode.server_name}:${serverData.slug}:${serverData.link_m3u8 ?? ''}:${serverData.link_embed ?? ''}`;
+    if (seenPlayable.has(key)) {
+      continue;
+    }
+    seenPlayable.add(key);
+    playableEpisodes.push({
+      ep: serverData.slug,
+      label: serverData.name,
+      linkEmbed: serverData.link_embed,
+      linkM3u8: serverData.link_m3u8,
+      serverName: episode.server_name,
+    });
+  }
 }
 
 const firstPlayableEpisode = playableEpisodes[0];
 const hasEpisodes = totalEpisodeCount > 0;
 const hasPlayableEpisodes = playableEpisodes.length > 0;
-const firstPlayableLabel = firstPlayableEpisode?.label ?? "Chọn tập để phát";
+const firstPlayableLabel = firstPlayableEpisode?.label ?? 'Chọn tập để phát';
 ---
 
 <!-- Hero Section -->

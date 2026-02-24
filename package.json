@@ -8,7 +8,7 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "ui:map": "bun scripts/generate-ui-map.ts --src src --entry src/components/VideoPlayer.tsx --out docs/ui-map --alias @=src",
+    "ui:map": "bun scripts/generate-ui-map.ts --src src --entry src/pages/index.astro --out docs/ui-map --alias @=src",
     "ai:check": "bun scripts/check-ai-contracts.ts --src src",
     "tw:check": "bun scripts/check-tailwind-safety.ts --src src",
     "ai:pack": "bun scripts/context-pack.ts --out .ai/context.txt --inlineRules=false",

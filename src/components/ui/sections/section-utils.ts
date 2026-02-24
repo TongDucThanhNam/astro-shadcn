@@ -1,7 +1,7 @@
-import { getOptimizedSectionData, type SectionRequest } from "@/lib/api-service";
-import type { ListItem } from "@/lib/phimapi";
+import { getOptimizedSectionData, type SectionRequest } from '@/lib/api-service';
+import type { ListItem } from '@/lib/phimapi';
 
-export type SectionLayout = "landscape" | "portrait";
+export type SectionLayout = 'landscape' | 'portrait';
 
 export interface SectionConfig {
   key: string;
@@ -37,7 +37,7 @@ export async function getSectionData(config: SectionConfig): Promise<SectionData
       error: result.error,
     };
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : "Khong the tai du lieu.";
+    const message = error instanceof Error ? error.message : 'Khong the tai du lieu.';
     return {
       ...config,
       items: [],

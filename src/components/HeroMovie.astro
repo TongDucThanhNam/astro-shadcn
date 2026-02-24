@@ -1,18 +1,14 @@
 ---
-import { Image } from "astro:assets";
-import {
-	getLatestMovies,
-	type LatestFeedVersion,
-	parseFeedVersion,
-} from "@/lib/phimapi";
-import { getCachedValue, setCachedValue } from "@/lib/server-cache";
-import { imagePresets, resolveImageUrl } from "@/lib/wsrv";
+import { Image } from 'astro:assets';
+import { getLatestMovies, type LatestFeedVersion, parseFeedVersion } from '@/lib/phimapi';
+import { getCachedValue, setCachedValue } from '@/lib/server-cache';
+import { imagePresets, resolveImageUrl } from '@/lib/wsrv';
 
 interface Props {
-	feedVersion?: LatestFeedVersion;
+  feedVersion?: LatestFeedVersion;
 }
 
-const { feedVersion = "v1" } = Astro.props as Props;
+const { feedVersion = 'v1' } = Astro.props as Props;
 const selectedFeed = parseFeedVersion(feedVersion);
 const HERO_CACHE_KEY = `hero:latest:${selectedFeed}`;
 const HERO_CACHE_TTL_SECONDS = 3600 * 3;
@@ -22,8 +18,8 @@ type LatestFeedResponse = Awaited<ReturnType<typeof getLatestMovies>>;
 let latestData = getCachedValue<LatestFeedResponse>(HERO_CACHE_KEY);
 
 if (!latestData) {
-	latestData = await getLatestMovies({ page: 1, feedVersion: selectedFeed });
-	setCachedValue(HERO_CACHE_KEY, latestData, HERO_CACHE_TTL_SECONDS);
+  latestData = await getLatestMovies({ page: 1, feedVersion: selectedFeed });
+  setCachedValue(HERO_CACHE_KEY, latestData, HERO_CACHE_TTL_SECONDS);
 }
 
 const items = latestData.items ?? [];
@@ -31,41 +27,37 @@ const items = latestData.items ?? [];
 const featured = items.slice(0, 5);
 const hasFeatured = featured.length > 0;
 const heroPreset = imagePresets.hero;
-type FeaturedItem = NonNullable<LatestFeedResponse["items"]>[number];
+type FeaturedItem = NonNullable<LatestFeedResponse['items']>[number];
 
 const normalizeHeroToken = (value: unknown) => {
-	if (typeof value !== "string") return null;
-	const normalized = value.trim();
-	return normalized.length ? normalized : null;
+  if (typeof value !== 'string') return null;
+  const normalized = value.trim();
+  return normalized.length ? normalized : null;
 };
 
 const getHeroMetaTokens = (item: FeaturedItem) => {
-	const tokens: string[] = [];
-	if ("quality" in item) {
-		const quality = normalizeHeroToken(item.quality);
-		if (quality) tokens.push(quality.toUpperCase());
-	}
-	if ("lang" in item) {
-		const lang = normalizeHeroToken(item.lang);
-		if (lang) tokens.push(lang);
-	}
-	if ("episode_current" in item) {
-		const episode = normalizeHeroToken(item.episode_current);
-		if (episode) tokens.push(episode);
-	}
-	if ("time" in item) {
-		const runtime = normalizeHeroToken(item.time);
-		if (runtime) tokens.push(runtime);
-	}
-	if (
-		"category" in item &&
-		Array.isArray(item.category) &&
-		item.category.length
-	) {
-		const primaryCategory = normalizeHeroToken(item.category[0]?.name);
-		if (primaryCategory) tokens.push(primaryCategory);
-	}
-	return tokens.slice(0, 4);
+  const tokens: string[] = [];
+  if ('quality' in item) {
+    const quality = normalizeHeroToken(item.quality);
+    if (quality) tokens.push(quality.toUpperCase());
+  }
+  if ('lang' in item) {
+    const lang = normalizeHeroToken(item.lang);
+    if (lang) tokens.push(lang);
+  }
+  if ('episode_current' in item) {
+    const episode = normalizeHeroToken(item.episode_current);
+    if (episode) tokens.push(episode);
+  }
+  if ('time' in item) {
+    const runtime = normalizeHeroToken(item.time);
+    if (runtime) tokens.push(runtime);
+  }
+  if ('category' in item && Array.isArray(item.category) && item.category.length) {
+    const primaryCategory = normalizeHeroToken(item.category[0]?.name);
+    if (primaryCategory) tokens.push(primaryCategory);
+  }
+  return tokens.slice(0, 4);
 };
 ---
 

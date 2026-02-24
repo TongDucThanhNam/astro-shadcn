@@ -1,13 +1,13 @@
 ---
-import SectionListCarousel from "@/components/ui/SectionListCarousel";
-import { getSectionData } from "./section-utils";
+import SectionListCarousel from '@/components/ui/SectionListCarousel';
+import { getSectionData } from './section-utils';
 
 const { config } = Astro.props;
 
 const section = await getSectionData(config);
 ---
 
-<section class="flex flex-col gap-5 border-t border-[#27272A] pt-8 sm:gap-6 sm:pt-10" id={section.key}>
+<section class="flex flex-col gap-5 border-t border-[#27272A] px-0 sm:px-2 md:px-4 lg:px-6 pt-8 sm:gap-6 sm:pt-10" id={section.key}>
     <div class="flex flex-wrap items-end justify-between gap-3">
         <div class="space-y-1">
             <h2 class="text-2xl font-bold uppercase tracking-tighter text-[#FAFAFA] sm:text-[2rem]">

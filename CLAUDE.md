@@ -1,244 +1,80 @@
-# Agents instructions
-You are an AI coding assistant working on the AstroFlim codebase. Keep responses short, actionable, and specific to this repository. NEVER CREATE DOCS OR TESTS.
-You have given 2 MCP tool to help you:
-- `search_astro_docs`: Search through Astro documentation
-- `get_code_context_example`: Search relevant code in Github.
+# AstroFilm — Agent Instructions
 
-Project snapshot
-- Framework: Astro (hybrid server + static); partial hydration used across components.
-- UI: React components inside Astro (`.tsx`) + Astro components (`.astro`). Tailwind + shadcn used for design.
-- Data: Canonical PhimAPI integration lives in `src/lib/phimapi/*`.
+You are an AI coding assistant on **AstroFilm**. Keep responses short, actionable, and repository-specific. **NEVER CREATE DOCS OR TESTS.**
 
-# AstroFilm Codebase Instructions
+## Project Identity
+Movie discovery app — **Astro 5 + React 18 + Tailwind 4 + shadcn/ui**, data from [PhimAPI](https://phimapi.com), deployed on **Vercel SSR**.
 
-## Project Overview
-**AstroFilm** is a movie discovery application built with **Astro 5 + React + Tailwind CSS**, using [PhimAPI](https://phimapi.com) as the upstream movie data provider.
-
-### Tech Stack
-- **Framework:** Astro 5.14.8 with React 18 integration
-- **Styling:** Tailwind CSS 3.4 + shadcn/ui (Radix)
-- **Design System:** Kinetic Typography (`docs/design_system.md`)
-- **API:** PhimAPI (`.github/instructions/phim_api_instructions.md`)
-- **Deployment:** Vercel serverless (SSR + cache headers)
-- **Validation:** Zod runtime schemas for upstream payload safety
+## MCP Tools
+- `search_astro_docs` — Astro documentation search
+- `get_code_context_example` — GitHub code search
 
 ---
 
-## Architecture & Data Flow
+## 🚨 HARD GATE — UI Edits Require Visual Hierarchy
 
-### 1) Routing & SSR
-Primary routes in `src/pages/`:
-- `/` and `/[page]` for latest movies (supports `?feed=v1|v2|v3`)
-- `/phim/[slug]` for movie detail
-- `/tim-kiem/[keyword]` for search
-- `/danh-sach/[type]` and `/danh-sach/[type]/[page]` for type lists
-- `/danh-sach/the-loai/[type]` for category lists
-- `/danh-sach/quoc-gia/[type]` for country lists
-- `/danh-sach/nam/[year]` for year lists
+**IF** you are about to change styling, layout, or Tailwind classes in **any** file under `src/components/`, `src/layouts/`, `src/styles/`, or `src/pages/**/*.astro`:
 
-Internal API routes:
-- `/api/sections/[typeList]` for section list data
-- `/api/tmdb/[type]/[id]` for TMDB based lookup proxy
+**STOP. Do NOT write code yet.** First:
 
-### 2) Canonical API Integration (single source of truth)
-All upstream calls should go through:
-- `src/lib/phimapi/client.ts` (methods + error handling)
-- `src/lib/phimapi/query.ts` (query parsing/normalization/invariants)
-- `src/lib/phimapi/schemas.ts` (Zod schemas + inferred TS types)
-- `src/lib/phimapi/index.ts` (public exports)
+1. Look up the **actual file path** from the **Route Map** below (e.g. `/danh-sach/phim-le` → `src/pages/danh-sach/[type].astro`)
+2. Run this command with that **real file path** (NOT the URL):
 
-Do **not** add direct `fetch("https://phimapi...")` from pages/components.
-
-### 3) API Coverage (excluding WEBP by design)
-Covered endpoints:
-- `GET /danh-sach/phim-moi-cap-nhat`
-- `GET /danh-sach/phim-moi-cap-nhat-v2`
-- `GET /danh-sach/phim-moi-cap-nhat-v3`
-- `GET /phim/{slug}`
-- `GET /tmdb/{type}/{id}`
-- `GET /v1/api/danh-sach/{type_list}`
-- `GET /v1/api/tim-kiem`
-- `GET /the-loai`
-- `GET /v1/api/the-loai/{slug}`
-- `GET /quoc-gia`
-- `GET /v1/api/quoc-gia/{slug}`
-- `GET /v1/api/nam/{year}`
-
-Not in scope: `GET /image.php?url=...` (WEBP conversion endpoint).
-
-### 4) Type & Validation Strategy
-- Runtime validation by Zod happens before payload reaches UI.
-- TS types are inferred from Zod schemas.
-- Compatibility aliases still exist in:
-  - `src/types/index.ts`
-  - `src/pages/danh-sach/type.ts`
-- Search `data.items` is normalized from `null` to `[]`.
-
----
-
-## Development Workflows
-
-### Local development
 ```bash
-bun install
-bun run dev
-bun run build
-bun run preview
+bun scripts/generate-ui-map.ts --src src --entry src/pages/PAGE_FILE.astro --out docs/ui-map --alias @=src
 ```
-Equivalent npm scripts are also available (`npm run dev`, `npm run build`, ...).
 
-### Build process
-1. `astro check` (type diagnostics)
-2. `astro build` (SSR/server build)
-3. Output in `dist/` with Vercel adapter packaging
+⚠️ `--entry` must be an **actual file on disk** (e.g. `src/pages/danh-sach/[type].astro`), NOT a URL route (~~`src/pages/danh-sach/phim-le`~~). Astro uses dynamic params like `[type]`, `[slug]`, `[page]` in filenames.
 
-### Environment
-- Required env: `PUBLIC_PHIM_MOI`
-- Example: `PUBLIC_PHIM_MOI=https://phimapi.com`
-
----
-
-## Query & Data Invariants
-Enforced in `src/lib/phimapi/query.ts`:
-- `page >= 1`
-- `1 <= limit <= 64`
-- `sort_field in {modified.time, _id, year}`
-- `sort_type in {asc, desc}`
-- `sort_lang in {vietsub, thuyet-minh, long-tieng}` when provided
-- slug format: `^[a-z0-9-]+$`
-- year range: `1970..currentYear`
-- TMDB type: `tv|movie`, TMDB id numeric
-
----
-
-## Important Files
-| File | Purpose |
-|------|---------|
-| `src/lib/phimapi/client.ts` | Canonical API client + typed errors |
-| `src/lib/phimapi/query.ts` | Query normalization and guardrails |
-| `src/lib/phimapi/schemas.ts` | Zod schemas + inferred response types |
-| `src/pages/api/tmdb/[type]/[id].ts` | Internal TMDB proxy endpoint |
-| `src/pages/api/sections/[typeList].ts` | Internal list section endpoint |
-| `src/components/FilterPanel.astro` | Taxonomy + validated filter UI |
-| `src/components/HeroMovie.astro` | Latest feed hero (v1/v2/v3 aware) |
-| `src/components/MovieGrid.astro` | Latest list grid and feed-aware pagination |
-| `src/lib/api-service.ts` | Section batching on top of canonical client |
-| `docs/api-integration.md` | Canonical API integration reference |
-
----
-
-## Common Tasks
-
-### Add a new upstream endpoint
-1. Add Zod schema in `src/lib/phimapi/schemas.ts`.
-2. Add/extend query/path validation in `src/lib/phimapi/query.ts`.
-3. Add method in `src/lib/phimapi/client.ts`.
-4. Use that method from route/component (no direct upstream fetch).
-5. Sync `docs/api-integration.md` endpoint matrix.
-
-### Add a new filtered list page
-1. Create route under `src/pages/danh-sach/...`.
-2. Use `listQueryFromRequest()` + `parseListQuery()`.
-3. Fetch via `getListByType()` or `getByCategory()` / `getByCountry()` / `getByYear()`.
-4. Build page links with `toListSearchParams()`.
-
-### Debug upstream shape issues
-1. Inspect relevant Zod schema in `src/lib/phimapi/schemas.ts`.
-2. Check thrown `PhimApiClientError` code (`invalid_payload`, `upstream_http_error`, ...).
-3. Compare with payload notes in `docs/api-integration.md`.
-
----
-
-## Deployment Notes
-- **Host:** Vercel serverless
-- **Adapter:** `@astrojs/vercel`
-- **Output:** `server`
-- **Caching:** via `Cache-Control` headers from `src/lib/cache.ts` + selective in-memory hot cache (`src/lib/server-cache.ts`)
-
----
-
-## Known Limitations / Notes
-- Upstream `status` type is inconsistent across endpoints (string/boolean); handled in schemas.
-- Search can return `items: null`; normalized to `[]`.
-- No Auth/Favorites subsystem yet.
-
----
-
-# React + Tailwind AI Rules (Context Engineering)
-
-## Golden Rule
-Never guess layout constraints. Use the provided UI tree + JSDoc contracts.
-If context is missing, infer only from:
-- `docs/ui-map.ascii.txt`
-- breadcrumb at the top of the file
-- JSDoc tags in the component file
-- `docs/spec.md`
-
-## Component Contracts (Mandatory)
-Every component file should start with:
-- `// BREADCRUMB: A / B / C / ComponentName`
-- `// PARENT_LAYOUT: flex-col | flex-row | grid-cols-... | unknown`
-- `// TAILWIND_CONTRACT: short constraints`
-
-Every exported component should include a JSDoc block with:
-- `@component`
-- `@hierarchy`
-- `@layout_context`
-- `@tailwind_contract`
-
-## Layout Safety
-- Child components should accept `className` and spread props when appropriate.
-- Child components should not hardcode width or height unless `docs/spec.md` explicitly requires it.
-- Prefer `w-full`, `min-w-0`, `flex-1`, `shrink-0` based on context.
-- If parent is grid, use `col-span-*` only when parent grid info is known.
-
-## Tailwind Discipline
-- Biome formatting is enforced. Keep class order stable and deterministic.
-- Avoid arbitrary values: `w-[...]`, `h-[...]`, `bg-[#...]` unless `docs/spec.md` allows it.
-- Avoid `@apply` unless documented exception.
-
-## Editing Protocol (Text-only)
-When asked to edit a component:
-1. Read breadcrumb + JSDoc contract.
-2. Locate parent container constraints from `docs/ui-map.ascii.txt`.
-3. Make minimal changes and preserve layout primitives (flex/grid/overflow).
-4. Keep class ordering stable.
-5. Ensure component composition keeps `className` and forwarded props.
-
-## Output Requirement
-- Provide code diffs or full file content.
-- Avoid screenshot-based verification requirements.
-- If uncertain, add a TODO with the exact missing context.
-
-## Bun Workflow (Manual Test + Feedback)
-Canonical command flow:
+3. **Read the output**:
 ```bash
-bun run format
-bun run ui:map
-bun run ai:check || true
-bun run tw:check || true
-bun run ai:pack
+cat docs/ui-map.ascii.txt
 ```
 
-Manual test flow:
-1. Run `bun run dev`.
-2. Open a single target route and capture baseline behavior in text.
-3. Apply one focused component change.
-4. Re-run `bun run ui:map` and `bun run ai:pack`.
-5. Validate only requested scope and ensure no layout regressions.
-
-Feedback packet expected from human:
-```txt
-[RESULT] pass|fail
-[ROUTE] /example-route
-[COMPONENT] src/components/Example.tsx
-[OBSERVED] what happened
-[EXPECTED] what should happen
-[REGRESSION] yes|no
-[SCREENLESS_HINT] one concrete DOM/class clue (text-only)
+This gives you the parent→child component tree with Tailwind wrapper classes at each level. Example:
+```
+[Layout] (flex flex-col min-h-screen)
+└── [FilterPanel] (sticky top-16 z-30 border-b)
+    ├── [Combobox] (relative w-full)
+    └── [Button] (inline-flex items-center gap-2)
 ```
 
-When feedback arrives:
-1. If fail, patch with minimal diff and preserve contracts.
-2. If regression, fix regression first.
-3. Return changed files and rerun commands.
+**WHY this is mandatory:** Without this tree, you don't know the parent's layout strategy (flex? grid? fixed? relative?) and will generate Tailwind classes that conflict with the container. This is the #1 cause of broken UI from AI edits.
+
+**Only after reading and understanding the hierarchy tree, proceed to edit code.**
+
+For full UI conventions → read [ui.instructions.md](.github/instructions/ui.instructions.md).
+
+---
+
+## Task Router
+
+Read the **domain-specific instructions** based on what you're working on:
+
+| You are editing… | Auto-loaded instructions | Key concern |
+|---|---|---|
+| `src/components/**`, `src/layouts/**`, `src/styles/**` | [ui.instructions.md](.github/instructions/ui.instructions.md) | **Visual Hierarchy workflow** — MUST generate tree before UI edits |
+| `src/lib/**`, `src/types/**` | [data.instructions.md](.github/instructions/data.instructions.md) | API client, Zod schemas, query invariants |
+| `src/pages/api/**` | [data.instructions.md](.github/instructions/data.instructions.md) | Internal API endpoints |
+| `src/pages/**/*.astro` | Both **ui** + **data** — pages wire data to templates | Routing + SSR |
+| `scripts/**`, `package.json`, `astro.config.*` | [ops.instructions.md](.github/instructions/ops.instructions.md) | Build, deploy, dev commands |
+| Any file | [phim_api.instructions.md](.github/instructions/phim_api.instructions.md) | Upstream API reference (always loaded) |
+
+## Route Map
+| Route | Page file |
+|---|---|
+| `/`, `/[page]` | `src/pages/index.astro`, `src/pages/[page].astro` |
+| `/phim/[slug]` | `src/pages/phim/[slug].astro` |
+| `/tim-kiem/[keyword]` | `src/pages/tim-kiem/[keyword].astro` |
+| `/danh-sach/[type]` | `src/pages/danh-sach/[type].astro` |
+| `/danh-sach/the-loai/[type]` | `src/pages/danh-sach/the-loai/[type].astro` |
+| `/danh-sach/quoc-gia/[type]` | `src/pages/danh-sach/quoc-gia/[type].astro` |
+| `/danh-sach/nam/[year]` | `src/pages/danh-sach/nam/[year].astro` |
+| `/api/sections/[typeList]` | `src/pages/api/sections/[typeList].ts` |
+| `/api/tmdb/[type]/[id]` | `src/pages/api/tmdb/[type]/[id].ts` |
+
+## Global Rules
+1. All upstream API calls go through `src/lib/phimapi/*` — **no direct fetch**.
+2. TS types inferred from Zod schemas — never duplicate.
+3. Use `cn()` from `src/lib/utils.ts` for class merging.
+4. No Auth/Favorites subsystem yet.

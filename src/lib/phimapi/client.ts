@@ -1,11 +1,7 @@
-import { getSecret } from "astro:env/server";
-import type { ZodTypeAny } from "zod";
+import { getSecret } from 'astro:env/server';
+import type { ZodTypeAny } from 'zod';
 
-import {
-  CACHE_CONFIGS,
-  getCacheHeaders,
-  type CacheConfig,
-} from "@/lib/cache";
+import { CACHE_CONFIGS, getCacheHeaders, type CacheConfig } from '@/lib/cache';
 import {
   latestV1ResponseSchema,
   latestV2ResponseSchema,
@@ -22,7 +18,7 @@ import {
   type MovieDetailResponse,
   type SearchResponse,
   type TaxonomyItem,
-} from "./schemas";
+} from './schemas';
 import {
   normalizeTmdbId,
   normalizeTmdbType,
@@ -34,20 +30,20 @@ import {
   type LatestFeedVersion,
   type QueryInput,
   type TmdbType,
-} from "./query";
+} from './query';
 
 const LATEST_PATHS = {
-  v1: "/danh-sach/phim-moi-cap-nhat",
-  v2: "/danh-sach/phim-moi-cap-nhat-v2",
-  v3: "/danh-sach/phim-moi-cap-nhat-v3",
+  v1: '/danh-sach/phim-moi-cap-nhat',
+  v2: '/danh-sach/phim-moi-cap-nhat-v2',
+  v3: '/danh-sach/phim-moi-cap-nhat-v3',
 } as const;
 
 export type PhimApiErrorCode =
-  | "missing_config"
-  | "invalid_query"
-  | "upstream_http_error"
-  | "invalid_json"
-  | "invalid_payload";
+  | 'missing_config'
+  | 'invalid_query'
+  | 'upstream_http_error'
+  | 'invalid_json'
+  | 'invalid_payload';
 
 export class PhimApiClientError extends Error {
   code: PhimApiErrorCode;
@@ -55,20 +51,16 @@ export class PhimApiClientError extends Error {
 
   constructor(message: string, code: PhimApiErrorCode, status = 500) {
     super(message);
-    this.name = "PhimApiClientError";
+    this.name = 'PhimApiClientError';
     this.code = code;
     this.status = status;
   }
 }
 
 function getApiBaseUrl() {
-  const apiBase = getSecret("PUBLIC_PHIM_MOI");
+  const apiBase = getSecret('PUBLIC_PHIM_MOI');
   if (!apiBase) {
-    throw new PhimApiClientError(
-      "Missing PUBLIC_PHIM_MOI configuration.",
-      "missing_config",
-      500,
-    );
+    throw new PhimApiClientError('Missing PUBLIC_PHIM_MOI configuration.', 'missing_config', 500);
   }
 
   return apiBase;
@@ -88,17 +80,17 @@ async function requestJson<TSchema extends ZodTypeAny>(options: {
   schema: TSchema;
   searchParams?: URLSearchParams;
   cacheConfig: CacheConfig;
-}): Promise<ReturnType<TSchema["parse"]>> {
+}): Promise<ReturnType<TSchema['parse']>> {
   const url = buildApiUrl(options.pathname, options.searchParams);
   const response = await fetch(url.toString(), {
-    cache: "force-cache",
+    cache: 'force-cache',
     headers: getCacheHeaders(options.cacheConfig),
   });
 
   if (!response.ok) {
     throw new PhimApiClientError(
       `Upstream API returned ${response.status}.`,
-      "upstream_http_error",
+      'upstream_http_error',
       response.status,
     );
   }
@@ -107,20 +99,16 @@ async function requestJson<TSchema extends ZodTypeAny>(options: {
   try {
     payload = await response.json();
   } catch {
-    throw new PhimApiClientError(
-      "Upstream API did not return valid JSON.",
-      "invalid_json",
-      502,
-    );
+    throw new PhimApiClientError('Upstream API did not return valid JSON.', 'invalid_json', 502);
   }
 
   const parsed = options.schema.safeParse(payload);
   if (!parsed.success) {
     const firstIssue = parsed.error.issues[0];
-    const issuePath = firstIssue?.path?.join(".") ?? "unknown";
+    const issuePath = firstIssue?.path?.join('.') ?? 'unknown';
     throw new PhimApiClientError(
       `Invalid upstream payload at ${issuePath}.`,
-      "invalid_payload",
+      'invalid_payload',
       502,
     );
   }
@@ -128,19 +116,20 @@ async function requestJson<TSchema extends ZodTypeAny>(options: {
   return parsed.data;
 }
 
-export async function getLatestMovies(options: {
-  page?: number;
-  feedVersion?: LatestFeedVersion;
-} = {}): Promise<
-  LatestMoviesResponseV1 | LatestMoviesResponseV2 | LatestMoviesResponseV3
-> {
-  const page = Number.isFinite(options.page) && (options.page ?? 0) > 0
-    ? Math.trunc(options.page as number)
-    : 1;
+export async function getLatestMovies(
+  options: {
+    page?: number;
+    feedVersion?: LatestFeedVersion;
+  } = {},
+): Promise<LatestMoviesResponseV1 | LatestMoviesResponseV2 | LatestMoviesResponseV3> {
+  const page =
+    Number.isFinite(options.page) && (options.page ?? 0) > 0
+      ? Math.trunc(options.page as number)
+      : 1;
   const feedVersion = parseFeedVersion(options.feedVersion);
   const searchParams = new URLSearchParams({ page: String(page) });
 
-  if (feedVersion === "v2") {
+  if (feedVersion === 'v2') {
     return requestJson({
       pathname: LATEST_PATHS.v2,
       schema: latestV2ResponseSchema,
@@ -149,7 +138,7 @@ export async function getLatestMovies(options: {
     });
   }
 
-  if (feedVersion === "v3") {
+  if (feedVersion === 'v3') {
     return requestJson({
       pathname: LATEST_PATHS.v3,
       schema: latestV3ResponseSchema,
@@ -169,9 +158,9 @@ export async function getLatestMovies(options: {
 export async function getMovieDetail(slug: string): Promise<MovieDetailResponse> {
   let normalizedSlug: string;
   try {
-    normalizedSlug = normalizeTypeList(slug, "slug");
+    normalizedSlug = normalizeTypeList(slug, 'slug');
   } catch {
-    throw new PhimApiClientError("Invalid slug.", "invalid_query", 400);
+    throw new PhimApiClientError('Invalid slug.', 'invalid_query', 400);
   }
 
   return requestJson({
@@ -181,10 +170,7 @@ export async function getMovieDetail(slug: string): Promise<MovieDetailResponse>
   });
 }
 
-export async function getMovieByTmdb(
-  type: TmdbType,
-  id: string,
-): Promise<MovieDetailResponse> {
+export async function getMovieByTmdb(type: TmdbType, id: string): Promise<MovieDetailResponse> {
   const tmdbType = normalizeTmdbType(type);
   const tmdbId = normalizeTmdbId(id);
 
@@ -214,7 +200,7 @@ export async function getByCategory(
   categorySlug: string,
   queryInput: QueryInput = {},
 ): Promise<ListResponse> {
-  const normalizedSlug = normalizeTypeList(categorySlug, "category slug");
+  const normalizedSlug = normalizeTypeList(categorySlug, 'category slug');
   const query = parseListQuery(queryInput, { limit: 10 });
 
   return requestJson({
@@ -229,7 +215,7 @@ export async function getByCountry(
   countrySlug: string,
   queryInput: QueryInput = {},
 ): Promise<ListResponse> {
-  const normalizedSlug = normalizeTypeList(countrySlug, "country slug");
+  const normalizedSlug = normalizeTypeList(countrySlug, 'country slug');
   const query = parseListQuery(queryInput, { limit: 10 });
 
   return requestJson({
@@ -240,14 +226,11 @@ export async function getByCountry(
   });
 }
 
-export async function getByYear(
-  year: string,
-  queryInput: QueryInput = {},
-): Promise<ListResponse> {
+export async function getByYear(year: string, queryInput: QueryInput = {}): Promise<ListResponse> {
   const normalizedYear = normalizeYearParam(year);
   const query = parseListQuery(queryInput, { limit: 10 });
   const search = toListSearchParams(query);
-  search.delete("year");
+  search.delete('year');
 
   return requestJson({
     pathname: `/v1/api/nam/${encodeURIComponent(normalizedYear)}`,
@@ -263,15 +246,15 @@ export async function searchMovies(
 ): Promise<SearchResponse> {
   const normalizedKeyword = keyword.trim();
   if (!normalizedKeyword) {
-    throw new PhimApiClientError("Keyword is required.", "invalid_query", 400);
+    throw new PhimApiClientError('Keyword is required.', 'invalid_query', 400);
   }
 
   const query = parseListQuery(queryInput, { limit: 32 });
   const search = toListSearchParams(query);
-  search.set("keyword", normalizedKeyword);
+  search.set('keyword', normalizedKeyword);
 
   return requestJson({
-    pathname: "/v1/api/tim-kiem",
+    pathname: '/v1/api/tim-kiem',
     schema: searchResponseSchema,
     searchParams: search,
     cacheConfig: CACHE_CONFIGS.SEARCH_RESULTS,
@@ -280,7 +263,7 @@ export async function searchMovies(
 
 export async function getCategoryTaxonomy(): Promise<TaxonomyItem[]> {
   return requestJson({
-    pathname: "/the-loai",
+    pathname: '/the-loai',
     schema: taxonomyListSchema,
     cacheConfig: CACHE_CONFIGS.SECTION_DATA,
   });
@@ -288,7 +271,7 @@ export async function getCategoryTaxonomy(): Promise<TaxonomyItem[]> {
 
 export async function getCountryTaxonomy(): Promise<TaxonomyItem[]> {
   return requestJson({
-    pathname: "/quoc-gia",
+    pathname: '/quoc-gia',
     schema: taxonomyListSchema,
     cacheConfig: CACHE_CONFIGS.SECTION_DATA,
   });

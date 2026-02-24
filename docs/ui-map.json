@@ -1,7 +1,240 @@
 {
-  "generatedAt": "2026-02-24T11:18:09.219Z",
-  "rootKey": "VideoPlayer@src/components/VideoPlayer.tsx",
+  "generatedAt": "2026-02-24T13:00:16.821Z",
+  "rootKey": "Layout@src/layouts/Layout.astro",
   "nodes": [
+    {
+      "key": "AdvancedPlayer@src/components/AdvancedPlayer.tsx",
+      "name": "AdvancedPlayer",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/AdvancedPlayer.tsx",
+      "fileRel": "src/components/AdvancedPlayer.tsx",
+      "wrapperClass": null,
+      "renders": [],
+      "mermaidId": "AdvancedPlayer_c886e4f7"
+    },
+    {
+      "key": "Card@src/components/Card.astro",
+      "name": "Card",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/Card.astro",
+      "fileRel": "src/components/Card.astro",
+      "wrapperClass": "link-card",
+      "renders": [],
+      "mermaidId": "Card_deb52676"
+    },
+    {
+      "key": "ComboboxDemo@src/components/Combobox.tsx",
+      "name": "ComboboxDemo",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/Combobox.tsx",
+      "fileRel": "src/components/Combobox.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "Popover",
+        "PopoverContent",
+        "Command",
+        "CommandList",
+        "CommandGroup",
+        "CommandItem",
+        "Check",
+        "CommandEmpty",
+        "CommandInput",
+        "PopoverTrigger",
+        "Button",
+        "ChevronsUpDown"
+      ],
+      "mermaidId": "ComboboxDemo_b220e84a"
+    },
+    {
+      "key": "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "name": "EpisodeSelector",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/EpisodeSelector.tsx",
+      "fileRel": "src/components/EpisodeSelector.tsx",
+      "wrapperClass": "mt-6 border-2 border-[#3F3F46] bg-[#09090B]",
+      "renders": [
+        "Card",
+        "CardContent",
+        "Tabs",
+        "TabsContent",
+        "Pagination",
+        "PaginationContent",
+        "PaginationItem",
+        "Button",
+        "ChevronRight",
+        "PaginationEllipsis",
+        "ChevronLeft",
+        "Film",
+        "Play",
+        "TooltipProvider",
+        "Tooltip",
+        "TooltipContent",
+        "TooltipTrigger",
+        "SkipForward",
+        "SkipBack",
+        "Badge",
+        "Toggle",
+        "ArrowUpDown",
+        "Input",
+        "Search",
+        "TabsList",
+        "TabsTrigger",
+        "CardHeader",
+        "CardTitle"
+      ],
+      "mermaidId": "EpisodeSelector_3201ab1a"
+    },
+    {
+      "key": "FilterPanel@src/components/FilterPanel.astro",
+      "name": "FilterPanel",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/FilterPanel.astro",
+      "fileRel": "src/components/FilterPanel.astro",
+      "wrapperClass": "relative w-full overflow-hidden border-2 border-[#3F3F46] bg-[#09090B]",
+      "renders": [
+        "FilterPanelMobile"
+      ],
+      "mermaidId": "FilterPanel_5bf99664"
+    },
+    {
+      "key": "FilterPanelMobile@src/components/FilterPanelMobile.tsx",
+      "name": "FilterPanelMobile",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/FilterPanelMobile.tsx",
+      "fileRel": "src/components/FilterPanelMobile.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "FilterSheet"
+      ],
+      "mermaidId": "FilterPanelMobile_cb158b15"
+    },
+    {
+      "key": "FilterSheet@src/components/FilterSheet.tsx",
+      "name": "FilterSheet",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/FilterSheet.tsx",
+      "fileRel": "src/components/FilterSheet.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "Sheet",
+        "SheetContent",
+        "SheetHeader",
+        "SheetTitle"
+      ],
+      "mermaidId": "FilterSheet_d50a544a"
+    },
+    {
+      "key": "HeroMovie@src/components/HeroMovie.astro",
+      "name": "HeroMovie",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/HeroMovie.astro",
+      "fileRel": "src/components/HeroMovie.astro",
+      "wrapperClass": "relative mx-auto flex w-full flex-col gap-6 px-0 pb-8 pt-3 sm:gap-8 sm:pb-10",
+      "renders": [
+        "Image"
+      ],
+      "mermaidId": "HeroMovie_25627ca5"
+    },
+    {
+      "key": "MenuItemComponent@src/components/MobileMenu.tsx",
+      "name": "MenuItemComponent",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/MobileMenu.tsx",
+      "fileRel": "src/components/MobileMenu.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "Collapsible",
+        "CollapsibleContent",
+        "MenuItemComponent",
+        "CollapsibleTrigger",
+        "ChevronRight",
+        "ChevronDown"
+      ],
+      "mermaidId": "MenuItemComponent_2951ee3c"
+    },
+    {
+      "key": "MobileMenu@src/components/MobileMenu.tsx",
+      "name": "MobileMenu",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/MobileMenu.tsx",
+      "fileRel": "src/components/MobileMenu.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "Sheet",
+        "SheetContent",
+        "MenuItemComponent",
+        "SheetTrigger",
+        "Button",
+        "Menu"
+      ],
+      "mermaidId": "MobileMenu_5b56bd69"
+    },
+    {
+      "key": "ModeToggle@src/components/ModeToggle.tsx",
+      "name": "ModeToggle",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ModeToggle.tsx",
+      "fileRel": "src/components/ModeToggle.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "DropdownMenu",
+        "DropdownMenuContent",
+        "DropdownMenuItem",
+        "DropdownMenuTrigger",
+        "Button",
+        "Moon",
+        "Sun"
+      ],
+      "mermaidId": "ModeToggle_d72ce61c"
+    },
+    {
+      "key": "MovieCard@src/components/MovieCard.astro",
+      "name": "MovieCard",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/MovieCard.astro",
+      "fileRel": "src/components/MovieCard.astro",
+      "wrapperClass": "group block w-full",
+      "renders": [
+        "Image"
+      ],
+      "mermaidId": "MovieCard_2af17c6a"
+    },
+    {
+      "key": "MovieDetailPage@src/components/MovieDetailPage.astro",
+      "name": "MovieDetailPage",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/MovieDetailPage.astro",
+      "fileRel": "src/components/MovieDetailPage.astro",
+      "wrapperClass": "relative min-h-[70svh] overflow-hidden md:min-h-[80svh] lg:min-h-[92svh]",
+      "renders": [
+        "Image",
+        "ShareButtonWrapper",
+        "WatchDock",
+        "EpisodeSelector",
+        "VideoPlayer"
+      ],
+      "mermaidId": "MovieDetailPage_b419a2bd"
+    },
+    {
+      "key": "MovieGrid@src/components/MovieGrid.astro",
+      "name": "MovieGrid",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/MovieGrid.astro",
+      "fileRel": "src/components/MovieGrid.astro",
+      "wrapperClass": null,
+      "renders": [
+        "MovieCard",
+        "Pagination",
+        "PaginationContent",
+        "PaginationItem",
+        "PaginationPrevious",
+        "PaginationLink",
+        "PaginationNext"
+      ],
+      "mermaidId": "MovieGrid_054a9e5d"
+    },
+    {
+      "key": "MovieTypeSelector@src/components/MovieTypeSelector.tsx",
+      "name": "MovieTypeSelector",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/MovieTypeSelector.tsx",
+      "fileRel": "src/components/MovieTypeSelector.tsx",
+      "wrapperClass": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4",
+      "renders": [
+        "Card",
+        "CardFooter",
+        "Button",
+        "CardContent",
+        "CardHeader",
+        "CardTitle"
+      ],
+      "mermaidId": "MovieTypeSelector_957a436a"
+    },
     {
       "key": "ListItem@src/components/NavigationMenuDemo.tsx",
       "name": "ListItem",
@@ -42,6 +275,7 @@
         "CommandList",
         "CommandGroup",
         "CommandItem",
+        "Icon",
         "CommandShortcut",
         "Search",
         "CommandInput",
@@ -50,164 +284,642 @@
       "mermaidId": "SearchForm_d8a5bbc4"
     },
     {
-      "key": "ComboboxDemo@src/components/Combobox.tsx",
-      "name": "ComboboxDemo",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/Combobox.tsx",
-      "fileRel": "src/components/Combobox.tsx",
+      "key": "Icon@src/components/SearchForm.tsx",
+      "name": "Icon",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/SearchForm.tsx",
+      "fileRel": "src/components/SearchForm.tsx",
       "wrapperClass": null,
       "renders": [
-        "Popover",
-        "PopoverContent",
-        "Command",
-        "CommandList",
-        "CommandGroup",
-        "CommandEmpty",
-        "CommandInput",
-        "PopoverTrigger",
-        "Button",
-        "ChevronsUpDown"
+        "link.icon"
       ],
-      "mermaidId": "ComboboxDemo_b220e84a"
+      "mermaidId": "Icon_1c40e2f4"
     },
     {
-      "key": "AdvancedPlayer@src/components/AdvancedPlayer.tsx",
-      "name": "AdvancedPlayer",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/AdvancedPlayer.tsx",
-      "fileRel": "src/components/AdvancedPlayer.tsx",
-      "wrapperClass": "advanced-player",
-      "renders": [],
-      "mermaidId": "AdvancedPlayer_c886e4f7"
+      "key": "SearchMovieGrid@src/components/SearchMovieGrid.astro",
+      "name": "SearchMovieGrid",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/SearchMovieGrid.astro",
+      "fileRel": "src/components/SearchMovieGrid.astro",
+      "wrapperClass": "flex flex-col items-center justify-center gap-4 py-8 md:py-10",
+      "renders": [
+        "MovieCard"
+      ],
+      "mermaidId": "SearchMovieGrid_01386542"
     },
     {
-      "key": "MenuItemComponent@src/components/MobileMenu.tsx",
-      "name": "MenuItemComponent",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/MobileMenu.tsx",
-      "fileRel": "src/components/MobileMenu.tsx",
-      "wrapperClass": null,
-      "renders": [],
-      "mermaidId": "MenuItemComponent_2951ee3c"
-    },
-    {
-      "key": "MobileMenu@src/components/MobileMenu.tsx",
-      "name": "MobileMenu",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/MobileMenu.tsx",
-      "fileRel": "src/components/MobileMenu.tsx",
+      "key": "AspectRatio@src/components/ui/aspect-ratio.tsx",
+      "name": "AspectRatio",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/aspect-ratio.tsx",
+      "fileRel": "src/components/ui/aspect-ratio.tsx",
       "wrapperClass": null,
       "renders": [
-        "Sheet",
-        "SheetContent",
-        "SheetTrigger",
-        "Button",
-        "Menu"
+        "AspectRatioPrimitive.Root"
       ],
-      "mermaidId": "MobileMenu_5b56bd69"
-    },
-    {
-      "key": "ModeToggle@src/components/ModeToggle.tsx",
-      "name": "ModeToggle",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ModeToggle.tsx",
-      "fileRel": "src/components/ModeToggle.tsx",
-      "wrapperClass": null,
-      "renders": [
-        "DropdownMenu",
-        "DropdownMenuContent",
-        "DropdownMenuItem",
-        "DropdownMenuTrigger",
-        "Button",
-        "Moon",
-        "Sun"
-      ],
-      "mermaidId": "ModeToggle_d72ce61c"
-    },
-    {
-      "key": "MovieTypeSelector@src/components/MovieTypeSelector.tsx",
-      "name": "MovieTypeSelector",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/MovieTypeSelector.tsx",
-      "fileRel": "src/components/MovieTypeSelector.tsx",
-      "wrapperClass": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4",
-      "renders": [],
-      "mermaidId": "MovieTypeSelector_957a436a"
-    },
-    {
-      "key": "WatchDock@src/components/WatchDock.tsx",
-      "name": "WatchDock",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/WatchDock.tsx",
-      "fileRel": "src/components/WatchDock.tsx",
-      "wrapperClass": null,
-      "renders": [
-        "AnimatePresence"
-      ],
-      "mermaidId": "WatchDock_66a65384"
-    },
-    {
-      "key": "EpisodeSelector@src/components/EpisodeSelector.tsx",
-      "name": "EpisodeSelector",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/EpisodeSelector.tsx",
-      "fileRel": "src/components/EpisodeSelector.tsx",
-      "wrapperClass": "mt-6 border-2 border-[#3F3F46] bg-[#09090B]",
-      "renders": [
-        "Card",
-        "CardContent",
-        "Tabs",
-        "Toggle",
-        "ArrowUpDown",
-        "Input",
-        "Search",
-        "TabsList",
-        "CardHeader",
-        "Play",
-        "CardTitle",
-        "Film"
-      ],
-      "mermaidId": "EpisodeSelector_3201ab1a"
-    },
-    {
-      "key": "VideoPlayer@src/components/VideoPlayer.tsx",
-      "name": "VideoPlayer",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/VideoPlayer.tsx",
-      "fileRel": "src/components/VideoPlayer.tsx",
-      "wrapperClass": null,
-      "renders": [
-        "LayoutPanelTop",
-        "Minimize2",
-        "Maximize2",
-        "RefreshCw",
-        "SkipForward",
-        "SkipBack",
-        "Server",
-        "AspectRatio",
-        "MediaPlayer",
-        "PlayerControlLayer",
-        "MediaProvider"
-      ],
-      "mermaidId": "VideoPlayer_edd2de7d"
+      "mermaidId": "AspectRatio_9977c3f1"
     },
     {
       "key": "Badge@src/components/ui/badge.tsx",
       "name": "Badge",
       "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/badge.tsx",
       "fileRel": "src/components/ui/badge.tsx",
-      "wrapperClass": null,
+      "wrapperClass": "inline-flex items-center border px-3 py-1 text-xs font-bold uppercase tracking-widest transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
       "renders": [],
       "mermaidId": "Badge_a2598bc8"
+    },
+    {
+      "key": "Button@src/components/ui/button.tsx",
+      "name": "Button",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/button.tsx",
+      "fileRel": "src/components/ui/button.tsx",
+      "wrapperClass": "inline-flex items-center justify-center gap-2 whitespace-nowrap uppercase tracking-wider text-sm font-bold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+      "renders": [
+        "Comp"
+      ],
+      "mermaidId": "Button_f874be33"
+    },
+    {
+      "key": "Card@src/components/ui/card.tsx",
+      "name": "Card",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/card.tsx",
+      "fileRel": "src/components/ui/card.tsx",
+      "wrapperClass": "border-2 border-border bg-card text-card-foreground transition-all duration-300 hover:border-accent",
+      "renders": [],
+      "mermaidId": "Card_dbd77aef"
+    },
+    {
+      "key": "CardHeader@src/components/ui/card.tsx",
+      "name": "CardHeader",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/card.tsx",
+      "fileRel": "src/components/ui/card.tsx",
+      "wrapperClass": "flex flex-col space-y-2 p-6",
+      "renders": [],
+      "mermaidId": "CardHeader_ccd1e665"
+    },
+    {
+      "key": "CardTitle@src/components/ui/card.tsx",
+      "name": "CardTitle",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/card.tsx",
+      "fileRel": "src/components/ui/card.tsx",
+      "wrapperClass": "font-bold uppercase tracking-tighter text-lg",
+      "renders": [],
+      "mermaidId": "CardTitle_605d83c8"
+    },
+    {
+      "key": "CardDescription@src/components/ui/card.tsx",
+      "name": "CardDescription",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/card.tsx",
+      "fileRel": "src/components/ui/card.tsx",
+      "wrapperClass": "text-sm text-muted-foreground",
+      "renders": [],
+      "mermaidId": "CardDescription_d00d4c9b"
+    },
+    {
+      "key": "CardContent@src/components/ui/card.tsx",
+      "name": "CardContent",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/card.tsx",
+      "fileRel": "src/components/ui/card.tsx",
+      "wrapperClass": "p-6 pt-0",
+      "renders": [],
+      "mermaidId": "CardContent_f4fb2ea5"
+    },
+    {
+      "key": "CardFooter@src/components/ui/card.tsx",
+      "name": "CardFooter",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/card.tsx",
+      "fileRel": "src/components/ui/card.tsx",
+      "wrapperClass": "flex items-center p-6 pt-0",
+      "renders": [],
+      "mermaidId": "CardFooter_8de238d5"
+    },
+    {
+      "key": "Collapsible@src/components/ui/collapsible.tsx",
+      "name": "Collapsible",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/collapsible.tsx",
+      "fileRel": "src/components/ui/collapsible.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "CollapsiblePrimitive.Root"
+      ],
+      "mermaidId": "Collapsible_46e39845"
+    },
+    {
+      "key": "CollapsibleTrigger@src/components/ui/collapsible.tsx",
+      "name": "CollapsibleTrigger",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/collapsible.tsx",
+      "fileRel": "src/components/ui/collapsible.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "CollapsiblePrimitive.CollapsibleTrigger"
+      ],
+      "mermaidId": "CollapsibleTrigger_06c857c1"
+    },
+    {
+      "key": "CollapsibleContent@src/components/ui/collapsible.tsx",
+      "name": "CollapsibleContent",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/collapsible.tsx",
+      "fileRel": "src/components/ui/collapsible.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "CollapsiblePrimitive.CollapsibleContent"
+      ],
+      "mermaidId": "CollapsibleContent_09f6919f"
+    },
+    {
+      "key": "Command@src/components/ui/command.tsx",
+      "name": "Command",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/command.tsx",
+      "fileRel": "src/components/ui/command.tsx",
+      "wrapperClass": "flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground",
+      "renders": [
+        "CommandPrimitive"
+      ],
+      "mermaidId": "Command_d286c5b8"
+    },
+    {
+      "key": "CommandDialog@src/components/ui/command.tsx",
+      "name": "CommandDialog",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/command.tsx",
+      "fileRel": "src/components/ui/command.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "Dialog",
+        "DialogContent",
+        "Command"
+      ],
+      "mermaidId": "CommandDialog_4f474eee"
+    },
+    {
+      "key": "CommandInput@src/components/ui/command.tsx",
+      "name": "CommandInput",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/command.tsx",
+      "fileRel": "src/components/ui/command.tsx",
+      "wrapperClass": "flex items-center border-b px-3",
+      "renders": [
+        "CommandPrimitive.Input",
+        "Search"
+      ],
+      "mermaidId": "CommandInput_bf8c31fe"
+    },
+    {
+      "key": "CommandList@src/components/ui/command.tsx",
+      "name": "CommandList",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/command.tsx",
+      "fileRel": "src/components/ui/command.tsx",
+      "wrapperClass": "max-h-[300px] overflow-y-auto overflow-x-hidden",
+      "renders": [
+        "CommandPrimitive.List"
+      ],
+      "mermaidId": "CommandList_02640111"
+    },
+    {
+      "key": "CommandEmpty@src/components/ui/command.tsx",
+      "name": "CommandEmpty",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/command.tsx",
+      "fileRel": "src/components/ui/command.tsx",
+      "wrapperClass": "py-6 text-center text-sm",
+      "renders": [
+        "CommandPrimitive.Empty"
+      ],
+      "mermaidId": "CommandEmpty_dc08ee73"
+    },
+    {
+      "key": "CommandGroup@src/components/ui/command.tsx",
+      "name": "CommandGroup",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/command.tsx",
+      "fileRel": "src/components/ui/command.tsx",
+      "wrapperClass": "overflow-hidden p-1 text-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground",
+      "renders": [
+        "CommandPrimitive.Group"
+      ],
+      "mermaidId": "CommandGroup_61170081"
+    },
+    {
+      "key": "CommandSeparator@src/components/ui/command.tsx",
+      "name": "CommandSeparator",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/command.tsx",
+      "fileRel": "src/components/ui/command.tsx",
+      "wrapperClass": "-mx-1 h-px bg-border",
+      "renders": [
+        "CommandPrimitive.Separator"
+      ],
+      "mermaidId": "CommandSeparator_30072097"
+    },
+    {
+      "key": "CommandItem@src/components/ui/command.tsx",
+      "name": "CommandItem",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/command.tsx",
+      "fileRel": "src/components/ui/command.tsx",
+      "wrapperClass": "relative flex cursor-default gap-2 select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none data-[disabled=true]:pointer-events-none data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+      "renders": [
+        "CommandPrimitive.Item"
+      ],
+      "mermaidId": "CommandItem_b5435fa3"
+    },
+    {
+      "key": "CommandShortcut@src/components/ui/command.tsx",
+      "name": "CommandShortcut",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/command.tsx",
+      "fileRel": "src/components/ui/command.tsx",
+      "wrapperClass": "ml-auto text-xs tracking-widest text-muted-foreground",
+      "renders": [],
+      "mermaidId": "CommandShortcut_a2d81ea1"
+    },
+    {
+      "key": "Cursor@src/components/ui/Cursor.tsx",
+      "name": "Cursor",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/Cursor.tsx",
+      "fileRel": "src/components/ui/Cursor.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "Play"
+      ],
+      "mermaidId": "Cursor_d80bb73c"
+    },
+    {
+      "key": "Dialog@src/components/ui/dialog.tsx",
+      "name": "Dialog",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dialog.tsx",
+      "fileRel": "src/components/ui/dialog.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "DialogPrimitive.Root"
+      ],
+      "mermaidId": "Dialog_95f26fd3"
+    },
+    {
+      "key": "DialogTrigger@src/components/ui/dialog.tsx",
+      "name": "DialogTrigger",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dialog.tsx",
+      "fileRel": "src/components/ui/dialog.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "DialogPrimitive.Trigger"
+      ],
+      "mermaidId": "DialogTrigger_832cf36a"
+    },
+    {
+      "key": "DialogPortal@src/components/ui/dialog.tsx",
+      "name": "DialogPortal",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dialog.tsx",
+      "fileRel": "src/components/ui/dialog.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "DialogPrimitive.Portal"
+      ],
+      "mermaidId": "DialogPortal_f7e86d96"
+    },
+    {
+      "key": "DialogClose@src/components/ui/dialog.tsx",
+      "name": "DialogClose",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dialog.tsx",
+      "fileRel": "src/components/ui/dialog.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "DialogPrimitive.Close"
+      ],
+      "mermaidId": "DialogClose_a3fd5810"
+    },
+    {
+      "key": "DialogOverlay@src/components/ui/dialog.tsx",
+      "name": "DialogOverlay",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dialog.tsx",
+      "fileRel": "src/components/ui/dialog.tsx",
+      "wrapperClass": "fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      "renders": [
+        "DialogPrimitive.Overlay"
+      ],
+      "mermaidId": "DialogOverlay_7d036781"
+    },
+    {
+      "key": "DialogContent@src/components/ui/dialog.tsx",
+      "name": "DialogContent",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dialog.tsx",
+      "fileRel": "src/components/ui/dialog.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "DialogPortal",
+        "DialogPrimitive.Content",
+        "DialogPrimitive.Close",
+        "X",
+        "DialogOverlay"
+      ],
+      "mermaidId": "DialogContent_bc707520"
+    },
+    {
+      "key": "DialogHeader@src/components/ui/dialog.tsx",
+      "name": "DialogHeader",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dialog.tsx",
+      "fileRel": "src/components/ui/dialog.tsx",
+      "wrapperClass": "flex flex-col space-y-1.5 text-center sm:text-left",
+      "renders": [],
+      "mermaidId": "DialogHeader_a0371821"
+    },
+    {
+      "key": "DialogFooter@src/components/ui/dialog.tsx",
+      "name": "DialogFooter",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dialog.tsx",
+      "fileRel": "src/components/ui/dialog.tsx",
+      "wrapperClass": "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
+      "renders": [],
+      "mermaidId": "DialogFooter_2edacabf"
+    },
+    {
+      "key": "DialogTitle@src/components/ui/dialog.tsx",
+      "name": "DialogTitle",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dialog.tsx",
+      "fileRel": "src/components/ui/dialog.tsx",
+      "wrapperClass": "text-lg font-semibold leading-none tracking-tight",
+      "renders": [
+        "DialogPrimitive.Title"
+      ],
+      "mermaidId": "DialogTitle_7ae7b9fb"
+    },
+    {
+      "key": "DialogDescription@src/components/ui/dialog.tsx",
+      "name": "DialogDescription",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dialog.tsx",
+      "fileRel": "src/components/ui/dialog.tsx",
+      "wrapperClass": "text-sm text-muted-foreground",
+      "renders": [
+        "DialogPrimitive.Description"
+      ],
+      "mermaidId": "DialogDescription_cc02536f"
+    },
+    {
+      "key": "DropdownMenu@src/components/ui/dropdown-menu.tsx",
+      "name": "DropdownMenu",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dropdown-menu.tsx",
+      "fileRel": "src/components/ui/dropdown-menu.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "DropdownMenuPrimitive.Root"
+      ],
+      "mermaidId": "DropdownMenu_9163a007"
+    },
+    {
+      "key": "DropdownMenuTrigger@src/components/ui/dropdown-menu.tsx",
+      "name": "DropdownMenuTrigger",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dropdown-menu.tsx",
+      "fileRel": "src/components/ui/dropdown-menu.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "DropdownMenuPrimitive.Trigger"
+      ],
+      "mermaidId": "DropdownMenuTrigger_fc55342a"
+    },
+    {
+      "key": "DropdownMenuGroup@src/components/ui/dropdown-menu.tsx",
+      "name": "DropdownMenuGroup",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dropdown-menu.tsx",
+      "fileRel": "src/components/ui/dropdown-menu.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "DropdownMenuPrimitive.Group"
+      ],
+      "mermaidId": "DropdownMenuGroup_4e194c65"
+    },
+    {
+      "key": "DropdownMenuPortal@src/components/ui/dropdown-menu.tsx",
+      "name": "DropdownMenuPortal",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dropdown-menu.tsx",
+      "fileRel": "src/components/ui/dropdown-menu.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "DropdownMenuPrimitive.Portal"
+      ],
+      "mermaidId": "DropdownMenuPortal_2ecbaed1"
+    },
+    {
+      "key": "DropdownMenuSub@src/components/ui/dropdown-menu.tsx",
+      "name": "DropdownMenuSub",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dropdown-menu.tsx",
+      "fileRel": "src/components/ui/dropdown-menu.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "DropdownMenuPrimitive.Sub"
+      ],
+      "mermaidId": "DropdownMenuSub_812fab98"
+    },
+    {
+      "key": "DropdownMenuRadioGroup@src/components/ui/dropdown-menu.tsx",
+      "name": "DropdownMenuRadioGroup",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dropdown-menu.tsx",
+      "fileRel": "src/components/ui/dropdown-menu.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "DropdownMenuPrimitive.RadioGroup"
+      ],
+      "mermaidId": "DropdownMenuRadioGroup_7d8c15fb"
+    },
+    {
+      "key": "DropdownMenuSubTrigger@src/components/ui/dropdown-menu.tsx",
+      "name": "DropdownMenuSubTrigger",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dropdown-menu.tsx",
+      "fileRel": "src/components/ui/dropdown-menu.tsx",
+      "wrapperClass": "flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-accent data-[state=open]:bg-accent [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 pl-8",
+      "renders": [
+        "DropdownMenuPrimitive.SubTrigger",
+        "ChevronRight"
+      ],
+      "mermaidId": "DropdownMenuSubTrigger_80849fb4"
+    },
+    {
+      "key": "DropdownMenuSubContent@src/components/ui/dropdown-menu.tsx",
+      "name": "DropdownMenuSubContent",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dropdown-menu.tsx",
+      "fileRel": "src/components/ui/dropdown-menu.tsx",
+      "wrapperClass": "z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-[--radix-dropdown-menu-content-transform-origin]",
+      "renders": [
+        "DropdownMenuPrimitive.SubContent"
+      ],
+      "mermaidId": "DropdownMenuSubContent_54f8c460"
+    },
+    {
+      "key": "DropdownMenuContent@src/components/ui/dropdown-menu.tsx",
+      "name": "DropdownMenuContent",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dropdown-menu.tsx",
+      "fileRel": "src/components/ui/dropdown-menu.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "DropdownMenuPrimitive.Portal",
+        "DropdownMenuPrimitive.Content"
+      ],
+      "mermaidId": "DropdownMenuContent_59b70b7c"
+    },
+    {
+      "key": "DropdownMenuItem@src/components/ui/dropdown-menu.tsx",
+      "name": "DropdownMenuItem",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dropdown-menu.tsx",
+      "fileRel": "src/components/ui/dropdown-menu.tsx",
+      "wrapperClass": "relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0 pl-8",
+      "renders": [
+        "DropdownMenuPrimitive.Item"
+      ],
+      "mermaidId": "DropdownMenuItem_9a9c378e"
+    },
+    {
+      "key": "DropdownMenuCheckboxItem@src/components/ui/dropdown-menu.tsx",
+      "name": "DropdownMenuCheckboxItem",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dropdown-menu.tsx",
+      "fileRel": "src/components/ui/dropdown-menu.tsx",
+      "wrapperClass": "relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "renders": [
+        "DropdownMenuPrimitive.CheckboxItem",
+        "DropdownMenuPrimitive.ItemIndicator",
+        "Check"
+      ],
+      "mermaidId": "DropdownMenuCheckboxItem_e8b13849"
+    },
+    {
+      "key": "DropdownMenuRadioItem@src/components/ui/dropdown-menu.tsx",
+      "name": "DropdownMenuRadioItem",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dropdown-menu.tsx",
+      "fileRel": "src/components/ui/dropdown-menu.tsx",
+      "wrapperClass": "relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "renders": [
+        "DropdownMenuPrimitive.RadioItem",
+        "DropdownMenuPrimitive.ItemIndicator",
+        "Circle"
+      ],
+      "mermaidId": "DropdownMenuRadioItem_d13c8706"
+    },
+    {
+      "key": "DropdownMenuLabel@src/components/ui/dropdown-menu.tsx",
+      "name": "DropdownMenuLabel",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dropdown-menu.tsx",
+      "fileRel": "src/components/ui/dropdown-menu.tsx",
+      "wrapperClass": "px-2 py-1.5 text-sm font-semibold pl-8",
+      "renders": [
+        "DropdownMenuPrimitive.Label"
+      ],
+      "mermaidId": "DropdownMenuLabel_9bf8a1f0"
+    },
+    {
+      "key": "DropdownMenuSeparator@src/components/ui/dropdown-menu.tsx",
+      "name": "DropdownMenuSeparator",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dropdown-menu.tsx",
+      "fileRel": "src/components/ui/dropdown-menu.tsx",
+      "wrapperClass": "-mx-1 my-1 h-px bg-muted",
+      "renders": [
+        "DropdownMenuPrimitive.Separator"
+      ],
+      "mermaidId": "DropdownMenuSeparator_1da02b97"
     },
     {
       "key": "DropdownMenuShortcut@src/components/ui/dropdown-menu.tsx",
       "name": "DropdownMenuShortcut",
       "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dropdown-menu.tsx",
       "fileRel": "src/components/ui/dropdown-menu.tsx",
-      "wrapperClass": null,
+      "wrapperClass": "ml-auto text-xs tracking-widest opacity-60",
       "renders": [],
       "mermaidId": "DropdownMenuShortcut_24f3bcba"
     },
     {
-      "key": "ShareButton@src/components/ui/share-button.tsx",
-      "name": "ShareButton",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/share-button.tsx",
-      "fileRel": "src/components/ui/share-button.tsx",
-      "wrapperClass": "relative inline-flex w-full sm:w-auto overflow-hidden [--share-slot:42px] md:[--share-slot:48px] [--share-closed:100%] sm:[--share-closed:148px] [--share-open:100%] sm:[--share-open:calc(var(--share-slot)*var(--share-count))] border-2 border-[#3F3F46] bg-[#09090B]/98 shadow-[0_14px_28px_rgba(0,0,0,0.45)] backdrop-blur-sm",
+      "key": "Input@src/components/ui/input.tsx",
+      "name": "Input",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/input.tsx",
+      "fileRel": "src/components/ui/input.tsx",
+      "wrapperClass": "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
       "renders": [],
-      "mermaidId": "ShareButton_ef724d8b"
+      "mermaidId": "Input_1d5749d7"
+    },
+    {
+      "key": "MagneticButton@src/components/ui/MagneticButton.tsx",
+      "name": "MagneticButton",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/MagneticButton.tsx",
+      "fileRel": "src/components/ui/MagneticButton.tsx",
+      "wrapperClass": "magnetic cursor-pointer",
+      "renders": [],
+      "mermaidId": "MagneticButton_7f2197e9"
+    },
+    {
+      "key": "NavigationMenu@src/components/ui/navigation-menu.tsx",
+      "name": "NavigationMenu",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/navigation-menu.tsx",
+      "fileRel": "src/components/ui/navigation-menu.tsx",
+      "wrapperClass": "relative z-10 flex max-w-max flex-1 items-center justify-center",
+      "renders": [
+        "NavigationMenuPrimitive.Root",
+        "NavigationMenuViewport"
+      ],
+      "mermaidId": "NavigationMenu_b7aaa325"
+    },
+    {
+      "key": "NavigationMenuList@src/components/ui/navigation-menu.tsx",
+      "name": "NavigationMenuList",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/navigation-menu.tsx",
+      "fileRel": "src/components/ui/navigation-menu.tsx",
+      "wrapperClass": "group flex flex-1 list-none items-center justify-center space-x-1",
+      "renders": [
+        "NavigationMenuPrimitive.List"
+      ],
+      "mermaidId": "NavigationMenuList_eb111d17"
+    },
+    {
+      "key": "NavigationMenuItem@src/components/ui/navigation-menu.tsx",
+      "name": "NavigationMenuItem",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/navigation-menu.tsx",
+      "fileRel": "src/components/ui/navigation-menu.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "NavigationMenuPrimitive.Item"
+      ],
+      "mermaidId": "NavigationMenuItem_4c0eca65"
+    },
+    {
+      "key": "NavigationMenuTrigger@src/components/ui/navigation-menu.tsx",
+      "name": "NavigationMenuTrigger",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/navigation-menu.tsx",
+      "fileRel": "src/components/ui/navigation-menu.tsx",
+      "wrapperClass": "group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=open]:text-accent-foreground data-[state=open]:bg-accent/50 data-[state=open]:hover:bg-accent data-[state=open]:focus:bg-accent",
+      "renders": [
+        "NavigationMenuPrimitive.Trigger",
+        "ChevronDown"
+      ],
+      "mermaidId": "NavigationMenuTrigger_5bedd529"
+    },
+    {
+      "key": "NavigationMenuContent@src/components/ui/navigation-menu.tsx",
+      "name": "NavigationMenuContent",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/navigation-menu.tsx",
+      "fileRel": "src/components/ui/navigation-menu.tsx",
+      "wrapperClass": "left-0 top-0 w-full data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 md:absolute md:w-auto",
+      "renders": [
+        "NavigationMenuPrimitive.Content"
+      ],
+      "mermaidId": "NavigationMenuContent_94adb5dc"
+    },
+    {
+      "key": "NavigationMenuLink@src/components/ui/navigation-menu.tsx",
+      "name": "NavigationMenuLink",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/navigation-menu.tsx",
+      "fileRel": "src/components/ui/navigation-menu.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "NavigationMenuPrimitive.Link"
+      ],
+      "mermaidId": "NavigationMenuLink_05f65cae"
+    },
+    {
+      "key": "NavigationMenuViewport@src/components/ui/navigation-menu.tsx",
+      "name": "NavigationMenuViewport",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/navigation-menu.tsx",
+      "fileRel": "src/components/ui/navigation-menu.tsx",
+      "wrapperClass": "absolute left-0 top-full flex justify-center",
+      "renders": [
+        "NavigationMenuPrimitive.Viewport"
+      ],
+      "mermaidId": "NavigationMenuViewport_952bbe2e"
+    },
+    {
+      "key": "NavigationMenuIndicator@src/components/ui/navigation-menu.tsx",
+      "name": "NavigationMenuIndicator",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/navigation-menu.tsx",
+      "fileRel": "src/components/ui/navigation-menu.tsx",
+      "wrapperClass": "top-full z-[1] flex h-1.5 items-end justify-center overflow-hidden data-[state=visible]:animate-in data-[state=hidden]:animate-out data-[state=hidden]:fade-out data-[state=visible]:fade-in",
+      "renders": [
+        "NavigationMenuPrimitive.Indicator"
+      ],
+      "mermaidId": "NavigationMenuIndicator_f9733a84"
     },
     {
       "key": "NumberCounter@src/components/ui/NumberCounter.tsx",
@@ -219,13 +931,362 @@
       "mermaidId": "NumberCounter_7f9595cb"
     },
     {
-      "key": "MagneticButton@src/components/ui/MagneticButton.tsx",
-      "name": "MagneticButton",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/MagneticButton.tsx",
-      "fileRel": "src/components/ui/MagneticButton.tsx",
+      "key": "Pagination@src/components/ui/pagination.tsx",
+      "name": "Pagination",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/pagination.tsx",
+      "fileRel": "src/components/ui/pagination.tsx",
+      "wrapperClass": "mx-auto flex w-full justify-center",
+      "renders": [],
+      "mermaidId": "Pagination_3ccc7dd6"
+    },
+    {
+      "key": "PaginationContent@src/components/ui/pagination.tsx",
+      "name": "PaginationContent",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/pagination.tsx",
+      "fileRel": "src/components/ui/pagination.tsx",
+      "wrapperClass": "flex flex-row items-center gap-1",
+      "renders": [],
+      "mermaidId": "PaginationContent_5f52bded"
+    },
+    {
+      "key": "PaginationItem@src/components/ui/pagination.tsx",
+      "name": "PaginationItem",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/pagination.tsx",
+      "fileRel": "src/components/ui/pagination.tsx",
       "wrapperClass": null,
       "renders": [],
-      "mermaidId": "MagneticButton_7f2197e9"
+      "mermaidId": "PaginationItem_6c83c5c9"
+    },
+    {
+      "key": "PaginationLink@src/components/ui/pagination.tsx",
+      "name": "PaginationLink",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/pagination.tsx",
+      "fileRel": "src/components/ui/pagination.tsx",
+      "wrapperClass": "inline-flex items-center justify-center gap-2 whitespace-nowrap uppercase tracking-wider text-sm font-bold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+      "renders": [],
+      "mermaidId": "PaginationLink_df80325e"
+    },
+    {
+      "key": "PaginationPrevious@src/components/ui/pagination.tsx",
+      "name": "PaginationPrevious",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/pagination.tsx",
+      "fileRel": "src/components/ui/pagination.tsx",
+      "wrapperClass": "gap-1 pl-2.5",
+      "renders": [
+        "PaginationLink",
+        "ChevronLeft"
+      ],
+      "mermaidId": "PaginationPrevious_7f1f54c2"
+    },
+    {
+      "key": "PaginationNext@src/components/ui/pagination.tsx",
+      "name": "PaginationNext",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/pagination.tsx",
+      "fileRel": "src/components/ui/pagination.tsx",
+      "wrapperClass": "gap-1 pr-2.5",
+      "renders": [
+        "PaginationLink",
+        "ChevronRight"
+      ],
+      "mermaidId": "PaginationNext_af5c94a7"
+    },
+    {
+      "key": "PaginationEllipsis@src/components/ui/pagination.tsx",
+      "name": "PaginationEllipsis",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/pagination.tsx",
+      "fileRel": "src/components/ui/pagination.tsx",
+      "wrapperClass": "flex h-9 w-9 items-center justify-center",
+      "renders": [
+        "MoreHorizontal"
+      ],
+      "mermaidId": "PaginationEllipsis_9c6a11bd"
+    },
+    {
+      "key": "Popover@src/components/ui/popover.tsx",
+      "name": "Popover",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/popover.tsx",
+      "fileRel": "src/components/ui/popover.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "PopoverPrimitive.Root"
+      ],
+      "mermaidId": "Popover_2b8755e6"
+    },
+    {
+      "key": "PopoverTrigger@src/components/ui/popover.tsx",
+      "name": "PopoverTrigger",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/popover.tsx",
+      "fileRel": "src/components/ui/popover.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "PopoverPrimitive.Trigger"
+      ],
+      "mermaidId": "PopoverTrigger_66db3bbd"
+    },
+    {
+      "key": "PopoverAnchor@src/components/ui/popover.tsx",
+      "name": "PopoverAnchor",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/popover.tsx",
+      "fileRel": "src/components/ui/popover.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "PopoverPrimitive.Anchor"
+      ],
+      "mermaidId": "PopoverAnchor_44d57092"
+    },
+    {
+      "key": "PopoverContent@src/components/ui/popover.tsx",
+      "name": "PopoverContent",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/popover.tsx",
+      "fileRel": "src/components/ui/popover.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "PopoverPrimitive.Portal",
+        "PopoverPrimitive.Content"
+      ],
+      "mermaidId": "PopoverContent_d9c6b03d"
+    },
+    {
+      "key": "ScrollReveal@src/components/ui/ScrollReveal.tsx",
+      "name": "ScrollReveal",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/ScrollReveal.tsx",
+      "fileRel": "src/components/ui/ScrollReveal.tsx",
+      "wrapperClass": null,
+      "renders": [],
+      "mermaidId": "ScrollReveal_fd975d50"
+    },
+    {
+      "key": "SectionListCarousel@src/components/ui/SectionListCarousel.tsx",
+      "name": "SectionListCarousel",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/SectionListCarousel.tsx",
+      "fileRel": "src/components/ui/SectionListCarousel.tsx",
+      "wrapperClass": "relative",
+      "renders": [
+        "Film",
+        "ChevronRight",
+        "ChevronLeft"
+      ],
+      "mermaidId": "SectionListCarousel_9bebe7d2"
+    },
+    {
+      "key": "BatchedHomeSections@src/components/ui/sections/BatchedHomeSections.astro",
+      "name": "BatchedHomeSections",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/sections/BatchedHomeSections.astro",
+      "fileRel": "src/components/ui/sections/BatchedHomeSections.astro",
+      "wrapperClass": "mx-auto flex w-full flex-col gap-12 px-0 pb-24 pt-2 sm:gap-14 sm:pt-3",
+      "renders": [
+        "SectionList"
+      ],
+      "mermaidId": "BatchedHomeSections_bb9e8285"
+    },
+    {
+      "key": "HoatHinhSection@src/components/ui/sections/HoatHinhSection.astro",
+      "name": "HoatHinhSection",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/sections/HoatHinhSection.astro",
+      "fileRel": "src/components/ui/sections/HoatHinhSection.astro",
+      "wrapperClass": null,
+      "renders": [
+        "SectionList"
+      ],
+      "mermaidId": "HoatHinhSection_31cfc439"
+    },
+    {
+      "key": "PhimBoSection@src/components/ui/sections/PhimBoSection.astro",
+      "name": "PhimBoSection",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/sections/PhimBoSection.astro",
+      "fileRel": "src/components/ui/sections/PhimBoSection.astro",
+      "wrapperClass": null,
+      "renders": [
+        "SectionList"
+      ],
+      "mermaidId": "PhimBoSection_fb2f2aa0"
+    },
+    {
+      "key": "PhimLeSection@src/components/ui/sections/PhimLeSection.astro",
+      "name": "PhimLeSection",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/sections/PhimLeSection.astro",
+      "fileRel": "src/components/ui/sections/PhimLeSection.astro",
+      "wrapperClass": null,
+      "renders": [
+        "SectionList"
+      ],
+      "mermaidId": "PhimLeSection_61a117aa"
+    },
+    {
+      "key": "SectionList@src/components/ui/sections/SectionList.astro",
+      "name": "SectionList",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/sections/SectionList.astro",
+      "fileRel": "src/components/ui/sections/SectionList.astro",
+      "wrapperClass": "flex flex-col gap-5 border-t border-[#27272A] pt-8 sm:gap-6 sm:pt-10",
+      "renders": [
+        "SectionListCarousel"
+      ],
+      "mermaidId": "SectionList_d3b87405"
+    },
+    {
+      "key": "TvShowsSection@src/components/ui/sections/TvShowsSection.astro",
+      "name": "TvShowsSection",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/sections/TvShowsSection.astro",
+      "fileRel": "src/components/ui/sections/TvShowsSection.astro",
+      "wrapperClass": null,
+      "renders": [
+        "SectionList"
+      ],
+      "mermaidId": "TvShowsSection_f5e30337"
+    },
+    {
+      "key": "Select@src/components/ui/select.tsx",
+      "name": "Select",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/select.tsx",
+      "fileRel": "src/components/ui/select.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "SelectPrimitive.Root"
+      ],
+      "mermaidId": "Select_b07a5f1b"
+    },
+    {
+      "key": "SelectGroup@src/components/ui/select.tsx",
+      "name": "SelectGroup",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/select.tsx",
+      "fileRel": "src/components/ui/select.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "SelectPrimitive.Group"
+      ],
+      "mermaidId": "SelectGroup_5a082ba9"
+    },
+    {
+      "key": "SelectValue@src/components/ui/select.tsx",
+      "name": "SelectValue",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/select.tsx",
+      "fileRel": "src/components/ui/select.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "SelectPrimitive.Value"
+      ],
+      "mermaidId": "SelectValue_24d02a7f"
+    },
+    {
+      "key": "SelectTrigger@src/components/ui/select.tsx",
+      "name": "SelectTrigger",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/select.tsx",
+      "fileRel": "src/components/ui/select.tsx",
+      "wrapperClass": "flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background data-[placeholder]:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+      "renders": [
+        "SelectPrimitive.Trigger",
+        "SelectPrimitive.Icon",
+        "ChevronDown"
+      ],
+      "mermaidId": "SelectTrigger_f132389b"
+    },
+    {
+      "key": "SelectScrollUpButton@src/components/ui/select.tsx",
+      "name": "SelectScrollUpButton",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/select.tsx",
+      "fileRel": "src/components/ui/select.tsx",
+      "wrapperClass": "flex cursor-default items-center justify-center py-1",
+      "renders": [
+        "SelectPrimitive.ScrollUpButton",
+        "ChevronUp"
+      ],
+      "mermaidId": "SelectScrollUpButton_f90847e2"
+    },
+    {
+      "key": "SelectScrollDownButton@src/components/ui/select.tsx",
+      "name": "SelectScrollDownButton",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/select.tsx",
+      "fileRel": "src/components/ui/select.tsx",
+      "wrapperClass": "flex cursor-default items-center justify-center py-1",
+      "renders": [
+        "SelectPrimitive.ScrollDownButton",
+        "ChevronDown"
+      ],
+      "mermaidId": "SelectScrollDownButton_d9aaab7f"
+    },
+    {
+      "key": "SelectContent@src/components/ui/select.tsx",
+      "name": "SelectContent",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/select.tsx",
+      "fileRel": "src/components/ui/select.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "SelectPrimitive.Portal",
+        "SelectPrimitive.Content",
+        "SelectScrollDownButton",
+        "SelectPrimitive.Viewport",
+        "SelectScrollUpButton"
+      ],
+      "mermaidId": "SelectContent_6b5a1e60"
+    },
+    {
+      "key": "SelectLabel@src/components/ui/select.tsx",
+      "name": "SelectLabel",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/select.tsx",
+      "fileRel": "src/components/ui/select.tsx",
+      "wrapperClass": "px-2 py-1.5 text-sm font-semibold",
+      "renders": [
+        "SelectPrimitive.Label"
+      ],
+      "mermaidId": "SelectLabel_98d713b9"
+    },
+    {
+      "key": "SelectItem@src/components/ui/select.tsx",
+      "name": "SelectItem",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/select.tsx",
+      "fileRel": "src/components/ui/select.tsx",
+      "wrapperClass": "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "renders": [
+        "SelectPrimitive.Item",
+        "SelectPrimitive.ItemText",
+        "SelectPrimitive.ItemIndicator",
+        "Check"
+      ],
+      "mermaidId": "SelectItem_d1144928"
+    },
+    {
+      "key": "SelectSeparator@src/components/ui/select.tsx",
+      "name": "SelectSeparator",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/select.tsx",
+      "fileRel": "src/components/ui/select.tsx",
+      "wrapperClass": "-mx-1 my-1 h-px bg-muted",
+      "renders": [
+        "SelectPrimitive.Separator"
+      ],
+      "mermaidId": "SelectSeparator_00e7ac61"
+    },
+    {
+      "key": "Separator@src/components/ui/separator.tsx",
+      "name": "Separator",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/separator.tsx",
+      "fileRel": "src/components/ui/separator.tsx",
+      "wrapperClass": "shrink-0 bg-border h-[1px] w-full h-full w-[1px]",
+      "renders": [
+        "SeparatorPrimitive.Root"
+      ],
+      "mermaidId": "Separator_136526f1"
+    },
+    {
+      "key": "ShareButton@src/components/ui/share-button.tsx",
+      "name": "ShareButton",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/share-button.tsx",
+      "fileRel": "src/components/ui/share-button.tsx",
+      "wrapperClass": "relative inline-flex w-full sm:w-auto overflow-hidden [--share-slot:42px] md:[--share-slot:48px] [--share-closed:100%] sm:[--share-closed:148px] [--share-open:100%] sm:[--share-open:calc(var(--share-slot)*var(--share-count))] border-2 border-[#3F3F46] bg-[#09090B]/98 shadow-[0_14px_28px_rgba(0,0,0,0.45)] backdrop-blur-sm",
+      "renders": [
+        "Icon"
+      ],
+      "mermaidId": "ShareButton_ef724d8b"
+    },
+    {
+      "key": "Icon@src/components/ui/share-button.tsx",
+      "name": "Icon",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/share-button.tsx",
+      "fileRel": "src/components/ui/share-button.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "link.icon"
+      ],
+      "mermaidId": "Icon_b3ffbee6"
     },
     {
       "key": "FacebookIcon@src/components/ui/ShareButtonWrapper.tsx",
@@ -258,26 +1319,184 @@
       "mermaidId": "ShareButtonWrapper_b5e6fd4d"
     },
     {
-      "key": "CommandDialog@src/components/ui/command.tsx",
-      "name": "CommandDialog",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/command.tsx",
-      "fileRel": "src/components/ui/command.tsx",
+      "key": "Sheet@src/components/ui/sheet.tsx",
+      "name": "Sheet",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/sheet.tsx",
+      "fileRel": "src/components/ui/sheet.tsx",
       "wrapperClass": null,
       "renders": [
-        "Dialog",
-        "DialogContent",
-        "Command"
+        "SheetPrimitive.Root"
       ],
-      "mermaidId": "CommandDialog_4f474eee"
+      "mermaidId": "Sheet_341a71ec"
     },
     {
-      "key": "CommandShortcut@src/components/ui/command.tsx",
-      "name": "CommandShortcut",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/command.tsx",
-      "fileRel": "src/components/ui/command.tsx",
+      "key": "SheetTrigger@src/components/ui/sheet.tsx",
+      "name": "SheetTrigger",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/sheet.tsx",
+      "fileRel": "src/components/ui/sheet.tsx",
       "wrapperClass": null,
+      "renders": [
+        "SheetPrimitive.Trigger"
+      ],
+      "mermaidId": "SheetTrigger_f416e93c"
+    },
+    {
+      "key": "SheetClose@src/components/ui/sheet.tsx",
+      "name": "SheetClose",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/sheet.tsx",
+      "fileRel": "src/components/ui/sheet.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "SheetPrimitive.Close"
+      ],
+      "mermaidId": "SheetClose_ee771ae7"
+    },
+    {
+      "key": "SheetPortal@src/components/ui/sheet.tsx",
+      "name": "SheetPortal",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/sheet.tsx",
+      "fileRel": "src/components/ui/sheet.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "SheetPrimitive.Portal"
+      ],
+      "mermaidId": "SheetPortal_c1d2a481"
+    },
+    {
+      "key": "SheetOverlay@src/components/ui/sheet.tsx",
+      "name": "SheetOverlay",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/sheet.tsx",
+      "fileRel": "src/components/ui/sheet.tsx",
+      "wrapperClass": "fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      "renders": [
+        "SheetPrimitive.Overlay"
+      ],
+      "mermaidId": "SheetOverlay_705832c0"
+    },
+    {
+      "key": "SheetContent@src/components/ui/sheet.tsx",
+      "name": "SheetContent",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/sheet.tsx",
+      "fileRel": "src/components/ui/sheet.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "SheetPortal",
+        "SheetPrimitive.Content",
+        "SheetPrimitive.Close",
+        "X",
+        "SheetOverlay"
+      ],
+      "mermaidId": "SheetContent_0547b244"
+    },
+    {
+      "key": "SheetHeader@src/components/ui/sheet.tsx",
+      "name": "SheetHeader",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/sheet.tsx",
+      "fileRel": "src/components/ui/sheet.tsx",
+      "wrapperClass": "flex flex-col space-y-2 text-center sm:text-left",
       "renders": [],
-      "mermaidId": "CommandShortcut_a2d81ea1"
+      "mermaidId": "SheetHeader_622628f8"
+    },
+    {
+      "key": "SheetFooter@src/components/ui/sheet.tsx",
+      "name": "SheetFooter",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/sheet.tsx",
+      "fileRel": "src/components/ui/sheet.tsx",
+      "wrapperClass": "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
+      "renders": [],
+      "mermaidId": "SheetFooter_b84e31af"
+    },
+    {
+      "key": "SheetTitle@src/components/ui/sheet.tsx",
+      "name": "SheetTitle",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/sheet.tsx",
+      "fileRel": "src/components/ui/sheet.tsx",
+      "wrapperClass": "text-lg font-semibold text-foreground",
+      "renders": [
+        "SheetPrimitive.Title"
+      ],
+      "mermaidId": "SheetTitle_4c51796d"
+    },
+    {
+      "key": "SheetDescription@src/components/ui/sheet.tsx",
+      "name": "SheetDescription",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/sheet.tsx",
+      "fileRel": "src/components/ui/sheet.tsx",
+      "wrapperClass": "text-sm text-muted-foreground",
+      "renders": [
+        "SheetPrimitive.Description"
+      ],
+      "mermaidId": "SheetDescription_bccb75b7"
+    },
+    {
+      "key": "Slider@src/components/ui/slider.tsx",
+      "name": "Slider",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/slider.tsx",
+      "fileRel": "src/components/ui/slider.tsx",
+      "wrapperClass": "relative flex w-full touch-none select-none items-center",
+      "renders": [
+        "SliderPrimitive.Root",
+        "SliderPrimitive.Thumb",
+        "SliderPrimitive.Track",
+        "SliderPrimitive.Range"
+      ],
+      "mermaidId": "Slider_6d526c36"
+    },
+    {
+      "key": "Switch@src/components/ui/switch.tsx",
+      "name": "Switch",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/switch.tsx",
+      "fileRel": "src/components/ui/switch.tsx",
+      "wrapperClass": "peer inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input",
+      "renders": [
+        "SwitchPrimitives.Root",
+        "SwitchPrimitives.Thumb"
+      ],
+      "mermaidId": "Switch_1dfe93f2"
+    },
+    {
+      "key": "Tabs@src/components/ui/tabs.tsx",
+      "name": "Tabs",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/tabs.tsx",
+      "fileRel": "src/components/ui/tabs.tsx",
+      "wrapperClass": null,
+      "renders": [
+        "TabsPrimitive.Root"
+      ],
+      "mermaidId": "Tabs_3f34b9f2"
+    },
+    {
+      "key": "TabsList@src/components/ui/tabs.tsx",
+      "name": "TabsList",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/tabs.tsx",
+      "fileRel": "src/components/ui/tabs.tsx",
+      "wrapperClass": "inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground",
+      "renders": [
+        "TabsPrimitive.List"
+      ],
+      "mermaidId": "TabsList_10d25ff5"
+    },
+    {
+      "key": "TabsTrigger@src/components/ui/tabs.tsx",
+      "name": "TabsTrigger",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/tabs.tsx",
+      "fileRel": "src/components/ui/tabs.tsx",
+      "wrapperClass": "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow",
+      "renders": [
+        "TabsPrimitive.Trigger"
+      ],
+      "mermaidId": "TabsTrigger_666f478b"
+    },
+    {
+      "key": "TabsContent@src/components/ui/tabs.tsx",
+      "name": "TabsContent",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/tabs.tsx",
+      "fileRel": "src/components/ui/tabs.tsx",
+      "wrapperClass": "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+      "renders": [
+        "TabsPrimitive.Content"
+      ],
+      "mermaidId": "TabsContent_30843403"
     },
     {
       "key": "TextReveal@src/components/ui/TextReveal.tsx",
@@ -289,125 +1508,83 @@
       "mermaidId": "TextReveal_554f4d57"
     },
     {
-      "key": "SectionListCarousel@src/components/ui/SectionListCarousel.tsx",
-      "name": "SectionListCarousel",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/SectionListCarousel.tsx",
-      "fileRel": "src/components/ui/SectionListCarousel.tsx",
-      "wrapperClass": "relative",
+      "key": "ToggleGroup@src/components/ui/toggle-group.tsx",
+      "name": "ToggleGroup",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/toggle-group.tsx",
+      "fileRel": "src/components/ui/toggle-group.tsx",
+      "wrapperClass": "flex items-center justify-center gap-1",
       "renders": [
-        "ChevronRight",
-        "ChevronLeft"
+        "ToggleGroupPrimitive.Root",
+        "ToggleGroupContext.Provider"
       ],
-      "mermaidId": "SectionListCarousel_9bebe7d2"
+      "mermaidId": "ToggleGroup_0edfb31a"
     },
     {
-      "key": "SheetHeader@src/components/ui/sheet.tsx",
-      "name": "SheetHeader",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/sheet.tsx",
-      "fileRel": "src/components/ui/sheet.tsx",
-      "wrapperClass": null,
-      "renders": [],
-      "mermaidId": "SheetHeader_622628f8"
-    },
-    {
-      "key": "SheetFooter@src/components/ui/sheet.tsx",
-      "name": "SheetFooter",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/sheet.tsx",
-      "fileRel": "src/components/ui/sheet.tsx",
-      "wrapperClass": null,
-      "renders": [],
-      "mermaidId": "SheetFooter_b84e31af"
-    },
-    {
-      "key": "Cursor@src/components/ui/Cursor.tsx",
-      "name": "Cursor",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/Cursor.tsx",
-      "fileRel": "src/components/ui/Cursor.tsx",
-      "wrapperClass": null,
+      "key": "ToggleGroupItem@src/components/ui/toggle-group.tsx",
+      "name": "ToggleGroupItem",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/toggle-group.tsx",
+      "fileRel": "src/components/ui/toggle-group.tsx",
+      "wrapperClass": "inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors hover:bg-muted hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
       "renders": [
-        "Play"
+        "ToggleGroupPrimitive.Item"
       ],
-      "mermaidId": "Cursor_d80bb73c"
+      "mermaidId": "ToggleGroupItem_07331033"
     },
     {
-      "key": "ScrollReveal@src/components/ui/ScrollReveal.tsx",
-      "name": "ScrollReveal",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/ScrollReveal.tsx",
-      "fileRel": "src/components/ui/ScrollReveal.tsx",
-      "wrapperClass": null,
-      "renders": [],
-      "mermaidId": "ScrollReveal_fd975d50"
+      "key": "Toggle@src/components/ui/toggle.tsx",
+      "name": "Toggle",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/toggle.tsx",
+      "fileRel": "src/components/ui/toggle.tsx",
+      "wrapperClass": "inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors hover:bg-muted hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+      "renders": [
+        "TogglePrimitive.Root"
+      ],
+      "mermaidId": "Toggle_c374f87e"
     },
     {
-      "key": "Pagination@src/components/ui/pagination.tsx",
-      "name": "Pagination",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/pagination.tsx",
-      "fileRel": "src/components/ui/pagination.tsx",
-      "wrapperClass": null,
-      "renders": [],
-      "mermaidId": "Pagination_3ccc7dd6"
-    },
-    {
-      "key": "PaginationLink@src/components/ui/pagination.tsx",
-      "name": "PaginationLink",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/pagination.tsx",
-      "fileRel": "src/components/ui/pagination.tsx",
-      "wrapperClass": null,
-      "renders": [],
-      "mermaidId": "PaginationLink_df80325e"
-    },
-    {
-      "key": "PaginationPrevious@src/components/ui/pagination.tsx",
-      "name": "PaginationPrevious",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/pagination.tsx",
-      "fileRel": "src/components/ui/pagination.tsx",
+      "key": "TooltipProvider@src/components/ui/tooltip.tsx",
+      "name": "TooltipProvider",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/tooltip.tsx",
+      "fileRel": "src/components/ui/tooltip.tsx",
       "wrapperClass": null,
       "renders": [
-        "PaginationLink",
-        "ChevronLeft"
+        "TooltipPrimitive.Provider"
       ],
-      "mermaidId": "PaginationPrevious_7f1f54c2"
+      "mermaidId": "TooltipProvider_a21fecea"
     },
     {
-      "key": "PaginationNext@src/components/ui/pagination.tsx",
-      "name": "PaginationNext",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/pagination.tsx",
-      "fileRel": "src/components/ui/pagination.tsx",
+      "key": "Tooltip@src/components/ui/tooltip.tsx",
+      "name": "Tooltip",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/tooltip.tsx",
+      "fileRel": "src/components/ui/tooltip.tsx",
       "wrapperClass": null,
       "renders": [
-        "PaginationLink",
-        "ChevronRight"
+        "TooltipPrimitive.Root"
       ],
-      "mermaidId": "PaginationNext_af5c94a7"
+      "mermaidId": "Tooltip_a052a868"
     },
     {
-      "key": "PaginationEllipsis@src/components/ui/pagination.tsx",
-      "name": "PaginationEllipsis",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/pagination.tsx",
-      "fileRel": "src/components/ui/pagination.tsx",
+      "key": "TooltipTrigger@src/components/ui/tooltip.tsx",
+      "name": "TooltipTrigger",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/tooltip.tsx",
+      "fileRel": "src/components/ui/tooltip.tsx",
       "wrapperClass": null,
       "renders": [
-        "MoreHorizontal"
+        "TooltipPrimitive.Trigger"
       ],
-      "mermaidId": "PaginationEllipsis_9c6a11bd"
+      "mermaidId": "TooltipTrigger_d5f27522"
     },
     {
-      "key": "DialogHeader@src/components/ui/dialog.tsx",
-      "name": "DialogHeader",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dialog.tsx",
-      "fileRel": "src/components/ui/dialog.tsx",
+      "key": "TooltipContent@src/components/ui/tooltip.tsx",
+      "name": "TooltipContent",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/tooltip.tsx",
+      "fileRel": "src/components/ui/tooltip.tsx",
       "wrapperClass": null,
-      "renders": [],
-      "mermaidId": "DialogHeader_a0371821"
-    },
-    {
-      "key": "DialogFooter@src/components/ui/dialog.tsx",
-      "name": "DialogFooter",
-      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/ui/dialog.tsx",
-      "fileRel": "src/components/ui/dialog.tsx",
-      "wrapperClass": null,
-      "renders": [],
-      "mermaidId": "DialogFooter_2edacabf"
+      "renders": [
+        "TooltipPrimitive.Portal",
+        "TooltipPrimitive.Content"
+      ],
+      "mermaidId": "TooltipContent_75ba978f"
     },
     {
       "key": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
@@ -459,9 +1636,548 @@
         "Gauge"
       ],
       "mermaidId": "PlayerControlLayer_aa87dc6d"
+    },
+    {
+      "key": "VideoPlayer@src/components/VideoPlayer.tsx",
+      "name": "VideoPlayer",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/VideoPlayer.tsx",
+      "fileRel": "src/components/VideoPlayer.tsx",
+      "wrapperClass": "w-full space-y-1.5 px-0 fixed inset-0 z-[75] bg-[#050507]/95 p-2 sm:p-5",
+      "renders": [
+        "LayoutPanelTop",
+        "Minimize2",
+        "Maximize2",
+        "RefreshCw",
+        "SkipForward",
+        "SkipBack",
+        "Server",
+        "AspectRatio",
+        "MediaPlayer",
+        "PlayerControlLayer",
+        "MediaProvider"
+      ],
+      "mermaidId": "VideoPlayer_edd2de7d"
+    },
+    {
+      "key": "WatchDock@src/components/WatchDock.tsx",
+      "name": "WatchDock",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/components/WatchDock.tsx",
+      "fileRel": "src/components/WatchDock.tsx",
+      "wrapperClass": "fixed bottom-4 right-4 z-40 lg:bottom-6 lg:right-8 w-[min(92vw,23.5rem)] w-14",
+      "renders": [
+        "AnimatePresence"
+      ],
+      "mermaidId": "WatchDock_66a65384"
+    },
+    {
+      "key": "Layout@src/layouts/Layout.astro",
+      "name": "Layout",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/layouts/Layout.astro",
+      "fileRel": "src/layouts/Layout.astro",
+      "wrapperClass": null,
+      "renders": [
+        "ClientRouter",
+        "Cursor",
+        "SearchForm",
+        "MobileMenu"
+      ],
+      "mermaidId": "Layout_9258f67b"
+    },
+    {
+      "key": "Page@src/pages/[page].astro",
+      "name": "Page",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/pages/[page].astro",
+      "fileRel": "src/pages/[page].astro",
+      "wrapperClass": null,
+      "renders": [
+        "Layout",
+        "MovieTypeSelector",
+        "MovieGrid"
+      ],
+      "mermaidId": "Page_24b8cbc9"
+    },
+    {
+      "key": "Astro404@src/pages/404.astro",
+      "name": "Astro404",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/pages/404.astro",
+      "fileRel": "src/pages/404.astro",
+      "wrapperClass": null,
+      "renders": [
+        "Layout",
+        "Card",
+        "CardHeader",
+        "CardTitle",
+        "CardDescription",
+        "CardContent",
+        "CardFooter",
+        "Button"
+      ],
+      "mermaidId": "Astro404_ed259820"
+    },
+    {
+      "key": "Astro500@src/pages/500.astro",
+      "name": "Astro500",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/pages/500.astro",
+      "fileRel": "src/pages/500.astro",
+      "wrapperClass": null,
+      "renders": [
+        "Layout",
+        "Card",
+        "CardHeader",
+        "CardTitle",
+        "CardDescription",
+        "CardContent",
+        "CardFooter",
+        "Button"
+      ],
+      "mermaidId": "Astro500_c8d6fe54"
+    },
+    {
+      "key": "GET@src/pages/api/sections/[typeList].ts",
+      "name": "GET",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/pages/api/sections/[typeList].ts",
+      "fileRel": "src/pages/api/sections/[typeList].ts",
+      "wrapperClass": null,
+      "renders": [],
+      "mermaidId": "GET_6351d41d"
+    },
+    {
+      "key": "GET@src/pages/api/tmdb/[type]/[id].ts",
+      "name": "GET",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/pages/api/tmdb/[type]/[id].ts",
+      "fileRel": "src/pages/api/tmdb/[type]/[id].ts",
+      "wrapperClass": null,
+      "renders": [],
+      "mermaidId": "GET_ce28874d"
+    },
+    {
+      "key": "Type@src/pages/danh-sach/[type].astro",
+      "name": "Type",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/pages/danh-sach/[type].astro",
+      "fileRel": "src/pages/danh-sach/[type].astro",
+      "wrapperClass": null,
+      "renders": [
+        "Layout",
+        "MovieCard",
+        "Pagination",
+        "PaginationContent",
+        "PaginationItem",
+        "PaginationPrevious",
+        "PaginationLink",
+        "PaginationNext"
+      ],
+      "mermaidId": "Type_959ac5b5"
+    },
+    {
+      "key": "Page@src/pages/danh-sach/[type]/[page].astro",
+      "name": "Page",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/pages/danh-sach/[type]/[page].astro",
+      "fileRel": "src/pages/danh-sach/[type]/[page].astro",
+      "wrapperClass": null,
+      "renders": [
+        "Layout",
+        "MovieCard",
+        "Pagination",
+        "PaginationContent",
+        "PaginationItem",
+        "PaginationPrevious",
+        "PaginationLink",
+        "PaginationNext"
+      ],
+      "mermaidId": "Page_06eb2577"
+    },
+    {
+      "key": "Year@src/pages/danh-sach/nam/[year].astro",
+      "name": "Year",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/pages/danh-sach/nam/[year].astro",
+      "fileRel": "src/pages/danh-sach/nam/[year].astro",
+      "wrapperClass": null,
+      "renders": [
+        "Layout",
+        "FilterPanel",
+        "MovieCard",
+        "Pagination",
+        "PaginationContent",
+        "PaginationItem",
+        "PaginationPrevious",
+        "PaginationLink",
+        "PaginationNext"
+      ],
+      "mermaidId": "Year_f8f9ffd7"
+    },
+    {
+      "key": "Type@src/pages/danh-sach/quoc-gia/[type].astro",
+      "name": "Type",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/pages/danh-sach/quoc-gia/[type].astro",
+      "fileRel": "src/pages/danh-sach/quoc-gia/[type].astro",
+      "wrapperClass": null,
+      "renders": [
+        "Layout",
+        "FilterPanel",
+        "MovieCard",
+        "Pagination",
+        "PaginationContent",
+        "PaginationItem",
+        "PaginationPrevious",
+        "PaginationLink",
+        "PaginationNext"
+      ],
+      "mermaidId": "Type_a0625843"
+    },
+    {
+      "key": "Type@src/pages/danh-sach/the-loai/[type].astro",
+      "name": "Type",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/pages/danh-sach/the-loai/[type].astro",
+      "fileRel": "src/pages/danh-sach/the-loai/[type].astro",
+      "wrapperClass": null,
+      "renders": [
+        "Layout",
+        "FilterPanel",
+        "MovieCard",
+        "Pagination",
+        "PaginationContent",
+        "PaginationItem",
+        "PaginationPrevious",
+        "PaginationLink",
+        "PaginationNext"
+      ],
+      "mermaidId": "Type_9491cf8c"
+    },
+    {
+      "key": "Pages@src/pages/index.astro",
+      "name": "Pages",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/pages/index.astro",
+      "fileRel": "src/pages/index.astro",
+      "wrapperClass": null,
+      "renders": [
+        "Layout",
+        "HeroMovie",
+        "BatchedHomeSections"
+      ],
+      "mermaidId": "Pages_c7586bc0"
+    },
+    {
+      "key": "Slug@src/pages/phim/[slug].astro",
+      "name": "Slug",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/pages/phim/[slug].astro",
+      "fileRel": "src/pages/phim/[slug].astro",
+      "wrapperClass": null,
+      "renders": [
+        "Layout",
+        "MovieDetailPage"
+      ],
+      "mermaidId": "Slug_334145aa"
+    },
+    {
+      "key": "Keyword@src/pages/tim-kiem/[keyword].astro",
+      "name": "Keyword",
+      "fileAbs": "/home/terasumi/Documents/source_code/Web/astro-shadcn/src/pages/tim-kiem/[keyword].astro",
+      "fileRel": "src/pages/tim-kiem/[keyword].astro",
+      "wrapperClass": null,
+      "renders": [
+        "Layout",
+        "SearchMovieGrid"
+      ],
+      "mermaidId": "Keyword_4d6a1dd1"
     }
   ],
   "edges": [
+    [
+      "ComboboxDemo@src/components/Combobox.tsx",
+      "Popover@src/components/ui/popover.tsx"
+    ],
+    [
+      "ComboboxDemo@src/components/Combobox.tsx",
+      "PopoverContent@src/components/ui/popover.tsx"
+    ],
+    [
+      "ComboboxDemo@src/components/Combobox.tsx",
+      "Command@src/components/ui/command.tsx"
+    ],
+    [
+      "ComboboxDemo@src/components/Combobox.tsx",
+      "CommandList@src/components/ui/command.tsx"
+    ],
+    [
+      "ComboboxDemo@src/components/Combobox.tsx",
+      "CommandGroup@src/components/ui/command.tsx"
+    ],
+    [
+      "ComboboxDemo@src/components/Combobox.tsx",
+      "CommandItem@src/components/ui/command.tsx"
+    ],
+    [
+      "ComboboxDemo@src/components/Combobox.tsx",
+      "CommandEmpty@src/components/ui/command.tsx"
+    ],
+    [
+      "ComboboxDemo@src/components/Combobox.tsx",
+      "CommandInput@src/components/ui/command.tsx"
+    ],
+    [
+      "ComboboxDemo@src/components/Combobox.tsx",
+      "PopoverTrigger@src/components/ui/popover.tsx"
+    ],
+    [
+      "ComboboxDemo@src/components/Combobox.tsx",
+      "Button@src/components/ui/button.tsx"
+    ],
+    [
+      "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "Card@src/components/ui/card.tsx"
+    ],
+    [
+      "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "CardContent@src/components/ui/card.tsx"
+    ],
+    [
+      "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "Tabs@src/components/ui/tabs.tsx"
+    ],
+    [
+      "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "TabsContent@src/components/ui/tabs.tsx"
+    ],
+    [
+      "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "Pagination@src/components/ui/pagination.tsx"
+    ],
+    [
+      "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "PaginationContent@src/components/ui/pagination.tsx"
+    ],
+    [
+      "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "PaginationItem@src/components/ui/pagination.tsx"
+    ],
+    [
+      "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "Button@src/components/ui/button.tsx"
+    ],
+    [
+      "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "PaginationEllipsis@src/components/ui/pagination.tsx"
+    ],
+    [
+      "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "TooltipProvider@src/components/ui/tooltip.tsx"
+    ],
+    [
+      "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "Tooltip@src/components/ui/tooltip.tsx"
+    ],
+    [
+      "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "TooltipContent@src/components/ui/tooltip.tsx"
+    ],
+    [
+      "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "TooltipTrigger@src/components/ui/tooltip.tsx"
+    ],
+    [
+      "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "Badge@src/components/ui/badge.tsx"
+    ],
+    [
+      "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "Toggle@src/components/ui/toggle.tsx"
+    ],
+    [
+      "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "Input@src/components/ui/input.tsx"
+    ],
+    [
+      "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "TabsList@src/components/ui/tabs.tsx"
+    ],
+    [
+      "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "TabsTrigger@src/components/ui/tabs.tsx"
+    ],
+    [
+      "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "CardHeader@src/components/ui/card.tsx"
+    ],
+    [
+      "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "CardTitle@src/components/ui/card.tsx"
+    ],
+    [
+      "FilterPanel@src/components/FilterPanel.astro",
+      "FilterPanelMobile@src/components/FilterPanelMobile.tsx"
+    ],
+    [
+      "FilterPanelMobile@src/components/FilterPanelMobile.tsx",
+      "FilterSheet@src/components/FilterSheet.tsx"
+    ],
+    [
+      "FilterSheet@src/components/FilterSheet.tsx",
+      "Sheet@src/components/ui/sheet.tsx"
+    ],
+    [
+      "FilterSheet@src/components/FilterSheet.tsx",
+      "SheetContent@src/components/ui/sheet.tsx"
+    ],
+    [
+      "FilterSheet@src/components/FilterSheet.tsx",
+      "SheetHeader@src/components/ui/sheet.tsx"
+    ],
+    [
+      "FilterSheet@src/components/FilterSheet.tsx",
+      "SheetTitle@src/components/ui/sheet.tsx"
+    ],
+    [
+      "MenuItemComponent@src/components/MobileMenu.tsx",
+      "Collapsible@src/components/ui/collapsible.tsx"
+    ],
+    [
+      "MenuItemComponent@src/components/MobileMenu.tsx",
+      "CollapsibleContent@src/components/ui/collapsible.tsx"
+    ],
+    [
+      "MenuItemComponent@src/components/MobileMenu.tsx",
+      "MenuItemComponent@src/components/MobileMenu.tsx"
+    ],
+    [
+      "MenuItemComponent@src/components/MobileMenu.tsx",
+      "CollapsibleTrigger@src/components/ui/collapsible.tsx"
+    ],
+    [
+      "MobileMenu@src/components/MobileMenu.tsx",
+      "Sheet@src/components/ui/sheet.tsx"
+    ],
+    [
+      "MobileMenu@src/components/MobileMenu.tsx",
+      "SheetContent@src/components/ui/sheet.tsx"
+    ],
+    [
+      "MobileMenu@src/components/MobileMenu.tsx",
+      "MenuItemComponent@src/components/MobileMenu.tsx"
+    ],
+    [
+      "MobileMenu@src/components/MobileMenu.tsx",
+      "SheetTrigger@src/components/ui/sheet.tsx"
+    ],
+    [
+      "MobileMenu@src/components/MobileMenu.tsx",
+      "Button@src/components/ui/button.tsx"
+    ],
+    [
+      "ModeToggle@src/components/ModeToggle.tsx",
+      "DropdownMenu@src/components/ui/dropdown-menu.tsx"
+    ],
+    [
+      "ModeToggle@src/components/ModeToggle.tsx",
+      "DropdownMenuContent@src/components/ui/dropdown-menu.tsx"
+    ],
+    [
+      "ModeToggle@src/components/ModeToggle.tsx",
+      "DropdownMenuItem@src/components/ui/dropdown-menu.tsx"
+    ],
+    [
+      "ModeToggle@src/components/ModeToggle.tsx",
+      "DropdownMenuTrigger@src/components/ui/dropdown-menu.tsx"
+    ],
+    [
+      "ModeToggle@src/components/ModeToggle.tsx",
+      "Button@src/components/ui/button.tsx"
+    ],
+    [
+      "MovieDetailPage@src/components/MovieDetailPage.astro",
+      "ShareButtonWrapper@src/components/ui/ShareButtonWrapper.tsx"
+    ],
+    [
+      "MovieDetailPage@src/components/MovieDetailPage.astro",
+      "WatchDock@src/components/WatchDock.tsx"
+    ],
+    [
+      "MovieDetailPage@src/components/MovieDetailPage.astro",
+      "EpisodeSelector@src/components/EpisodeSelector.tsx"
+    ],
+    [
+      "MovieDetailPage@src/components/MovieDetailPage.astro",
+      "VideoPlayer@src/components/VideoPlayer.tsx"
+    ],
+    [
+      "MovieGrid@src/components/MovieGrid.astro",
+      "MovieCard@src/components/MovieCard.astro"
+    ],
+    [
+      "MovieGrid@src/components/MovieGrid.astro",
+      "Pagination@src/components/ui/pagination.tsx"
+    ],
+    [
+      "MovieGrid@src/components/MovieGrid.astro",
+      "PaginationContent@src/components/ui/pagination.tsx"
+    ],
+    [
+      "MovieGrid@src/components/MovieGrid.astro",
+      "PaginationItem@src/components/ui/pagination.tsx"
+    ],
+    [
+      "MovieGrid@src/components/MovieGrid.astro",
+      "PaginationPrevious@src/components/ui/pagination.tsx"
+    ],
+    [
+      "MovieGrid@src/components/MovieGrid.astro",
+      "PaginationLink@src/components/ui/pagination.tsx"
+    ],
+    [
+      "MovieGrid@src/components/MovieGrid.astro",
+      "PaginationNext@src/components/ui/pagination.tsx"
+    ],
+    [
+      "MovieTypeSelector@src/components/MovieTypeSelector.tsx",
+      "Card@src/components/ui/card.tsx"
+    ],
+    [
+      "MovieTypeSelector@src/components/MovieTypeSelector.tsx",
+      "CardFooter@src/components/ui/card.tsx"
+    ],
+    [
+      "MovieTypeSelector@src/components/MovieTypeSelector.tsx",
+      "Button@src/components/ui/button.tsx"
+    ],
+    [
+      "MovieTypeSelector@src/components/MovieTypeSelector.tsx",
+      "CardContent@src/components/ui/card.tsx"
+    ],
+    [
+      "MovieTypeSelector@src/components/MovieTypeSelector.tsx",
+      "CardHeader@src/components/ui/card.tsx"
+    ],
+    [
+      "MovieTypeSelector@src/components/MovieTypeSelector.tsx",
+      "CardTitle@src/components/ui/card.tsx"
+    ],
+    [
+      "ListItem@src/components/NavigationMenuDemo.tsx",
+      "NavigationMenuLink@src/components/ui/navigation-menu.tsx"
+    ],
+    [
+      "ListItem@src/components/NavigationMenuDemo.tsx",
+      "Icon@src/components/SearchForm.tsx"
+    ],
+    [
+      "NavigationMenuDemo@src/components/NavigationMenuDemo.tsx",
+      "NavigationMenu@src/components/ui/navigation-menu.tsx"
+    ],
+    [
+      "NavigationMenuDemo@src/components/NavigationMenuDemo.tsx",
+      "NavigationMenuItem@src/components/ui/navigation-menu.tsx"
+    ],
+    [
+      "NavigationMenuDemo@src/components/NavigationMenuDemo.tsx",
+      "NavigationMenuContent@src/components/ui/navigation-menu.tsx"
+    ],
+    [
+      "NavigationMenuDemo@src/components/NavigationMenuDemo.tsx",
+      "NavigationMenuLink@src/components/ui/navigation-menu.tsx"
+    ],
+    [
+      "NavigationMenuDemo@src/components/NavigationMenuDemo.tsx",
+      "NavigationMenuTrigger@src/components/ui/navigation-menu.tsx"
+    ],
     [
       "NavigationMenuDemo@src/components/NavigationMenuDemo.tsx",
       "ListItem@src/components/NavigationMenuDemo.tsx"
@@ -472,15 +2188,59 @@
     ],
     [
       "SearchForm@src/components/SearchForm.tsx",
+      "CommandList@src/components/ui/command.tsx"
+    ],
+    [
+      "SearchForm@src/components/SearchForm.tsx",
+      "CommandGroup@src/components/ui/command.tsx"
+    ],
+    [
+      "SearchForm@src/components/SearchForm.tsx",
+      "CommandItem@src/components/ui/command.tsx"
+    ],
+    [
+      "SearchForm@src/components/SearchForm.tsx",
+      "Icon@src/components/SearchForm.tsx"
+    ],
+    [
+      "SearchForm@src/components/SearchForm.tsx",
       "CommandShortcut@src/components/ui/command.tsx"
     ],
     [
-      "VideoPlayer@src/components/VideoPlayer.tsx",
-      "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx"
+      "SearchForm@src/components/SearchForm.tsx",
+      "CommandInput@src/components/ui/command.tsx"
     ],
     [
-      "ShareButtonWrapper@src/components/ui/ShareButtonWrapper.tsx",
-      "ShareButton@src/components/ui/share-button.tsx"
+      "SearchForm@src/components/SearchForm.tsx",
+      "Button@src/components/ui/button.tsx"
+    ],
+    [
+      "SearchMovieGrid@src/components/SearchMovieGrid.astro",
+      "MovieCard@src/components/MovieCard.astro"
+    ],
+    [
+      "CommandDialog@src/components/ui/command.tsx",
+      "Dialog@src/components/ui/dialog.tsx"
+    ],
+    [
+      "CommandDialog@src/components/ui/command.tsx",
+      "DialogContent@src/components/ui/dialog.tsx"
+    ],
+    [
+      "CommandDialog@src/components/ui/command.tsx",
+      "Command@src/components/ui/command.tsx"
+    ],
+    [
+      "DialogContent@src/components/ui/dialog.tsx",
+      "DialogPortal@src/components/ui/dialog.tsx"
+    ],
+    [
+      "DialogContent@src/components/ui/dialog.tsx",
+      "DialogOverlay@src/components/ui/dialog.tsx"
+    ],
+    [
+      "NavigationMenu@src/components/ui/navigation-menu.tsx",
+      "NavigationMenuViewport@src/components/ui/navigation-menu.tsx"
     ],
     [
       "PaginationPrevious@src/components/ui/pagination.tsx",
@@ -489,6 +2249,1871 @@
     [
       "PaginationNext@src/components/ui/pagination.tsx",
       "PaginationLink@src/components/ui/pagination.tsx"
+    ],
+    [
+      "BatchedHomeSections@src/components/ui/sections/BatchedHomeSections.astro",
+      "SectionList@src/components/ui/sections/SectionList.astro"
+    ],
+    [
+      "HoatHinhSection@src/components/ui/sections/HoatHinhSection.astro",
+      "SectionList@src/components/ui/sections/SectionList.astro"
+    ],
+    [
+      "PhimBoSection@src/components/ui/sections/PhimBoSection.astro",
+      "SectionList@src/components/ui/sections/SectionList.astro"
+    ],
+    [
+      "PhimLeSection@src/components/ui/sections/PhimLeSection.astro",
+      "SectionList@src/components/ui/sections/SectionList.astro"
+    ],
+    [
+      "SectionList@src/components/ui/sections/SectionList.astro",
+      "SectionListCarousel@src/components/ui/SectionListCarousel.tsx"
+    ],
+    [
+      "TvShowsSection@src/components/ui/sections/TvShowsSection.astro",
+      "SectionList@src/components/ui/sections/SectionList.astro"
+    ],
+    [
+      "SelectContent@src/components/ui/select.tsx",
+      "SelectScrollDownButton@src/components/ui/select.tsx"
+    ],
+    [
+      "SelectContent@src/components/ui/select.tsx",
+      "SelectScrollUpButton@src/components/ui/select.tsx"
+    ],
+    [
+      "ShareButton@src/components/ui/share-button.tsx",
+      "Icon@src/components/ui/share-button.tsx"
+    ],
+    [
+      "ShareButtonWrapper@src/components/ui/ShareButtonWrapper.tsx",
+      "ShareButton@src/components/ui/share-button.tsx"
+    ],
+    [
+      "SheetContent@src/components/ui/sheet.tsx",
+      "SheetPortal@src/components/ui/sheet.tsx"
+    ],
+    [
+      "SheetContent@src/components/ui/sheet.tsx",
+      "SheetOverlay@src/components/ui/sheet.tsx"
+    ],
+    [
+      "VideoPlayer@src/components/VideoPlayer.tsx",
+      "AspectRatio@src/components/ui/aspect-ratio.tsx"
+    ],
+    [
+      "VideoPlayer@src/components/VideoPlayer.tsx",
+      "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx"
+    ],
+    [
+      "Layout@src/layouts/Layout.astro",
+      "Cursor@src/components/ui/Cursor.tsx"
+    ],
+    [
+      "Layout@src/layouts/Layout.astro",
+      "SearchForm@src/components/SearchForm.tsx"
+    ],
+    [
+      "Layout@src/layouts/Layout.astro",
+      "MobileMenu@src/components/MobileMenu.tsx"
+    ],
+    [
+      "Page@src/pages/[page].astro",
+      "Layout@src/layouts/Layout.astro"
+    ],
+    [
+      "Page@src/pages/[page].astro",
+      "MovieTypeSelector@src/components/MovieTypeSelector.tsx"
+    ],
+    [
+      "Page@src/pages/[page].astro",
+      "MovieGrid@src/components/MovieGrid.astro"
+    ],
+    [
+      "Astro404@src/pages/404.astro",
+      "Layout@src/layouts/Layout.astro"
+    ],
+    [
+      "Astro404@src/pages/404.astro",
+      "Card@src/components/ui/card.tsx"
+    ],
+    [
+      "Astro404@src/pages/404.astro",
+      "CardHeader@src/components/ui/card.tsx"
+    ],
+    [
+      "Astro404@src/pages/404.astro",
+      "CardTitle@src/components/ui/card.tsx"
+    ],
+    [
+      "Astro404@src/pages/404.astro",
+      "CardDescription@src/components/ui/card.tsx"
+    ],
+    [
+      "Astro404@src/pages/404.astro",
+      "CardContent@src/components/ui/card.tsx"
+    ],
+    [
+      "Astro404@src/pages/404.astro",
+      "CardFooter@src/components/ui/card.tsx"
+    ],
+    [
+      "Astro404@src/pages/404.astro",
+      "Button@src/components/ui/button.tsx"
+    ],
+    [
+      "Astro500@src/pages/500.astro",
+      "Layout@src/layouts/Layout.astro"
+    ],
+    [
+      "Astro500@src/pages/500.astro",
+      "Card@src/components/ui/card.tsx"
+    ],
+    [
+      "Astro500@src/pages/500.astro",
+      "CardHeader@src/components/ui/card.tsx"
+    ],
+    [
+      "Astro500@src/pages/500.astro",
+      "CardTitle@src/components/ui/card.tsx"
+    ],
+    [
+      "Astro500@src/pages/500.astro",
+      "CardDescription@src/components/ui/card.tsx"
+    ],
+    [
+      "Astro500@src/pages/500.astro",
+      "CardContent@src/components/ui/card.tsx"
+    ],
+    [
+      "Astro500@src/pages/500.astro",
+      "CardFooter@src/components/ui/card.tsx"
+    ],
+    [
+      "Astro500@src/pages/500.astro",
+      "Button@src/components/ui/button.tsx"
+    ],
+    [
+      "Type@src/pages/danh-sach/[type].astro",
+      "Layout@src/layouts/Layout.astro"
+    ],
+    [
+      "Type@src/pages/danh-sach/[type].astro",
+      "MovieCard@src/components/MovieCard.astro"
+    ],
+    [
+      "Type@src/pages/danh-sach/[type].astro",
+      "Pagination@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Type@src/pages/danh-sach/[type].astro",
+      "PaginationContent@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Type@src/pages/danh-sach/[type].astro",
+      "PaginationItem@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Type@src/pages/danh-sach/[type].astro",
+      "PaginationPrevious@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Type@src/pages/danh-sach/[type].astro",
+      "PaginationLink@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Type@src/pages/danh-sach/[type].astro",
+      "PaginationNext@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Page@src/pages/danh-sach/[type]/[page].astro",
+      "Layout@src/layouts/Layout.astro"
+    ],
+    [
+      "Page@src/pages/danh-sach/[type]/[page].astro",
+      "MovieCard@src/components/MovieCard.astro"
+    ],
+    [
+      "Page@src/pages/danh-sach/[type]/[page].astro",
+      "Pagination@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Page@src/pages/danh-sach/[type]/[page].astro",
+      "PaginationContent@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Page@src/pages/danh-sach/[type]/[page].astro",
+      "PaginationItem@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Page@src/pages/danh-sach/[type]/[page].astro",
+      "PaginationPrevious@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Page@src/pages/danh-sach/[type]/[page].astro",
+      "PaginationLink@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Page@src/pages/danh-sach/[type]/[page].astro",
+      "PaginationNext@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Year@src/pages/danh-sach/nam/[year].astro",
+      "Layout@src/layouts/Layout.astro"
+    ],
+    [
+      "Year@src/pages/danh-sach/nam/[year].astro",
+      "FilterPanel@src/components/FilterPanel.astro"
+    ],
+    [
+      "Year@src/pages/danh-sach/nam/[year].astro",
+      "MovieCard@src/components/MovieCard.astro"
+    ],
+    [
+      "Year@src/pages/danh-sach/nam/[year].astro",
+      "Pagination@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Year@src/pages/danh-sach/nam/[year].astro",
+      "PaginationContent@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Year@src/pages/danh-sach/nam/[year].astro",
+      "PaginationItem@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Year@src/pages/danh-sach/nam/[year].astro",
+      "PaginationPrevious@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Year@src/pages/danh-sach/nam/[year].astro",
+      "PaginationLink@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Year@src/pages/danh-sach/nam/[year].astro",
+      "PaginationNext@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Type@src/pages/danh-sach/quoc-gia/[type].astro",
+      "Layout@src/layouts/Layout.astro"
+    ],
+    [
+      "Type@src/pages/danh-sach/quoc-gia/[type].astro",
+      "FilterPanel@src/components/FilterPanel.astro"
+    ],
+    [
+      "Type@src/pages/danh-sach/quoc-gia/[type].astro",
+      "MovieCard@src/components/MovieCard.astro"
+    ],
+    [
+      "Type@src/pages/danh-sach/quoc-gia/[type].astro",
+      "Pagination@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Type@src/pages/danh-sach/quoc-gia/[type].astro",
+      "PaginationContent@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Type@src/pages/danh-sach/quoc-gia/[type].astro",
+      "PaginationItem@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Type@src/pages/danh-sach/quoc-gia/[type].astro",
+      "PaginationPrevious@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Type@src/pages/danh-sach/quoc-gia/[type].astro",
+      "PaginationLink@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Type@src/pages/danh-sach/quoc-gia/[type].astro",
+      "PaginationNext@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Type@src/pages/danh-sach/the-loai/[type].astro",
+      "Layout@src/layouts/Layout.astro"
+    ],
+    [
+      "Type@src/pages/danh-sach/the-loai/[type].astro",
+      "FilterPanel@src/components/FilterPanel.astro"
+    ],
+    [
+      "Type@src/pages/danh-sach/the-loai/[type].astro",
+      "MovieCard@src/components/MovieCard.astro"
+    ],
+    [
+      "Type@src/pages/danh-sach/the-loai/[type].astro",
+      "Pagination@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Type@src/pages/danh-sach/the-loai/[type].astro",
+      "PaginationContent@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Type@src/pages/danh-sach/the-loai/[type].astro",
+      "PaginationItem@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Type@src/pages/danh-sach/the-loai/[type].astro",
+      "PaginationPrevious@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Type@src/pages/danh-sach/the-loai/[type].astro",
+      "PaginationLink@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Type@src/pages/danh-sach/the-loai/[type].astro",
+      "PaginationNext@src/components/ui/pagination.tsx"
+    ],
+    [
+      "Pages@src/pages/index.astro",
+      "Layout@src/layouts/Layout.astro"
+    ],
+    [
+      "Pages@src/pages/index.astro",
+      "HeroMovie@src/components/HeroMovie.astro"
+    ],
+    [
+      "Pages@src/pages/index.astro",
+      "BatchedHomeSections@src/components/ui/sections/BatchedHomeSections.astro"
+    ],
+    [
+      "Slug@src/pages/phim/[slug].astro",
+      "Layout@src/layouts/Layout.astro"
+    ],
+    [
+      "Slug@src/pages/phim/[slug].astro",
+      "MovieDetailPage@src/components/MovieDetailPage.astro"
+    ],
+    [
+      "Keyword@src/pages/tim-kiem/[keyword].astro",
+      "Layout@src/layouts/Layout.astro"
+    ],
+    [
+      "Keyword@src/pages/tim-kiem/[keyword].astro",
+      "SearchMovieGrid@src/components/SearchMovieGrid.astro"
     ]
-  ]
+  ],
+  "unresolvedRefs": [
+    {
+      "fromKey": "ComboboxDemo@src/components/Combobox.tsx",
+      "fromFile": "src/components/Combobox.tsx",
+      "fromComponent": "ComboboxDemo",
+      "renderedName": "Check",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "ComboboxDemo@src/components/Combobox.tsx",
+      "fromFile": "src/components/Combobox.tsx",
+      "fromComponent": "ComboboxDemo",
+      "renderedName": "ChevronsUpDown",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "fromFile": "src/components/EpisodeSelector.tsx",
+      "fromComponent": "EpisodeSelector",
+      "renderedName": "ChevronRight",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "fromFile": "src/components/EpisodeSelector.tsx",
+      "fromComponent": "EpisodeSelector",
+      "renderedName": "ChevronLeft",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "fromFile": "src/components/EpisodeSelector.tsx",
+      "fromComponent": "EpisodeSelector",
+      "renderedName": "Film",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "fromFile": "src/components/EpisodeSelector.tsx",
+      "fromComponent": "EpisodeSelector",
+      "renderedName": "Play",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "fromFile": "src/components/EpisodeSelector.tsx",
+      "fromComponent": "EpisodeSelector",
+      "renderedName": "SkipForward",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "fromFile": "src/components/EpisodeSelector.tsx",
+      "fromComponent": "EpisodeSelector",
+      "renderedName": "SkipBack",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "fromFile": "src/components/EpisodeSelector.tsx",
+      "fromComponent": "EpisodeSelector",
+      "renderedName": "ArrowUpDown",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "EpisodeSelector@src/components/EpisodeSelector.tsx",
+      "fromFile": "src/components/EpisodeSelector.tsx",
+      "fromComponent": "EpisodeSelector",
+      "renderedName": "Search",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "HeroMovie@src/components/HeroMovie.astro",
+      "fromFile": "src/components/HeroMovie.astro",
+      "fromComponent": "HeroMovie",
+      "renderedName": "Image",
+      "reason": "external_component_reference",
+      "detail": "astro:assets"
+    },
+    {
+      "fromKey": "MenuItemComponent@src/components/MobileMenu.tsx",
+      "fromFile": "src/components/MobileMenu.tsx",
+      "fromComponent": "MenuItemComponent",
+      "renderedName": "ChevronRight",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "MenuItemComponent@src/components/MobileMenu.tsx",
+      "fromFile": "src/components/MobileMenu.tsx",
+      "fromComponent": "MenuItemComponent",
+      "renderedName": "ChevronDown",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "MobileMenu@src/components/MobileMenu.tsx",
+      "fromFile": "src/components/MobileMenu.tsx",
+      "fromComponent": "MobileMenu",
+      "renderedName": "Menu",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "ModeToggle@src/components/ModeToggle.tsx",
+      "fromFile": "src/components/ModeToggle.tsx",
+      "fromComponent": "ModeToggle",
+      "renderedName": "Moon",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "ModeToggle@src/components/ModeToggle.tsx",
+      "fromFile": "src/components/ModeToggle.tsx",
+      "fromComponent": "ModeToggle",
+      "renderedName": "Sun",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "MovieCard@src/components/MovieCard.astro",
+      "fromFile": "src/components/MovieCard.astro",
+      "fromComponent": "MovieCard",
+      "renderedName": "Image",
+      "reason": "external_component_reference",
+      "detail": "astro:assets"
+    },
+    {
+      "fromKey": "MovieDetailPage@src/components/MovieDetailPage.astro",
+      "fromFile": "src/components/MovieDetailPage.astro",
+      "fromComponent": "MovieDetailPage",
+      "renderedName": "Image",
+      "reason": "external_component_reference",
+      "detail": "astro:assets"
+    },
+    {
+      "fromKey": "NavigationMenuDemo@src/components/NavigationMenuDemo.tsx",
+      "fromFile": "src/components/NavigationMenuDemo.tsx",
+      "fromComponent": "NavigationMenuDemo",
+      "renderedName": "Film",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "SearchForm@src/components/SearchForm.tsx",
+      "fromFile": "src/components/SearchForm.tsx",
+      "fromComponent": "SearchForm",
+      "renderedName": "Search",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "Icon@src/components/SearchForm.tsx",
+      "fromFile": "src/components/SearchForm.tsx",
+      "fromComponent": "Icon",
+      "renderedName": "link.icon",
+      "reason": "namespace_import_not_found",
+      "detail": "link"
+    },
+    {
+      "fromKey": "AspectRatio@src/components/ui/aspect-ratio.tsx",
+      "fromFile": "src/components/ui/aspect-ratio.tsx",
+      "fromComponent": "AspectRatio",
+      "renderedName": "AspectRatioPrimitive.Root",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-aspect-ratio"
+    },
+    {
+      "fromKey": "Button@src/components/ui/button.tsx",
+      "fromFile": "src/components/ui/button.tsx",
+      "fromComponent": "Button",
+      "renderedName": "Comp",
+      "reason": "component_not_found",
+      "detail": "Comp"
+    },
+    {
+      "fromKey": "Collapsible@src/components/ui/collapsible.tsx",
+      "fromFile": "src/components/ui/collapsible.tsx",
+      "fromComponent": "Collapsible",
+      "renderedName": "CollapsiblePrimitive.Root",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-collapsible"
+    },
+    {
+      "fromKey": "CollapsibleTrigger@src/components/ui/collapsible.tsx",
+      "fromFile": "src/components/ui/collapsible.tsx",
+      "fromComponent": "CollapsibleTrigger",
+      "renderedName": "CollapsiblePrimitive.CollapsibleTrigger",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-collapsible"
+    },
+    {
+      "fromKey": "CollapsibleContent@src/components/ui/collapsible.tsx",
+      "fromFile": "src/components/ui/collapsible.tsx",
+      "fromComponent": "CollapsibleContent",
+      "renderedName": "CollapsiblePrimitive.CollapsibleContent",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-collapsible"
+    },
+    {
+      "fromKey": "Command@src/components/ui/command.tsx",
+      "fromFile": "src/components/ui/command.tsx",
+      "fromComponent": "Command",
+      "renderedName": "CommandPrimitive",
+      "reason": "external_component_reference",
+      "detail": "cmdk"
+    },
+    {
+      "fromKey": "CommandInput@src/components/ui/command.tsx",
+      "fromFile": "src/components/ui/command.tsx",
+      "fromComponent": "CommandInput",
+      "renderedName": "CommandPrimitive.Input",
+      "reason": "external_namespace_reference",
+      "detail": "cmdk"
+    },
+    {
+      "fromKey": "CommandInput@src/components/ui/command.tsx",
+      "fromFile": "src/components/ui/command.tsx",
+      "fromComponent": "CommandInput",
+      "renderedName": "Search",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "CommandList@src/components/ui/command.tsx",
+      "fromFile": "src/components/ui/command.tsx",
+      "fromComponent": "CommandList",
+      "renderedName": "CommandPrimitive.List",
+      "reason": "external_namespace_reference",
+      "detail": "cmdk"
+    },
+    {
+      "fromKey": "CommandEmpty@src/components/ui/command.tsx",
+      "fromFile": "src/components/ui/command.tsx",
+      "fromComponent": "CommandEmpty",
+      "renderedName": "CommandPrimitive.Empty",
+      "reason": "external_namespace_reference",
+      "detail": "cmdk"
+    },
+    {
+      "fromKey": "CommandGroup@src/components/ui/command.tsx",
+      "fromFile": "src/components/ui/command.tsx",
+      "fromComponent": "CommandGroup",
+      "renderedName": "CommandPrimitive.Group",
+      "reason": "external_namespace_reference",
+      "detail": "cmdk"
+    },
+    {
+      "fromKey": "CommandSeparator@src/components/ui/command.tsx",
+      "fromFile": "src/components/ui/command.tsx",
+      "fromComponent": "CommandSeparator",
+      "renderedName": "CommandPrimitive.Separator",
+      "reason": "external_namespace_reference",
+      "detail": "cmdk"
+    },
+    {
+      "fromKey": "CommandItem@src/components/ui/command.tsx",
+      "fromFile": "src/components/ui/command.tsx",
+      "fromComponent": "CommandItem",
+      "renderedName": "CommandPrimitive.Item",
+      "reason": "external_namespace_reference",
+      "detail": "cmdk"
+    },
+    {
+      "fromKey": "Cursor@src/components/ui/Cursor.tsx",
+      "fromFile": "src/components/ui/Cursor.tsx",
+      "fromComponent": "Cursor",
+      "renderedName": "Play",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "Dialog@src/components/ui/dialog.tsx",
+      "fromFile": "src/components/ui/dialog.tsx",
+      "fromComponent": "Dialog",
+      "renderedName": "DialogPrimitive.Root",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dialog"
+    },
+    {
+      "fromKey": "DialogTrigger@src/components/ui/dialog.tsx",
+      "fromFile": "src/components/ui/dialog.tsx",
+      "fromComponent": "DialogTrigger",
+      "renderedName": "DialogPrimitive.Trigger",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dialog"
+    },
+    {
+      "fromKey": "DialogPortal@src/components/ui/dialog.tsx",
+      "fromFile": "src/components/ui/dialog.tsx",
+      "fromComponent": "DialogPortal",
+      "renderedName": "DialogPrimitive.Portal",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dialog"
+    },
+    {
+      "fromKey": "DialogClose@src/components/ui/dialog.tsx",
+      "fromFile": "src/components/ui/dialog.tsx",
+      "fromComponent": "DialogClose",
+      "renderedName": "DialogPrimitive.Close",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dialog"
+    },
+    {
+      "fromKey": "DialogOverlay@src/components/ui/dialog.tsx",
+      "fromFile": "src/components/ui/dialog.tsx",
+      "fromComponent": "DialogOverlay",
+      "renderedName": "DialogPrimitive.Overlay",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dialog"
+    },
+    {
+      "fromKey": "DialogContent@src/components/ui/dialog.tsx",
+      "fromFile": "src/components/ui/dialog.tsx",
+      "fromComponent": "DialogContent",
+      "renderedName": "DialogPrimitive.Content",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dialog"
+    },
+    {
+      "fromKey": "DialogContent@src/components/ui/dialog.tsx",
+      "fromFile": "src/components/ui/dialog.tsx",
+      "fromComponent": "DialogContent",
+      "renderedName": "DialogPrimitive.Close",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dialog"
+    },
+    {
+      "fromKey": "DialogContent@src/components/ui/dialog.tsx",
+      "fromFile": "src/components/ui/dialog.tsx",
+      "fromComponent": "DialogContent",
+      "renderedName": "X",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "DialogTitle@src/components/ui/dialog.tsx",
+      "fromFile": "src/components/ui/dialog.tsx",
+      "fromComponent": "DialogTitle",
+      "renderedName": "DialogPrimitive.Title",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dialog"
+    },
+    {
+      "fromKey": "DialogDescription@src/components/ui/dialog.tsx",
+      "fromFile": "src/components/ui/dialog.tsx",
+      "fromComponent": "DialogDescription",
+      "renderedName": "DialogPrimitive.Description",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dialog"
+    },
+    {
+      "fromKey": "DropdownMenu@src/components/ui/dropdown-menu.tsx",
+      "fromFile": "src/components/ui/dropdown-menu.tsx",
+      "fromComponent": "DropdownMenu",
+      "renderedName": "DropdownMenuPrimitive.Root",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dropdown-menu"
+    },
+    {
+      "fromKey": "DropdownMenuTrigger@src/components/ui/dropdown-menu.tsx",
+      "fromFile": "src/components/ui/dropdown-menu.tsx",
+      "fromComponent": "DropdownMenuTrigger",
+      "renderedName": "DropdownMenuPrimitive.Trigger",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dropdown-menu"
+    },
+    {
+      "fromKey": "DropdownMenuGroup@src/components/ui/dropdown-menu.tsx",
+      "fromFile": "src/components/ui/dropdown-menu.tsx",
+      "fromComponent": "DropdownMenuGroup",
+      "renderedName": "DropdownMenuPrimitive.Group",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dropdown-menu"
+    },
+    {
+      "fromKey": "DropdownMenuPortal@src/components/ui/dropdown-menu.tsx",
+      "fromFile": "src/components/ui/dropdown-menu.tsx",
+      "fromComponent": "DropdownMenuPortal",
+      "renderedName": "DropdownMenuPrimitive.Portal",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dropdown-menu"
+    },
+    {
+      "fromKey": "DropdownMenuSub@src/components/ui/dropdown-menu.tsx",
+      "fromFile": "src/components/ui/dropdown-menu.tsx",
+      "fromComponent": "DropdownMenuSub",
+      "renderedName": "DropdownMenuPrimitive.Sub",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dropdown-menu"
+    },
+    {
+      "fromKey": "DropdownMenuRadioGroup@src/components/ui/dropdown-menu.tsx",
+      "fromFile": "src/components/ui/dropdown-menu.tsx",
+      "fromComponent": "DropdownMenuRadioGroup",
+      "renderedName": "DropdownMenuPrimitive.RadioGroup",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dropdown-menu"
+    },
+    {
+      "fromKey": "DropdownMenuSubTrigger@src/components/ui/dropdown-menu.tsx",
+      "fromFile": "src/components/ui/dropdown-menu.tsx",
+      "fromComponent": "DropdownMenuSubTrigger",
+      "renderedName": "DropdownMenuPrimitive.SubTrigger",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dropdown-menu"
+    },
+    {
+      "fromKey": "DropdownMenuSubTrigger@src/components/ui/dropdown-menu.tsx",
+      "fromFile": "src/components/ui/dropdown-menu.tsx",
+      "fromComponent": "DropdownMenuSubTrigger",
+      "renderedName": "ChevronRight",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "DropdownMenuSubContent@src/components/ui/dropdown-menu.tsx",
+      "fromFile": "src/components/ui/dropdown-menu.tsx",
+      "fromComponent": "DropdownMenuSubContent",
+      "renderedName": "DropdownMenuPrimitive.SubContent",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dropdown-menu"
+    },
+    {
+      "fromKey": "DropdownMenuContent@src/components/ui/dropdown-menu.tsx",
+      "fromFile": "src/components/ui/dropdown-menu.tsx",
+      "fromComponent": "DropdownMenuContent",
+      "renderedName": "DropdownMenuPrimitive.Portal",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dropdown-menu"
+    },
+    {
+      "fromKey": "DropdownMenuContent@src/components/ui/dropdown-menu.tsx",
+      "fromFile": "src/components/ui/dropdown-menu.tsx",
+      "fromComponent": "DropdownMenuContent",
+      "renderedName": "DropdownMenuPrimitive.Content",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dropdown-menu"
+    },
+    {
+      "fromKey": "DropdownMenuItem@src/components/ui/dropdown-menu.tsx",
+      "fromFile": "src/components/ui/dropdown-menu.tsx",
+      "fromComponent": "DropdownMenuItem",
+      "renderedName": "DropdownMenuPrimitive.Item",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dropdown-menu"
+    },
+    {
+      "fromKey": "DropdownMenuCheckboxItem@src/components/ui/dropdown-menu.tsx",
+      "fromFile": "src/components/ui/dropdown-menu.tsx",
+      "fromComponent": "DropdownMenuCheckboxItem",
+      "renderedName": "DropdownMenuPrimitive.CheckboxItem",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dropdown-menu"
+    },
+    {
+      "fromKey": "DropdownMenuCheckboxItem@src/components/ui/dropdown-menu.tsx",
+      "fromFile": "src/components/ui/dropdown-menu.tsx",
+      "fromComponent": "DropdownMenuCheckboxItem",
+      "renderedName": "DropdownMenuPrimitive.ItemIndicator",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dropdown-menu"
+    },
+    {
+      "fromKey": "DropdownMenuCheckboxItem@src/components/ui/dropdown-menu.tsx",
+      "fromFile": "src/components/ui/dropdown-menu.tsx",
+      "fromComponent": "DropdownMenuCheckboxItem",
+      "renderedName": "Check",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "DropdownMenuRadioItem@src/components/ui/dropdown-menu.tsx",
+      "fromFile": "src/components/ui/dropdown-menu.tsx",
+      "fromComponent": "DropdownMenuRadioItem",
+      "renderedName": "DropdownMenuPrimitive.RadioItem",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dropdown-menu"
+    },
+    {
+      "fromKey": "DropdownMenuRadioItem@src/components/ui/dropdown-menu.tsx",
+      "fromFile": "src/components/ui/dropdown-menu.tsx",
+      "fromComponent": "DropdownMenuRadioItem",
+      "renderedName": "DropdownMenuPrimitive.ItemIndicator",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dropdown-menu"
+    },
+    {
+      "fromKey": "DropdownMenuRadioItem@src/components/ui/dropdown-menu.tsx",
+      "fromFile": "src/components/ui/dropdown-menu.tsx",
+      "fromComponent": "DropdownMenuRadioItem",
+      "renderedName": "Circle",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "DropdownMenuLabel@src/components/ui/dropdown-menu.tsx",
+      "fromFile": "src/components/ui/dropdown-menu.tsx",
+      "fromComponent": "DropdownMenuLabel",
+      "renderedName": "DropdownMenuPrimitive.Label",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dropdown-menu"
+    },
+    {
+      "fromKey": "DropdownMenuSeparator@src/components/ui/dropdown-menu.tsx",
+      "fromFile": "src/components/ui/dropdown-menu.tsx",
+      "fromComponent": "DropdownMenuSeparator",
+      "renderedName": "DropdownMenuPrimitive.Separator",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dropdown-menu"
+    },
+    {
+      "fromKey": "NavigationMenu@src/components/ui/navigation-menu.tsx",
+      "fromFile": "src/components/ui/navigation-menu.tsx",
+      "fromComponent": "NavigationMenu",
+      "renderedName": "NavigationMenuPrimitive.Root",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-navigation-menu"
+    },
+    {
+      "fromKey": "NavigationMenuList@src/components/ui/navigation-menu.tsx",
+      "fromFile": "src/components/ui/navigation-menu.tsx",
+      "fromComponent": "NavigationMenuList",
+      "renderedName": "NavigationMenuPrimitive.List",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-navigation-menu"
+    },
+    {
+      "fromKey": "NavigationMenuItem@src/components/ui/navigation-menu.tsx",
+      "fromFile": "src/components/ui/navigation-menu.tsx",
+      "fromComponent": "NavigationMenuItem",
+      "renderedName": "NavigationMenuPrimitive.Item",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-navigation-menu"
+    },
+    {
+      "fromKey": "NavigationMenuTrigger@src/components/ui/navigation-menu.tsx",
+      "fromFile": "src/components/ui/navigation-menu.tsx",
+      "fromComponent": "NavigationMenuTrigger",
+      "renderedName": "NavigationMenuPrimitive.Trigger",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-navigation-menu"
+    },
+    {
+      "fromKey": "NavigationMenuTrigger@src/components/ui/navigation-menu.tsx",
+      "fromFile": "src/components/ui/navigation-menu.tsx",
+      "fromComponent": "NavigationMenuTrigger",
+      "renderedName": "ChevronDown",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "NavigationMenuContent@src/components/ui/navigation-menu.tsx",
+      "fromFile": "src/components/ui/navigation-menu.tsx",
+      "fromComponent": "NavigationMenuContent",
+      "renderedName": "NavigationMenuPrimitive.Content",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-navigation-menu"
+    },
+    {
+      "fromKey": "NavigationMenuLink@src/components/ui/navigation-menu.tsx",
+      "fromFile": "src/components/ui/navigation-menu.tsx",
+      "fromComponent": "NavigationMenuLink",
+      "renderedName": "NavigationMenuPrimitive.Link",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-navigation-menu"
+    },
+    {
+      "fromKey": "NavigationMenuViewport@src/components/ui/navigation-menu.tsx",
+      "fromFile": "src/components/ui/navigation-menu.tsx",
+      "fromComponent": "NavigationMenuViewport",
+      "renderedName": "NavigationMenuPrimitive.Viewport",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-navigation-menu"
+    },
+    {
+      "fromKey": "NavigationMenuIndicator@src/components/ui/navigation-menu.tsx",
+      "fromFile": "src/components/ui/navigation-menu.tsx",
+      "fromComponent": "NavigationMenuIndicator",
+      "renderedName": "NavigationMenuPrimitive.Indicator",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-navigation-menu"
+    },
+    {
+      "fromKey": "PaginationPrevious@src/components/ui/pagination.tsx",
+      "fromFile": "src/components/ui/pagination.tsx",
+      "fromComponent": "PaginationPrevious",
+      "renderedName": "ChevronLeft",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PaginationNext@src/components/ui/pagination.tsx",
+      "fromFile": "src/components/ui/pagination.tsx",
+      "fromComponent": "PaginationNext",
+      "renderedName": "ChevronRight",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PaginationEllipsis@src/components/ui/pagination.tsx",
+      "fromFile": "src/components/ui/pagination.tsx",
+      "fromComponent": "PaginationEllipsis",
+      "renderedName": "MoreHorizontal",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "Popover@src/components/ui/popover.tsx",
+      "fromFile": "src/components/ui/popover.tsx",
+      "fromComponent": "Popover",
+      "renderedName": "PopoverPrimitive.Root",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-popover"
+    },
+    {
+      "fromKey": "PopoverTrigger@src/components/ui/popover.tsx",
+      "fromFile": "src/components/ui/popover.tsx",
+      "fromComponent": "PopoverTrigger",
+      "renderedName": "PopoverPrimitive.Trigger",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-popover"
+    },
+    {
+      "fromKey": "PopoverAnchor@src/components/ui/popover.tsx",
+      "fromFile": "src/components/ui/popover.tsx",
+      "fromComponent": "PopoverAnchor",
+      "renderedName": "PopoverPrimitive.Anchor",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-popover"
+    },
+    {
+      "fromKey": "PopoverContent@src/components/ui/popover.tsx",
+      "fromFile": "src/components/ui/popover.tsx",
+      "fromComponent": "PopoverContent",
+      "renderedName": "PopoverPrimitive.Portal",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-popover"
+    },
+    {
+      "fromKey": "PopoverContent@src/components/ui/popover.tsx",
+      "fromFile": "src/components/ui/popover.tsx",
+      "fromComponent": "PopoverContent",
+      "renderedName": "PopoverPrimitive.Content",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-popover"
+    },
+    {
+      "fromKey": "SectionListCarousel@src/components/ui/SectionListCarousel.tsx",
+      "fromFile": "src/components/ui/SectionListCarousel.tsx",
+      "fromComponent": "SectionListCarousel",
+      "renderedName": "Film",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "SectionListCarousel@src/components/ui/SectionListCarousel.tsx",
+      "fromFile": "src/components/ui/SectionListCarousel.tsx",
+      "fromComponent": "SectionListCarousel",
+      "renderedName": "ChevronRight",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "SectionListCarousel@src/components/ui/SectionListCarousel.tsx",
+      "fromFile": "src/components/ui/SectionListCarousel.tsx",
+      "fromComponent": "SectionListCarousel",
+      "renderedName": "ChevronLeft",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "Select@src/components/ui/select.tsx",
+      "fromFile": "src/components/ui/select.tsx",
+      "fromComponent": "Select",
+      "renderedName": "SelectPrimitive.Root",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-select"
+    },
+    {
+      "fromKey": "SelectGroup@src/components/ui/select.tsx",
+      "fromFile": "src/components/ui/select.tsx",
+      "fromComponent": "SelectGroup",
+      "renderedName": "SelectPrimitive.Group",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-select"
+    },
+    {
+      "fromKey": "SelectValue@src/components/ui/select.tsx",
+      "fromFile": "src/components/ui/select.tsx",
+      "fromComponent": "SelectValue",
+      "renderedName": "SelectPrimitive.Value",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-select"
+    },
+    {
+      "fromKey": "SelectTrigger@src/components/ui/select.tsx",
+      "fromFile": "src/components/ui/select.tsx",
+      "fromComponent": "SelectTrigger",
+      "renderedName": "SelectPrimitive.Trigger",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-select"
+    },
+    {
+      "fromKey": "SelectTrigger@src/components/ui/select.tsx",
+      "fromFile": "src/components/ui/select.tsx",
+      "fromComponent": "SelectTrigger",
+      "renderedName": "SelectPrimitive.Icon",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-select"
+    },
+    {
+      "fromKey": "SelectTrigger@src/components/ui/select.tsx",
+      "fromFile": "src/components/ui/select.tsx",
+      "fromComponent": "SelectTrigger",
+      "renderedName": "ChevronDown",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "SelectScrollUpButton@src/components/ui/select.tsx",
+      "fromFile": "src/components/ui/select.tsx",
+      "fromComponent": "SelectScrollUpButton",
+      "renderedName": "SelectPrimitive.ScrollUpButton",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-select"
+    },
+    {
+      "fromKey": "SelectScrollUpButton@src/components/ui/select.tsx",
+      "fromFile": "src/components/ui/select.tsx",
+      "fromComponent": "SelectScrollUpButton",
+      "renderedName": "ChevronUp",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "SelectScrollDownButton@src/components/ui/select.tsx",
+      "fromFile": "src/components/ui/select.tsx",
+      "fromComponent": "SelectScrollDownButton",
+      "renderedName": "SelectPrimitive.ScrollDownButton",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-select"
+    },
+    {
+      "fromKey": "SelectScrollDownButton@src/components/ui/select.tsx",
+      "fromFile": "src/components/ui/select.tsx",
+      "fromComponent": "SelectScrollDownButton",
+      "renderedName": "ChevronDown",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "SelectContent@src/components/ui/select.tsx",
+      "fromFile": "src/components/ui/select.tsx",
+      "fromComponent": "SelectContent",
+      "renderedName": "SelectPrimitive.Portal",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-select"
+    },
+    {
+      "fromKey": "SelectContent@src/components/ui/select.tsx",
+      "fromFile": "src/components/ui/select.tsx",
+      "fromComponent": "SelectContent",
+      "renderedName": "SelectPrimitive.Content",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-select"
+    },
+    {
+      "fromKey": "SelectContent@src/components/ui/select.tsx",
+      "fromFile": "src/components/ui/select.tsx",
+      "fromComponent": "SelectContent",
+      "renderedName": "SelectPrimitive.Viewport",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-select"
+    },
+    {
+      "fromKey": "SelectLabel@src/components/ui/select.tsx",
+      "fromFile": "src/components/ui/select.tsx",
+      "fromComponent": "SelectLabel",
+      "renderedName": "SelectPrimitive.Label",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-select"
+    },
+    {
+      "fromKey": "SelectItem@src/components/ui/select.tsx",
+      "fromFile": "src/components/ui/select.tsx",
+      "fromComponent": "SelectItem",
+      "renderedName": "SelectPrimitive.Item",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-select"
+    },
+    {
+      "fromKey": "SelectItem@src/components/ui/select.tsx",
+      "fromFile": "src/components/ui/select.tsx",
+      "fromComponent": "SelectItem",
+      "renderedName": "SelectPrimitive.ItemText",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-select"
+    },
+    {
+      "fromKey": "SelectItem@src/components/ui/select.tsx",
+      "fromFile": "src/components/ui/select.tsx",
+      "fromComponent": "SelectItem",
+      "renderedName": "SelectPrimitive.ItemIndicator",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-select"
+    },
+    {
+      "fromKey": "SelectItem@src/components/ui/select.tsx",
+      "fromFile": "src/components/ui/select.tsx",
+      "fromComponent": "SelectItem",
+      "renderedName": "Check",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "SelectSeparator@src/components/ui/select.tsx",
+      "fromFile": "src/components/ui/select.tsx",
+      "fromComponent": "SelectSeparator",
+      "renderedName": "SelectPrimitive.Separator",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-select"
+    },
+    {
+      "fromKey": "Separator@src/components/ui/separator.tsx",
+      "fromFile": "src/components/ui/separator.tsx",
+      "fromComponent": "Separator",
+      "renderedName": "SeparatorPrimitive.Root",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-separator"
+    },
+    {
+      "fromKey": "Icon@src/components/ui/share-button.tsx",
+      "fromFile": "src/components/ui/share-button.tsx",
+      "fromComponent": "Icon",
+      "renderedName": "link.icon",
+      "reason": "namespace_import_not_found",
+      "detail": "link"
+    },
+    {
+      "fromKey": "ShareButtonWrapper@src/components/ui/ShareButtonWrapper.tsx",
+      "fromFile": "src/components/ui/ShareButtonWrapper.tsx",
+      "fromComponent": "ShareButtonWrapper",
+      "renderedName": "Link2",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "Sheet@src/components/ui/sheet.tsx",
+      "fromFile": "src/components/ui/sheet.tsx",
+      "fromComponent": "Sheet",
+      "renderedName": "SheetPrimitive.Root",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dialog"
+    },
+    {
+      "fromKey": "SheetTrigger@src/components/ui/sheet.tsx",
+      "fromFile": "src/components/ui/sheet.tsx",
+      "fromComponent": "SheetTrigger",
+      "renderedName": "SheetPrimitive.Trigger",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dialog"
+    },
+    {
+      "fromKey": "SheetClose@src/components/ui/sheet.tsx",
+      "fromFile": "src/components/ui/sheet.tsx",
+      "fromComponent": "SheetClose",
+      "renderedName": "SheetPrimitive.Close",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dialog"
+    },
+    {
+      "fromKey": "SheetPortal@src/components/ui/sheet.tsx",
+      "fromFile": "src/components/ui/sheet.tsx",
+      "fromComponent": "SheetPortal",
+      "renderedName": "SheetPrimitive.Portal",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dialog"
+    },
+    {
+      "fromKey": "SheetOverlay@src/components/ui/sheet.tsx",
+      "fromFile": "src/components/ui/sheet.tsx",
+      "fromComponent": "SheetOverlay",
+      "renderedName": "SheetPrimitive.Overlay",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dialog"
+    },
+    {
+      "fromKey": "SheetContent@src/components/ui/sheet.tsx",
+      "fromFile": "src/components/ui/sheet.tsx",
+      "fromComponent": "SheetContent",
+      "renderedName": "SheetPrimitive.Content",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dialog"
+    },
+    {
+      "fromKey": "SheetContent@src/components/ui/sheet.tsx",
+      "fromFile": "src/components/ui/sheet.tsx",
+      "fromComponent": "SheetContent",
+      "renderedName": "SheetPrimitive.Close",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dialog"
+    },
+    {
+      "fromKey": "SheetContent@src/components/ui/sheet.tsx",
+      "fromFile": "src/components/ui/sheet.tsx",
+      "fromComponent": "SheetContent",
+      "renderedName": "X",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "SheetTitle@src/components/ui/sheet.tsx",
+      "fromFile": "src/components/ui/sheet.tsx",
+      "fromComponent": "SheetTitle",
+      "renderedName": "SheetPrimitive.Title",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dialog"
+    },
+    {
+      "fromKey": "SheetDescription@src/components/ui/sheet.tsx",
+      "fromFile": "src/components/ui/sheet.tsx",
+      "fromComponent": "SheetDescription",
+      "renderedName": "SheetPrimitive.Description",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-dialog"
+    },
+    {
+      "fromKey": "Slider@src/components/ui/slider.tsx",
+      "fromFile": "src/components/ui/slider.tsx",
+      "fromComponent": "Slider",
+      "renderedName": "SliderPrimitive.Root",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-slider"
+    },
+    {
+      "fromKey": "Slider@src/components/ui/slider.tsx",
+      "fromFile": "src/components/ui/slider.tsx",
+      "fromComponent": "Slider",
+      "renderedName": "SliderPrimitive.Thumb",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-slider"
+    },
+    {
+      "fromKey": "Slider@src/components/ui/slider.tsx",
+      "fromFile": "src/components/ui/slider.tsx",
+      "fromComponent": "Slider",
+      "renderedName": "SliderPrimitive.Track",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-slider"
+    },
+    {
+      "fromKey": "Slider@src/components/ui/slider.tsx",
+      "fromFile": "src/components/ui/slider.tsx",
+      "fromComponent": "Slider",
+      "renderedName": "SliderPrimitive.Range",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-slider"
+    },
+    {
+      "fromKey": "Switch@src/components/ui/switch.tsx",
+      "fromFile": "src/components/ui/switch.tsx",
+      "fromComponent": "Switch",
+      "renderedName": "SwitchPrimitives.Root",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-switch"
+    },
+    {
+      "fromKey": "Switch@src/components/ui/switch.tsx",
+      "fromFile": "src/components/ui/switch.tsx",
+      "fromComponent": "Switch",
+      "renderedName": "SwitchPrimitives.Thumb",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-switch"
+    },
+    {
+      "fromKey": "Tabs@src/components/ui/tabs.tsx",
+      "fromFile": "src/components/ui/tabs.tsx",
+      "fromComponent": "Tabs",
+      "renderedName": "TabsPrimitive.Root",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-tabs"
+    },
+    {
+      "fromKey": "TabsList@src/components/ui/tabs.tsx",
+      "fromFile": "src/components/ui/tabs.tsx",
+      "fromComponent": "TabsList",
+      "renderedName": "TabsPrimitive.List",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-tabs"
+    },
+    {
+      "fromKey": "TabsTrigger@src/components/ui/tabs.tsx",
+      "fromFile": "src/components/ui/tabs.tsx",
+      "fromComponent": "TabsTrigger",
+      "renderedName": "TabsPrimitive.Trigger",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-tabs"
+    },
+    {
+      "fromKey": "TabsContent@src/components/ui/tabs.tsx",
+      "fromFile": "src/components/ui/tabs.tsx",
+      "fromComponent": "TabsContent",
+      "renderedName": "TabsPrimitive.Content",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-tabs"
+    },
+    {
+      "fromKey": "ToggleGroup@src/components/ui/toggle-group.tsx",
+      "fromFile": "src/components/ui/toggle-group.tsx",
+      "fromComponent": "ToggleGroup",
+      "renderedName": "ToggleGroupPrimitive.Root",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-toggle-group"
+    },
+    {
+      "fromKey": "ToggleGroup@src/components/ui/toggle-group.tsx",
+      "fromFile": "src/components/ui/toggle-group.tsx",
+      "fromComponent": "ToggleGroup",
+      "renderedName": "ToggleGroupContext.Provider",
+      "reason": "namespace_import_not_found",
+      "detail": "ToggleGroupContext"
+    },
+    {
+      "fromKey": "ToggleGroupItem@src/components/ui/toggle-group.tsx",
+      "fromFile": "src/components/ui/toggle-group.tsx",
+      "fromComponent": "ToggleGroupItem",
+      "renderedName": "ToggleGroupPrimitive.Item",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-toggle-group"
+    },
+    {
+      "fromKey": "Toggle@src/components/ui/toggle.tsx",
+      "fromFile": "src/components/ui/toggle.tsx",
+      "fromComponent": "Toggle",
+      "renderedName": "TogglePrimitive.Root",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-toggle"
+    },
+    {
+      "fromKey": "TooltipProvider@src/components/ui/tooltip.tsx",
+      "fromFile": "src/components/ui/tooltip.tsx",
+      "fromComponent": "TooltipProvider",
+      "renderedName": "TooltipPrimitive.Provider",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-tooltip"
+    },
+    {
+      "fromKey": "Tooltip@src/components/ui/tooltip.tsx",
+      "fromFile": "src/components/ui/tooltip.tsx",
+      "fromComponent": "Tooltip",
+      "renderedName": "TooltipPrimitive.Root",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-tooltip"
+    },
+    {
+      "fromKey": "TooltipTrigger@src/components/ui/tooltip.tsx",
+      "fromFile": "src/components/ui/tooltip.tsx",
+      "fromComponent": "TooltipTrigger",
+      "renderedName": "TooltipPrimitive.Trigger",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-tooltip"
+    },
+    {
+      "fromKey": "TooltipContent@src/components/ui/tooltip.tsx",
+      "fromFile": "src/components/ui/tooltip.tsx",
+      "fromComponent": "TooltipContent",
+      "renderedName": "TooltipPrimitive.Portal",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-tooltip"
+    },
+    {
+      "fromKey": "TooltipContent@src/components/ui/tooltip.tsx",
+      "fromFile": "src/components/ui/tooltip.tsx",
+      "fromComponent": "TooltipContent",
+      "renderedName": "TooltipPrimitive.Content",
+      "reason": "external_namespace_reference",
+      "detail": "@radix-ui/react-tooltip"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "AnimatePresence",
+      "reason": "external_component_reference",
+      "detail": "framer-motion"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "RefreshCw",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Spinner.Root",
+      "reason": "external_namespace_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Spinner.TrackFill",
+      "reason": "external_namespace_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Spinner.Track",
+      "reason": "external_namespace_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Airplay",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Cast",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Play",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Controls.Root",
+      "reason": "external_namespace_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Controls.Group",
+      "reason": "external_namespace_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "FullscreenButton",
+      "reason": "external_component_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Expand",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Minimize2",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "SlidersHorizontal",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "PIPButton",
+      "reason": "external_component_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "MonitorPlay",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "AirPlayButton",
+      "reason": "external_component_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "GoogleCastButton",
+      "reason": "external_component_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "CaptionButton",
+      "reason": "external_component_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "MessageSquareText",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Time",
+      "reason": "external_component_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "VolumeSlider.Root",
+      "reason": "external_namespace_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "VolumeSlider.Thumb",
+      "reason": "external_namespace_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "VolumeSlider.Track",
+      "reason": "external_namespace_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "VolumeSlider.TrackFill",
+      "reason": "external_namespace_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "MuteButton",
+      "reason": "external_component_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Volume2",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "VolumeX",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "SeekButton",
+      "reason": "external_component_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "SkipForward",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "SkipBack",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "PlayButton",
+      "reason": "external_component_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Pause",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "TimeSlider.Root",
+      "reason": "external_namespace_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "TimeSlider.Thumb",
+      "reason": "external_namespace_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "TimeSlider.Track",
+      "reason": "external_namespace_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "TimeSlider.TrackFill",
+      "reason": "external_namespace_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "TimeSlider.Progress",
+      "reason": "external_namespace_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Server",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Tv",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "PlayerControlLayer@src/components/video-player/PlayerControlLayer.tsx",
+      "fromFile": "src/components/video-player/PlayerControlLayer.tsx",
+      "fromComponent": "PlayerControlLayer",
+      "renderedName": "Gauge",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "VideoPlayer@src/components/VideoPlayer.tsx",
+      "fromFile": "src/components/VideoPlayer.tsx",
+      "fromComponent": "VideoPlayer",
+      "renderedName": "LayoutPanelTop",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "VideoPlayer@src/components/VideoPlayer.tsx",
+      "fromFile": "src/components/VideoPlayer.tsx",
+      "fromComponent": "VideoPlayer",
+      "renderedName": "Minimize2",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "VideoPlayer@src/components/VideoPlayer.tsx",
+      "fromFile": "src/components/VideoPlayer.tsx",
+      "fromComponent": "VideoPlayer",
+      "renderedName": "Maximize2",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "VideoPlayer@src/components/VideoPlayer.tsx",
+      "fromFile": "src/components/VideoPlayer.tsx",
+      "fromComponent": "VideoPlayer",
+      "renderedName": "RefreshCw",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "VideoPlayer@src/components/VideoPlayer.tsx",
+      "fromFile": "src/components/VideoPlayer.tsx",
+      "fromComponent": "VideoPlayer",
+      "renderedName": "SkipForward",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "VideoPlayer@src/components/VideoPlayer.tsx",
+      "fromFile": "src/components/VideoPlayer.tsx",
+      "fromComponent": "VideoPlayer",
+      "renderedName": "SkipBack",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "VideoPlayer@src/components/VideoPlayer.tsx",
+      "fromFile": "src/components/VideoPlayer.tsx",
+      "fromComponent": "VideoPlayer",
+      "renderedName": "Server",
+      "reason": "external_component_reference",
+      "detail": "lucide-react"
+    },
+    {
+      "fromKey": "VideoPlayer@src/components/VideoPlayer.tsx",
+      "fromFile": "src/components/VideoPlayer.tsx",
+      "fromComponent": "VideoPlayer",
+      "renderedName": "MediaPlayer",
+      "reason": "external_component_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "VideoPlayer@src/components/VideoPlayer.tsx",
+      "fromFile": "src/components/VideoPlayer.tsx",
+      "fromComponent": "VideoPlayer",
+      "renderedName": "MediaProvider",
+      "reason": "external_component_reference",
+      "detail": "@vidstack/react"
+    },
+    {
+      "fromKey": "WatchDock@src/components/WatchDock.tsx",
+      "fromFile": "src/components/WatchDock.tsx",
+      "fromComponent": "WatchDock",
+      "renderedName": "AnimatePresence",
+      "reason": "external_component_reference",
+      "detail": "framer-motion"
+    },
+    {
+      "fromKey": "Layout@src/layouts/Layout.astro",
+      "fromFile": "src/layouts/Layout.astro",
+      "fromComponent": "Layout",
+      "renderedName": "ClientRouter",
+      "reason": "external_component_reference",
+      "detail": "astro:transitions"
+    }
+  ],
+  "stats": {
+    "totalNodes": 154,
+    "totalEdges": 178,
+    "totalRenderedRefs": 366,
+    "resolvedRefs": 178,
+    "unresolvedRefs": 188,
+    "unresolvedInternalRefs": 4,
+    "externalRefs": 184,
+    "unresolvedByReason": {
+      "external_component_reference": 78,
+      "namespace_import_not_found": 3,
+      "external_namespace_reference": 106,
+      "component_not_found": 1
+    }
+  }
 }

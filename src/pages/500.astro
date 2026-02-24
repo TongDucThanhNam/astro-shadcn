@@ -1,11 +1,18 @@
 ---
 interface Props {
-    error: unknown
+  error: unknown;
 }
 
-const {error} = Astro.props
-import {Button} from "@/components/ui/button"
-import {Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter} from "@/components/ui/card"
+const { error } = Astro.props;
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from '@/components/ui/card';
 import Layout from '../layouts/Layout.astro';
 ---
 <Layout title="404 - Page Not Found">

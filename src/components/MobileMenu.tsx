@@ -1,69 +1,62 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import { ChevronDown, ChevronRight, Menu } from "lucide-react"
+import { ChevronDown, ChevronRight, Menu } from 'lucide-react';
+import * as React from 'react';
 
-import { Button } from "@/components/ui/button"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { cn } from "@/lib/utils"
-import { movieCategories } from "@/components/NavigationMenuDemo"
+import { movieCategories } from '@/components/NavigationMenuDemo';
+import { Button } from '@/components/ui/button';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { cn } from '@/lib/utils';
 
 type MenuItem = {
-  title: string
-  href?: string
-  submenu?: MenuItem[]
-}
+  title: string;
+  href?: string;
+  submenu?: MenuItem[];
+};
 
 const menuItems: MenuItem[] = [
-  { title: "Trang chủ", href: "/" },
+  { title: 'Trang chủ', href: '/' },
   {
-    title: "Danh sách",
+    title: 'Danh sách',
     submenu: [
-      { title: "Phim lẻ", href: "/danh-sach/phim-le" },
-      { title: "Phim bộ", href: "/danh-sach/phim-bo" },
-      { title: "TV Shows", href: "/danh-sach/tv-shows" },
-      { title: "Phim Vietsub", href: "/danh-sach/phim-vietsub" },
+      { title: 'Phim lẻ', href: '/danh-sach/phim-le' },
+      { title: 'Phim bộ', href: '/danh-sach/phim-bo' },
+      { title: 'TV Shows', href: '/danh-sach/tv-shows' },
+      { title: 'Phim Vietsub', href: '/danh-sach/phim-vietsub' },
     ],
   },
   {
-    title: "Thể loại",
+    title: 'Thể loại',
     submenu: movieCategories.map((category) => ({
       title: category.name,
       href: `/danh-sach/the-loai/${category.slug}`,
     })),
   },
-]
+];
 
 interface MenuItemComponentProps {
-  item: MenuItem
-  depth?: number
-  onNavigate: () => void
+  item: MenuItem;
+  depth?: number;
+  onNavigate: () => void;
 }
 
-const MenuItemComponent: React.FC<MenuItemComponentProps> = ({
-  item,
-  depth = 0,
-  onNavigate,
-}) => {
-  const [isOpen, setIsOpen] = React.useState(false)
+const MenuItemComponent: React.FC<MenuItemComponentProps> = ({ item, depth = 0, onNavigate }) => {
+  const [isOpen, setIsOpen] = React.useState(false);
 
   if (item.submenu) {
     return (
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger asChild>
           <button
+            type="button"
             className={cn(
-              "flex w-full items-center justify-between border border-transparent px-2 py-2.5 text-sm font-semibold uppercase tracking-[0.1em] text-[#E4E4E7] transition-colors duration-200 hover:border-[#2D2F35] hover:bg-[#111318] hover:text-[#DFE104]",
-              depth > 0 && "pl-4 text-xs tracking-[0.08em]",
+              'flex w-full items-center justify-between border border-transparent px-2 py-2.5 text-sm font-semibold uppercase tracking-[0.1em] text-[#E4E4E7] transition-colors duration-200 hover:border-[#2D2F35] hover:bg-[#111318] hover:text-[#DFE104]',
+              depth > 0 && 'pl-4 text-xs tracking-[0.08em]',
             )}
           >
             {item.title}
-            {isOpen ? (
-              <ChevronDown className="h-4 w-4" />
-            ) : (
-              <ChevronRight className="h-4 w-4" />
-            )}
+            {isOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
           </button>
         </CollapsibleTrigger>
         <CollapsibleContent className="pl-2">
@@ -77,25 +70,25 @@ const MenuItemComponent: React.FC<MenuItemComponentProps> = ({
           ))}
         </CollapsibleContent>
       </Collapsible>
-    )
+    );
   }
 
   return (
     <a
       href={item.href}
       className={cn(
-        "block border border-transparent px-2 py-2.5 text-sm font-semibold uppercase tracking-[0.1em] text-[#E4E4E7] transition-colors duration-200 hover:border-[#2D2F35] hover:bg-[#111318] hover:text-[#DFE104]",
-        depth > 0 && "pl-4 text-xs tracking-[0.08em] text-[#A1A1AA]",
+        'block border border-transparent px-2 py-2.5 text-sm font-semibold uppercase tracking-[0.1em] text-[#E4E4E7] transition-colors duration-200 hover:border-[#2D2F35] hover:bg-[#111318] hover:text-[#DFE104]',
+        depth > 0 && 'pl-4 text-xs tracking-[0.08em] text-[#A1A1AA]',
       )}
       onClick={onNavigate}
     >
       {item.title}
     </a>
-  )
-}
+  );
+};
 
 export default function MobileMenu() {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = React.useState(false);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -111,21 +104,17 @@ export default function MobileMenu() {
       </SheetTrigger>
       <SheetContent
         side="left"
-        className="w-[280px] border-r border-[#2D2F35] bg-[#09090B] p-0 text-white sm:w-[340px]"
+        className="flex h-full w-[280px] flex-col overflow-y-auto border-r border-[#2D2F35] bg-[#09090B] p-0 text-white sm:w-[340px]"
       >
-        <div className="border-b border-[#2D2F35] px-5 py-4">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#71717A]">Điều hướng</p>
+        <div className="border-b border-[#2D2F35] px-5 py-4 sticky top-0 bg-[#09090B] z-10">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#71717A]">AtroFlim</p>
         </div>
         <nav className="flex flex-col gap-1 px-3 py-4">
           {menuItems.map((item) => (
-            <MenuItemComponent
-              key={item.title}
-              item={item}
-              onNavigate={() => setOpen(false)}
-            />
+            <MenuItemComponent key={item.title} item={item} onNavigate={() => setOpen(false)} />
           ))}
         </nav>
       </SheetContent>
     </Sheet>
-  )
+  );
 }

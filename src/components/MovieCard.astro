@@ -1,13 +1,13 @@
 ---
-import { Image } from "astro:assets";
-import { imagePresets, resolveImageUrl } from "@/lib/wsrv";
+import { Image } from 'astro:assets';
+import { imagePresets, resolveImageUrl } from '@/lib/wsrv';
 
 interface Props {
-	index: number;
-	slug: string;
-	name: string;
-	year: string;
-	image: string;
+  index: number;
+  slug: string;
+  name: string;
+  year: string;
+  image: string;
 }
 
 const { index, slug, name, image, year } = Astro.props;

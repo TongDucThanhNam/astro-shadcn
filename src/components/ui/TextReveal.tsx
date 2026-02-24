@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React, { useRef } from "react";
-import { motion, useInView, type Variants } from "framer-motion";
+import React, { useRef } from 'react';
+import { motion, useInView, type Variants } from 'framer-motion';
 
 interface TextRevealProps {
   text: string;
@@ -9,16 +9,12 @@ interface TextRevealProps {
   delay?: number;
 }
 
-const TextReveal: React.FC<TextRevealProps> = ({
-  text,
-  className = "",
-  delay = 0,
-}) => {
+const TextReveal: React.FC<TextRevealProps> = ({ text, className = '', delay = 0 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const isInView = useInView(ref, { once: true, margin: '-50px' });
 
   // Split text into words
-  const words = text.split(" ");
+  const words = text.split(' ');
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -32,7 +28,7 @@ const TextReveal: React.FC<TextRevealProps> = ({
   };
 
   const wordVariants: Variants = {
-    hidden: { y: "100%" },
+    hidden: { y: '100%' },
     visible: {
       y: 0,
       transition: {
@@ -48,14 +44,11 @@ const TextReveal: React.FC<TextRevealProps> = ({
       className={className}
       variants={containerVariants}
       initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
+      animate={isInView ? 'visible' : 'hidden'}
     >
       {words.map((word, index) => (
         <span key={index} className="inline-block overflow-hidden mr-[0.25em]">
-          <motion.span
-            variants={wordVariants}
-            className="inline-block"
-          >
+          <motion.span variants={wordVariants} className="inline-block">
             {word}
           </motion.span>
         </span>

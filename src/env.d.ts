@@ -2,8 +2,8 @@
 /// <reference types="@astrojs/vercel" />
 
 const env: {
-    PUBLIC_PHIM_MOI: string;
-    NODE_ENV: 'development' | 'production';
+  PUBLIC_PHIM_MOI: string;
+  NODE_ENV: 'development' | 'production';
 };
 
 // Vercel Edge Middleware types

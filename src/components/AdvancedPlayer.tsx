@@ -22,7 +22,7 @@ export function AdvancedPlayer({ src }: AdvancedPlayerProps) {
 
     const player = new MediaFox({
       renderTarget: canvasRef.current,
-      volume
+      volume,
     });
 
     playerRef.current = player;
@@ -79,7 +79,7 @@ export function AdvancedPlayer({ src }: AdvancedPlayerProps) {
   // Screenshot
   const takeScreenshot = async () => {
     const blob = await playerRef.current?.screenshot({
-      format: 'png'
+      format: 'png',
     });
 
     if (blob) {
@@ -142,24 +142,14 @@ export function AdvancedPlayer({ src }: AdvancedPlayerProps) {
 
   return (
     <div className="advanced-player">
-      <canvas
-        ref={canvasRef}
-        className="video-canvas"
-        style={{ width: '100%', height: 'auto' }}
-      />
+      <canvas ref={canvasRef} className="video-canvas" style={{ width: '100%', height: 'auto' }} />
 
       <div className="controls">
         {/* Playback controls */}
         <div className="control-row">
-          <button onClick={() => playerRef.current?.play()}>
-            ▶️
-          </button>
-          <button onClick={() => playerRef.current?.pause()}>
-            ⏸
-          </button>
-          <button onClick={() => playerRef.current?.stop()}>
-            ⏹
-          </button>
+          <button onClick={() => playerRef.current?.play()}>▶️</button>
+          <button onClick={() => playerRef.current?.pause()}>⏸</button>
+          <button onClick={() => playerRef.current?.stop()}>⏹</button>
 
           <span className="time">
             {formatTime(state.currentTime)} / {formatTime(state.duration)}
@@ -223,7 +213,7 @@ export function AdvancedPlayer({ src }: AdvancedPlayerProps) {
                 value={selectedVideo}
                 onChange={(e) => handleVideoTrackChange(e.target.value)}
               >
-                {videoTracks.map(track => (
+                {videoTracks.map((track) => (
                   <option key={track.id} value={track.id}>
                     {track.codec} {track.width}x{track.height}
                   </option>
@@ -241,7 +231,7 @@ export function AdvancedPlayer({ src }: AdvancedPlayerProps) {
                 value={selectedAudio}
                 onChange={(e) => handleAudioTrackChange(e.target.value)}
               >
-                {audioTracks.map(track => (
+                {audioTracks.map((track) => (
                   <option key={track.id} value={track.id}>
                     {track.language || track.codec} {track.channels}ch
                   </option>

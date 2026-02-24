@@ -1,6 +1,6 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import MovieCard from "@/components/MovieCard.astro";
+import Layout from '@/layouts/Layout.astro';
+import MovieCard from '@/components/MovieCard.astro';
 import {
   Pagination,
   PaginationContent,
@@ -8,13 +8,13 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
-import { getListByType, type ListItem } from "@/lib/phimapi";
+} from '@/components/ui/pagination';
+import { getListByType, type ListItem } from '@/lib/phimapi';
 
 const { type } = Astro.params;
 
 if (!type) {
-  throw new Error("Missing list type.");
+  throw new Error('Missing list type.');
 }
 
 const data = await getListByType(type, { page: 1, limit: 10 });
