@@ -204,18 +204,21 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
         linkEmbed: first.link_embed,
         linkM3u8: first.link_m3u8,
       });
-      window.dispatchEvent(
-        new CustomEvent('episodeSelected', {
-          detail: {
-            ep: first.slug,
-            label: first.name,
-            linkEmbed: first.link_embed,
-            linkM3u8: first.link_m3u8,
-            serverName: server.server_name,
-            autoSelect: true,
-          },
-        }),
-      );
+      // Defer dispatch so VideoPlayer's listener is registered first
+      requestAnimationFrame(() => {
+        window.dispatchEvent(
+          new CustomEvent('episodeSelected', {
+            detail: {
+              ep: first.slug,
+              label: first.name,
+              linkEmbed: first.link_embed,
+              linkM3u8: first.link_m3u8,
+              serverName: server.server_name,
+              autoSelect: true,
+            },
+          }),
+        );
+      });
     }
   }, [episodes]);
 
