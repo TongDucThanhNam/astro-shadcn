@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useCallback } from "react"
+import { navigate } from "astro:transitions/client"
 import { Button } from "@/components/ui/button"
 import {
     CommandDialog,
@@ -46,11 +47,11 @@ const SearchForm: React.FC<SearchFormProps> = ({ variant = "default", className 
     const navigateToSearch = (query: string) => {
         const trimmed = query.trim()
         if (!trimmed) return
-        window.location.href = `/tim-kiem/${encodeURIComponent(trimmed)}`
+        navigate(`/tim-kiem/${encodeURIComponent(trimmed)}`)
     }
 
     const handleSelect = (href: string) => {
-        window.location.href = href
+        navigate(href)
         setOpen(false)
     }
 

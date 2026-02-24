@@ -1,4 +1,5 @@
 import React from 'react'
+import { navigate } from "astro:transitions/client"
 import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/card"
 import {Button} from "@/components/ui/button"
 import {Film, Tv, PlayCircle, MonitorPlay} from 'lucide-react'
@@ -29,7 +30,7 @@ export default function MovieTypeSelector() {
                     <CardFooter className="flex justify-center">
                         <Button
                             variant="outline"
-                            onClick={() => window.location.href = `/danh-sach/${movieType.type}`}
+                            onClick={() => navigate(`/danh-sach/${movieType.type}`)}
                         >
                             Xem danh sách
                         </Button>

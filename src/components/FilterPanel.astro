@@ -337,6 +337,8 @@ const activeFilters = [
 </div>
 
 <script define:vars={{ basePath, currentType, currentPage }}>
+    import { navigate } from "astro:transitions/client";
+
     const form = document.getElementById("filterForm");
 
     if (!(form instanceof HTMLFormElement)) {
@@ -404,11 +406,11 @@ const activeFilters = [
 
         params.set("limit", formData.get("limit"));
 
-        window.location.href = `${basePath}/${currentType}?${params.toString()}`;
+        navigate(`${basePath}/${currentType}?${params.toString()}`);
     });
 
     form.addEventListener("reset", (e) => {
         e.preventDefault();
-        window.location.href = `${basePath}/${currentType}?page=1&sort_field=modified.time&sort_type=desc&limit=10`;
+        navigate(`${basePath}/${currentType}?page=1&sort_field=modified.time&sort_type=desc&limit=10`);
     });
 </script>

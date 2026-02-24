@@ -1,8 +1,55 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
+@source "../components";
+
+@theme {
+  /* Colors - Kinetic Typography Theme */
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-border: hsl(var(--border));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  /* Typography */
+  --font-sans: 'Space Grotesk', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+
+  /* Border radius - Sharp corners for brutalist aesthetic */
+  --radius: 0px;
+
+  /* Letter spacing */
+  --tracking-tighter: -0.05em;
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0em;
+  --tracking-wide: 0.025em;
+  --tracking-wider: 0.05em;
+  --tracking-widest: 0.1em;
+
+  /* Custom font sizes - Kinetic typography */
+  --text-hero: clamp(3rem, 12vw, 14rem);
+  --text-massive: clamp(4rem, 10vw, 12rem);
+  --text-display: clamp(2.5rem, 8vw, 6rem);
+
+  /* Line heights */
+  --leading-tighter: 0.9;
+  --leading-tight: 1.1;
+}
 
 @layer base {
   :root {
@@ -26,24 +73,6 @@
     --destructive-foreground: 0 0% 98%;
     --input: 240 6% 16%;             /* #27272A */
     --ring: 66 88% 54%;               /* #DFE104 - Acid yellow */
-
-    /* Typography */
-    --font-sans: 'Space Grotesk', system-ui, sans-serif;
-    --font-display: 'Space Grotesk', sans-serif;
-
-    /* Radius - Sharp corners for brutalist aesthetic */
-    --radius: 0px;
-
-    /* Spacing */
-    --spacing: 0.25rem;
-
-    /* Tracking */
-    --tracking-tighter: -0.05em;
-    --tracking-tight: -0.025em;
-    --tracking-normal: 0em;
-    --tracking-wide: 0.025em;
-    --tracking-wider: 0.05em;
-    --tracking-widest: 0.1em;
   }
 
   /* Global reset for dark theme */
@@ -120,22 +149,22 @@
     border-radius: var(--radius);
   }
 
-  /* Accent utilities - direct hex for convenience */
+  /* Accent utilities - using CSS variable */
   .bg-acid {
-    background-color: #DFE104;
+    background-color: hsl(var(--accent));
   }
 
   .text-acid {
-    color: #DFE104;
+    color: hsl(var(--accent));
   }
 
   .border-acid {
-    border-color: #DFE104;
+    border-color: hsl(var(--accent));
   }
 
   /* Hover effects */
   .hover-invert {
-    @apply transition-all duration-300;
+    transition: all 0.3s;
   }
 
   .hover-invert:hover {
@@ -143,17 +172,17 @@
     color: hsl(var(--accent-foreground));
   }
 
-  /* Kinetic typography scale */
+  /* Kinetic typography scale - using @theme variables */
   .text-hero {
-    font-size: clamp(3rem, 12vw, 14rem);
-    line-height: 0.9;
+    font-size: var(--text-hero);
+    line-height: var(--leading-tighter);
     letter-spacing: var(--tracking-tighter);
     text-transform: uppercase;
   }
 
   .text-massive {
-    font-size: clamp(4rem, 10vw, 12rem);
-    line-height: 0.8;
+    font-size: var(--text-massive);
+    line-height: var(--leading-tighter);
     font-weight: 700;
   }
 

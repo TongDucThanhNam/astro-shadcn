@@ -3,7 +3,7 @@ import {defineConfig} from 'astro/config';
 
 import react from '@astrojs/react';
 
-import tailwind from '@astrojs/tailwind';
+import tailwindcss from '@tailwindcss/vite';
 
 import vercel from '@astrojs/vercel';
 
@@ -18,9 +18,6 @@ export default defineConfig({
         defaultStrategy: 'hover'
     },
     integrations: [react(),
-        tailwind({
-            applyBaseStyles: false,
-        }),
         // vtbot(
         //     {
         //         loadingIndicator: true,
@@ -28,6 +25,9 @@ export default defineConfig({
         //     }
         // ),
     ],
+    vite: {
+        plugins: [tailwindcss()],
+    },
     image: {
         service: {
             entrypoint: './src/lib/image-service/wsrc.ts',
@@ -50,10 +50,10 @@ export default defineConfig({
             },
             // Enable edge middleware for better performance
             edgeMiddleware: false,
-            // Optimize ISR caching - longer cache for better performance
+            // Optimize ISR caching - 10 min for fresh movie data
             isr: {
-                // caches all pages on first request and saves for 12 hours
-                expiration: 60 * 60 * 12,
+                // caches all pages on first request, expires after 10 minutes
+                expiration: 60 * 10,
             },
             // Enable Vercel Image Optimization API
             imageService: false,
