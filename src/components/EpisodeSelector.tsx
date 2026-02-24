@@ -1,10 +1,17 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+} from '@/components/ui/pagination';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Toggle } from '@/components/ui/toggle';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
 import {
   ArrowUpDown,
   ChevronLeft,
@@ -15,14 +22,8 @@ import {
   SkipBack,
   SkipForward,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-} from '@/components/ui/pagination';
-import { Toggle } from '@/components/ui/toggle';
+import type React from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 type Episode = {
   server_name: string;
@@ -175,6 +176,36 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes }) => {
       });
       return next;
     });
+  }, [episodes]);
+
+  // Auto-select the first playable episode on mount
+  const hasAutoSelected = useRef(false);
+  useEffect(() => {
+    if (hasAutoSelected.current || selectedEpisode || !episodes.length) return;
+    const server = episodes[0];
+    if (!server?.server_data?.length) return;
+
+    const defaultSort = getDefaultSortOrder(episodes);
+    const sorted = [...server.server_data].sort((a, b) => {
+      const numA = getEpisodeNumber(a.slug) || getEpisodeNumber(a.name);
+      const numB = getEpisodeNumber(b.slug) || getEpisodeNumber(b.name);
+      if (!Number.isNaN(numA) && !Number.isNaN(numB)) {
+        return defaultSort === 'asc' ? numA - numB : numB - numA;
+      }
+      return defaultSort === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+    });
+
+    const first = sorted[0];
+    if (first && (first.link_m3u8 || first.link_embed)) {
+      hasAutoSelected.current = true;
+      handleEpisodeSelect(
+        first.slug,
+        first.name,
+        first.link_embed,
+        first.link_m3u8,
+        server.server_name,
+      );
+    }
   }, [episodes]);
 
   return (
