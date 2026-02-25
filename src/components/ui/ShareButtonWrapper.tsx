@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { MovieDetail } from '@/types';
 import ShareButton from './share-button';
-import { ChatCircle as MessageCircle, LinkSimple as Link2 } from '@phosphor-icons/react/dist/ssr';
+import { ChatCircle as MessageCircle } from '@phosphor-icons/react/dist/ssr/ChatCircle';
+import { LinkSimple as Link2 } from '@phosphor-icons/react/dist/ssr/LinkSimple';
 import { cn } from '@/lib/utils';
 
 interface ShareButtonWrapperProps {

@@ -12,16 +12,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Toggle } from '@/components/ui/toggle';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
-import {
-  ArrowsDownUp as ArrowUpDown,
-  CaretLeft as ChevronLeft,
-  CaretRight as ChevronRight,
-  FilmSlate as Film,
-  MagnifyingGlass as Search,
-  Play,
-  SkipBack,
-  SkipForward,
-} from '@phosphor-icons/react/dist/ssr';
+import { ArrowsDownUp as ArrowUpDown } from '@phosphor-icons/react/dist/ssr/ArrowsDownUp';
+import { CaretLeft as ChevronLeft } from '@phosphor-icons/react/dist/ssr/CaretLeft';
+import { CaretRight as ChevronRight } from '@phosphor-icons/react/dist/ssr/CaretRight';
+import { FilmSlate as Film } from '@phosphor-icons/react/dist/ssr/FilmSlate';
+import { MagnifyingGlass as Search } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
+import { Play } from '@phosphor-icons/react/dist/ssr/Play';
+import { SkipBack } from '@phosphor-icons/react/dist/ssr/SkipBack';
+import { SkipForward } from '@phosphor-icons/react/dist/ssr/SkipForward';
 import type React from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 

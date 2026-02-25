@@ -176,8 +176,9 @@ const hasPlayableEpisodes = playableEpisodes.length > 0;
     </div>
 
     <!-- Content -->
-    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12 lg:py-20">
-        <div class="flex flex-col lg:flex-row gap-6 md:gap-8 lg:gap-16 items-start">
+    <div class="relative z-10 w-full px-4 sm:px-6 lg:px-8 py-6 md:py-12 lg:py-20">
+        <div class="max-w-384">
+            <div class="flex flex-col lg:flex-row gap-6 md:gap-8 lg:gap-16 items-start">
             <!-- Poster -->
             <div
                 data-parallax-layer
@@ -358,6 +359,7 @@ const hasPlayableEpisodes = playableEpisodes.length > 0;
                     </button>
                 </div>
             </div>
+            </div>
         </div>
     </div>
 </section>
@@ -370,48 +372,52 @@ const hasPlayableEpisodes = playableEpisodes.length > 0;
 
 <!-- Episode Selection -->
 <section class="py-12 lg:py-16 bg-[#09090B]" id="episode-selection">
-    <div class="container mx-auto px-4 lg:px-8">
-        <div class="border-t-2 border-[#3F3F46] pt-8">
-            <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <h2 class="text-2xl font-bold uppercase tracking-tighter text-[#FAFAFA]">Chọn Tập</h2>
-                <div class="flex items-center gap-2 text-sm text-[#A1A1AA]">
-                    <span class="w-2 h-2 bg-emerald-500"></span>
-                    <span class="uppercase tracking-wider">{episodeAvailability}</span>
+    <div class="w-full px-4 lg:px-8">
+        <div class="max-w-384">
+            <div class="border-t-2 border-[#3F3F46] pt-8">
+                <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <h2 class="text-2xl font-bold uppercase tracking-tighter text-[#FAFAFA]">Chọn Tập</h2>
+                    <div class="flex items-center gap-2 text-sm text-[#A1A1AA]">
+                        <span class="w-2 h-2 bg-emerald-500"></span>
+                        <span class="uppercase tracking-wider">{episodeAvailability}</span>
+                    </div>
                 </div>
+                {hasEpisodes ? (
+                    <EpisodeSelector client:idle episodes={episodes} />
+                ) : (
+                    <div class="border-2 border-[#3F3F46] bg-[#27272A]/40 p-6 text-center text-sm text-[#A1A1AA]">
+                        Hiện chưa có tập nào được cập nhật.
+                    </div>
+                )}
             </div>
-            {hasEpisodes ? (
-                <EpisodeSelector client:idle episodes={episodes} />
-            ) : (
-                <div class="border-2 border-[#3F3F46] bg-[#27272A]/40 p-6 text-center text-sm text-[#A1A1AA]">
-                    Hiện chưa có tập nào được cập nhật.
-                </div>
-            )}
         </div>
     </div>
 </section>
 
 <!-- Video Player -->
 <section class="py-12 lg:py-16 bg-[#09090B]" id="video-player">
-    <div class="container mx-auto px-4 lg:px-8">
-        <div class="border-t-2 border-[#3F3F46] pt-8 space-y-4">
-            <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                <h2 id="playerHeading" class="text-2xl font-bold uppercase tracking-tighter text-[#FAFAFA]">
-                    {firstPlayableEpisode ? `Sẵn sàng phát: ${firstPlayableEpisode.label}` : "Chưa có tập để phát"}
-                </h2>
-                <span id="playerStatus" class="text-sm uppercase tracking-wider text-[#A1A1AA]" aria-live="polite">
-                    {hasPlayableEpisodes
-                        ? "Chọn tập để bắt đầu phát."
-                        : hasEpisodes
-                            ? "Đang cập nhật nguồn phát."
-                            : "Đợi nhà phát hành cập nhật tập mới."}
-                </span>
+    <div class="w-full px-4 lg:px-8">
+        <div class="max-w-384">
+            <div class="border-t-2 border-[#3F3F46] pt-8 space-y-4">
+                <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <h2 id="playerHeading" class="text-2xl font-bold uppercase tracking-tighter text-[#FAFAFA]">
+                        {firstPlayableEpisode ? `Sẵn sàng phát: ${firstPlayableEpisode.label}` : "Chưa có tập để phát"}
+                    </h2>
+                    <span id="playerStatus" class="text-sm uppercase tracking-wider text-[#A1A1AA]" aria-live="polite">
+                        {hasPlayableEpisodes
+                            ? "Chọn tập để bắt đầu phát."
+                            : hasEpisodes
+                                ? "Đang cập nhật nguồn phát."
+                                : "Đợi nhà phát hành cập nhật tập mới."}
+                    </span>
+                </div>
+                <!-- <div
+                    id="playerShell"
+                    class="player-shell relative overflow-hidden"
+                > -->
+                    <VideoPlayer client:load playlist={playableEpisodes} movieSlug={slug} />
+                <!-- </div> -->
             </div>
-            <!-- <div
-                id="playerShell"
-                class="player-shell relative overflow-hidden"
-            > -->
-                <VideoPlayer client:load playlist={playableEpisodes} movieSlug={slug} />
-            <!-- </div> -->
         </div>
     </div>
 </section>

@@ -1,35 +1,33 @@
 import { cn } from '@/lib/utils';
-import {
-  Camera,
-  Broadcast as Cast,
-  Check,
-  CaretDown as ChevronDown,
-  CaretRight as ChevronRight,
-  Copy,
-  CornersOutIcon,
-  ArrowsOut as Expand,
-  Gauge,
-  Info,
-  Keyboard,
-  Layout as LayoutPanelTop,
-  LinkSimple as Link2,
-  ChatText as MessageSquareText,
-  ArrowsIn as Minimize2,
-  MonitorPlay,
-  Pause,
-  Play,
-  ProjectorScreenIcon,
-  ArrowClockwise as RefreshCw,
-  Repeat,
-  StackSimple as Server,
-  GearSix as Settings,
-  SkipBack,
-  SkipForward,
-  Television as Tv,
-  SpeakerLow as Volume1,
-  SpeakerHigh as Volume2,
-  SpeakerX as VolumeX,
-} from '@phosphor-icons/react/dist/ssr';
+import { Camera } from '@phosphor-icons/react/dist/ssr/Camera';
+import { Broadcast as Cast } from '@phosphor-icons/react/dist/ssr/Broadcast';
+import { Check } from '@phosphor-icons/react/dist/ssr/Check';
+import { CaretDown as ChevronDown } from '@phosphor-icons/react/dist/ssr/CaretDown';
+import { CaretRight as ChevronRight } from '@phosphor-icons/react/dist/ssr/CaretRight';
+import { Copy } from '@phosphor-icons/react/dist/ssr/Copy';
+import { CornersOutIcon } from '@phosphor-icons/react/dist/ssr/CornersOut';
+import { ArrowsOut as Expand } from '@phosphor-icons/react/dist/ssr/ArrowsOut';
+import { Gauge } from '@phosphor-icons/react/dist/ssr/Gauge';
+import { Info } from '@phosphor-icons/react/dist/ssr/Info';
+import { Keyboard } from '@phosphor-icons/react/dist/ssr/Keyboard';
+import { Layout as LayoutPanelTop } from '@phosphor-icons/react/dist/ssr/Layout';
+import { LinkSimple as Link2 } from '@phosphor-icons/react/dist/ssr/LinkSimple';
+import { ChatText as MessageSquareText } from '@phosphor-icons/react/dist/ssr/ChatText';
+import { ArrowsIn as Minimize2 } from '@phosphor-icons/react/dist/ssr/ArrowsIn';
+import { MonitorPlay } from '@phosphor-icons/react/dist/ssr/MonitorPlay';
+import { Pause } from '@phosphor-icons/react/dist/ssr/Pause';
+import { Play } from '@phosphor-icons/react/dist/ssr/Play';
+import { ProjectorScreenIcon } from '@phosphor-icons/react/dist/ssr/ProjectorScreen';
+import { ArrowClockwise as RefreshCw } from '@phosphor-icons/react/dist/ssr/ArrowClockwise';
+import { Repeat } from '@phosphor-icons/react/dist/ssr/Repeat';
+import { StackSimple as Server } from '@phosphor-icons/react/dist/ssr/StackSimple';
+import { GearSix as Settings } from '@phosphor-icons/react/dist/ssr/GearSix';
+import { SkipBack } from '@phosphor-icons/react/dist/ssr/SkipBack';
+import { SkipForward } from '@phosphor-icons/react/dist/ssr/SkipForward';
+import { Television as Tv } from '@phosphor-icons/react/dist/ssr/Television';
+import { SpeakerLow as Volume1 } from '@phosphor-icons/react/dist/ssr/SpeakerLow';
+import { SpeakerHigh as Volume2 } from '@phosphor-icons/react/dist/ssr/SpeakerHigh';
+import { SpeakerX as VolumeX } from '@phosphor-icons/react/dist/ssr/SpeakerX';
 import {
   CaptionButton,
   Controls,

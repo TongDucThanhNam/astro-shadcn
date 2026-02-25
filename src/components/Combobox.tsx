@@ -1,7 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { CaretUpDown as ChevronsUpDown, Check } from '@phosphor-icons/react/dist/ssr';
+import { CaretUpDown as ChevronsUpDown } from '@phosphor-icons/react/dist/ssr/CaretUpDown';
+import { Check } from '@phosphor-icons/react/dist/ssr/Check';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';

@@ -2,7 +2,10 @@
 
 import { cn } from '@/lib/utils';
 import { AnimatePresence, motion } from 'framer-motion';
-import { CaretLeft as ChevronLeft, CaretRight as ChevronRight, List, Play } from '@phosphor-icons/react/dist/ssr';
+import { CaretLeft as ChevronLeft } from '@phosphor-icons/react/dist/ssr/CaretLeft';
+import { CaretRight as ChevronRight } from '@phosphor-icons/react/dist/ssr/CaretRight';
+import { List } from '@phosphor-icons/react/dist/ssr/List';
+import { Play } from '@phosphor-icons/react/dist/ssr/Play';
 import { type FocusEvent, useCallback, useEffect, useMemo, useState } from 'react';
 
 type EpisodeDetail = {

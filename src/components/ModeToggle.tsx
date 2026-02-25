@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Moon, Sun } from '@phosphor-icons/react/dist/ssr';
+import { Moon } from '@phosphor-icons/react/dist/ssr/Moon';
+import { Sun } from '@phosphor-icons/react/dist/ssr/Sun';
 
 import { Button } from '@/components/ui/button';
 import {

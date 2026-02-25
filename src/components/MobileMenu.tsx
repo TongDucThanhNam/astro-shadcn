@@ -1,6 +1,8 @@
 'use client';
 
-import { CaretDown as ChevronDown, CaretRight as ChevronRight, List as Menu } from '@phosphor-icons/react/dist/ssr';
+import { CaretDown as ChevronDown } from '@phosphor-icons/react/dist/ssr/CaretDown';
+import { CaretRight as ChevronRight } from '@phosphor-icons/react/dist/ssr/CaretRight';
+import { List as Menu } from '@phosphor-icons/react/dist/ssr/List';
 import * as React from 'react';
 
 import { movieCategories } from '@/components/NavigationMenuDemo';

@@ -1,11 +1,10 @@
 'use client';
 
-import { createWsrvImageUrl, imagePresets } from '@/lib/wsrv';
-import {
-  CaretLeft as ChevronLeft,
-  CaretRight as ChevronRight,
-  FilmSlate as Film,
-} from '@phosphor-icons/react/dist/ssr';
+import { createWsrvImageUrl } from '@/lib/wsrv';
+import { imagePresets } from '@/lib/wsrv';
+import { CaretLeft as ChevronLeft } from '@phosphor-icons/react/dist/ssr/CaretLeft';
+import { CaretRight as ChevronRight } from '@phosphor-icons/react/dist/ssr/CaretRight';
+import { FilmSlate as Film } from '@phosphor-icons/react/dist/ssr/FilmSlate';
 import { motion } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
 const SCROLL_EPSILON = 2;

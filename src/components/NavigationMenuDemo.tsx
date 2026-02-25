@@ -1,6 +1,7 @@
 'use client';
 
-import { FilmSlate as Film, Television as Tv } from '@phosphor-icons/react/dist/ssr';
+import { FilmSlate as Film } from '@phosphor-icons/react/dist/ssr/FilmSlate';
+import { Television as Tv } from '@phosphor-icons/react/dist/ssr/Television';
 import type * as React from 'react';
 
 import {

@@ -1,8 +1,11 @@
 import React from 'react';
 import { navigate } from 'astro:transitions/client';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { MonitorPlay, PlayCircle, FilmSlate as Film, Television as Tv } from '@phosphor-icons/react/dist/ssr';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { MonitorPlay } from '@phosphor-icons/react/dist/ssr/MonitorPlay';
+import { PlayCircle } from '@phosphor-icons/react/dist/ssr/PlayCircle';
+import { FilmSlate as Film } from '@phosphor-icons/react/dist/ssr/FilmSlate';
+import { Television as Tv } from '@phosphor-icons/react/dist/ssr/Television';
 
 const movieTypes = [
   { title: 'Phim lẻ', icon: Film, type: 'phim-le' },

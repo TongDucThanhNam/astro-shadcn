@@ -9,7 +9,11 @@ import {
   CommandItem,
   CommandShortcut,
 } from '@/components/ui/command';
-import { CalendarBlank as Calendar, FilmSlate as Film, GlobeHemisphereWest as Globe, MagnifyingGlass as Search, Television as Tv } from '@phosphor-icons/react/dist/ssr';
+import { CalendarBlank as Calendar } from '@phosphor-icons/react/dist/ssr/CalendarBlank';
+import { FilmSlate as Film } from '@phosphor-icons/react/dist/ssr/FilmSlate';
+import { GlobeHemisphereWest as Globe } from '@phosphor-icons/react/dist/ssr/GlobeHemisphereWest';
+import { MagnifyingGlass as Search } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
+import { Television as Tv } from '@phosphor-icons/react/dist/ssr/Television';
 import { cn } from '@/lib/utils';
 
 const QUICK_LINKS = [
