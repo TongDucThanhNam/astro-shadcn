@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, List, Play } from 'lucide-react';
+import { CaretLeft as ChevronLeft, CaretRight as ChevronRight, List, Play } from '@phosphor-icons/react/dist/ssr';
 import { type FocusEvent, useCallback, useEffect, useMemo, useState } from 'react';
 
 type EpisodeDetail = {

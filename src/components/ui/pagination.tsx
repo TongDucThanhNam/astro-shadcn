@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
+import { CaretLeft as ChevronLeft, CaretRight as ChevronRight, DotsThree as MoreHorizontal } from '@phosphor-icons/react/dist/ssr';
 
 import { cn } from '@/lib/utils';
 import { type ButtonProps, buttonVariants } from '@/components/ui/button';

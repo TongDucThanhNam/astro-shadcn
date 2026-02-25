@@ -9,7 +9,7 @@ import {
   CommandItem,
   CommandShortcut,
 } from '@/components/ui/command';
-import { Search, Film, Tv, Globe, Calendar } from 'lucide-react';
+import { CalendarBlank as Calendar, FilmSlate as Film, GlobeHemisphereWest as Globe, MagnifyingGlass as Search, Television as Tv } from '@phosphor-icons/react/dist/ssr';
 import { cn } from '@/lib/utils';
 
 const QUICK_LINKS = [

@@ -1,6 +1,6 @@
 'use client';
 
-import { Film, Tv } from 'lucide-react';
+import { FilmSlate as Film, Television as Tv } from '@phosphor-icons/react/dist/ssr';
 import type * as React from 'react';
 
 import {

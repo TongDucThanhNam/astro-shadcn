@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import { imagePresets, resolveImageUrl } from '@/lib/wsrv';
 import EpisodeSelector from './EpisodeSelector';
 import VideoPlayer from './VideoPlayer';
@@ -33,10 +33,34 @@ const episodes = (data.episodes ?? []) as EpisodeServer[];
 const viewFormatter = new Intl.NumberFormat('vi-VN');
 
 const heroPreset = imagePresets.hero;
+const heroSizes = heroPreset.sizes;
 const posterPreset = imagePresets.poster;
+const posterSizes = '(max-width: 640px) 45vw, (max-width: 768px) 60vw, 320px';
 
 const heroSource = resolveImageUrl(movie.thumb_url ?? movie.poster_url);
 const posterSource = resolveImageUrl(movie.poster_url ?? movie.thumb_url);
+const heroPreload = heroSource
+  ? await getImage({
+      src: heroSource,
+      width: heroPreset.dimension.width,
+      height: heroPreset.dimension.height,
+      widths: heroPreset.widths,
+      quality: heroPreset.quality,
+      fit: 'cover',
+    })
+  : null;
+const posterPreload = posterSource
+  ? await getImage({
+      src: posterSource,
+      width: posterPreset.dimension.width,
+      height: posterPreset.dimension.height,
+      widths: posterPreset.widths,
+      quality: posterPreset.quality,
+      fit: 'cover',
+    })
+  : null;
+const shouldPreloadPoster =
+  posterPreload && (!heroPreload || heroPreload.src !== posterPreload.src);
 
 const rating = movie.tmdb?.vote_average ? Number(movie.tmdb.vote_average).toFixed(1) : '0.0';
 const toEpisodeCount = (value: string | number | null | undefined) => {
@@ -82,6 +106,31 @@ const hasEpisodes = totalEpisodeCount > 0;
 const hasPlayableEpisodes = playableEpisodes.length > 0;
 ---
 
+<head>
+    {
+        heroPreload && (
+            <link
+                rel="preload"
+                as="image"
+                href={heroPreload.src}
+                imagesrcset={heroPreload.srcSet.attribute}
+                imagesizes={heroSizes}
+            />
+        )
+    }
+    {
+        shouldPreloadPoster && (
+            <link
+                rel="preload"
+                as="image"
+                href={posterPreload.src}
+                imagesrcset={posterPreload.srcSet.attribute}
+                imagesizes={posterSizes}
+            />
+        )
+    }
+</head>
+
 <!-- Hero Section -->
 <section id="movie-hero" class="relative min-h-[70svh] overflow-hidden md:min-h-[80svh] lg:min-h-[92svh]">
     <!-- Background Number Effect -->
@@ -107,6 +156,7 @@ const hasPlayableEpisodes = playableEpisodes.length > 0;
             <Image
                 loading="eager"
                 fetchpriority="high"
+                data-transition-priority="high"
                 src={heroSource}
                 alt={movie.name}
                 width={heroPreset.dimension.width}
@@ -138,20 +188,22 @@ const hasPlayableEpisodes = playableEpisodes.length > 0;
             >
                 <div
                     class="poster-card border-2 border-[#3F3F46] bg-[#09090B] overflow-hidden transition-all duration-300 hover:scale-[1.02] group"
-                    transition:name={`image-${slug}`}
                 >
                     {posterSource ? (
                         <Image
-                            loading="lazy"
-                            fetchpriority="auto"
+                            loading="eager"
+                            fetchpriority="high"
+                            data-transition-priority="high"
+                            decoding="sync"
                             src={posterSource}
                             alt={movie.name}
                             width={posterPreset.dimension.width}
                             height={posterPreset.dimension.height}
                             widths={posterPreset.widths}
-                            sizes="(max-width: 640px) 45vw, (max-width: 768px) 60vw, 320px"
+                            sizes={posterSizes}
                             quality={posterPreset.quality}
                             fit="cover"
+                            transition:name={`image-${slug}`}
                             class="h-full w-full object-cover group-hover:opacity-80 transition-opacity"
                         />
                     ) : (

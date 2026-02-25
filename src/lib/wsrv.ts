@@ -1,4 +1,16 @@
 const IMAGE_ORIGIN = 'https://phimimg.com/';
+const WSRV_BASE_URL = 'https://wsrv.nl/?url=';
+const DEFAULT_QUALITY = 80;
+const DEFAULT_FORMAT = 'webp';
+
+type WsrvImageOptions = {
+  width?: number;
+  height?: number;
+  quality?: number;
+  format?: string;
+  fit?: string;
+  crop?: string;
+};
 
 export const resolveImageUrl = (source?: string | null) => {
   if (!source) return null;
@@ -13,6 +25,35 @@ export const resolveImageUrl = (source?: string | null) => {
 
   const sanitized = source.replace(/^\/+/, '');
   return `${IMAGE_ORIGIN}${sanitized}`;
+};
+
+const isWsrvUrl = (source: string) => {
+  try {
+    const parsed = new URL(source);
+    return parsed.hostname === 'wsrv.nl';
+  } catch {
+    return false;
+  }
+};
+
+export const createWsrvImageUrl = (source?: string | null, options: WsrvImageOptions = {}) => {
+  const resolvedSource = resolveImageUrl(source);
+  if (!resolvedSource) return null;
+  if (isWsrvUrl(resolvedSource)) return resolvedSource;
+
+  const { width, height, fit, crop, quality = DEFAULT_QUALITY, format = DEFAULT_FORMAT } = options;
+
+  const params = new URLSearchParams();
+  if (width) params.set('w', String(width));
+  if (height) params.set('h', String(height));
+  if (quality) params.set('q', String(quality));
+  if (format) params.set('output', format);
+  if (fit) params.set('fit', fit);
+  if (crop) params.set('crop', crop);
+
+  const query = params.toString();
+  const separator = WSRV_BASE_URL.includes('?') ? '&' : '?';
+  return `${WSRV_BASE_URL}${encodeURIComponent(resolvedSource)}${query ? `${separator}${query}` : ''}`;
 };
 
 export const imagePresets = {

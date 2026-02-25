@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useMotionValue, useSpring } from 'framer-motion';
-import { Play } from 'lucide-react';
+import { Play } from '@phosphor-icons/react/dist/ssr';
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 

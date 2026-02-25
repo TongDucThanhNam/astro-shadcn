@@ -2,7 +2,7 @@ import React from 'react';
 import { navigate } from 'astro:transitions/client';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Film, Tv, PlayCircle, MonitorPlay } from 'lucide-react';
+import { MonitorPlay, PlayCircle, FilmSlate as Film, Television as Tv } from '@phosphor-icons/react/dist/ssr';
 
 const movieTypes = [
   { title: 'Phim lẻ', icon: Film, type: 'phim-le' },

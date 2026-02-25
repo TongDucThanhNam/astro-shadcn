@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronDown, ChevronRight, Menu } from 'lucide-react';
+import { CaretDown as ChevronDown, CaretRight as ChevronRight, List as Menu } from '@phosphor-icons/react/dist/ssr';
 import * as React from 'react';
 
 import { movieCategories } from '@/components/NavigationMenuDemo';

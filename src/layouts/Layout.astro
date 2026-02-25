@@ -7,6 +7,7 @@ const { title } = Astro.props;
 import { ClientRouter } from 'astro:transitions';
 
 import '@/styles/globals.css';
+import { GenreDialog } from '@/components/GenreDialog';
 import MobileMenu from '@/components/MobileMenu';
 import SearchForm from '@/components/SearchForm';
 import Cursor from '@/components/ui/Cursor';
@@ -47,6 +48,121 @@ const yearLinks = [
         <meta name="generator" content={Astro.generator} />
         <title>{title}</title>
         <ClientRouter />
+        <script is:inline>
+            (() => {
+                if (typeof window === 'undefined') return;
+                if (window.__movieTransitionWaitInstalled) return;
+                window.__movieTransitionWaitInstalled = true;
+
+                const prewarmedImages = new Map();
+
+                const warmImage = (src, srcset, sizes) => {
+                    if (!src) return Promise.resolve();
+
+                    const key = `${src}|${srcset || ''}|${sizes || ''}`;
+                    if (prewarmedImages.has(key)) {
+                        return prewarmedImages.get(key);
+                    }
+
+                    const promise = new Promise((resolve) => {
+                        const img = new Image();
+                        let settled = false;
+                        const timeout = window.setTimeout(() => {
+                            done();
+                        }, 2500);
+                        const done = () => {
+                            if (settled) return;
+                            settled = true;
+                            window.clearTimeout(timeout);
+                            resolve();
+                        };
+
+                        img.onload = done;
+                        img.onerror = done;
+
+                        if (srcset) img.srcset = srcset;
+                        if (sizes) img.sizes = sizes;
+                        img.src = src;
+
+                        if (typeof img.decode === 'function') {
+                            img.decode().then(done).catch(done);
+                        }
+                    });
+
+                    prewarmedImages.set(key, promise);
+                    return promise;
+                };
+
+                const waitForImageElement = (candidate) => {
+                    const src = candidate?.getAttribute('src');
+                    const srcset = candidate?.getAttribute('srcset');
+                    const sizes = candidate?.getAttribute('sizes');
+                    return warmImage(src, srcset, sizes);
+                };
+
+                const warmTransitionLinkImages = (target) => {
+                    const link = target instanceof Element
+                        ? target.closest('a[data-transition-prewarm]')
+                        : null;
+                    if (!link) return;
+
+                    const rawValue = link.getAttribute('data-transition-prewarm');
+                    if (!rawValue) return;
+
+                    const sources = rawValue
+                        .split(',')
+                        .map((item) => item.trim())
+                        .filter(Boolean);
+                    if (!sources.length) return;
+
+                    void Promise.all(sources.map((src) => warmImage(src)));
+                };
+
+                document.addEventListener(
+                    'pointerover',
+                    (event) => warmTransitionLinkImages(event.target),
+                    true,
+                );
+                document.addEventListener(
+                    'focusin',
+                    (event) => warmTransitionLinkImages(event.target),
+                    true,
+                );
+                document.addEventListener(
+                    'touchstart',
+                    (event) => warmTransitionLinkImages(event.target),
+                    { capture: true, passive: true },
+                );
+
+                document.addEventListener('astro:before-preparation', (event) => {
+                    const transitionEvent = event;
+                    if (!transitionEvent?.to?.pathname?.startsWith('/phim/')) {
+                        return;
+                    }
+
+                    const originalLoader = transitionEvent.loader;
+                    transitionEvent.loader = async () => {
+                        await originalLoader();
+
+                        if (transitionEvent.defaultPrevented || transitionEvent.signal?.aborted) {
+                            return;
+                        }
+
+                        const nextDocument = transitionEvent.newDocument;
+                        if (!nextDocument) return;
+
+                        const criticalImages = Array.from(
+                            nextDocument.querySelectorAll(
+                                'img[data-transition-priority="high"], img[fetchpriority="high"]',
+                            ),
+                        );
+
+                        if (!criticalImages.length) return;
+                        await Promise.all(criticalImages.slice(0, 3).map(waitForImageElement));
+                    };
+                });
+            })();
+        </script>
     </head>
     <body class="min-h-screen bg-[#09090B] text-[#FAFAFA] antialiased font-sans cursor-none-custom">
         <!-- Custom Cursor -->
@@ -124,12 +240,7 @@ const yearLinks = [
                                                 ))
                                             }
                                         </div>
-                                        <a
-                                            href="/danh-sach"
-                                            class="block border-2 border-[#27272A] bg-[#27272A] px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-tighter text-[#A1A1AA] transition-all duration-300 hover:bg-[#FAFAFA] hover:text-black hover:scale-105"
-                                        >
-                                            Xem tất cả thể loại
-                                        </a>
+                                        <GenreDialog client:load />
                                     </div>
                                 </div>
                             </div>

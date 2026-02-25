@@ -13,15 +13,15 @@ import { Toggle } from '@/components/ui/toggle';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import {
-  ArrowUpDown,
-  ChevronLeft,
-  ChevronRight,
-  Film,
+  ArrowsDownUp as ArrowUpDown,
+  CaretLeft as ChevronLeft,
+  CaretRight as ChevronRight,
+  FilmSlate as Film,
+  MagnifyingGlass as Search,
   Play,
-  Search,
   SkipBack,
   SkipForward,
-} from 'lucide-react';
+} from '@phosphor-icons/react/dist/ssr';
 import type React from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 

@@ -1,5 +1,36 @@
 import { cn } from '@/lib/utils';
 import {
+  Camera,
+  Broadcast as Cast,
+  Check,
+  CaretDown as ChevronDown,
+  CaretRight as ChevronRight,
+  Copy,
+  CornersOutIcon,
+  ArrowsOut as Expand,
+  Gauge,
+  Info,
+  Keyboard,
+  Layout as LayoutPanelTop,
+  LinkSimple as Link2,
+  ChatText as MessageSquareText,
+  ArrowsIn as Minimize2,
+  MonitorPlay,
+  Pause,
+  Play,
+  ProjectorScreenIcon,
+  ArrowClockwise as RefreshCw,
+  Repeat,
+  StackSimple as Server,
+  GearSix as Settings,
+  SkipBack,
+  SkipForward,
+  Television as Tv,
+  SpeakerLow as Volume1,
+  SpeakerHigh as Volume2,
+  SpeakerX as VolumeX,
+} from '@phosphor-icons/react/dist/ssr';
+import {
   CaptionButton,
   Controls,
   FullscreenButton,
@@ -20,35 +51,6 @@ import {
   useVideoQualityOptions,
 } from '@vidstack/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import {
-  Camera,
-  Cast,
-  Check,
-  ChevronDown,
-  ChevronRight,
-  Copy,
-  Expand,
-  Gauge,
-  Info,
-  Keyboard,
-  LayoutPanelTop,
-  Link2,
-  MessageSquareText,
-  Minimize2,
-  MonitorPlay,
-  Pause,
-  Play,
-  RefreshCw,
-  Repeat,
-  Server,
-  Settings,
-  SkipBack,
-  SkipForward,
-  Tv,
-  Volume1,
-  Volume2,
-  VolumeX,
-} from 'lucide-react';
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -106,6 +108,12 @@ const springScale = {
 /* ── Types ── */
 type ContextMenuPos = { x: number; y: number } | null;
 type SettingsView = 'main' | 'speed' | 'quality' | 'audio' | 'subtitles' | 'shortcuts' | null;
+const CONTEXT_MENU_EDGE_PADDING = 8;
+
+const clamp = (value: number, min: number, max: number) => {
+  if (max <= min) return min;
+  return Math.min(Math.max(value, min), max);
+};
 
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
@@ -240,6 +248,34 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
     playerEl.addEventListener('contextmenu', handler);
     return () => playerEl.removeEventListener('contextmenu', handler);
   }, [player]);
+
+  useEffect(() => {
+    if (!contextMenu) return;
+    const playerEl = player?.el;
+    const menuEl = contextMenuRef.current;
+    if (!playerEl || !menuEl) return;
+
+    const frameId = window.requestAnimationFrame(() => {
+      const playerRect = playerEl.getBoundingClientRect();
+      const menuRect = menuEl.getBoundingClientRect();
+      const maxX = Math.max(
+        CONTEXT_MENU_EDGE_PADDING,
+        playerRect.width - menuRect.width - CONTEXT_MENU_EDGE_PADDING,
+      );
+      const maxY = Math.max(
+        CONTEXT_MENU_EDGE_PADDING,
+        playerRect.height - menuRect.height - CONTEXT_MENU_EDGE_PADDING,
+      );
+      const x = clamp(contextMenu.x, CONTEXT_MENU_EDGE_PADDING, maxX);
+      const y = clamp(contextMenu.y, CONTEXT_MENU_EDGE_PADDING, maxY);
+
+      if (Math.abs(x - contextMenu.x) > 0.5 || Math.abs(y - contextMenu.y) > 0.5) {
+        setContextMenu({ x, y });
+      }
+    });
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, [contextMenu, player]);
 
   /* ── Close context menu on outside click / scroll / esc ── */
   useEffect(() => {
@@ -390,12 +426,12 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
               </p>
             )}
             <div className="flex shrink-0 items-center gap-1.5">
-              {sourceLabel && (
+              {/* {sourceLabel && (
                 <span className="inline-flex items-center gap-1 rounded-sm bg-black/50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white/70 backdrop-blur-sm">
                   <Server className="h-3 w-3" />
                   {sourceLabel}
                 </span>
-              )}
+              )} */}
               {canSwitchSources ? (
                 <div className="relative" ref={sourceMenuRef}>
                   <button
@@ -636,7 +672,7 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: 8 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute bottom-12 right-0 z-20 min-w-[260px] overflow-hidden rounded-xl bg-[#212121]/95 py-2 shadow-2xl backdrop-blur-md"
+                    className="absolute bottom-12 right-0 z-20 min-w-[260px] overflow-hidden bg-[#212121]/95 py-2 shadow-2xl backdrop-blur-md"
                     onClick={(e) => e.stopPropagation()}
                   >
                     {/* ── Main view ── */}
@@ -1019,7 +1055,7 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                 window.dispatchEvent(new KeyboardEvent('keydown', { key: 't', bubbles: true }));
               }}
             >
-              <LayoutPanelTop className="h-[20px] w-[20px]" />
+              <ProjectorScreenIcon className="h-[20px] w-[20px]" />
             </button>
 
             {/* Fullscreen */}
@@ -1032,7 +1068,7 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
               {fullscreen ? (
                 <Minimize2 className="h-[22px] w-[22px]" />
               ) : (
-                <Expand className="h-[22px] w-[22px]" />
+                <CornersOutIcon className="h-[22px] w-[22px]" />
               )}
             </FullscreenButton>
           </div>
@@ -1048,7 +1084,7 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.12 }}
-            className="absolute z-[50] min-w-[280px] overflow-hidden rounded-xl bg-[#212121]/95 py-2 shadow-2xl backdrop-blur-md"
+            className="absolute z-[50] w-[280px] max-w-[calc(100%-16px)] overflow-hidden bg-[#212121]/95 py-2 shadow-2xl backdrop-blur-md"
             style={{ left: contextMenu.x, top: contextMenu.y }}
             onContextMenu={(e) => e.preventDefault()}
           >

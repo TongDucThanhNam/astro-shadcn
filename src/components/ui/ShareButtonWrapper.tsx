@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { MovieDetail } from '@/types';
 import ShareButton from './share-button';
-import { Link2, MessageCircle } from 'lucide-react';
+import { ChatCircle as MessageCircle, LinkSimple as Link2 } from '@phosphor-icons/react/dist/ssr';
 import { cn } from '@/lib/utils';
 
 interface ShareButtonWrapperProps {

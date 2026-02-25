@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import { imagePresets, resolveImageUrl } from '@/lib/wsrv';
+import { createWsrvImageUrl, imagePresets, resolveImageUrl } from '@/lib/wsrv';
 
 interface Props {
   index: number;
@@ -14,12 +14,21 @@ const { index, slug, name, image, year } = Astro.props;
 
 const imageSource = resolveImageUrl(image);
 const thumbnailPreset = imagePresets.thumbnail;
+const posterPreset = imagePresets.poster;
+const transitionPrewarmSource = createWsrvImageUrl(image, {
+  width: posterPreset.dimension.width,
+  height: posterPreset.dimension.height,
+  quality: posterPreset.quality,
+  fit: 'cover',
+});
 ---
 
 <a
 	href={`/phim/${slug}`}
 	class="group block w-full"
 	data-cursor-play
+	data-astro-prefetch="hover"
+	data-transition-prewarm={transitionPrewarmSource ?? undefined}
 >
     <div class="relative overflow-hidden border-2 border-[#3F3F46] bg-[#09090B] transition-all duration-300 group-hover:border-[#DFE104]">
         <div class="relative aspect-[2/3] overflow-hidden">

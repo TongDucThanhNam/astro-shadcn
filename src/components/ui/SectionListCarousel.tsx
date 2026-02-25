@@ -1,26 +1,14 @@
 'use client';
 
+import { createWsrvImageUrl, imagePresets } from '@/lib/wsrv';
+import {
+  CaretLeft as ChevronLeft,
+  CaretRight as ChevronRight,
+  FilmSlate as Film,
+} from '@phosphor-icons/react/dist/ssr';
 import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Film } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-
-const IMAGE_ORIGIN = 'https://phimimg.com/';
 const SCROLL_EPSILON = 2;
-
-const resolveImageUrl = (source?: string | null) => {
-  if (!source) return null;
-
-  if (source.startsWith('http')) {
-    return source;
-  }
-
-  if (source.startsWith('//')) {
-    return `https:${source}`;
-  }
-
-  const sanitized = source.replace(/^\/+/, '');
-  return `${IMAGE_ORIGIN}${sanitized}`;
-};
 
 interface CarouselItem {
   slug: string;
@@ -151,6 +139,25 @@ const SectionListCarousel: React.FC<SectionListCarouselProps> = ({ items, layout
             layout === 'landscape'
               ? item.thumb_url || item.poster_url
               : item.poster_url || item.thumb_url;
+          const transitionName = `${layout === 'landscape' ? 'poster' : 'image'}-${item.slug}`;
+          const imageSrc = createWsrvImageUrl(imageUrl, {
+            width: baseWidth,
+            height: baseHeight,
+            fit: 'cover',
+          });
+          const transitionPrewarmSource = createWsrvImageUrl(imageUrl, {
+            width:
+              layout === 'landscape'
+                ? imagePresets.hero.dimension.width
+                : imagePresets.poster.dimension.width,
+            height:
+              layout === 'landscape'
+                ? imagePresets.hero.dimension.height
+                : imagePresets.poster.dimension.height,
+            quality:
+              layout === 'landscape' ? imagePresets.hero.quality : imagePresets.poster.quality,
+            fit: 'cover',
+          });
 
           return (
             <motion.article
@@ -168,16 +175,22 @@ const SectionListCarousel: React.FC<SectionListCarouselProps> = ({ items, layout
                 layout === 'landscape' ? 'w-[320px] snap-start' : 'w-[212px]'
               }`}
             >
-              <a href={`/phim/${item.slug}`} className="block h-full">
+              <a
+                href={`/phim/${item.slug}`}
+                className="block h-full"
+                data-astro-prefetch="hover"
+                data-transition-prewarm={transitionPrewarmSource || undefined}
+              >
                 <div className={layout === 'landscape' ? 'aspect-[16/9]' : 'aspect-[3/4]'}>
-                  {imageUrl ? (
+                  {imageSrc ? (
                     <motion.img
-                      src={resolveImageUrl(imageUrl) || undefined}
+                      src={imageSrc}
                       alt={item.name}
                       loading="lazy"
                       decoding="async"
                       width={baseWidth}
                       height={baseHeight}
+                      style={{ viewTransitionName: transitionName }}
                       className="h-full w-full object-cover"
                       whileHover={{ scale: 1.05 }}
                       transition={{ duration: 0.3 }}
