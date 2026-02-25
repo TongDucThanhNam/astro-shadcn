@@ -32,16 +32,7 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   image: {
-    service: {
-      entrypoint: './src/lib/image-service/wsrc.ts',
-      config: {
-        baseUrl: 'https://wsrv.nl/?url=',
-        imageOrigin: 'https://phimimg.com/',
-        defaultQuality: 80,
-        defaultFormat: 'webp',
-      },
-    },
-    domains: ['wsrv.nl', 'phimimg.com'],
+    domains: ['phimimg.com'],
     responsiveStyles: true,
   },
   output: 'server',

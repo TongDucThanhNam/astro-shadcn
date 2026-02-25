@@ -1,8 +1,8 @@
 ---
 import { Image } from 'astro:assets';
+import { imagePresets, resolveImageUrl } from '@/lib/image';
 import { type LatestFeedVersion, getLatestMovies, parseFeedVersion } from '@/lib/phimapi';
 import { getCachedValue, setCachedValue } from '@/lib/server-cache';
-import { imagePresets, resolveImageUrl } from '@/lib/wsrv';
 
 interface Props {
   feedVersion?: LatestFeedVersion;

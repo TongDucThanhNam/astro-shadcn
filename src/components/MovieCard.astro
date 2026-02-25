@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import { createWsrvImageUrl, imagePresets, resolveImageUrl } from '@/lib/wsrv';
+import { imagePresets, resolveImageUrl } from '@/lib/image';
 
 interface Props {
   index: number;
@@ -14,13 +14,7 @@ const { index, slug, name, image, year } = Astro.props;
 
 const imageSource = resolveImageUrl(image);
 const thumbnailPreset = imagePresets.thumbnail;
-const posterPreset = imagePresets.poster;
-const transitionPrewarmSource = createWsrvImageUrl(image, {
-  width: posterPreset.dimension.width,
-  height: posterPreset.dimension.height,
-  quality: posterPreset.quality,
-  fit: 'cover',
-});
+const transitionPrewarmSource = imageSource;
 ---
 
 <a

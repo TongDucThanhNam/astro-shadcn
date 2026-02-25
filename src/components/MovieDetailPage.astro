@@ -1,6 +1,6 @@
 ---
 import { Image, getImage } from 'astro:assets';
-import { imagePresets, resolveImageUrl } from '@/lib/wsrv';
+import { imagePresets, resolveImageUrl } from '@/lib/image';
 import EpisodeSelector from './EpisodeSelector';
 import VideoPlayer from './VideoPlayer';
 import WatchDock from './WatchDock';
@@ -176,7 +176,7 @@ const hasPlayableEpisodes = playableEpisodes.length > 0;
     </div>
 
     <!-- Content -->
-    <div class="relative z-10 w-full px-4 sm:px-6 lg:px-8 py-6 md:py-12 lg:py-20">
+    <div class="relative z-10 mx-3 px-4 py-6 sm:mx-5 sm:px-6 md:mx-7 md:py-12 lg:mx-20 lg:px-8 lg:py-20 xl:mx-24 2xl:mx-28">
         <div class="max-w-384">
             <div class="flex flex-col lg:flex-row gap-6 md:gap-8 lg:gap-16 items-start">
             <!-- Poster -->
@@ -372,7 +372,7 @@ const hasPlayableEpisodes = playableEpisodes.length > 0;
 
 <!-- Episode Selection -->
 <section class="py-12 lg:py-16 bg-[#09090B]" id="episode-selection">
-    <div class="w-full px-4 lg:px-8">
+    <div class="mx-3 px-4 sm:mx-5 sm:px-6 md:mx-7 lg:mx-20 lg:px-8 xl:mx-24 2xl:mx-28">
         <div class="max-w-384">
             <div class="border-t-2 border-[#3F3F46] pt-8">
                 <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -396,7 +396,7 @@ const hasPlayableEpisodes = playableEpisodes.length > 0;
 
 <!-- Video Player -->
 <section class="py-12 lg:py-16 bg-[#09090B]" id="video-player">
-    <div class="w-full px-4 lg:px-8">
+    <div class="mx-3 px-4 sm:mx-5 sm:px-6 md:mx-7 lg:mx-20 lg:px-8 xl:mx-24 2xl:mx-28">
         <div class="max-w-384">
             <div class="border-t-2 border-[#3F3F46] pt-8 space-y-4">
                 <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">

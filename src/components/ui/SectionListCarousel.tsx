@@ -1,7 +1,6 @@
 'use client';
 
-import { createWsrvImageUrl } from '@/lib/wsrv';
-import { imagePresets } from '@/lib/wsrv';
+import { resolveImageUrl } from '@/lib/image';
 import { CaretLeft as ChevronLeft } from '@phosphor-icons/react/dist/ssr/CaretLeft';
 import { CaretRight as ChevronRight } from '@phosphor-icons/react/dist/ssr/CaretRight';
 import { FilmSlate as Film } from '@phosphor-icons/react/dist/ssr/FilmSlate';
@@ -139,24 +138,8 @@ const SectionListCarousel: React.FC<SectionListCarouselProps> = ({ items, layout
               ? item.thumb_url || item.poster_url
               : item.poster_url || item.thumb_url;
           const transitionName = `${layout === 'landscape' ? 'poster' : 'image'}-${item.slug}`;
-          const imageSrc = createWsrvImageUrl(imageUrl, {
-            width: baseWidth,
-            height: baseHeight,
-            fit: 'cover',
-          });
-          const transitionPrewarmSource = createWsrvImageUrl(imageUrl, {
-            width:
-              layout === 'landscape'
-                ? imagePresets.hero.dimension.width
-                : imagePresets.poster.dimension.width,
-            height:
-              layout === 'landscape'
-                ? imagePresets.hero.dimension.height
-                : imagePresets.poster.dimension.height,
-            quality:
-              layout === 'landscape' ? imagePresets.hero.quality : imagePresets.poster.quality,
-            fit: 'cover',
-          });
+          const imageSrc = resolveImageUrl(imageUrl);
+          const transitionPrewarmSource = imageSrc;
 
           return (
             <motion.article
