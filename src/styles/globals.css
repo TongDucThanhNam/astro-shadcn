@@ -82,12 +82,14 @@
 
   html {
     scroll-behavior: smooth;
+    scrollbar-gutter: stable both-edges;
   }
 
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
     font-family: var(--font-sans);
+    overflow-y: scroll;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
