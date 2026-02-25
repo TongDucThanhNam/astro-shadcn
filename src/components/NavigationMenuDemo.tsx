@@ -163,7 +163,7 @@ export function NavigationMenuDemo() {
                   <span className="flex items-center justify-start gap-3">
                     <Film className="h-6 w-6 text-[#DFE104]" />
                     <p className="mb-2 mt-4 text-lg font-bold uppercase tracking-tighter">
-                      AstroFlim
+                      AstroFilm
                     </p>
                   </span>
                   <p className="text-sm leading-tight text-[#A1A1AA]">

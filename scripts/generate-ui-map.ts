@@ -2,7 +2,7 @@
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 
-import { parseArgs } from 'node:util';
+import { parseArgs } from 'util';
 
 import { parse } from '@babel/parser';
 import traverseModule from '@babel/traverse';
@@ -24,7 +24,7 @@ Options:
 `;
 
 const { values: cliValues } = parseArgs({
-  args: process.argv.slice(2),
+  args: Bun.argv,
   options: {
     src: { type: 'string', default: 'src' },
     entry: { type: 'string' },
@@ -37,6 +37,7 @@ const { values: cliValues } = parseArgs({
     help: { type: 'boolean', short: 'h', default: false },
   },
   strict: true,
+  allowPositionals: true,
 });
 
 if (cliValues.help) {

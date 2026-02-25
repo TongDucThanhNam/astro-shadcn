@@ -1,11 +1,16 @@
 ---
-import Layout from '@/layouts/Layout.astro';
 import SearchMovieGrid from '@/components/SearchMovieGrid.astro';
+import Layout from '@/layouts/Layout.astro';
+import { CACHE_CONFIGS, getCacheHeaders } from '@/lib/cache';
 import { listQueryFromRequest } from '@/lib/phimapi';
 
 const requestUrl = new URL(Astro.request.url);
 const searchParams = requestUrl.searchParams;
 const filters = listQueryFromRequest(searchParams);
+
+for (const [key, value] of Object.entries(getCacheHeaders(CACHE_CONFIGS.QUERY_PAGES))) {
+  Astro.response.headers.set(key, value);
+}
 ---
 
 <Layout title="Astro flim.">

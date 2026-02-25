@@ -2,7 +2,7 @@
 
 ## Overview
 
-AstroFlim sử dụng **Kinetic Typography** design style - một phong cách bold, năng động với typography làm trung tâm. Mọi element đều cảm thấy alive thông qua motion (marquees), reactive motion (hover states), hoặc scroll-triggered motion.
+AstroFilm sử dụng **Kinetic Typography** design style - một phong cách bold, năng động với typography làm trung tâm. Mọi element đều cảm thấy alive thông qua motion (marquees), reactive motion (hover states), hoặc scroll-triggered motion.
 
 ## Design Philosophy
 

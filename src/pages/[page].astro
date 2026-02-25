@@ -1,12 +1,17 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import { CACHE_CONFIGS, getCacheHeaders } from '@/lib/cache';
+import { parseFeedVersion } from '@/lib/phimapi';
 import MovieGrid from '../components/MovieGrid.astro';
 import MovieTypeSelector from '../components/MovieTypeSelector';
-import { parseFeedVersion } from '@/lib/phimapi';
+import Layout from '../layouts/Layout.astro';
 
 const { page } = Astro.params;
 const requestUrl = new URL(Astro.request.url);
 const feedVersion = parseFeedVersion(requestUrl.searchParams.get('feed'));
+
+for (const [key, value] of Object.entries(getCacheHeaders(CACHE_CONFIGS.QUERY_PAGES))) {
+  Astro.response.headers.set(key, value);
+}
 ---
 
 <Layout title="Astro flim.">

@@ -1,9 +1,64 @@
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 128 128">
-    <path d="M50.4 78.5a75.1 75.1 0 0 0-28.5 6.9l24.2-65.7c.7-2 1.9-3.2 3.4-3.2h29c1.5 0 2.7 1.2 3.4 3.2l24.2 65.7s-11.6-7-28.5-7L67 45.5c-.4-1.7-1.6-2.8-2.9-2.8-1.3 0-2.5 1.1-2.9 2.7L50.4 78.5Zm-1.1 28.2Zm-4.2-20.2c-2 6.6-.6 15.8 4.2 20.2a17.5 17.5 0 0 1 .2-.7 5.5 5.5 0 0 1 5.7-4.5c2.8.1 4.3 1.5 4.7 4.7.2 1.1.2 2.3.2 3.5v.4c0 2.7.7 5.2 2.2 7.4a13 13 0 0 0 5.7 4.9v-.3l-.2-.3c-1.8-5.6-.5-9.5 4.4-12.8l1.5-1a73 73 0 0 0 3.2-2.2 16 16 0 0 0 6.8-11.4c.3-2 .1-4-.6-6l-.8.6-1.6 1a37 37 0 0 1-22.4 2.7c-5-.7-9.7-2-13.2-6.2Z" />
-    <style>
-        path { fill: #000; }
-        @media (prefers-color-scheme: dark) {
-            path { fill: #FFF; }
-        }
-    </style>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <!-- Background: #09090B -->
+  <rect width="512" height="512" fill="#09090B" />
+  
+  <!-- Group holding the icon (Camera + Reel), filled with #DFE104 -->
+  <g fill="#DFE104">
+    <!-- Camera Body -->
+    <path d="M 120 250 L 350 250 L 350 400 L 200 400 Z" />
+    
+    <!-- Camera Lens / Front -->
+    <path d="M 370 280 L 450 230 L 450 370 L 370 320 Z" />
+    
+    <!-- Reel 1 (Left) -->
+    <circle cx="180" cy="180" r="60" />
+    <circle cx="180" cy="180" r="15" fill="#09090B" />
+    <circle cx="150" cy="180" r="12" fill="#09090B" />
+    <circle cx="210" cy="180" r="12" fill="#09090B" />
+    <circle cx="180" cy="150" r="12" fill="#09090B" />
+    <circle cx="180" cy="210" r="12" fill="#09090B" />
+    
+    <!-- Reel 2 (Right) -->
+    <circle cx="310" cy="170" r="65" />
+    <circle cx="310" cy="170" r="16" fill="#09090B" />
+    <circle cx="270" cy="170" r="14" fill="#09090B" />
+    <circle cx="350" cy="170" r="14" fill="#09090B" />
+    <circle cx="310" cy="130" r="14" fill="#09090B" />
+    <circle cx="310" cy="210" r="14" fill="#09090B" />
+    
+    <!-- Diagonal Dynamic Accent inside Camera Body -->
+    <polygon points="180 380 330 250 350 250 200 380" fill="#09090B" />
+    
+    <!-- 4-point Stars -->
+    <!-- Star 1 (Left) -->
+    <path d="M 80 300 Q 100 300 100 280 Q 100 300 120 300 Q 100 300 100 320 Q 100 300 80 300 Z" />
+    <!-- Star 2 (Top Right) -->
+    <path d="M 400 150 Q 420 150 420 130 Q 420 150 440 150 Q 420 150 420 170 Q 420 150 400 150 Z" />
+  </g>
+  
+  <!-- Zinc 400 (#A1A1AA) Accent: Film strip fragment -->
+  <g fill="#A1A1AA">
+    <path d="M 80 260 L 250 260 L 250 280 L 80 280 Z" />
+    <rect x="90" y="265" width="10" height="10" fill="#09090B" />
+    <rect x="110" y="265" width="10" height="10" fill="#09090B" />
+    <rect x="130" y="265" width="10" height="10" fill="#09090B" />
+    <rect x="150" y="265" width="10" height="10" fill="#09090B" />
+    <rect x="170" y="265" width="10" height="10" fill="#09090B" />
+    <rect x="190" y="265" width="10" height="10" fill="#09090B" />
+    <rect x="210" y="265" width="10" height="10" fill="#09090B" />
+    <rect x="230" y="265" width="10" height="10" fill="#09090B" />
+  </g>
+  
+  <g fill="#A1A1AA">
+    <path d="M 80 340 L 200 340 L 200 360 L 80 360 Z" />
+    <rect x="90" y="345" width="10" height="10" fill="#09090B" />
+    <rect x="110" y="345" width="10" height="10" fill="#09090B" />
+    <rect x="130" y="345" width="10" height="10" fill="#09090B" />
+    <rect x="150" y="345" width="10" height="10" fill="#09090B" />
+    <rect x="170" y="345" width="10" height="10" fill="#09090B" />
+    <rect x="190" y="345" width="10" height="10" fill="#09090B" />
+  </g>
+  
+  <!-- White Star point -->
+  <path d="M 380 210 Q 400 210 400 190 Q 400 210 420 210 Q 400 210 400 230 Q 400 210 380 210 Z" fill="#FAFAFA" />
 </svg>

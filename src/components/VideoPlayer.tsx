@@ -1,5 +1,7 @@
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import PlayerControlLayer from '@/components/video-player/PlayerControlLayer';
+import PlayerControlLayer, {
+  type PlayerSourceOption,
+} from '@/components/video-player/PlayerControlLayer';
 import { cn } from '@/lib/utils';
 import {
   MediaPlayer,
@@ -39,6 +41,29 @@ const isEditableTarget = (target: EventTarget | null) => {
 
 const hasPlayableSource = (episode: EpisodeSelectionDetail | null | undefined) =>
   Boolean(episode?.linkM3u8?.trim() || episode?.linkEmbed?.trim());
+
+const normalizeSourceName = (sourceName: string | undefined) => sourceName?.trim() ?? '';
+
+const isSameEpisodeSource = (
+  episode: EpisodeSelectionDetail,
+  selectedEpisode: EpisodeSelectionDetail,
+) => {
+  if (episode.ep !== selectedEpisode.ep) return false;
+
+  const selectedM3u8 = selectedEpisode.linkM3u8?.trim();
+  const episodeM3u8 = episode.linkM3u8?.trim();
+  if (selectedM3u8 && episodeM3u8) {
+    return selectedM3u8 === episodeM3u8;
+  }
+
+  const selectedEmbed = selectedEpisode.linkEmbed?.trim();
+  const episodeEmbed = episode.linkEmbed?.trim();
+  if (selectedEmbed && episodeEmbed) {
+    return selectedEmbed === episodeEmbed;
+  }
+
+  return false;
+};
 
 const HLS_TYPE_HINT = 'application/x-mpegurl';
 
@@ -104,24 +129,75 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
     pointer: rootPointer,
   } = useMediaStore(mediaPlayerRef);
 
+  const playablePlaylist = useMemo(
+    () =>
+      playlist.filter((episode): episode is EpisodeSelectionDetail => hasPlayableSource(episode)),
+    [playlist],
+  );
+
+  const episodesBySource = useMemo(() => {
+    const sourceMap = new Map<string, EpisodeSelectionDetail[]>();
+    for (const episode of playablePlaylist) {
+      const sourceName = normalizeSourceName(episode.serverName);
+      if (!sourceName) continue;
+      const sourceEpisodes = sourceMap.get(sourceName) ?? [];
+      sourceEpisodes.push(episode);
+      sourceMap.set(sourceName, sourceEpisodes);
+    }
+    return sourceMap;
+  }, [playablePlaylist]);
+
+  const activeSourceName = useMemo(() => {
+    if (!selectedEpisode) return '';
+
+    const explicitSource = normalizeSourceName(selectedEpisode.serverName);
+    if (explicitSource && episodesBySource.has(explicitSource)) {
+      return explicitSource;
+    }
+
+    const matchedEpisode = playablePlaylist.find((episode) =>
+      isSameEpisodeSource(episode, selectedEpisode),
+    );
+    return normalizeSourceName(matchedEpisode?.serverName);
+  }, [episodesBySource, playablePlaylist, selectedEpisode]);
+
+  const activeSourcePlaylist = useMemo(() => {
+    if (activeSourceName) {
+      return episodesBySource.get(activeSourceName) ?? [];
+    }
+    return playablePlaylist;
+  }, [activeSourceName, episodesBySource, playablePlaylist]);
+
+  const sourceOptions = useMemo<PlayerSourceOption[]>(() => {
+    if (!episodesBySource.size) return [];
+
+    const selectedEp = selectedEpisode?.ep;
+    return Array.from(episodesBySource.entries()).map(([name, sourceEpisodes]) => {
+      const hasCurrentEpisode = selectedEp
+        ? sourceEpisodes.some((episode) => episode.ep === selectedEp)
+        : true;
+
+      return {
+        name,
+        active: name === activeSourceName,
+        available: hasCurrentEpisode,
+        unavailableReason: hasCurrentEpisode ? undefined : 'Nguồn này chưa có tập hiện tại',
+      };
+    });
+  }, [activeSourceName, episodesBySource, selectedEpisode?.ep]);
+
   const currentEpisodeIndex = useMemo(() => {
     if (!selectedEpisode) return -1;
-    const indexBySource = playlist.findIndex((episode) => {
-      if (episode.ep !== selectedEpisode.ep) return false;
-      if (selectedEpisode.linkM3u8 && episode.linkM3u8) {
-        return selectedEpisode.linkM3u8 === episode.linkM3u8;
-      }
-      if (selectedEpisode.linkEmbed && episode.linkEmbed) {
-        return selectedEpisode.linkEmbed === episode.linkEmbed;
-      }
-      return false;
-    });
+    const indexBySource = activeSourcePlaylist.findIndex((episode) =>
+      isSameEpisodeSource(episode, selectedEpisode),
+    );
     if (indexBySource >= 0) return indexBySource;
-    return playlist.findIndex((episode) => episode.ep === selectedEpisode.ep);
-  }, [playlist, selectedEpisode]);
+    return activeSourcePlaylist.findIndex((episode) => episode.ep === selectedEpisode.ep);
+  }, [activeSourcePlaylist, selectedEpisode]);
 
   const hasPreviousEpisode = currentEpisodeIndex > 0;
-  const hasNextEpisode = currentEpisodeIndex >= 0 && currentEpisodeIndex < playlist.length - 1;
+  const hasNextEpisode =
+    currentEpisodeIndex >= 0 && currentEpisodeIndex < activeSourcePlaylist.length - 1;
 
   const emitEpisodeSelection = useCallback((episode: EpisodeSelectionDetail) => {
     window.dispatchEvent(new CustomEvent('episodeSelected', { detail: episode }));
@@ -162,11 +238,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
 
   const goToEpisodeIndex = useCallback(
     (index: number) => {
-      const episode = playlist[index];
+      const episode = activeSourcePlaylist[index];
       if (!episode || !hasPlayableSource(episode)) return;
       emitEpisodeSelection(episode);
     },
-    [emitEpisodeSelection, playlist],
+    [activeSourcePlaylist, emitEpisodeSelection],
   );
 
   const goToPreviousEpisode = useCallback(() => {
@@ -178,6 +254,25 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
     if (!hasNextEpisode) return;
     goToEpisodeIndex(currentEpisodeIndex + 1);
   }, [currentEpisodeIndex, goToEpisodeIndex, hasNextEpisode]);
+
+  const switchEpisodeSource = useCallback(
+    (sourceName: string) => {
+      const normalizedSource = normalizeSourceName(sourceName);
+      if (!selectedEpisode || !normalizedSource || normalizedSource === activeSourceName) return;
+
+      const targetEpisode = episodesBySource
+        .get(normalizedSource)
+        ?.find((episode) => episode.ep === selectedEpisode.ep && hasPlayableSource(episode));
+
+      if (!targetEpisode) {
+        setStreamHint(`Nguồn ${normalizedSource} chưa có ${getEpisodeLabel(selectedEpisode)}.`);
+        return;
+      }
+
+      emitEpisodeSelection(targetEpisode);
+    },
+    [activeSourceName, emitEpisodeSelection, episodesBySource, selectedEpisode],
+  );
 
   const activateEmbedFallback = useCallback(
     (reason: string) => {
@@ -465,8 +560,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
 
   // Auto-select the first episode on mount (no autoplay, no scroll)
   useEffect(() => {
-    if (hasInitialized.current || !playlist.length) return;
-    const first = playlist[0];
+    if (hasInitialized.current || !playablePlaylist.length) return;
+    const first = playablePlaylist[0];
     if (!first || !hasPlayableSource(first)) return;
     hasInitialized.current = true;
     applyEpisodeSelection(first);
@@ -476,7 +571,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
         detail: { ...first, autoSelect: true },
       }),
     );
-  }, [playlist, applyEpisodeSelection]);
+  }, [playablePlaylist, applyEpisodeSelection]);
 
   useEffect(() => {
     const onEpisodeSelected = (event: Event) => {
@@ -733,7 +828,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
             <MediaPlayer
               ref={mediaPlayerRef}
               title={getEpisodeLabel(selectedEpisode)}
-              artist="AstroFlim"
+              artist="AstroFilm"
               src={playerSrc}
               load="visible"
               preload="metadata"
@@ -751,6 +846,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
                 episodeLabel={getEpisodeLabel(selectedEpisode)}
                 sourceLabel={sourceLabel}
                 serverName={selectedEpisode.serverName}
+                sourceOptions={sourceOptions}
+                onSourceChange={switchEpisodeSource}
                 isTheaterMode={isTheaterMode}
                 hasPreviousEpisode={hasPreviousEpisode}
                 hasNextEpisode={hasNextEpisode}

@@ -1,7 +1,6 @@
 ---
-import Layout from '@/layouts/Layout.astro';
-import MovieCard from '@/components/MovieCard.astro';
 import FilterPanel from '@/components/FilterPanel.astro';
+import MovieCard from '@/components/MovieCard.astro';
 import {
   Pagination,
   PaginationContent,
@@ -10,12 +9,14 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
+import Layout from '@/layouts/Layout.astro';
+import { CACHE_CONFIGS, getCacheHeaders } from '@/lib/cache';
 import {
+  type ListItem,
   getByCategory,
   listQueryFromRequest,
   parseListQuery,
   toListSearchParams,
-  type ListItem,
 } from '@/lib/phimapi';
 
 const { type } = Astro.params;
@@ -26,6 +27,10 @@ if (!type) {
 const requestUrl = new URL(Astro.request.url);
 const queryInput = listQueryFromRequest(requestUrl.searchParams);
 const query = parseListQuery(queryInput, { limit: 10 });
+
+for (const [key, value] of Object.entries(getCacheHeaders(CACHE_CONFIGS.QUERY_PAGES))) {
+  Astro.response.headers.set(key, value);
+}
 
 const data = await getByCategory(type, query);
 const movies = data.data.items;

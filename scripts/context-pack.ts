@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
-import { parseArgs } from 'node:util';
+import { parseArgs } from 'util';
 
 function parseBooleanValue(rawValue, optionName) {
   const normalized = String(rawValue).trim().toLowerCase();
@@ -34,7 +34,7 @@ function normalizeCliArgs(rawArgs) {
   return { normalizedArgs, inlineRulesOverride };
 }
 
-const { normalizedArgs, inlineRulesOverride } = normalizeCliArgs(process.argv.slice(2));
+const { normalizedArgs, inlineRulesOverride } = normalizeCliArgs(Bun.argv.slice(2));
 
 const { values } = parseArgs({
   args: normalizedArgs,

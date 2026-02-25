@@ -80,8 +80,6 @@ const firstPlayableEpisode = playableEpisodes[0];
 const lastPlayableEpisode = playableEpisodes[playableEpisodes.length - 1];
 const hasEpisodes = totalEpisodeCount > 0;
 const hasPlayableEpisodes = playableEpisodes.length > 0;
-const firstPlayableLabel = firstPlayableEpisode?.label ?? 'Chọn tập để phát';
-const lastPlayableLabel = lastPlayableEpisode?.label ?? 'Chọn tập để phát';
 ---
 
 <!-- Hero Section -->
@@ -315,7 +313,7 @@ const lastPlayableLabel = lastPlayableEpisode?.label ?? 'Chọn tập để phá
 <WatchDock
     client:load
     defaultEpisode={firstPlayableEpisode}
-    firstPlayableLabel={firstPlayableLabel}
+    playlist={playableEpisodes}
 />
 
 <!-- Episode Selection -->

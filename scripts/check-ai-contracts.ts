@@ -1,14 +1,15 @@
 #!/usr/bin/env bun
 import path from 'node:path';
-import { parseArgs } from 'node:util';
+import { parseArgs } from 'util';
 
 const { values } = parseArgs({
-  args: process.argv.slice(2),
+  args: Bun.argv,
   options: {
     src: { type: 'string', default: 'src' },
     help: { type: 'boolean', short: 'h', default: false },
   },
   strict: true,
+  allowPositionals: true,
 });
 
 if (values.help) {

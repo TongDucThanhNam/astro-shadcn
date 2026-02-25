@@ -14,8 +14,10 @@ import vercel from '@astrojs/vercel';
 // https://astro.build/config
 export default defineConfig({
   prefetch: {
-    prefetchAll: true,
-    defaultStrategy: 'hover',
+    // Movie grids create hundreds of links; global prefetch causes wasted SSR traffic.
+    // Keep navigation explicit instead of opportunistic hover prefetching.
+    prefetchAll: false,
+    defaultStrategy: 'tap',
   },
   integrations: [
     react(),
@@ -53,6 +55,20 @@ export default defineConfig({
     isr: {
       // caches all pages on first request, expires after 10 minutes
       expiration: 60 * 10,
+      // Optional on-demand invalidation (x-prerender-revalidate).
+      // Keep secret in Vercel env: VERCEL_ISR_BYPASS_TOKEN
+      bypassToken: process.env.VERCEL_ISR_BYPASS_TOKEN,
+      // ISR rewrite uses x_astro_path and strips query params in Astro.request.url.
+      // Keep query-driven pages/endpoints on normal serverless rendering.
+      exclude: [
+        '/',
+        '/[page]',
+        '/tim-kiem/[keyword]',
+        '/danh-sach/the-loai/[type]',
+        '/danh-sach/quoc-gia/[type]',
+        '/danh-sach/nam/[year]',
+        /^\/api\/sections\/\[[^\]]+\]$/i,
+      ],
     },
     // Enable Vercel Image Optimization API
     imageService: false,

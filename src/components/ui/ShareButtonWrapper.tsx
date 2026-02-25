@@ -24,7 +24,7 @@ const InstagramIcon = ({ className }: { className?: string }) => (
 const ShareButtonWrapper: React.FC<ShareButtonWrapperProps> = ({ movie, className }) => {
   const [feedback, setFeedback] = useState('');
   const feedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const shareText = `Xem phim "${movie.name}"${movie.year ? ` (${movie.year})` : ''} trên AstroFlim`;
+  const shareText = `Xem phim "${movie.name}"${movie.year ? ` (${movie.year})` : ''} trên AstroFilm`;
   const popupOptions = 'width=640,height=720,noopener,noreferrer';
 
   const getShareUrl = useCallback(() => {

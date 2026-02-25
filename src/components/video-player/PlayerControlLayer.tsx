@@ -24,6 +24,7 @@ import {
   Camera,
   Cast,
   Check,
+  ChevronDown,
   ChevronRight,
   Copy,
   Expand,
@@ -70,6 +71,17 @@ export type PlayerControlLayerProps = {
   autoAdvance?: boolean;
   /** Toggle auto-advance */
   onAutoAdvanceChange?: (v: boolean) => void;
+  /** Source switch options for the current episode */
+  sourceOptions?: PlayerSourceOption[];
+  /** Switch to a selected source */
+  onSourceChange?: (sourceName: string) => void;
+};
+
+export type PlayerSourceOption = {
+  name: string;
+  active: boolean;
+  available: boolean;
+  unavailableReason?: string;
 };
 
 /* ── YouTube-style icon button ── */
@@ -108,10 +120,13 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
   hasNextEpisode,
   autoAdvance,
   onAutoAdvanceChange,
+  sourceOptions,
+  onSourceChange,
 }) => {
   /* ── Local state ── */
   const [contextMenu, setContextMenu] = useState<ContextMenuPos>(null);
   const [settingsView, setSettingsView] = useState<SettingsView>(null);
+  const [isSourceMenuOpen, setIsSourceMenuOpen] = useState(false);
   const [loopEnabled, setLoopEnabled] = useState(false);
   const [clickIndicator, setClickIndicator] = useState<'play' | 'pause' | null>(null);
   const [showStats, setShowStats] = useState(false);
@@ -119,6 +134,7 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
 
   const contextMenuRef = useRef<HTMLDivElement>(null);
   const settingsRef = useRef<HTMLDivElement>(null);
+  const sourceMenuRef = useRef<HTMLDivElement>(null);
 
   /* ── Player state ── */
   const player = useMediaPlayer();
@@ -170,6 +186,10 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
   const remoteDeviceName = remotePlaybackInfo?.deviceName?.trim() || 'Thiết bị';
   const remoteLabel = isGoogleCastConnected ? 'Google Cast' : 'AirPlay';
   const canInteract = canPlay && !error;
+  const canSwitchSources = Boolean(onSourceChange && (sourceOptions?.length ?? 0) > 1);
+  const activeSource = sourceOptions?.find((option) => option.active);
+  const sourceMenuLabel = activeSource?.name || serverName || 'Nguồn phát';
+  const hasSourceBadge = Boolean(activeSource?.name || serverName);
 
   const finiteDuration = Number.isFinite(duration) && duration > 0 ? duration : 0;
   const bufferedPercent = finiteDuration
@@ -254,6 +274,29 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
     window.addEventListener('click', handleClick, true);
     return () => window.removeEventListener('click', handleClick, true);
   }, [settingsView]);
+
+  useEffect(() => {
+    if (!isSourceMenuOpen) return;
+    const handleClick = (e: MouseEvent) => {
+      if (sourceMenuRef.current && !sourceMenuRef.current.contains(e.target as Node)) {
+        setIsSourceMenuOpen(false);
+      }
+    };
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsSourceMenuOpen(false);
+    };
+    window.addEventListener('click', handleClick, true);
+    window.addEventListener('keydown', handleKey);
+    return () => {
+      window.removeEventListener('click', handleClick, true);
+      window.removeEventListener('keydown', handleKey);
+    };
+  }, [isSourceMenuOpen]);
+
+  useEffect(() => {
+    if (canSwitchSources) return;
+    setIsSourceMenuOpen(false);
+  }, [canSwitchSources]);
 
   const copyToClipboard = useCallback(async (text: string, label?: string) => {
     try {
@@ -353,10 +396,83 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                   {sourceLabel}
                 </span>
               )}
-              {serverName && (
-                <span className="rounded-sm bg-[#DFE104]/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#DFE104] backdrop-blur-sm">
-                  {serverName}
-                </span>
+              {canSwitchSources ? (
+                <div className="relative" ref={sourceMenuRef}>
+                  <button
+                    type="button"
+                    className={cn(
+                      'inline-flex max-w-[220px] items-center gap-1.5 rounded-sm border border-[#DFE104]/60 bg-[#DFE104]/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#DFE104] backdrop-blur-sm transition-colors',
+                      'hover:bg-[#DFE104]/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104]/60',
+                    )}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSettingsView(null);
+                      setIsSourceMenuOpen((prev) => !prev);
+                    }}
+                    aria-expanded={isSourceMenuOpen}
+                    aria-label="Đổi nguồn phát"
+                  >
+                    <Server className="h-3 w-3 shrink-0" />
+                    <span className="truncate">{sourceMenuLabel}</span>
+                    <ChevronDown
+                      className={cn(
+                        'h-3 w-3 shrink-0 transition-transform',
+                        isSourceMenuOpen && 'rotate-180',
+                      )}
+                    />
+                  </button>
+                  <AnimatePresence>
+                    {isSourceMenuOpen && sourceOptions && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.96, y: -4 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.96, y: -4 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute right-0 top-7 z-30 min-w-[220px] overflow-hidden rounded-md border border-white/10 bg-[#111111]/95 py-1.5 shadow-2xl backdrop-blur-md"
+                      >
+                        {sourceOptions.map((source) => {
+                          const isDisabled = !source.available || source.active;
+                          return (
+                            <button
+                              key={source.name}
+                              type="button"
+                              disabled={isDisabled}
+                              className={cn(
+                                'flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-[11px] font-bold uppercase tracking-wide transition-colors',
+                                source.active
+                                  ? 'text-[#DFE104]'
+                                  : 'text-white/90 hover:bg-white/10 hover:text-white',
+                                !source.available &&
+                                  'cursor-not-allowed text-white/40 hover:bg-transparent hover:text-white/40',
+                              )}
+                              onClick={() => {
+                                if (isDisabled || !onSourceChange) return;
+                                onSourceChange(source.name);
+                                setIsSourceMenuOpen(false);
+                              }}
+                            >
+                              <div className="min-w-0">
+                                <p className="truncate">{source.name}</p>
+                                {!source.available && (
+                                  <p className="mt-0.5 truncate text-[10px] font-medium normal-case tracking-normal text-white/45">
+                                    {source.unavailableReason || 'Chưa có tập này'}
+                                  </p>
+                                )}
+                              </div>
+                              {source.active && <Check className="h-3.5 w-3.5 shrink-0" />}
+                            </button>
+                          );
+                        })}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                hasSourceBadge && (
+                  <span className="rounded-sm bg-[#DFE104]/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#DFE104] backdrop-blur-sm">
+                    {sourceMenuLabel}
+                  </span>
+                )
               )}
             </div>
           </Controls.Group>
@@ -490,61 +606,6 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
 
           {/* Right side */}
           <div className="flex items-center gap-0.5">
-            {/* Auto-advance toggle */}
-            {hasNextEpisode && autoAdvance !== undefined && onAutoAdvanceChange && (
-              <button
-                type="button"
-                className={cn(
-                  'hidden items-center gap-1 rounded-sm px-2 py-1 text-[10px] font-bold uppercase tracking-wide transition-colors sm:inline-flex',
-                  autoAdvance
-                    ? 'bg-[#DFE104] text-[#09090B]'
-                    : 'bg-white/10 text-white/60 hover:bg-white/20',
-                )}
-                onClick={() => onAutoAdvanceChange(!autoAdvance)}
-                title={autoAdvance ? 'Auto-advance đang bật' : 'Auto-advance đang tắt'}
-              >
-                {autoAdvance ? 'Auto' : 'Auto ✕'}
-              </button>
-            )}
-
-            {/* Captions toggle */}
-            {captionOptions.length > 1 && (
-              <CaptionButton
-                className={cn(YT_ICON_BTN, 'hidden sm:inline-flex')}
-                aria-label="Phụ đề"
-                title="Phụ đề (C)"
-                disabled={!canInteract}
-              >
-                <MessageSquareText className="h-[22px] w-[22px]" />
-              </CaptionButton>
-            )}
-
-            {/* Screenshot */}
-            <button
-              type="button"
-              className={cn(YT_ICON_BTN, 'hidden lg:inline-flex')}
-              aria-label="Chụp ảnh màn hình"
-              title="Chụp ảnh màn hình"
-              onClick={takeScreenshot}
-              disabled={!canInteract}
-            >
-              <Camera className="h-[20px] w-[20px]" />
-            </button>
-
-            {/* Reload source */}
-            <button
-              type="button"
-              className={cn(YT_ICON_BTN, 'hidden sm:inline-flex')}
-              aria-label="Tải lại nguồn phát"
-              title="Tải lại nguồn (R)"
-              disabled={!canInteract}
-              onClick={() => {
-                window.dispatchEvent(new KeyboardEvent('keydown', { key: 'r', bubbles: true }));
-              }}
-            >
-              <RefreshCw className="h-[18px] w-[18px]" />
-            </button>
-
             {/* Settings gear */}
             <div className="relative" ref={settingsRef}>
               <button
@@ -552,6 +613,7 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                 className={cn(YT_ICON_BTN, settingsView && 'text-white')}
                 onClick={(e) => {
                   e.stopPropagation();
+                  setIsSourceMenuOpen(false);
                   setSettingsView((prev) => (prev ? null : 'main'));
                 }}
                 aria-label="Cài đặt"

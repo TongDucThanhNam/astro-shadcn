@@ -68,7 +68,7 @@ const getHeroMetaTokens = (item: FeaturedItem) => {
     {
         hasFeatured ? (
             <div class="relative overflow-hidden border-2 border-[#3F3F46] bg-[#09090B]" data-carousel="hero">
-                <div class="relative min-h-[22rem] overflow-hidden sm:min-h-[28rem] md:min-h-[32rem] lg:min-h-[34rem]">
+                <div class="relative min-h-[27rem] overflow-hidden sm:min-h-[28rem] md:min-h-[32rem] lg:min-h-[34rem]">
                     {featured.map((item, index) => (
                         <article
                             class={`absolute inset-0 h-full w-full transition-opacity duration-1000 ${
@@ -107,41 +107,41 @@ const getHeroMetaTokens = (item: FeaturedItem) => {
                                 <div class="pointer-events-none absolute inset-y-0 left-0 w-[72%] bg-gradient-to-r from-[#09090B]/88 via-[#09090B]/54 to-transparent" />
                             </div>
 
-                            <div class="relative grid h-full grid-rows-[auto_1fr_auto] px-4 pb-14 pt-10 sm:px-8 sm:pb-16 md:px-12 lg:px-16">
+                            <div class="relative grid h-full grid-rows-[auto_1fr_auto] px-4 pb-16 pt-6 sm:px-8 sm:pb-16 sm:pt-10 md:px-12 lg:px-16">
                                 <div class="flex items-center justify-between gap-3">
                                     <span class="inline-flex border border-[#DFE104] bg-[#DFE104] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.24em] text-[#09090B] sm:px-4 sm:py-1.5 sm:text-xs">
                                         Mới cập nhật
                                     </span>
-                                    <span class="hidden border border-[#3F3F46] bg-[#09090B]/75 px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] text-[#A1A1AA] sm:inline-flex">
+                                    <span class="inline-flex border border-[#3F3F46] bg-[#09090B]/75 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#A1A1AA] sm:text-xs sm:tracking-[0.2em]">
                                         {String(item.year)}
                                     </span>
                                 </div>
 
                                 <div class="self-end space-y-3 pb-4 sm:space-y-4 sm:pb-5">
-                                    <div class="mx-auto w-full max-w-[20rem] space-y-2 sm:mx-0 sm:max-w-[46rem] sm:space-y-3 min-h-[8.5rem] sm:min-h-[11rem] lg:min-h-[13rem]">
-                                        <h1 class="max-w-[14ch] line-clamp-2 text-3xl font-bold uppercase tracking-tighter leading-[0.92] text-[#FAFAFA] drop-shadow-[0_2px_0_rgba(0,0,0,0.35)] sm:max-w-[16ch] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
+                                    <div class="w-full max-w-[20rem] space-y-2 sm:mx-0 sm:max-w-[46rem] sm:space-y-3 min-h-[8.5rem] sm:min-h-[11rem] lg:min-h-[13rem]">
+                                        <h1 class="max-w-[16ch] line-clamp-2 text-[1.8rem] font-bold uppercase tracking-tight leading-[0.96] text-[#FAFAFA] drop-shadow-[0_2px_0_rgba(0,0,0,0.35)] sm:max-w-[16ch] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
                                             {item.name}
                                         </h1>
-                                        <p class="line-clamp-1 min-h-[1.25rem] text-xs uppercase tracking-[0.22em] text-[#A1A1AA] sm:min-h-[1.5rem] sm:text-sm md:text-base">
+                                        <p class="line-clamp-2 min-h-[1.25rem] text-[11px] uppercase tracking-[0.16em] text-[#A1A1AA] sm:line-clamp-1 sm:min-h-[1.5rem] sm:text-sm sm:tracking-[0.22em] md:text-base">
                                             {item.origin_name}
                                         </p>
                                     </div>
 
-                                    <div class="flex min-h-[1.8rem] flex-wrap items-center gap-2">
+                                    <div class="flex min-h-[1.8rem] flex-wrap items-center gap-1.5 sm:gap-2">
                                         {getHeroMetaTokens(item).map((token) => (
-                                            <span class="inline-flex items-center border border-[#3F3F46] bg-[#09090B]/82 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#FAFAFA] sm:px-2.5">
+                                            <span class="inline-flex items-center border border-[#3F3F46] bg-[#09090B]/82 px-2 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-[#FAFAFA] sm:px-2.5 sm:text-[10px] sm:tracking-[0.16em]">
                                                 {token}
                                             </span>
                                         ))}
                                     </div>
                                 </div>
 
-                                <div class="flex flex-wrap items-center justify-center gap-3 sm:justify-start sm:gap-4">
+                                <div class="flex flex-col items-stretch gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-start sm:gap-4">
                                     <a
                                         href={`/phim/${item.slug}?autoplay=1`}
                         id="watchBtn"
                         type="button"
-                        class="flex-1 sm:flex-none uppercase tracking-tighter font-bold bg-[#DFE104] text-black px-5 py-2.5 md:px-6 md:py-3 hover:scale-105 transition-all inline-flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B] min-w-[140px]"
+                        class="w-full sm:w-auto sm:flex-none uppercase tracking-tighter font-bold bg-[#DFE104] text-black px-5 py-3 md:px-6 md:py-3 hover:scale-105 transition-all inline-flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B] min-h-11 min-w-[140px]"
                     >
                         <svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M8 5v14l11-7z"/>
@@ -150,7 +150,7 @@ const getHeroMetaTokens = (item: FeaturedItem) => {
                     </a>
                                     <a
                                         href={`/phim/${item.slug}?autoplay=1`}
-                                        class="inline-flex items-center justify-center gap-2 border-2 border-[#3F3F46] bg-[#09090B]/74 px-6 py-2.5 text-xs font-bold uppercase tracking-[0.2em] text-[#FAFAFA] transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B] focus:outline-none focus:ring-2 focus:ring-[#DFE104] focus:ring-offset-2 focus:ring-offset-[#09090B] sm:px-8 sm:py-3 sm:text-sm"
+                                        class="inline-flex w-full sm:w-auto items-center justify-center gap-2 border-2 border-[#3F3F46] bg-[#09090B]/74 px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-[#FAFAFA] transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B] focus:outline-none focus:ring-2 focus:ring-[#DFE104] focus:ring-offset-2 focus:ring-offset-[#09090B] min-h-11 sm:px-8 sm:py-3 sm:text-sm sm:tracking-[0.2em]"
                                         tabindex={index === 0 ? "0" : "-1"}
                                     >
                                         Chi tiết
@@ -163,7 +163,7 @@ const getHeroMetaTokens = (item: FeaturedItem) => {
 
                 {featured.length > 1 && (
                     <>
-                        <div class="pointer-events-auto absolute inset-y-0 left-0 z-40 flex items-center px-2 sm:px-3">
+                        <div class="pointer-events-auto absolute inset-y-0 left-0 z-40 hidden items-center px-2 sm:flex sm:px-3">
                             <button
                                 type="button"
                                 class="z-50 inline-flex h-10 w-10 items-center justify-center border border-[#3F3F46] bg-[#09090B]/82 text-[#FAFAFA] backdrop-blur-sm transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B] focus:outline-none focus:ring-2 focus:ring-[#DFE104] focus:ring-offset-2 focus:ring-offset-[#09090B] sm:h-11 sm:w-11"
@@ -175,7 +175,7 @@ const getHeroMetaTokens = (item: FeaturedItem) => {
                                 </svg>
                             </button>
                         </div>
-                        <div class="pointer-events-auto absolute inset-y-0 right-0 z-40 flex items-center px-2 sm:px-3">
+                        <div class="pointer-events-auto absolute inset-y-0 right-0 z-40 hidden items-center px-2 sm:flex sm:px-3">
                             <button
                                 type="button"
                                 class="z-50 inline-flex h-10 w-10 items-center justify-center border border-[#3F3F46] bg-[#09090B]/82 text-[#FAFAFA] backdrop-blur-sm transition-all duration-300 hover:border-[#DFE104] hover:bg-[#DFE104] hover:text-[#09090B] focus:outline-none focus:ring-2 focus:ring-[#DFE104] focus:ring-offset-2 focus:ring-offset-[#09090B] sm:h-11 sm:w-11"
@@ -204,7 +204,7 @@ const getHeroMetaTokens = (item: FeaturedItem) => {
                                 ))}
                             </div>
                         </div>
-                        <div class="pointer-events-none absolute bottom-4 right-4 z-40 border border-[#3F3F46] bg-[#09090B]/80 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#A1A1AA] backdrop-blur-sm sm:px-4 sm:py-2 sm:text-xs">
+                        <div class="pointer-events-none absolute bottom-3 right-3 z-40 border border-[#3F3F46] bg-[#09090B]/80 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.16em] text-[#A1A1AA] backdrop-blur-sm sm:bottom-4 sm:right-4 sm:px-4 sm:py-2 sm:text-xs sm:tracking-[0.2em]">
                             <span class="text-[#DFE104]" data-current>1</span> / <span data-total>{featured.length}</span>
                         </div>
                     </>
@@ -227,6 +227,8 @@ const getHeroMetaTokens = (item: FeaturedItem) => {
                 const nextButton = heroCarousel.querySelector('[data-next]');
                 const currentIndicator = heroCarousel.querySelector('[data-current]');
                 let activeIndex = 0;
+                let touchStartX = 0;
+                let touchDeltaX = 0;
 
                 const updateIndicators = () => {
                     if (currentIndicator) {
@@ -268,6 +270,7 @@ const getHeroMetaTokens = (item: FeaturedItem) => {
 
                 const handleNext = () => toggleSlide(activeIndex + 1);
                 const handlePrev = () => toggleSlide(activeIndex - 1);
+                const SWIPE_THRESHOLD_PX = 44;
 
                 let autoIntervalId;
                 const clearAuto = () => {
@@ -306,6 +309,23 @@ const getHeroMetaTokens = (item: FeaturedItem) => {
                         restartAuto();
                     }
                 });
+                heroCarousel.addEventListener('touchstart', (event) => {
+                    touchStartX = event.changedTouches[0]?.clientX ?? 0;
+                    touchDeltaX = 0;
+                }, { passive: true });
+                heroCarousel.addEventListener('touchmove', (event) => {
+                    const currentX = event.changedTouches[0]?.clientX ?? touchStartX;
+                    touchDeltaX = currentX - touchStartX;
+                }, { passive: true });
+                heroCarousel.addEventListener('touchend', () => {
+                    if (Math.abs(touchDeltaX) < SWIPE_THRESHOLD_PX) return;
+                    if (touchDeltaX < 0) {
+                        handleNext();
+                    } else {
+                        handlePrev();
+                    }
+                    restartAuto();
+                }, { passive: true });
 
                 heroCarousel.setAttribute('tabindex', '0');
                 nextButton?.addEventListener('click', restartAuto);

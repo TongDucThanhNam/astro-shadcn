@@ -5,6 +5,10 @@ export interface CacheConfig {
 }
 
 export const CACHE_CONFIGS = {
+  QUERY_PAGES: {
+    maxAge: 300, // 5 minutes
+    staleWhileRevalidate: 1800, // 30 minutes
+  },
   SECTION_DATA: {
     maxAge: 14400, // 4 hours
     staleWhileRevalidate: 86400, // 24 hours
