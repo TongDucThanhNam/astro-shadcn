@@ -10,7 +10,7 @@ import {
   type MediaProviderAdapter,
   type PlayerSrc,
   isHLSProvider,
-  useMediaStore,
+  useMediaState,
 } from '@vidstack/react';
 import { motion, useSpring, useTransform } from 'framer-motion';
 import type React from 'react';
@@ -122,12 +122,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const lastSavedTimeRef = useRef<number>(0);
   const hlsFallbackEpisodeRef = useRef<string | null>(null);
-  const {
-    fullscreen: isPlayerFullscreen,
-    pictureInPicture: isPlayerPiP,
-    canOrientScreen: canRootOrientScreen,
-    pointer: rootPointer,
-  } = useMediaStore(mediaPlayerRef);
+  const isPlayerFullscreen = useMediaState('fullscreen', mediaPlayerRef);
+  const isPlayerPiP = useMediaState('pictureInPicture', mediaPlayerRef);
+  const canRootOrientScreen = useMediaState('canOrientScreen', mediaPlayerRef);
+  const rootPointer = useMediaState('pointer', mediaPlayerRef);
 
   const playablePlaylist = useMemo(
     () =>
@@ -275,16 +273,25 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
   );
 
   const activateEmbedFallback = useCallback(
-    (reason: string) => {
+    ({
+      userHint,
+      logMessage,
+    }: {
+      userHint: string | null;
+      logMessage?: string;
+    }) => {
       const fallback = selectedEpisode?.linkEmbed?.trim();
+      if (logMessage) {
+        console.warn(`[VideoPlayer] ${logMessage}`);
+      }
       if (!fallback) {
-        setStreamHint(reason);
+        setStreamHint(userHint);
         return;
       }
 
       const fallbackKey = `${selectedEpisode?.ep ?? 'unknown'}:${selectedEpisode?.linkM3u8 ?? ''}`;
       if (hlsFallbackEpisodeRef.current === fallbackKey && playbackMode === 'embed') {
-        setStreamHint(reason);
+        setStreamHint(userHint);
         return;
       }
 
@@ -292,13 +299,16 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
       setPlaybackMode('embed');
       setIframeSrc(fallback);
       setIsEmbedLoading(true);
-      setStreamHint(reason);
+      setStreamHint(userHint);
     },
     [playbackMode, selectedEpisode],
   );
 
   const switchToEmbedFallback = useCallback(() => {
-    activateEmbedFallback('Đã chuyển sang nguồn dự phòng embed.');
+    activateEmbedFallback({
+      userHint: 'Đã chuyển sang nguồn dự phòng embed.',
+      logMessage: 'Manual fallback triggered by user.',
+    });
   }, [activateEmbedFallback]);
 
   const reloadCurrentSource = useCallback(() => {
@@ -524,13 +534,19 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
       }
 
       if (message.includes('decoder') || message.includes('mpegurl')) {
-        activateEmbedFallback(
-          'HLS không giải mã được trên môi trường hiện tại. Đã chuyển sang embed fallback.',
-        );
+        activateEmbedFallback({
+          userHint:
+            'HLS không giải mã được trên môi trường hiện tại. Đã chuyển sang embed fallback.',
+          logMessage:
+            'HLS decoder/mpegurl runtime error. Switched to embed fallback for compatibility.',
+        });
         return;
       }
 
-      activateEmbedFallback('Nguồn HLS lỗi runtime. Đã chuyển sang embed fallback.');
+      activateEmbedFallback({
+        userHint: null,
+        logMessage: 'Nguồn HLS lỗi runtime. Đã chuyển sang embed fallback.',
+      });
     };
 
     player.addEventListener('error', handlePlayerError);
@@ -549,9 +565,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
         message.includes('ns_error_corrupted_content');
       if (!isViteOptimizeError) return;
 
-      activateEmbedFallback(
-        'Dev server đang lỗi optimize cache (.vite/deps). Đã chuyển sang embed fallback.',
-      );
+      activateEmbedFallback({
+        userHint: 'Dev server đang lỗi optimize cache (.vite/deps). Đã chuyển sang embed fallback.',
+        logMessage: 'Vite optimize deps cache issue detected from unhandledrejection.',
+      });
     };
 
     window.addEventListener('unhandledrejection', handleUnhandledRejection);

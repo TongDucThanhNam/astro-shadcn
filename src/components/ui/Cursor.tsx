@@ -188,11 +188,10 @@ const Cursor: React.FC<CursorProps> = ({ enabled = true }) => {
         style={{
           x: followerSpringX,
           y: followerSpringY,
-          opacity: isVisible ? 1 : 0,
         }}
         animate={{
           scale: cursorMode === 'play' ? 1.7 : cursorMode === 'hover' ? 1.25 : 1,
-          opacity: cursorMode === 'default' ? 0.75 : 0.95,
+          opacity: isVisible ? (cursorMode === 'default' ? 0.75 : 0.95) : 0,
         }}
         transition={{ duration: 0.2, ease: 'easeOut' }}
       >
