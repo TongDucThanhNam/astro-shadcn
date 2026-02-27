@@ -13,10 +13,12 @@ import { Keyboard } from '@phosphor-icons/react/dist/ssr/Keyboard';
 import { LinkSimple as Link2 } from '@phosphor-icons/react/dist/ssr/LinkSimple';
 import { MonitorPlay } from '@phosphor-icons/react/dist/ssr/MonitorPlay';
 import { Repeat } from '@phosphor-icons/react/dist/ssr/Repeat';
+import { SkipBack } from '@phosphor-icons/react/dist/ssr/SkipBack';
 import { SkipForward } from '@phosphor-icons/react/dist/ssr/SkipForward';
 import { SpeakerHigh as Volume2 } from '@phosphor-icons/react/dist/ssr/SpeakerHigh';
 import { StackSimple as Server } from '@phosphor-icons/react/dist/ssr/StackSimple';
 import { Television as Tv } from '@phosphor-icons/react/dist/ssr/Television';
+import { X } from '@phosphor-icons/react/dist/ssr/X';
 import {
   AirPlayButton,
   AudioGainSlider,
@@ -30,6 +32,7 @@ import {
   Time,
   TimeSlider,
   VolumeSlider,
+  isGoogleCastProvider,
   useAudioOptions,
   useCaptionOptions,
   useMediaPlayer,
@@ -281,7 +284,9 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
   const isMuted = muted || volume === 0;
   const audioGainMultiplier = audioGain == null ? 1 : audioGain > 10 ? audioGain / 100 : audioGain;
   const audioGainPercent = Math.round(audioGainMultiplier * 100);
-  const showVolumeHoverSlider = canSetVolume && pointer !== 'coarse';
+  const isTouchUI = pointer === 'coarse';
+  const useCompactControls = isTouchUI || isRemoteActive;
+  const showVolumeHoverSlider = canSetVolume && !isTouchUI;
   const googleCastState =
     remotePlaybackType === 'google-cast'
       ? remotePlaybackState
@@ -471,6 +476,58 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
     }
   }, [player, canAirPlay]);
 
+  const seekBySeconds = useCallback(
+    (deltaSeconds: number) => {
+      if (!player || !Number.isFinite(deltaSeconds) || deltaSeconds === 0) return;
+
+      const currentTime = Number.isFinite(player.currentTime) ? player.currentTime : 0;
+      const maxTime =
+        finiteDuration > 0 ? finiteDuration : Math.max(currentTime + deltaSeconds, currentTime, 0);
+      const nextTime = clamp(currentTime + deltaSeconds, 0, maxTime);
+
+      const remoteApi = player.remote as unknown as { seek?: (time: number) => void };
+      if (typeof remoteApi?.seek === 'function') {
+        remoteApi.seek(nextTime);
+        return;
+      }
+
+      player.currentTime = nextTime;
+    },
+    [player, finiteDuration],
+  );
+
+  const disconnectRemotePlayback = useCallback(() => {
+    if (!player) return;
+
+    const provider = player.provider;
+    if (isGoogleCastProvider(provider)) {
+      try {
+        provider.cast?.endCurrentSession?.(true);
+        setCopiedFeedback('Đã ngắt Google Cast.');
+        setTimeout(() => setCopiedFeedback(null), 2000);
+      } catch {
+        setCopiedFeedback('Không thể ngắt Google Cast lúc này.');
+        setTimeout(() => setCopiedFeedback(null), 2500);
+      }
+      return;
+    }
+
+    if (isAirPlayConnected) {
+      const videoEl = player.el?.querySelector('video');
+      const airPlayVideo = videoEl as
+        | (HTMLVideoElement & { webkitShowPlaybackTargetPicker?: () => void })
+        | null;
+
+      if (typeof airPlayVideo?.webkitShowPlaybackTargetPicker === 'function') {
+        airPlayVideo.webkitShowPlaybackTargetPicker();
+        setCopiedFeedback('Mở AirPlay picker. Chọn thiết bị hiện tại để ngắt.');
+      } else {
+        setCopiedFeedback('Hãy ngắt AirPlay từ thiết bị phát hoặc Control Center.');
+      }
+      setTimeout(() => setCopiedFeedback(null), 2800);
+    }
+  }, [player, isAirPlayConnected]);
+
   /* ── Screenshot ── */
   const takeScreenshot = useCallback(() => {
     if (!player) return;
@@ -578,7 +635,7 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#09090B]/95 via-[#09090B]/55 to-transparent" />
 
         {/* Top-right quick actions (remote playback) */}
-        {(canUseGoogleCast || canUseAirPlay) && (
+        {(canUseGoogleCast || canUseAirPlay) && !isRemoteActive && (
           <Controls.Group className="pointer-events-auto absolute right-3 top-3 z-10 flex items-center gap-1.5">
             {canUseGoogleCast && (
               <div onPointerUp={(event) => event.stopPropagation()}>
@@ -655,25 +712,56 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
 
         {/* ─── Control buttons row ─── */}
         <Controls.Group className="pointer-events-auto relative z-10">
-          <div className="flex h-12 items-stretch bg-[#09090B]/85 backdrop-blur-[12px]">
-            <div className="flex items-stretch">
+          <div
+            className={cn(
+              'flex items-stretch bg-[#09090B]/85 backdrop-blur-[12px]',
+              useCompactControls ? 'h-10' : 'h-12',
+            )}
+          >
+            <div className="flex min-w-0 items-stretch">
               {/* Play / Pause */}
               <PlayButton
-                className={BRUTAL_ICON_BTN}
+                className={cn(BRUTAL_ICON_BTN, useCompactControls && 'h-10 px-3')}
                 aria-label="Phát hoặc tạm dừng"
                 title="Phát/Tạm dừng (K)"
                 disabled={!canInteract}
               >
                 {paused ? (
-                  <SharpPlayIcon className={SHARP_FILL_ICON} />
+                  <SharpPlayIcon className={cn(SHARP_FILL_ICON, useCompactControls && 'h-4 w-4')} />
                 ) : (
-                  <SharpPauseIcon className={SHARP_FILL_ICON} />
+                  <SharpPauseIcon className={cn(SHARP_FILL_ICON, useCompactControls && 'h-4 w-4')} />
                 )}
               </PlayButton>
 
+              {isRemoteActive && (
+                <>
+                  <button
+                    type="button"
+                    className={cn(BRUTAL_ICON_BTN, 'h-10 px-3')}
+                    aria-label="Lùi 10 giây"
+                    title="Lùi 10 giây"
+                    onClick={() => seekBySeconds(-10)}
+                    disabled={!canInteract}
+                  >
+                    <SkipBack className="h-[16px] w-[16px]" />
+                  </button>
+                  <button
+                    type="button"
+                    className={cn(BRUTAL_ICON_BTN, 'h-10 px-3')}
+                    aria-label="Tiến 10 giây"
+                    title="Tiến 10 giây"
+                    onClick={() => seekBySeconds(10)}
+                    disabled={!canInteract}
+                  >
+                    <SkipForward className="h-[16px] w-[16px]" />
+                  </button>
+                </>
+              )}
+
               <div
                 className={cn(
-                  'group/volume flex h-12 items-stretch border-r border-[#3F3F46] bg-transparent',
+                  'group/volume flex items-stretch border-r border-[#3F3F46] bg-transparent',
+                  useCompactControls ? 'h-10' : 'h-12',
                   showVolumeHoverSlider && 'w-[56px] transition-[width] duration-200 ease-out',
                   showVolumeHoverSlider &&
                     'hover:w-[210px] focus-within:w-[210px] data-[open=true]:w-[210px]',
@@ -696,6 +784,7 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                 <MuteButton
                   className={cn(
                     'inline-flex h-12 w-[56px] shrink-0 items-center justify-center text-[#FAFAFA] transition-none hover:bg-[#DFE104] hover:text-[#09090B] focus-visible:outline-none focus-visible:bg-[#DFE104] focus-visible:text-[#09090B] disabled:cursor-not-allowed disabled:text-[#71717A] disabled:hover:bg-transparent disabled:hover:text-[#71717A]',
+                    useCompactControls && 'h-10 w-10',
                     showVolumeHoverSlider && 'border-r border-[#3F3F46]',
                   )}
                   aria-label="Bật hoặc tắt tiếng"
@@ -703,9 +792,19 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                   disabled={!canInteract}
                 >
                   {isMuted ? (
-                    <SharpMutedIcon className={SHARP_STROKE_ICON} />
+                    <SharpMutedIcon
+                      className={cn(
+                        SHARP_STROKE_ICON,
+                        useCompactControls && 'h-[17px] w-[17px] [stroke-width:1.9]',
+                      )}
+                    />
                   ) : (
-                    <SharpVolumeIcon className={SHARP_STROKE_ICON} />
+                    <SharpVolumeIcon
+                      className={cn(
+                        SHARP_STROKE_ICON,
+                        useCompactControls && 'h-[17px] w-[17px] [stroke-width:1.9]',
+                      )}
+                    />
                   )}
                 </MuteButton>
 
@@ -733,10 +832,25 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
               </div>
 
               {/* Time display */}
-              <div className={BRUTAL_TIMECODE}>
+              <div
+                className={cn(
+                  BRUTAL_TIMECODE,
+                  useCompactControls && 'h-10 min-w-0 border-r-0 px-2 text-[13px]',
+                )}
+              >
                 <Time type="current" className="inline" />
-                <span className="px-2.5 text-[#3F3F46]">/</span>
-                <Time type="duration" className="inline text-[#A1A1AA]" />
+                <span
+                  className={cn(
+                    'px-2.5 text-[#3F3F46]',
+                    isTouchUI && 'hidden px-1.5 min-[390px]:inline',
+                  )}
+                >
+                  /
+                </span>
+                <Time
+                  type="duration"
+                  className={cn('inline text-[#A1A1AA]', isTouchUI && 'hidden min-[390px]:inline')}
+                />
               </div>
             </div>
 
@@ -744,12 +858,61 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
 
             {/* Right side */}
             <div className="flex shrink-0 items-stretch">
-              {canSwitchSources ? (
+              {isRemoteActive ? (
+                <>
+                  <span className="hidden h-10 max-w-[220px] items-center border-l border-r border-[#3F3F46] px-3 text-[11px] font-bold uppercase tracking-[0.12em] text-[#A1A1AA] sm:inline-flex">
+                    {remoteLabel}: {remoteDeviceName}
+                  </span>
+
+                  {isGoogleCastConnected && (
+                    <div onPointerUp={(event) => event.stopPropagation()}>
+                      <GoogleCastButton
+                        className={cn(BRUTAL_ICON_BTN, 'h-10 border-r-0 border-l border-[#3F3F46] px-3')}
+                        disabled={!canGoogleCast || googleCastState === 'connecting'}
+                        aria-label="Google Cast"
+                        title={`Google Cast • ${getRemoteStateLabel('google-cast', googleCastState)}`}
+                      >
+                        <Tv className="h-[16px] w-[16px]" />
+                      </GoogleCastButton>
+                    </div>
+                  )}
+
+                  {isAirPlayConnected && (
+                    <div onPointerUp={(event) => event.stopPropagation()}>
+                      <AirPlayButton
+                        className={cn(BRUTAL_ICON_BTN, 'h-10 border-r-0 border-l border-[#3F3F46] px-3')}
+                        disabled={!canAirPlay || airPlayState === 'connecting'}
+                        aria-label="AirPlay"
+                        title={`AirPlay • ${getRemoteStateLabel('airplay', airPlayState)}`}
+                      >
+                        <MonitorPlay className="h-[16px] w-[16px]" />
+                      </AirPlayButton>
+                    </div>
+                  )}
+
+                  <button
+                    type="button"
+                    className={cn(
+                      BRUTAL_ICON_BTN,
+                      'h-10 border-r-0 border-l border-[#3F3F46] px-3 text-[#FAFAFA]',
+                    )}
+                    aria-label={isGoogleCastConnected ? 'Ngắt Google Cast' : 'Ngắt AirPlay'}
+                    title={isGoogleCastConnected ? 'Ngắt Google Cast' : 'Ngắt AirPlay'}
+                    onClick={disconnectRemotePlayback}
+                  >
+                    <X className="h-[15px] w-[15px] shrink-0" />
+                    <span className="hidden text-[10px] font-bold uppercase tracking-[0.12em] sm:inline">
+                      Ngắt
+                    </span>
+                  </button>
+                </>
+              ) : canSwitchSources ? (
                 <div className="relative" ref={sourceMenuRef}>
                   <button
                     type="button"
                     className={cn(
                       BRUTAL_SERVER_BADGE,
+                      isTouchUI && 'h-10 w-10 justify-center border-l border-r px-0',
                       isSourceMenuOpen && 'bg-[#DFE104] text-[#09090B]',
                     )}
                     onClick={(e) => {
@@ -761,11 +924,17 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                     aria-label="Đổi nguồn phát"
                     title="Đổi nguồn phát"
                   >
-                    <span className="h-1.5 w-1.5 shrink-0 bg-current opacity-85" />
-                    <span className="truncate">#{sourceMenuLabel}</span>
-                    <ChevronDown
-                      className={cn('h-3 w-3 shrink-0', isSourceMenuOpen && 'rotate-180')}
-                    />
+                    {isTouchUI ? (
+                      <Server className="h-[16px] w-[16px]" />
+                    ) : (
+                      <>
+                        <span className="h-1.5 w-1.5 shrink-0 bg-current opacity-85" />
+                        <span className="truncate">#{sourceMenuLabel}</span>
+                        <ChevronDown
+                          className={cn('h-3 w-3 shrink-0', isSourceMenuOpen && 'rotate-180')}
+                        />
+                      </>
+                    )}
                   </button>
                   <AnimatePresence>
                     {isSourceMenuOpen && sourceOptions && (
@@ -774,7 +943,10 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.96, y: -4 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute bottom-[calc(100%+4px)] right-0 z-30 min-w-[220px] overflow-hidden border border-[#3F3F46] bg-[#09090B]/95 py-1 shadow-2xl backdrop-blur-md"
+                        className={cn(
+                          'absolute bottom-[calc(100%+4px)] right-0 z-30 min-w-[220px] overflow-hidden border border-[#3F3F46] bg-[#09090B]/95 py-1 shadow-2xl backdrop-blur-md',
+                          isTouchUI && 'w-[min(18rem,calc(100vw-24px))] min-w-0',
+                        )}
                       >
                         {sourceOptions.map((source) => {
                           const isDisabled = !source.available || source.active;
@@ -814,7 +986,8 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                   </AnimatePresence>
                 </div>
               ) : (
-                hasSourceBadge && (
+                hasSourceBadge &&
+                !isTouchUI && (
                   <span className="inline-flex h-12 max-w-[220px] items-center gap-2 border-l border-[#3F3F46] border-r border-[#3F3F46] px-4 text-[11px] font-bold uppercase tracking-[0.14em] text-[#A1A1AA]">
                     <span className="h-1.5 w-1.5 shrink-0 bg-current opacity-85" />
                     <span className="truncate">#{sourceMenuLabel}</span>
@@ -847,6 +1020,7 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                   className={cn(
                     BRUTAL_ICON_BTN,
                     'border-r-0 border-l border-[#3F3F46]',
+                    isTouchUI && 'h-10 px-3',
                     settingsView && 'bg-[#DFE104] text-[#09090B]',
                   )}
                   onClick={(e) => {
@@ -861,6 +1035,7 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                   <Settings
                     className={cn(
                       'h-[20px] w-[20px]',
+                      isTouchUI && 'h-[17px] w-[17px]',
                       settingsView ? 'text-[#09090B]' : 'text-[#FAFAFA]',
                     )}
                     weight="regular"
@@ -1324,6 +1499,7 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                 className={cn(
                   BRUTAL_ICON_BTN,
                   'border-r-0 border-l border-[#3F3F46]',
+                  useCompactControls && 'h-10 px-3',
                   !canFullscreen && 'opacity-40 cursor-not-allowed',
                 )}
                 aria-label="Toàn màn hình"
@@ -1331,9 +1507,19 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                 disabled={!canFullscreen}
               >
                 {fullscreen ? (
-                  <SharpFullscreenExitIcon className={SHARP_STROKE_ICON} />
+                  <SharpFullscreenExitIcon
+                    className={cn(
+                      SHARP_STROKE_ICON,
+                      useCompactControls && 'h-[17px] w-[17px] [stroke-width:1.9]',
+                    )}
+                  />
                 ) : (
-                  <SharpFullscreenIcon className={SHARP_STROKE_ICON} />
+                  <SharpFullscreenIcon
+                    className={cn(
+                      SHARP_STROKE_ICON,
+                      useCompactControls && 'h-[17px] w-[17px] [stroke-width:1.9]',
+                    )}
+                  />
                 )}
               </FullscreenButton>
             </div>
@@ -1538,17 +1724,23 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
         {isRemoteActive && (
           <motion.div
             {...springOverlay}
-            className="pointer-events-none absolute inset-0 z-[3] flex flex-col items-center justify-center gap-3 bg-black/80 text-center"
+            className="pointer-events-none absolute inset-x-0 top-3 z-[3] flex justify-center px-3"
           >
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-white">
+            <div className="flex items-center gap-2 border border-[#3F3F46] bg-[#09090B]/88 px-3 py-1.5 text-[#FAFAFA] backdrop-blur-md">
               {isGoogleCastConnected ? (
-                <Tv className="h-8 w-8" />
+                <Tv className="h-4 w-4" />
               ) : (
-                <MonitorPlay className="h-8 w-8" />
+                <MonitorPlay className="h-4 w-4" />
               )}
+              <div className="text-left">
+                <p className="text-[10px] uppercase tracking-[0.12em] text-[#A1A1AA]">
+                  {remoteLabel}
+                </p>
+                <p className="max-w-[min(50vw,14rem)] truncate text-xs font-semibold">
+                  {remoteDeviceName}
+                </p>
+              </div>
             </div>
-            <p className="text-xs font-medium text-white/60">Đang phát trên {remoteLabel}</p>
-            <p className="text-sm font-semibold text-white">{remoteDeviceName}</p>
           </motion.div>
         )}
       </AnimatePresence>

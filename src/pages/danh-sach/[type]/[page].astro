@@ -1,104 +1,25 @@
 ---
-import Layout from '@/layouts/Layout.astro';
-import MovieCard from '@/components/MovieCard.astro';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
-import { getListByType, type ListItem } from '@/lib/phimapi';
-
 const { type, page } = Astro.params;
 
 if (!type) {
   throw new Error('Missing list type.');
 }
 
-const pageNum = Number(page) > 0 ? Number(page) : 1;
-const data = await getListByType(type, { page: pageNum, limit: 10 });
-const movies = data.data.items;
-const currentPage = pageNum;
-const totalPages = data.data.params.pagination.totalPages;
+const numericPage = Number(page);
+const normalizedPage = Number.isInteger(numericPage) && numericPage > 1 ? numericPage : 1;
 
-function getPageUrl(pageNumber: number) {
-  if (pageNumber === 1) return `/danh-sach/${type}/`;
-  return `/danh-sach/${type}/${pageNumber}`;
+const requestUrl = new URL(Astro.request.url);
+const redirectUrl = new URL(`/danh-sach/${type}`, requestUrl);
+
+for (const [key, value] of requestUrl.searchParams.entries()) {
+  redirectUrl.searchParams.set(key, value);
 }
+
+if (normalizedPage > 1) {
+  redirectUrl.searchParams.set('page', String(normalizedPage));
+} else {
+  redirectUrl.searchParams.delete('page');
+}
+
+return Astro.redirect(`${redirectUrl.pathname}${redirectUrl.search}`, 301);
 ---
-
-<Layout title={`${type} - Trang ${currentPage}`}>
-  <main>
-    <div class="flex flex-col items-center mt-2">
-      <div class="mx-4 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-20">
-        <section class="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-          <div class="container mx-auto px-4 py-8">
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-              {
-                movies.map((item: ListItem, index: number) => (
-                  <MovieCard
-                    index={index}
-                    slug={item.slug}
-                    name={item.name}
-                    image={item.poster_url}
-                    year={item.year.toString()}
-                  />
-                ))
-              }
-            </div>
-
-            <div class="mt-8">
-              <Pagination>
-                <PaginationContent>
-                  {
-                    currentPage > 1 && (
-                      <PaginationItem>
-                        <PaginationPrevious href={getPageUrl(currentPage - 1)} />
-                      </PaginationItem>
-                    )
-                  }
-
-                  <PaginationItem>
-                    <PaginationLink isActive={true} href={getPageUrl(currentPage)}
-                      >{currentPage}</PaginationLink
-                    >
-                  </PaginationItem>
-
-                  {
-                    currentPage < totalPages && (
-                      <PaginationItem>
-                        <PaginationLink href={getPageUrl(currentPage + 1)}>
-                          {currentPage + 1}
-                        </PaginationLink>
-                      </PaginationItem>
-                    )
-                  }
-
-                  {
-                    currentPage < totalPages - 1 && (
-                      <PaginationItem>
-                        <PaginationLink href={getPageUrl(currentPage + 2)}>
-                          {currentPage + 2}
-                        </PaginationLink>
-                      </PaginationItem>
-                    )
-                  }
-
-                  {
-                    currentPage < totalPages && (
-                      <PaginationItem>
-                        <PaginationNext href={getPageUrl(currentPage + 1)} />
-                      </PaginationItem>
-                    )
-                  }
-                </PaginationContent>
-              </Pagination>
-            </div>
-          </div>
-        </section>
-      </div>
-    </div>
-  </main>
-</Layout>
