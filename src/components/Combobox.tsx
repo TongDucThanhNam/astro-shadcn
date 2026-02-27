@@ -1,10 +1,9 @@
 'use client';
 
-import * as React from 'react';
 import { CaretUpDown as ChevronsUpDown } from '@phosphor-icons/react/dist/ssr/CaretUpDown';
 import { Check } from '@phosphor-icons/react/dist/ssr/Check';
+import * as React from 'react';
 
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
   Command,
@@ -15,6 +14,7 @@ import {
   CommandList,
 } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 
 const frameworks = [
   {
@@ -48,9 +48,9 @@ export function ComboboxDemo() {
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          role="combobox"
+          // role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="w-50 justify-between"
           aria-label="Select framework"
         >
           {value
@@ -59,7 +59,7 @@ export function ComboboxDemo() {
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-50 p-0">
         <Command>
           <CommandInput placeholder="Search framework..." />
           <CommandList>

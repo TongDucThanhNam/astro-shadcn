@@ -8,6 +8,7 @@ import {
   type MediaPlayerInstance,
   MediaProvider,
   type MediaProviderAdapter,
+  type MediaRemotePlaybackChangeEventDetail,
   type PlayerSrc,
   isHLSProvider,
   useMediaState,
@@ -404,6 +405,44 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
     }
   }, []);
 
+  const onRemotePlaybackChange = useCallback(
+    ({ type, state }: MediaRemotePlaybackChangeEventDetail) => {
+      if (state === 'connecting') {
+        setStreamHint(
+          type === 'google-cast'
+            ? 'Đang kết nối Google Cast...'
+            : type === 'airplay'
+              ? 'Đang kết nối AirPlay...'
+              : null,
+        );
+        return;
+      }
+
+      if (state === 'connected') {
+        setStreamHint(
+          type === 'google-cast'
+            ? 'Đã kết nối Google Cast.'
+            : type === 'airplay'
+              ? 'Đã kết nối AirPlay.'
+              : null,
+        );
+        return;
+      }
+
+      setStreamHint((current) => {
+        if (!current) return null;
+        const remoteHints = [
+          'Đang kết nối Google Cast...',
+          'Đang kết nối AirPlay...',
+          'Đã kết nối Google Cast.',
+          'Đã kết nối AirPlay.',
+        ];
+        return remoteHints.includes(current) ? null : current;
+      });
+    },
+    [],
+  );
+
   // Save progress to localStorage
   const saveProgress = useCallback(
     (currentTime: number, duration: number) => {
@@ -498,19 +537,30 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
       onGoogleCastPromptError(castEvent.detail);
     };
 
+    const handleRemotePlaybackChange = (event: Event) => {
+      const remotePlaybackEvent = event as Event & {
+        detail?: MediaRemotePlaybackChangeEventDetail;
+      };
+      if (!remotePlaybackEvent.detail) return;
+      onRemotePlaybackChange(remotePlaybackEvent.detail);
+    };
+
     player.addEventListener('google-cast-prompt-open', handlePromptOpen);
     player.addEventListener('google-cast-prompt-close', handlePromptClose);
     player.addEventListener('google-cast-prompt-error', handlePromptError);
+    player.addEventListener('remote-playback-change', handleRemotePlaybackChange);
 
     return () => {
       player.removeEventListener('google-cast-prompt-open', handlePromptOpen);
       player.removeEventListener('google-cast-prompt-close', handlePromptClose);
       player.removeEventListener('google-cast-prompt-error', handlePromptError);
+      player.removeEventListener('remote-playback-change', handleRemotePlaybackChange);
     };
   }, [
     onGoogleCastPromptClose,
     onGoogleCastPromptError,
     onGoogleCastPromptOpen,
+    onRemotePlaybackChange,
     playbackMode,
     playerSrc,
   ]);
@@ -798,7 +848,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
   }, [isTheaterMode, theaterSpring]);
 
   const playerContent = (
-    <div ref={videoSectionRef} className="w-full space-y-1.5 px-0">
+    <div ref={videoSectionRef} className="mx-auto w-full max-w-none space-y-2 px-0">
       <motion.div
         ref={playerFrameRef}
         data-cursor-disabled
@@ -808,7 +858,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
         }}
         onPointerEnter={() => window.dispatchEvent(new Event('cursor:disable-zone'))}
         onPointerLeave={() => window.dispatchEvent(new Event('cursor:enable-zone'))}
-        className="relative overflow-hidden border-2 border-[#3F3F46] bg-[#09090B] cursor-auto w-full"
+        className="relative mx-auto w-full cursor-auto overflow-hidden border-2 border-[#3F3F46] bg-[#09090B] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)]"
       >
         <AspectRatio ratio={16 / 9} className="overflow-hidden bg-[#09090B]">
           {!selectedEpisode ? (
@@ -832,7 +882,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
               />
               {isEmbedLoading ? (
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[#09090B] text-[#A1A1AA]">
-                  <div className="h-1 w-36 overflow-hidden rounded-sm bg-[#27272A]">
+                  <div className="h-1 w-36 overflow-hidden bg-[#27272A]">
                     <div className="h-full w-1/2 animate-pulse bg-[#DFE104]" />
                   </div>
                   <p className="text-xs font-bold uppercase tracking-[0.24em]">
@@ -856,6 +906,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
               onProviderChange={onProviderChange}
               className="group/player relative h-full w-full cursor-auto bg-[#09090B] text-[#FAFAFA]"
             >
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[120px] bg-gradient-to-t from-[#09090B]/95 to-transparent" />
               <MediaProvider className="h-full w-full bg-[#09090B]" />
               <PlayerControlLayer
                 allowFallback={Boolean(selectedEpisode.linkEmbed)}
@@ -895,7 +946,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
   if (isTheaterMode) {
     return createPortal(
       <div
-        className="fixed inset-0 z-[9998] flex items-center justify-center bg-black p-4 sm:p-8"
+        className="fixed inset-0 z-[9998] flex items-center justify-center bg-[#111111] p-4 sm:p-8"
         onClick={(e) => {
           if (e.target === e.currentTarget) setIsTheaterMode(false);
         }}

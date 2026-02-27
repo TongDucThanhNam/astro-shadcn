@@ -1,41 +1,30 @@
 import { cn } from '@/lib/utils';
+import { ArrowClockwise as RefreshCw } from '@phosphor-icons/react/dist/ssr/ArrowClockwise';
 import { Camera } from '@phosphor-icons/react/dist/ssr/Camera';
-import { Broadcast as Cast } from '@phosphor-icons/react/dist/ssr/Broadcast';
-import { Check } from '@phosphor-icons/react/dist/ssr/Check';
 import { CaretDown as ChevronDown } from '@phosphor-icons/react/dist/ssr/CaretDown';
 import { CaretRight as ChevronRight } from '@phosphor-icons/react/dist/ssr/CaretRight';
+import { ChatText as MessageSquareText } from '@phosphor-icons/react/dist/ssr/ChatText';
+import { Check } from '@phosphor-icons/react/dist/ssr/Check';
 import { Copy } from '@phosphor-icons/react/dist/ssr/Copy';
-import { CornersOutIcon } from '@phosphor-icons/react/dist/ssr/CornersOut';
-import { ArrowsOut as Expand } from '@phosphor-icons/react/dist/ssr/ArrowsOut';
 import { Gauge } from '@phosphor-icons/react/dist/ssr/Gauge';
+import { GearSix as Settings } from '@phosphor-icons/react/dist/ssr/GearSix';
 import { Info } from '@phosphor-icons/react/dist/ssr/Info';
 import { Keyboard } from '@phosphor-icons/react/dist/ssr/Keyboard';
-import { Layout as LayoutPanelTop } from '@phosphor-icons/react/dist/ssr/Layout';
 import { LinkSimple as Link2 } from '@phosphor-icons/react/dist/ssr/LinkSimple';
-import { ChatText as MessageSquareText } from '@phosphor-icons/react/dist/ssr/ChatText';
-import { ArrowsIn as Minimize2 } from '@phosphor-icons/react/dist/ssr/ArrowsIn';
 import { MonitorPlay } from '@phosphor-icons/react/dist/ssr/MonitorPlay';
-import { Pause } from '@phosphor-icons/react/dist/ssr/Pause';
-import { Play } from '@phosphor-icons/react/dist/ssr/Play';
-import { ProjectorScreenIcon } from '@phosphor-icons/react/dist/ssr/ProjectorScreen';
-import { ArrowClockwise as RefreshCw } from '@phosphor-icons/react/dist/ssr/ArrowClockwise';
 import { Repeat } from '@phosphor-icons/react/dist/ssr/Repeat';
-import { StackSimple as Server } from '@phosphor-icons/react/dist/ssr/StackSimple';
-import { GearSix as Settings } from '@phosphor-icons/react/dist/ssr/GearSix';
-import { SkipBack } from '@phosphor-icons/react/dist/ssr/SkipBack';
 import { SkipForward } from '@phosphor-icons/react/dist/ssr/SkipForward';
-import { Television as Tv } from '@phosphor-icons/react/dist/ssr/Television';
-import { SpeakerLow as Volume1 } from '@phosphor-icons/react/dist/ssr/SpeakerLow';
 import { SpeakerHigh as Volume2 } from '@phosphor-icons/react/dist/ssr/SpeakerHigh';
-import { SpeakerX as VolumeX } from '@phosphor-icons/react/dist/ssr/SpeakerX';
+import { StackSimple as Server } from '@phosphor-icons/react/dist/ssr/StackSimple';
+import { Television as Tv } from '@phosphor-icons/react/dist/ssr/Television';
 import {
-  CaptionButton,
+  AirPlayButton,
+  AudioGainSlider,
   Controls,
   FullscreenButton,
   Gesture,
   GoogleCastButton,
   MuteButton,
-  PIPButton,
   PlayButton,
   Spinner,
   Time,
@@ -84,9 +73,78 @@ export type PlayerSourceOption = {
   unavailableReason?: string;
 };
 
-/* ── YouTube-style icon button ── */
-const YT_ICON_BTN =
-  'inline-flex h-10 w-10 items-center justify-center rounded-full text-white/90 transition-colors duration-150 hover:text-white focus-visible:outline-none disabled:opacity-40 disabled:cursor-not-allowed';
+type SharpIconProps = {
+  className?: string;
+};
+
+const SHARP_STROKE_ICON =
+  'h-[21px] w-[21px] stroke-current [stroke-linecap:square] [stroke-linejoin:miter] [stroke-width:1.7]';
+const SHARP_FILL_ICON = 'h-[21px] w-[21px] fill-current';
+
+const SharpPlayIcon = ({ className }: SharpIconProps) => (
+  <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+    <polygon points="7,4 20,12 7,20" fill="currentColor" />
+  </svg>
+);
+
+const SharpPauseIcon = ({ className }: SharpIconProps) => (
+  <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+    <rect x="6" y="4" width="4" height="16" fill="currentColor" />
+    <rect x="14" y="4" width="4" height="16" fill="currentColor" />
+  </svg>
+);
+
+const SharpVolumeIcon = ({ className }: SharpIconProps) => (
+  <svg viewBox="0 0 24 24" className={className} fill="none" aria-hidden="true">
+    <polygon points="11,5 6,9 2,9 2,15 6,15 11,19" fill="currentColor" />
+    <line x1="15.5" y1="8.5" x2="15.5" y2="15.5" />
+    <line x1="19" y1="6.5" x2="19" y2="17.5" />
+  </svg>
+);
+
+const SharpMutedIcon = ({ className }: SharpIconProps) => (
+  <svg viewBox="0 0 24 24" className={className} fill="none" aria-hidden="true">
+    <polygon points="11,5 6,9 2,9 2,15 6,15 11,19" fill="currentColor" />
+    <line x1="15" y1="9" x2="22" y2="16" />
+    <line x1="15" y1="16" x2="22" y2="9" />
+  </svg>
+);
+
+const SharpFullscreenIcon = ({ className }: SharpIconProps) => (
+  <svg viewBox="0 0 24 24" className={className} fill="none" aria-hidden="true">
+    <polyline points="3,9 3,3 9,3" />
+    <polyline points="21,9 21,3 15,3" />
+    <polyline points="3,15 3,21 9,21" />
+    <polyline points="21,15 21,21 15,21" />
+  </svg>
+);
+
+const SharpFullscreenExitIcon = ({ className }: SharpIconProps) => (
+  <svg viewBox="0 0 24 24" className={className} fill="none" aria-hidden="true">
+    <polyline points="9,3 9,9 3,9" />
+    <polyline points="15,3 15,9 21,9" />
+    <polyline points="9,21 9,15 3,15" />
+    <polyline points="15,21 15,15 21,15" />
+  </svg>
+);
+
+const SharpEpisodesIcon = ({ className }: SharpIconProps) => (
+  <svg viewBox="0 0 24 24" className={className} fill="none" aria-hidden="true">
+    <rect x="3" y="4" width="18" height="4" />
+    <rect x="3" y="10" width="18" height="4" />
+    <rect x="3" y="16" width="18" height="4" />
+  </svg>
+);
+
+/* ── Brutalist player control primitives ── */
+const BRUTAL_ICON_BTN =
+  'inline-flex h-12 shrink-0 items-center justify-center border-r border-[#3F3F46] px-5 text-[#FAFAFA] transition-none hover:bg-[#DFE104] hover:text-[#09090B] focus-visible:outline-none focus-visible:bg-[#DFE104] focus-visible:text-[#09090B] disabled:cursor-not-allowed disabled:text-[#71717A] disabled:hover:bg-transparent disabled:hover:text-[#71717A]';
+const BRUTAL_SERVER_BADGE =
+  'inline-flex h-12 max-w-[220px] items-center gap-2 border-l border-[#3F3F46] border-r border-[#3F3F46] px-4 text-[11px] font-bold uppercase tracking-[0.14em] text-[#A1A1AA] transition-none hover:bg-[#DFE104] hover:text-[#09090B] focus-visible:outline-none focus-visible:bg-[#DFE104] focus-visible:text-[#09090B]';
+const BRUTAL_TIMECODE =
+  'flex h-12 items-center border-r border-[#3F3F46] px-6 text-[15px] font-bold tracking-[-0.02em] tabular-nums text-[#FAFAFA]';
+const BRUTAL_TOP_ICON_BTN =
+  'inline-flex h-9 w-9 items-center justify-center border border-[#3F3F46] bg-[#09090B]/90 text-[#A1A1AA] transition-none hover:bg-[#DFE104] hover:text-[#09090B] focus-visible:outline-none focus-visible:bg-[#DFE104] focus-visible:text-[#09090B] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-[#09090B]/90 disabled:hover:text-[#A1A1AA]';
 
 /* ── Overlay animation presets ── */
 const springOverlay = {
@@ -105,7 +163,15 @@ const springScale = {
 
 /* ── Types ── */
 type ContextMenuPos = { x: number; y: number } | null;
-type SettingsView = 'main' | 'speed' | 'quality' | 'audio' | 'subtitles' | 'shortcuts' | null;
+type SettingsView =
+  | 'main'
+  | 'speed'
+  | 'quality'
+  | 'audio'
+  | 'audio-gain'
+  | 'subtitles'
+  | 'shortcuts'
+  | null;
 const CONTEXT_MENU_EDGE_PADDING = 8;
 
 const clamp = (value: number, min: number, max: number) => {
@@ -121,8 +187,6 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
   episodeLabel,
   sourceLabel,
   serverName,
-  isTheaterMode,
-  hasPreviousEpisode,
   hasNextEpisode,
   autoAdvance,
   onAutoAdvanceChange,
@@ -137,6 +201,8 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
   const [clickIndicator, setClickIndicator] = useState<'play' | 'pause' | null>(null);
   const [showStats, setShowStats] = useState(false);
   const [copiedFeedback, setCopiedFeedback] = useState<string | null>(null);
+  const [controlsVisible, setControlsVisible] = useState(true);
+  const [isVolumeHoverOpen, setIsVolumeHoverOpen] = useState(false);
 
   const contextMenuRef = useRef<HTMLDivElement>(null);
   const settingsRef = useRef<HTMLDivElement>(null);
@@ -155,9 +221,7 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
     volume,
     pictureInPicture,
     canPictureInPicture,
-    canGoogleCast,
     canFullscreen,
-    canPlay,
     playbackRate,
     live,
     liveEdge,
@@ -166,9 +230,15 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
     quality,
     qualities,
     autoQuality,
-    canSetVolume,
     canSetPlaybackRate,
     canSetQuality,
+    canSetVolume,
+    canSetAudioGain,
+    canAirPlay,
+    canGoogleCast,
+    audioGain,
+    remotePlaybackState,
+    remotePlaybackType,
     pointer,
     error,
     autoPlayError,
@@ -191,22 +261,50 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
   const isRemoteActive = isGoogleCastConnected || isAirPlayConnected;
   const remoteDeviceName = remotePlaybackInfo?.deviceName?.trim() || 'Thiết bị';
   const remoteLabel = isGoogleCastConnected ? 'Google Cast' : 'AirPlay';
-  const canInteract = canPlay && !error;
+  const canInteract = !error;
   const canSwitchSources = Boolean(onSourceChange && (sourceOptions?.length ?? 0) > 1);
   const activeSource = sourceOptions?.find((option) => option.active);
   const sourceMenuLabel = activeSource?.name || serverName || 'Nguồn phát';
   const hasSourceBadge = Boolean(activeSource?.name || serverName);
+  const canUseGoogleCast = canGoogleCast || isGoogleCastConnected;
+  const canUseAirPlay = canAirPlay || isAirPlayConnected;
 
   const finiteDuration = Number.isFinite(duration) && duration > 0 ? duration : 0;
   const bufferedPercent = finiteDuration
     ? Math.max(0, Math.min(100, (bufferedEnd / finiteDuration) * 100))
     : 0;
 
-  const shouldShowInitialSplash = canPlay && !error && !isRemoteActive && !started && paused;
+  const shouldShowInitialSplash = !error && !isRemoteActive && !started && paused;
   const activeQualityLabel =
     quality?.height && Number.isFinite(quality.height) ? `${quality.height}p` : null;
 
-  const VolumeIcon = muted || volume === 0 ? VolumeX : volume < 0.5 ? Volume1 : Volume2;
+  const isMuted = muted || volume === 0;
+  const audioGainMultiplier = audioGain == null ? 1 : audioGain > 10 ? audioGain / 100 : audioGain;
+  const audioGainPercent = Math.round(audioGainMultiplier * 100);
+  const showVolumeHoverSlider = canSetVolume && pointer !== 'coarse';
+  const googleCastState =
+    remotePlaybackType === 'google-cast'
+      ? remotePlaybackState
+      : isGoogleCastConnected
+        ? 'connected'
+        : 'disconnected';
+  const airPlayState =
+    remotePlaybackType === 'airplay'
+      ? remotePlaybackState
+      : isAirPlayConnected
+        ? 'connected'
+        : 'disconnected';
+
+  const getRemoteStateLabel = useCallback(
+    (type: 'google-cast' | 'airplay', state: string) => {
+      if (state === 'connecting') return 'Đang kết nối...';
+      if (state === 'connected') {
+        return type === 'google-cast' ? remoteDeviceName : 'Đã kết nối';
+      }
+      return 'Sẵn sàng';
+    },
+    [remoteDeviceName],
+  );
 
   /* ── Click indicator animation (brief play/pause ripple) ── */
   useEffect(() => {
@@ -230,6 +328,17 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
     const videoEl = player.el?.querySelector('video');
     if (videoEl) videoEl.loop = loopEnabled;
   }, [loopEnabled, player]);
+
+  // Keep controls pinned while source/settings menu is open.
+  useEffect(() => {
+    if (!player) return;
+    const shouldPauseControls = Boolean(settingsView || isSourceMenuOpen || isVolumeHoverOpen);
+    if (shouldPauseControls) {
+      player.remote?.pauseControls?.();
+      return;
+    }
+    player.remote?.resumeControls?.();
+  }, [player, settingsView, isSourceMenuOpen, isVolumeHoverOpen]);
 
   /* ── Right-click context menu via player element ── */
   useEffect(() => {
@@ -342,6 +451,26 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
     }
   }, []);
 
+  const requestGoogleCast = useCallback(async () => {
+    if (!player || !canGoogleCast) return;
+    try {
+      await player.requestGoogleCast();
+    } catch {
+      setCopiedFeedback('Không thể mở Google Cast.');
+      setTimeout(() => setCopiedFeedback(null), 2500);
+    }
+  }, [player, canGoogleCast]);
+
+  const requestAirPlay = useCallback(async () => {
+    if (!player || !canAirPlay) return;
+    try {
+      await player.requestAirPlay();
+    } catch {
+      setCopiedFeedback('Không thể mở AirPlay.');
+      setTimeout(() => setCopiedFeedback(null), 2500);
+    }
+  }, [player, canAirPlay]);
+
   /* ── Screenshot ── */
   const takeScreenshot = useCallback(() => {
     if (!player) return;
@@ -391,11 +520,11 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
             transition={{ duration: 0.5, ease: 'easeOut' }}
             className="pointer-events-none absolute inset-0 z-[5] flex items-center justify-center"
           >
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-black/50">
+            <div className="flex h-14 w-14 items-center justify-center border border-[#3F3F46] bg-[#09090B]/90 text-[#FAFAFA] backdrop-blur-sm">
               {clickIndicator === 'play' ? (
-                <Play className="h-6 w-6 translate-x-[1px] fill-white text-white" />
+                <SharpPlayIcon className={SHARP_FILL_ICON} />
               ) : (
-                <Pause className="h-6 w-6 fill-white text-white" />
+                <SharpPauseIcon className={SHARP_FILL_ICON} />
               )}
             </div>
           </motion.div>
@@ -404,39 +533,224 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
 
       {/* ─── Controls overlay ─── */}
       <Controls.Root
+        hideDelay={2200}
+        hideOnMouseLeave
+        onChange={setControlsVisible}
         className={cn(
-          'absolute inset-0 z-[2] flex flex-col pointer-events-none',
+          'absolute inset-0 z-[2] flex flex-col justify-end pointer-events-none',
           'opacity-0 transition-opacity duration-300',
-          'group-hover/player:opacity-100 group-data-[paused]/player:opacity-100',
+          controlsVisible && 'opacity-100',
+          'group-data-[paused]/player:opacity-100',
           'group-data-[waiting]/player:opacity-100 group-data-[seeking]/player:opacity-100',
           pointer === 'coarse' && 'opacity-100',
         )}
       >
         {/* Top gradient */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/70 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#09090B]/85 via-[#09090B]/50 to-transparent" />
 
         {/* ─── Top info bar ─── */}
-        {(episodeLabel || sourceLabel || serverName) && (
-          <Controls.Group className="pointer-events-auto relative z-10 flex items-center justify-between gap-2 px-3 pt-3">
+        {/* {(episodeLabel || sourceLabel || serverName) && (
+          <Controls.Group className="pointer-events-auto absolute inset-x-0 top-0 z-10 flex items-start justify-between gap-2 px-3 pt-3">
             {episodeLabel && (
-              <p className="min-w-0 truncate text-sm font-bold uppercase tracking-tight text-white drop-shadow-lg sm:text-[15px]">
+              <p className="min-w-0 max-w-[min(70vw,34rem)] truncate border border-[#3F3F46] bg-[#09090B]/85 px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-[#FAFAFA] backdrop-blur-md sm:text-[13px]">
                 {episodeLabel}
               </p>
             )}
             <div className="flex shrink-0 items-center gap-1.5">
-              {/* {sourceLabel && (
-                <span className="inline-flex items-center gap-1 rounded-sm bg-black/50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white/70 backdrop-blur-sm">
-                  <Server className="h-3 w-3" />
+              {sourceLabel && (
+                <span className="hidden border border-[#3F3F46] bg-[#09090B]/85 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#A1A1AA] backdrop-blur-md sm:inline-flex">
                   {sourceLabel}
                 </span>
-              )} */}
+              )}
+              {hasSourceBadge && (
+                <span className="hidden border border-[#3F3F46] bg-[#09090B]/85 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#A1A1AA] backdrop-blur-md sm:inline-flex">
+                  #{sourceMenuLabel}
+                </span>
+              )}
+            </div>
+          </Controls.Group>
+        )} */}
+
+        {/* Spacer */}
+        <div className="flex-1" />
+
+        {/* Bottom gradient */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#09090B]/95 via-[#09090B]/55 to-transparent" />
+
+        {/* Top-right quick actions (remote playback) */}
+        {(canUseGoogleCast || canUseAirPlay) && (
+          <Controls.Group className="pointer-events-auto absolute right-3 top-3 z-10 flex items-center gap-1.5">
+            {canUseGoogleCast && (
+              <div onPointerUp={(event) => event.stopPropagation()}>
+                <GoogleCastButton
+                  className={cn(
+                    BRUTAL_TOP_ICON_BTN,
+                    googleCastState === 'connected' &&
+                      'border-[#DFE104] bg-[#DFE104] text-[#09090B]',
+                    googleCastState === 'connecting' && 'animate-pulse text-[#FAFAFA]',
+                  )}
+                  disabled={!canGoogleCast || googleCastState === 'connecting'}
+                  aria-label="Google Cast"
+                  title={`Google Cast • ${getRemoteStateLabel('google-cast', googleCastState)}`}
+                >
+                  <Tv className="h-[18px] w-[18px]" />
+                </GoogleCastButton>
+              </div>
+            )}
+
+            {canUseAirPlay && (
+              <div onPointerUp={(event) => event.stopPropagation()}>
+                <AirPlayButton
+                  className={cn(
+                    BRUTAL_TOP_ICON_BTN,
+                    airPlayState === 'connected' && 'border-[#DFE104] bg-[#DFE104] text-[#09090B]',
+                    airPlayState === 'connecting' && 'animate-pulse text-[#FAFAFA]',
+                  )}
+                  disabled={!canAirPlay || airPlayState === 'connecting'}
+                  aria-label="AirPlay"
+                  title={`AirPlay • ${getRemoteStateLabel('airplay', airPlayState)}`}
+                >
+                  <MonitorPlay className="h-[18px] w-[18px]" />
+                </AirPlayButton>
+              </div>
+            )}
+          </Controls.Group>
+        )}
+
+        {/* Live badge (top-left) */}
+        {live && (
+          <div className="pointer-events-auto absolute left-3 top-3 z-10 flex items-center gap-1.5 border border-[#3F3F46] bg-[#09090B]/90 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.14em] backdrop-blur-md">
+            <span
+              className={cn('h-1.5 w-1.5', liveEdge ? 'bg-red-500 animate-pulse' : 'bg-gray-500')}
+            />
+            <span className={cn(liveEdge ? 'text-red-500' : 'text-[#71717A]')}>TRỰC TIẾP</span>
+          </div>
+        )}
+
+        {/* ─── Progress bar (Brutalist blade) ─── */}
+        <Controls.Group className="pointer-events-auto relative z-10 w-full border-t border-[#3F3F46]">
+          {seeking && (
+            <div className="absolute left-1/2 top-0 z-10 -translate-x-1/2 -translate-y-full border border-[#3F3F46] bg-[#09090B]/95 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#FAFAFA] backdrop-blur-md">
+              Đang tải
+            </div>
+          )}
+          <TimeSlider.Root
+            className={cn(
+              'group/time relative flex h-[3px] w-full cursor-pointer items-stretch transition-[height] duration-150 hover:h-[10px] data-[dragging]:h-[10px]',
+              !canInteract && 'pointer-events-none opacity-60',
+            )}
+          >
+            <TimeSlider.Track className="relative h-full w-full overflow-hidden bg-white/20">
+              {/* Buffered */}
+              <TimeSlider.Progress
+                className="absolute inset-y-0 left-0 bg-white/35"
+                style={{ width: `${bufferedPercent}%` }}
+              />
+              {/* Played – accent yellow */}
+              <TimeSlider.TrackFill className="absolute inset-y-0 left-0 w-[var(--slider-fill)] bg-[#DFE104]" />
+            </TimeSlider.Track>
+            <TimeSlider.Thumb className="pointer-events-none absolute left-[var(--slider-fill)] top-1/2 z-[3] block h-[12px] w-[2px] -translate-x-1/2 -translate-y-1/2 bg-[#FAFAFA] opacity-0 shadow-[0_0_10px_rgba(223,225,4,0.5)] transition-[opacity,width] duration-150 group-hover/time:w-[4px] group-hover/time:opacity-100 group-data-[active]/time:w-[4px] group-data-[active]/time:opacity-100 group-data-[dragging]/time:w-[4px] group-data-[dragging]/time:opacity-100" />
+          </TimeSlider.Root>
+        </Controls.Group>
+
+        {/* ─── Control buttons row ─── */}
+        <Controls.Group className="pointer-events-auto relative z-10">
+          <div className="flex h-12 items-stretch bg-[#09090B]/85 backdrop-blur-[12px]">
+            <div className="flex items-stretch">
+              {/* Play / Pause */}
+              <PlayButton
+                className={BRUTAL_ICON_BTN}
+                aria-label="Phát hoặc tạm dừng"
+                title="Phát/Tạm dừng (K)"
+                disabled={!canInteract}
+              >
+                {paused ? (
+                  <SharpPlayIcon className={SHARP_FILL_ICON} />
+                ) : (
+                  <SharpPauseIcon className={SHARP_FILL_ICON} />
+                )}
+              </PlayButton>
+
+              <div
+                className={cn(
+                  'group/volume flex h-12 items-stretch border-r border-[#3F3F46] bg-transparent',
+                  showVolumeHoverSlider && 'w-[56px] transition-[width] duration-200 ease-out',
+                  showVolumeHoverSlider &&
+                    'hover:w-[210px] focus-within:w-[210px] data-[open=true]:w-[210px]',
+                )}
+                data-open={isVolumeHoverOpen}
+                onPointerEnter={() => {
+                  if (showVolumeHoverSlider) setIsVolumeHoverOpen(true);
+                }}
+                onPointerLeave={() => setIsVolumeHoverOpen(false)}
+                onFocusCapture={() => {
+                  if (showVolumeHoverSlider) setIsVolumeHoverOpen(true);
+                }}
+                onBlurCapture={(event) => {
+                  const next = event.relatedTarget;
+                  if (!(next instanceof Node) || !event.currentTarget.contains(next)) {
+                    setIsVolumeHoverOpen(false);
+                  }
+                }}
+              >
+                <MuteButton
+                  className={cn(
+                    'inline-flex h-12 w-[56px] shrink-0 items-center justify-center text-[#FAFAFA] transition-none hover:bg-[#DFE104] hover:text-[#09090B] focus-visible:outline-none focus-visible:bg-[#DFE104] focus-visible:text-[#09090B] disabled:cursor-not-allowed disabled:text-[#71717A] disabled:hover:bg-transparent disabled:hover:text-[#71717A]',
+                    showVolumeHoverSlider && 'border-r border-[#3F3F46]',
+                  )}
+                  aria-label="Bật hoặc tắt tiếng"
+                  title="Tắt tiếng (M)"
+                  disabled={!canInteract}
+                >
+                  {isMuted ? (
+                    <SharpMutedIcon className={SHARP_STROKE_ICON} />
+                  ) : (
+                    <SharpVolumeIcon className={SHARP_STROKE_ICON} />
+                  )}
+                </MuteButton>
+
+                {showVolumeHoverSlider && (
+                  <div
+                    className={cn(
+                      'flex min-w-0 flex-1 items-center overflow-hidden px-0 opacity-0 transition-[opacity,padding] duration-150',
+                      'group-hover/volume:px-3 group-hover/volume:opacity-100',
+                      'group-focus-within/volume:px-3 group-focus-within/volume:opacity-100',
+                    )}
+                  >
+                    <VolumeSlider.Root
+                      className={cn(
+                        'group/volslider relative flex h-4 min-w-0 w-full cursor-pointer items-center',
+                        !canInteract && 'pointer-events-none opacity-60',
+                      )}
+                    >
+                      <VolumeSlider.Track className="relative h-[3px] w-full bg-white/20">
+                        <VolumeSlider.TrackFill className="absolute inset-y-0 left-0 w-[var(--slider-fill)] bg-[#DFE104]" />
+                      </VolumeSlider.Track>
+                      <VolumeSlider.Thumb className="absolute left-[var(--slider-fill)] top-1/2 block h-[11px] w-[3px] -translate-x-1/2 -translate-y-1/2 bg-[#FAFAFA] opacity-0 shadow-[0_0_10px_rgba(223,225,4,0.5)] transition-[opacity,width] duration-150 group-hover/volslider:w-[4px] group-hover/volslider:opacity-100 group-data-[active]/volslider:w-[4px] group-data-[active]/volslider:opacity-100 group-data-[dragging]/volslider:w-[4px] group-data-[dragging]/volslider:opacity-100" />
+                    </VolumeSlider.Root>
+                  </div>
+                )}
+              </div>
+
+              {/* Time display */}
+              <div className={BRUTAL_TIMECODE}>
+                <Time type="current" className="inline" />
+                <span className="px-2.5 text-[#3F3F46]">/</span>
+                <Time type="duration" className="inline text-[#A1A1AA]" />
+              </div>
+            </div>
+
+            <div className="flex-1" />
+
+            {/* Right side */}
+            <div className="flex shrink-0 items-stretch">
               {canSwitchSources ? (
                 <div className="relative" ref={sourceMenuRef}>
                   <button
                     type="button"
                     className={cn(
-                      'inline-flex max-w-[220px] items-center gap-1.5 rounded-sm border border-[#DFE104]/60 bg-[#DFE104]/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#DFE104] backdrop-blur-sm transition-colors',
-                      'hover:bg-[#DFE104]/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFE104]/60',
+                      BRUTAL_SERVER_BADGE,
+                      isSourceMenuOpen && 'bg-[#DFE104] text-[#09090B]',
                     )}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -445,14 +759,12 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                     }}
                     aria-expanded={isSourceMenuOpen}
                     aria-label="Đổi nguồn phát"
+                    title="Đổi nguồn phát"
                   >
-                    <Server className="h-3 w-3 shrink-0" />
-                    <span className="truncate">{sourceMenuLabel}</span>
+                    <span className="h-1.5 w-1.5 shrink-0 bg-current opacity-85" />
+                    <span className="truncate">#{sourceMenuLabel}</span>
                     <ChevronDown
-                      className={cn(
-                        'h-3 w-3 shrink-0 transition-transform',
-                        isSourceMenuOpen && 'rotate-180',
-                      )}
+                      className={cn('h-3 w-3 shrink-0', isSourceMenuOpen && 'rotate-180')}
                     />
                   </button>
                   <AnimatePresence>
@@ -462,7 +774,7 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.96, y: -4 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute right-0 top-7 z-30 min-w-[220px] overflow-hidden rounded-md border border-white/10 bg-[#111111]/95 py-1.5 shadow-2xl backdrop-blur-md"
+                        className="absolute bottom-[calc(100%+4px)] right-0 z-30 min-w-[220px] overflow-hidden border border-[#3F3F46] bg-[#09090B]/95 py-1 shadow-2xl backdrop-blur-md"
                       >
                         {sourceOptions.map((source) => {
                           const isDisabled = !source.available || source.active;
@@ -472,12 +784,12 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                               type="button"
                               disabled={isDisabled}
                               className={cn(
-                                'flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-[11px] font-bold uppercase tracking-wide transition-colors',
+                                'flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-[11px] font-bold uppercase tracking-[0.12em] transition-none',
                                 source.active
-                                  ? 'text-[#DFE104]'
-                                  : 'text-white/90 hover:bg-white/10 hover:text-white',
+                                  ? 'bg-[#DFE104]/12 text-[#DFE104]'
+                                  : 'text-[#FAFAFA] hover:bg-[#DFE104] hover:text-[#09090B]',
                                 !source.available &&
-                                  'cursor-not-allowed text-white/40 hover:bg-transparent hover:text-white/40',
+                                  'cursor-not-allowed text-[#71717A] hover:bg-transparent hover:text-[#71717A]',
                               )}
                               onClick={() => {
                                 if (isDisabled || !onSourceChange) return;
@@ -488,7 +800,7 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                               <div className="min-w-0">
                                 <p className="truncate">{source.name}</p>
                                 {!source.available && (
-                                  <p className="mt-0.5 truncate text-[10px] font-medium normal-case tracking-normal text-white/45">
+                                  <p className="mt-0.5 truncate text-[10px] font-medium normal-case tracking-normal text-[#71717A]">
                                     {source.unavailableReason || 'Chưa có tập này'}
                                   </p>
                                 )}
@@ -503,572 +815,528 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                 </div>
               ) : (
                 hasSourceBadge && (
-                  <span className="rounded-sm bg-[#DFE104]/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#DFE104] backdrop-blur-sm">
-                    {sourceMenuLabel}
+                  <span className="inline-flex h-12 max-w-[220px] items-center gap-2 border-l border-[#3F3F46] border-r border-[#3F3F46] px-4 text-[11px] font-bold uppercase tracking-[0.14em] text-[#A1A1AA]">
+                    <span className="h-1.5 w-1.5 shrink-0 bg-current opacity-85" />
+                    <span className="truncate">#{sourceMenuLabel}</span>
                   </span>
                 )
               )}
-            </div>
-          </Controls.Group>
-        )}
 
-        {/* Spacer */}
-        <div className="flex-1" />
-
-        {/* Bottom gradient */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-
-        {/* Live badge */}
-        {live && (
-          <div className="pointer-events-auto absolute left-3 top-3 z-10 flex items-center gap-1.5 rounded bg-black/70 px-2.5 py-1 text-xs font-semibold backdrop-blur-sm">
-            <span
-              className={cn(
-                'h-2 w-2 rounded-full',
-                liveEdge ? 'bg-red-500 animate-pulse' : 'bg-gray-500',
-              )}
-            />
-            <span className={cn(liveEdge ? 'text-red-500' : 'text-gray-400')}>TRỰC TIẾP</span>
-          </div>
-        )}
-
-        {/* ─── Progress bar (YouTube-style) ─── */}
-        <Controls.Group className="pointer-events-auto relative z-10 w-full px-3">
-          {seeking && (
-            <div className="absolute left-1/2 top-0 z-10 -translate-x-1/2 -translate-y-full rounded bg-black/80 px-2.5 py-1 text-[11px] font-medium text-white/90 backdrop-blur-sm">
-              Đang tìm kiếm…
-            </div>
-          )}
-          <TimeSlider.Root
-            className={cn(
-              'group/time relative flex h-[20px] w-full cursor-pointer items-center',
-              !canInteract && 'pointer-events-none opacity-60',
-            )}
-          >
-            <TimeSlider.Track className="relative h-[3px] w-full overflow-hidden rounded-full bg-white/25 transition-[height] duration-150 group-hover/time:h-[5px] group-data-[dragging]/time:h-[5px]">
-              {/* Buffered */}
-              <TimeSlider.Progress
-                className="absolute inset-y-0 left-0 bg-white/40"
-                style={{ width: `${bufferedPercent}%` }}
-              />
-              {/* Played – accent yellow */}
-              <TimeSlider.TrackFill className="absolute inset-y-0 left-0 w-[var(--slider-fill)] bg-[#DFE104]" />
-            </TimeSlider.Track>
-            <TimeSlider.Thumb className="pointer-events-none absolute left-[var(--slider-fill)] top-1/2 z-[3] block h-[13px] w-[13px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#DFE104] opacity-0 shadow-sm transition-opacity group-hover/time:opacity-100 group-data-[active]/time:opacity-100 group-data-[dragging]/time:opacity-100" />
-          </TimeSlider.Root>
-        </Controls.Group>
-
-        {/* ─── Control buttons row ─── */}
-        <Controls.Group className="pointer-events-auto relative z-10 flex items-center justify-between px-1.5 pb-1.5 pt-0.5 sm:px-2">
-          {/* Left side */}
-          <div className="flex items-center gap-0.5">
-            {/* Previous episode */}
-            {hasPreviousEpisode !== undefined && (
               <button
                 type="button"
-                className={cn(YT_ICON_BTN, 'hidden sm:inline-flex')}
-                aria-label="Tập trước"
-                title="Tập trước (J)"
-                disabled={!hasPreviousEpisode}
+                className={cn(
+                  BRUTAL_ICON_BTN,
+                  'hidden border-r-0 border-l border-[#3F3F46] sm:inline-flex',
+                )}
+                aria-label="Chọn tập"
+                title="Danh sách tập"
                 onClick={() => {
-                  window.dispatchEvent(new KeyboardEvent('keydown', { key: 'j', bubbles: true }));
+                  document.getElementById('episode-selection')?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start',
+                  });
                 }}
               >
-                <SkipBack className="h-[20px] w-[20px]" />
+                <SharpEpisodesIcon className={SHARP_STROKE_ICON} />
               </button>
-            )}
 
-            {/* Play / Pause */}
-            <PlayButton
-              className={YT_ICON_BTN}
-              aria-label="Phát hoặc tạm dừng"
-              title="Phát/Tạm dừng (K)"
-              disabled={!canInteract}
-            >
-              {paused ? (
-                <Play className="h-[22px] w-[22px] translate-x-[1px] fill-white text-white" />
-              ) : (
-                <Pause className="h-[22px] w-[22px] fill-white text-white" />
-              )}
-            </PlayButton>
-
-            {/* Next episode */}
-            {hasNextEpisode !== undefined && (
-              <button
-                type="button"
-                className={cn(YT_ICON_BTN, 'hidden sm:inline-flex')}
-                aria-label="Tập tiếp theo"
-                title="Tập tiếp theo (L)"
-                disabled={!hasNextEpisode}
-                onClick={() => {
-                  window.dispatchEvent(new KeyboardEvent('keydown', { key: 'l', bubbles: true }));
-                }}
-              >
-                <SkipForward className="h-[20px] w-[20px]" />
-              </button>
-            )}
-
-            {/* Volume – compact, hover to expand */}
-            <div className="group/vol flex items-center">
-              <MuteButton
-                className={YT_ICON_BTN}
-                aria-label="Bật hoặc tắt tiếng"
-                title="Tắt tiếng (M)"
-                disabled={!canInteract}
-              >
-                <VolumeIcon className="h-[22px] w-[22px]" />
-              </MuteButton>
-
-              {canSetVolume && (
-                <div className="flex w-0 items-center overflow-hidden transition-all duration-200 ease-out group-hover/vol:w-[80px] group-focus-within/vol:w-[80px]">
-                  <VolumeSlider.Root className="group/volslider relative inline-flex h-10 w-[72px] cursor-pointer items-center px-0">
-                    <VolumeSlider.Track className="relative h-[3px] w-full overflow-hidden rounded-full bg-white/30">
-                      <VolumeSlider.TrackFill className="absolute inset-y-0 left-0 w-[var(--slider-fill)] rounded-full bg-white" />
-                    </VolumeSlider.Track>
-                    <VolumeSlider.Thumb className="absolute left-[var(--slider-fill)] top-1/2 z-[3] block h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white opacity-0 shadow-sm transition-opacity group-hover/vol:opacity-100 group-data-[dragging]/volslider:opacity-100" />
-                  </VolumeSlider.Root>
-                </div>
-              )}
-            </div>
-
-            {/* Time display */}
-            <div className="ml-1.5 flex items-center gap-1.5 text-[13px] font-medium tabular-nums text-white/90">
-              <Time type="current" className="inline" />
-              <span className="text-white/50">/</span>
-              <Time type="duration" className="inline text-white/50" />
-            </div>
-          </div>
-
-          {/* Right side */}
-          <div className="flex items-center gap-0.5">
-            {/* Settings gear */}
-            <div className="relative" ref={settingsRef}>
-              <button
-                type="button"
-                className={cn(YT_ICON_BTN, settingsView && 'text-white')}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsSourceMenuOpen(false);
-                  setSettingsView((prev) => (prev ? null : 'main'));
-                }}
-                aria-label="Cài đặt"
-                title="Cài đặt"
-                disabled={!canInteract}
-              >
-                <Settings
+              {/* Settings gear */}
+              <div className="relative" ref={settingsRef}>
+                <button
+                  type="button"
                   className={cn(
-                    'h-[22px] w-[22px] transition-transform duration-300',
-                    settingsView && 'rotate-[30deg]',
+                    BRUTAL_ICON_BTN,
+                    'border-r-0 border-l border-[#3F3F46]',
+                    settingsView && 'bg-[#DFE104] text-[#09090B]',
                   )}
-                />
-              </button>
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsSourceMenuOpen(false);
+                    setSettingsView((prev) => (prev ? null : 'main'));
+                  }}
+                  aria-label="Cài đặt"
+                  title="Cài đặt"
+                  disabled={!canInteract}
+                >
+                  <Settings
+                    className={cn(
+                      'h-[20px] w-[20px]',
+                      settingsView ? 'text-[#09090B]' : 'text-[#FAFAFA]',
+                    )}
+                    weight="regular"
+                  />
+                </button>
 
-              {/* ── Settings popup ── */}
-              <AnimatePresence>
-                {settingsView && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95, y: 8 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, y: 8 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute bottom-12 right-0 z-20 min-w-[260px] overflow-hidden bg-[#212121]/95 py-2 shadow-2xl backdrop-blur-md"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {/* ── Main view ── */}
-                    {settingsView === 'main' && (
-                      <div className="flex flex-col">
-                        {/* Playback Speed */}
-                        <button
-                          type="button"
-                          className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm text-white/90 transition-colors hover:bg-white/10"
-                          onClick={() => setSettingsView('speed')}
-                          disabled={!canSetPlaybackRate}
-                        >
-                          <div className="flex items-center gap-3">
-                            <Gauge className="h-5 w-5 text-white/60" />
-                            <span>Tốc độ phát</span>
-                          </div>
-                          <div className="flex items-center gap-1 text-white/50">
-                            <span className="text-xs">
-                              {playbackRate === 1 ? 'Bình thường' : `${playbackRate}x`}
-                            </span>
-                            <ChevronRight className="h-4 w-4" />
-                          </div>
-                        </button>
-
-                        {/* Quality */}
-                        {qualities.length > 0 && (
+                {/* ── Settings popup ── */}
+                <AnimatePresence>
+                  {settingsView && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95, y: 8 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95, y: 8 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute bottom-[calc(100%+4px)] right-0 z-20 min-w-[260px] overflow-hidden border border-[#3F3F46] bg-[#09090B]/95 py-2 shadow-2xl backdrop-blur-md"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {/* ── Main view ── */}
+                      {settingsView === 'main' && (
+                        <div className="flex flex-col">
+                          {/* Playback Speed */}
                           <button
                             type="button"
                             className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm text-white/90 transition-colors hover:bg-white/10"
-                            onClick={() => setSettingsView('quality')}
-                            disabled={!canSetQuality}
+                            onClick={() => setSettingsView('speed')}
+                            disabled={!canSetPlaybackRate}
                           >
                             <div className="flex items-center gap-3">
-                              <Tv className="h-5 w-5 text-white/60" />
-                              <span>Chất lượng</span>
+                              <Gauge className="h-5 w-5 text-white/60" />
+                              <span>Tốc độ phát</span>
                             </div>
                             <div className="flex items-center gap-1 text-white/50">
                               <span className="text-xs">
-                                {autoQuality
-                                  ? `Tự động${activeQualityLabel ? ` (${activeQualityLabel})` : ''}`
-                                  : activeQualityLabel || 'Tự động'}
+                                {playbackRate === 1 ? 'Bình thường' : `${playbackRate}x`}
                               </span>
                               <ChevronRight className="h-4 w-4" />
                             </div>
                           </button>
-                        )}
 
-                        {/* Audio tracks */}
-                        {audioOptions.length > 1 && (
+                          {/* Quality */}
+                          {qualities.length > 0 && (
+                            <button
+                              type="button"
+                              className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm text-white/90 transition-colors hover:bg-white/10"
+                              onClick={() => setSettingsView('quality')}
+                              disabled={!canSetQuality}
+                            >
+                              <div className="flex items-center gap-3">
+                                <Tv className="h-5 w-5 text-white/60" />
+                                <span>Chất lượng</span>
+                              </div>
+                              <div className="flex items-center gap-1 text-white/50">
+                                <span className="text-xs">
+                                  {autoQuality
+                                    ? `Tự động${activeQualityLabel ? ` (${activeQualityLabel})` : ''}`
+                                    : activeQualityLabel || 'Tự động'}
+                                </span>
+                                <ChevronRight className="h-4 w-4" />
+                              </div>
+                            </button>
+                          )}
+
+                          {/* Audio tracks */}
+                          {audioOptions.length > 1 && (
+                            <button
+                              type="button"
+                              className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm text-white/90 transition-colors hover:bg-white/10"
+                              onClick={() => setSettingsView('audio')}
+                            >
+                              <div className="flex items-center gap-3">
+                                <Volume2 className="h-5 w-5 text-white/60" />
+                                <span>Âm thanh</span>
+                              </div>
+                              <div className="flex items-center gap-1 text-white/50">
+                                <span className="text-xs">{audioOptions.selectedValue}</span>
+                                <ChevronRight className="h-4 w-4" />
+                              </div>
+                            </button>
+                          )}
+
+                          {/* Audio gain */}
+
+
+                          {/* Subtitles */}
+                          {captionOptions.length > 1 && (
+                            <button
+                              type="button"
+                              className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm text-white/90 transition-colors hover:bg-white/10"
+                              onClick={() => setSettingsView('subtitles')}
+                            >
+                              <div className="flex items-center gap-3">
+                                <MessageSquareText className="h-5 w-5 text-white/60" />
+                                <span>Phụ đề</span>
+                              </div>
+                              <div className="flex items-center gap-1 text-white/50">
+                                <span className="text-xs">
+                                  {captionOptions.selectedValue || 'Tắt'}
+                                </span>
+                                <ChevronRight className="h-4 w-4" />
+                              </div>
+                            </button>
+                          )}
+
+                          {(canUseGoogleCast || canUseAirPlay) && (
+                            <>
+                              <div className="my-1 border-t border-white/10" />
+
+                              {canUseGoogleCast && (
+                                <button
+                                  type="button"
+                                  className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm text-white/90 transition-colors hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"
+                                  onClick={() => {
+                                    void requestGoogleCast();
+                                  }}
+                                  disabled={!canGoogleCast || googleCastState === 'connecting'}
+                                >
+                                  <div className="flex items-center gap-3">
+                                    <Tv className="h-5 w-5 text-white/60" />
+                                    <span>Google Cast</span>
+                                  </div>
+                                  <span className="text-xs text-white/50">
+                                    {getRemoteStateLabel('google-cast', googleCastState)}
+                                  </span>
+                                </button>
+                              )}
+
+                              {canUseAirPlay && (
+                                <button
+                                  type="button"
+                                  className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm text-white/90 transition-colors hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"
+                                  onClick={() => {
+                                    void requestAirPlay();
+                                  }}
+                                  disabled={!canAirPlay || airPlayState === 'connecting'}
+                                >
+                                  <div className="flex items-center gap-3">
+                                    <MonitorPlay className="h-5 w-5 text-white/60" />
+                                    <span>AirPlay</span>
+                                  </div>
+                                  <span className="text-xs text-white/50">
+                                    {getRemoteStateLabel('airplay', airPlayState)}
+                                  </span>
+                                </button>
+                              )}
+                            </>
+                          )}
+
+                          <div className="my-1 border-t border-white/10" />
+
+                          {/* Auto-advance */}
+                          {hasNextEpisode && autoAdvance !== undefined && onAutoAdvanceChange && (
+                            <button
+                              type="button"
+                              className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm text-white/90 transition-colors hover:bg-white/10"
+                              onClick={() => onAutoAdvanceChange(!autoAdvance)}
+                            >
+                              <div className="flex items-center gap-3">
+                                <SkipForward className="h-5 w-5 text-white/60" />
+                                <span>Tự động chuyển tập</span>
+                              </div>
+                              <div
+                                className={cn(
+                                  'h-4 w-8 rounded-full transition-colors',
+                                  autoAdvance ? 'bg-[#DFE104]' : 'bg-white/20',
+                                )}
+                              >
+                                <div
+                                  className={cn(
+                                    'h-4 w-4 rounded-full bg-white shadow transition-transform',
+                                    autoAdvance && 'translate-x-4',
+                                  )}
+                                />
+                              </div>
+                            </button>
+                          )}
+
+                          {/* Loop toggle */}
                           <button
                             type="button"
                             className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm text-white/90 transition-colors hover:bg-white/10"
-                            onClick={() => setSettingsView('audio')}
+                            onClick={() => setLoopEnabled((prev) => !prev)}
                           >
                             <div className="flex items-center gap-3">
-                              <Volume2 className="h-5 w-5 text-white/60" />
-                              <span>Âm thanh</span>
-                            </div>
-                            <div className="flex items-center gap-1 text-white/50">
-                              <span className="text-xs">{audioOptions.selectedValue}</span>
-                              <ChevronRight className="h-4 w-4" />
-                            </div>
-                          </button>
-                        )}
-
-                        {/* Subtitles */}
-                        {captionOptions.length > 1 && (
-                          <button
-                            type="button"
-                            className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm text-white/90 transition-colors hover:bg-white/10"
-                            onClick={() => setSettingsView('subtitles')}
-                          >
-                            <div className="flex items-center gap-3">
-                              <MessageSquareText className="h-5 w-5 text-white/60" />
-                              <span>Phụ đề</span>
-                            </div>
-                            <div className="flex items-center gap-1 text-white/50">
-                              <span className="text-xs">
-                                {captionOptions.selectedValue || 'Tắt'}
-                              </span>
-                              <ChevronRight className="h-4 w-4" />
-                            </div>
-                          </button>
-                        )}
-
-                        <div className="my-1 border-t border-white/10" />
-
-                        {/* Auto-advance */}
-                        {hasNextEpisode && autoAdvance !== undefined && onAutoAdvanceChange && (
-                          <button
-                            type="button"
-                            className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm text-white/90 transition-colors hover:bg-white/10"
-                            onClick={() => onAutoAdvanceChange(!autoAdvance)}
-                          >
-                            <div className="flex items-center gap-3">
-                              <SkipForward className="h-5 w-5 text-white/60" />
-                              <span>Tự động chuyển tập</span>
+                              <Repeat className="h-5 w-5 text-white/60" />
+                              <span>Vòng lặp</span>
                             </div>
                             <div
                               className={cn(
                                 'h-4 w-8 rounded-full transition-colors',
-                                autoAdvance ? 'bg-[#DFE104]' : 'bg-white/20',
+                                loopEnabled ? 'bg-[#DFE104]' : 'bg-white/20',
                               )}
                             >
                               <div
                                 className={cn(
                                   'h-4 w-4 rounded-full bg-white shadow transition-transform',
-                                  autoAdvance && 'translate-x-4',
+                                  loopEnabled && 'translate-x-4',
                                 )}
                               />
                             </div>
                           </button>
-                        )}
 
-                        {/* Loop toggle */}
-                        <button
-                          type="button"
-                          className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm text-white/90 transition-colors hover:bg-white/10"
-                          onClick={() => setLoopEnabled((prev) => !prev)}
-                        >
-                          <div className="flex items-center gap-3">
-                            <Repeat className="h-5 w-5 text-white/60" />
-                            <span>Vòng lặp</span>
-                          </div>
-                          <div
-                            className={cn(
-                              'h-4 w-8 rounded-full transition-colors',
-                              loopEnabled ? 'bg-[#DFE104]' : 'bg-white/20',
-                            )}
-                          >
-                            <div
-                              className={cn(
-                                'h-4 w-4 rounded-full bg-white shadow transition-transform',
-                                loopEnabled && 'translate-x-4',
-                              )}
-                            />
-                          </div>
-                        </button>
-
-                        {/* Screenshot */}
-                        <button
-                          type="button"
-                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-white/90 transition-colors hover:bg-white/10"
-                          onClick={() => {
-                            takeScreenshot();
-                            setSettingsView(null);
-                          }}
-                          disabled={!canInteract}
-                        >
-                          <Camera className="h-5 w-5 text-white/60" />
-                          <span>Chụp ảnh màn hình</span>
-                        </button>
-
-                        {/* Keyboard shortcuts */}
-                        <button
-                          type="button"
-                          className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm text-white/90 transition-colors hover:bg-white/10"
-                          onClick={() => setSettingsView('shortcuts')}
-                        >
-                          <div className="flex items-center gap-3">
-                            <Keyboard className="h-5 w-5 text-white/60" />
-                            <span>Phím tắt</span>
-                          </div>
-                          <ChevronRight className="h-4 w-4 text-white/50" />
-                        </button>
-                      </div>
-                    )}
-
-                    {/* ── Speed sub-view ── */}
-                    {settingsView === 'speed' && (
-                      <div className="flex flex-col">
-                        <button
-                          type="button"
-                          className="flex items-center gap-2 border-b border-white/10 px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:bg-white/10"
-                          onClick={() => setSettingsView('main')}
-                        >
-                          <ChevronRight className="h-4 w-4 rotate-180" />
-                          <span>Tốc độ phát</span>
-                        </button>
-                        {playbackRateOptions.map((option) => (
+                          {/* Screenshot */}
                           <button
-                            key={option.value}
                             type="button"
-                            className={cn(
-                              'flex items-center gap-3 px-4 py-2 text-sm text-white/80 transition-colors hover:bg-white/10',
-                              option.selected && 'text-white font-medium',
-                            )}
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-white/90 transition-colors hover:bg-white/10"
                             onClick={() => {
-                              option.select();
-                              setSettingsView('main');
+                              takeScreenshot();
+                              setSettingsView(null);
                             }}
+                            disabled={!canInteract}
                           >
-                            <span className="w-5">
-                              {option.selected && <Check className="h-4 w-4" />}
-                            </span>
-                            <span>{option.label}</span>
+                            <Camera className="h-5 w-5 text-white/60" />
+                            <span>Chụp ảnh màn hình</span>
                           </button>
-                        ))}
-                      </div>
-                    )}
 
-                    {/* ── Quality sub-view ── */}
-                    {settingsView === 'quality' && (
-                      <div className="flex flex-col">
-                        <button
-                          type="button"
-                          className="flex items-center gap-2 border-b border-white/10 px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:bg-white/10"
-                          onClick={() => setSettingsView('main')}
-                        >
-                          <ChevronRight className="h-4 w-4 rotate-180" />
-                          <span>Chất lượng</span>
-                        </button>
-                        {qualityOptions.map((option) => (
+                          {/* Keyboard shortcuts */}
                           <button
-                            key={option.value}
                             type="button"
-                            className={cn(
-                              'flex items-center gap-3 px-4 py-2 text-sm text-white/80 transition-colors hover:bg-white/10',
-                              option.selected && 'text-white font-medium',
-                            )}
-                            onClick={() => {
-                              option.select();
-                              setSettingsView('main');
-                            }}
+                            className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm text-white/90 transition-colors hover:bg-white/10"
+                            onClick={() => setSettingsView('shortcuts')}
                           >
-                            <span className="w-5">
-                              {option.selected && <Check className="h-4 w-4" />}
-                            </span>
-                            <span>{option.label}</span>
-                          </button>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* ── Audio sub-view ── */}
-                    {settingsView === 'audio' && (
-                      <div className="flex flex-col">
-                        <button
-                          type="button"
-                          className="flex items-center gap-2 border-b border-white/10 px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:bg-white/10"
-                          onClick={() => setSettingsView('main')}
-                        >
-                          <ChevronRight className="h-4 w-4 rotate-180" />
-                          <span>Âm thanh</span>
-                        </button>
-                        {audioOptions.map((option) => (
-                          <button
-                            key={option.value}
-                            type="button"
-                            className={cn(
-                              'flex items-center gap-3 px-4 py-2 text-sm text-white/80 transition-colors hover:bg-white/10',
-                              option.selected && 'text-white font-medium',
-                            )}
-                            onClick={() => {
-                              option.select();
-                              setSettingsView('main');
-                            }}
-                          >
-                            <span className="w-5">
-                              {option.selected && <Check className="h-4 w-4" />}
-                            </span>
-                            <span>{option.label}</span>
-                          </button>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* ── Shortcuts sub-view ── */}
-                    {settingsView === 'shortcuts' && (
-                      <div className="flex flex-col">
-                        <button
-                          type="button"
-                          className="flex items-center gap-2 border-b border-white/10 px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:bg-white/10"
-                          onClick={() => setSettingsView('main')}
-                        >
-                          <ChevronRight className="h-4 w-4 rotate-180" />
-                          <span>Phím tắt</span>
-                        </button>
-                        <div className="max-h-[300px] overflow-y-auto px-4 py-2">
-                          {[
-                            ['K / Space', 'Phát / Tạm dừng'],
-                            ['M', 'Bật / Tắt tiếng'],
-                            ['F', 'Toàn màn hình'],
-                            ['T', 'Chế độ rạp'],
-                            ['P', 'Picture-in-Picture'],
-                            ['C', 'Bật / Tắt phụ đề'],
-                            ['J / ←', 'Tập trước'],
-                            ['L / →', 'Tập tiếp theo'],
-                            ['↑ / ↓', 'Tăng / giảm âm lượng'],
-                            ['R', 'Tải lại nguồn phát'],
-                            ['Esc', 'Thoát chế độ rạp'],
-                          ].map(([key, desc]) => (
-                            <div key={key} className="flex items-center justify-between py-1.5">
-                              <span className="text-xs text-white/60">{desc}</span>
-                              <kbd className="rounded bg-white/10 px-2 py-0.5 font-mono text-[11px] text-white/80">
-                                {key}
-                              </kbd>
+                            <div className="flex items-center gap-3">
+                              <Keyboard className="h-5 w-5 text-white/60" />
+                              <span>Phím tắt</span>
                             </div>
+                            <ChevronRight className="h-4 w-4 text-white/50" />
+                          </button>
+                        </div>
+                      )}
+
+                      {/* ── Speed sub-view ── */}
+                      {settingsView === 'speed' && (
+                        <div className="flex flex-col">
+                          <button
+                            type="button"
+                            className="flex items-center gap-2 border-b border-white/10 px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:bg-white/10"
+                            onClick={() => setSettingsView('main')}
+                          >
+                            <ChevronRight className="h-4 w-4 rotate-180" />
+                            <span>Tốc độ phát</span>
+                          </button>
+                          {playbackRateOptions.map((option) => (
+                            <button
+                              key={option.value}
+                              type="button"
+                              className={cn(
+                                'flex items-center gap-3 px-4 py-2 text-sm text-white/80 transition-colors hover:bg-white/10',
+                                option.selected && 'text-white font-medium',
+                              )}
+                              onClick={() => {
+                                option.select();
+                                setSettingsView('main');
+                              }}
+                            >
+                              <span className="w-5">
+                                {option.selected && <Check className="h-4 w-4" />}
+                              </span>
+                              <span>{option.label}</span>
+                            </button>
                           ))}
                         </div>
-                      </div>
-                    )}
+                      )}
 
-                    {/* ── Subtitles sub-view ── */}
-                    {settingsView === 'subtitles' && (
-                      <div className="flex flex-col">
-                        <button
-                          type="button"
-                          className="flex items-center gap-2 border-b border-white/10 px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:bg-white/10"
-                          onClick={() => setSettingsView('main')}
-                        >
-                          <ChevronRight className="h-4 w-4 rotate-180" />
-                          <span>Phụ đề</span>
-                        </button>
-                        {captionOptions.map((option) => (
+                      {/* ── Quality sub-view ── */}
+                      {settingsView === 'quality' && (
+                        <div className="flex flex-col">
                           <button
-                            key={option.value}
                             type="button"
-                            className={cn(
-                              'flex items-center gap-3 px-4 py-2 text-sm text-white/80 transition-colors hover:bg-white/10',
-                              option.selected && 'text-white font-medium',
-                            )}
-                            onClick={() => {
-                              option.select();
-                              setSettingsView('main');
-                            }}
+                            className="flex items-center gap-2 border-b border-white/10 px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:bg-white/10"
+                            onClick={() => setSettingsView('main')}
                           >
-                            <span className="w-5">
-                              {option.selected && <Check className="h-4 w-4" />}
-                            </span>
-                            <span>{option.label}</span>
+                            <ChevronRight className="h-4 w-4 rotate-180" />
+                            <span>Chất lượng</span>
                           </button>
-                        ))}
-                      </div>
-                    )}
-                  </motion.div>
+                          {qualityOptions.map((option) => (
+                            <button
+                              key={option.value}
+                              type="button"
+                              className={cn(
+                                'flex items-center gap-3 px-4 py-2 text-sm text-white/80 transition-colors hover:bg-white/10',
+                                option.selected && 'text-white font-medium',
+                              )}
+                              onClick={() => {
+                                option.select();
+                                setSettingsView('main');
+                              }}
+                            >
+                              <span className="w-5">
+                                {option.selected && <Check className="h-4 w-4" />}
+                              </span>
+                              <span>{option.label}</span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* ── Audio sub-view ── */}
+                      {settingsView === 'audio' && (
+                        <div className="flex flex-col">
+                          <button
+                            type="button"
+                            className="flex items-center gap-2 border-b border-white/10 px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:bg-white/10"
+                            onClick={() => setSettingsView('main')}
+                          >
+                            <ChevronRight className="h-4 w-4 rotate-180" />
+                            <span>Âm thanh</span>
+                          </button>
+                          {audioOptions.map((option) => (
+                            <button
+                              key={option.value}
+                              type="button"
+                              className={cn(
+                                'flex items-center gap-3 px-4 py-2 text-sm text-white/80 transition-colors hover:bg-white/10',
+                                option.selected && 'text-white font-medium',
+                              )}
+                              onClick={() => {
+                                option.select();
+                                setSettingsView('main');
+                              }}
+                            >
+                              <span className="w-5">
+                                {option.selected && <Check className="h-4 w-4" />}
+                              </span>
+                              <span>{option.label}</span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* ── Audio gain sub-view ── */}
+                      {settingsView === 'audio-gain' && (
+                        <div className="flex flex-col">
+                          <button
+                            type="button"
+                            className="flex items-center gap-2 border-b border-white/10 px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:bg-white/10"
+                            onClick={() => setSettingsView('main')}
+                          >
+                            <ChevronRight className="h-4 w-4 rotate-180" />
+                            <span>Audio Gain</span>
+                          </button>
+                          <div className="space-y-3 px-4 py-3">
+                            <AudioGainSlider.Root
+                              min={100}
+                              max={200}
+                              step={5}
+                              keyStep={5}
+                              className={cn(
+                                'group/gain relative flex h-5 w-full cursor-pointer items-center',
+                                !canSetAudioGain && 'pointer-events-none opacity-50',
+                              )}
+                            >
+                              <AudioGainSlider.Track className="relative h-[4px] w-full bg-white/20">
+                                <AudioGainSlider.TrackFill className="absolute inset-y-0 left-0 bg-[#DFE104]" />
+                              </AudioGainSlider.Track>
+                              <AudioGainSlider.Thumb className="absolute left-[var(--slider-fill)] top-1/2 block h-4 w-[3px] -translate-x-1/2 -translate-y-1/2 bg-[#FAFAFA] shadow-[0_0_8px_rgba(223,225,4,0.5)]" />
+                            </AudioGainSlider.Root>
+
+                            <div className="flex items-center justify-between text-xs text-white/60">
+                              <span>100%</span>
+                              <span className="font-medium text-[#DFE104]">
+                                {audioGainPercent}%
+                              </span>
+                              <span>200%</span>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                              {[100, 125, 150, 200].map((preset) => (
+                                <button
+                                  key={preset}
+                                  type="button"
+                                  className={cn(
+                                    'border border-white/15 px-2 py-1 text-xs font-medium text-white/75 transition-colors hover:border-[#DFE104] hover:text-[#DFE104]',
+                                    Math.abs(audioGainPercent - preset) <= 2 &&
+                                      'border-[#DFE104] text-[#DFE104]',
+                                  )}
+                                  onClick={() => player?.remote?.changeAudioGain?.(preset / 100)}
+                                >
+                                  {preset}%
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* ── Shortcuts sub-view ── */}
+                      {settingsView === 'shortcuts' && (
+                        <div className="flex flex-col">
+                          <button
+                            type="button"
+                            className="flex items-center gap-2 border-b border-white/10 px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:bg-white/10"
+                            onClick={() => setSettingsView('main')}
+                          >
+                            <ChevronRight className="h-4 w-4 rotate-180" />
+                            <span>Phím tắt</span>
+                          </button>
+                          <div className="max-h-[300px] overflow-y-auto px-4 py-2">
+                            {[
+                              ['K / Space', 'Phát / Tạm dừng'],
+                              ['M', 'Bật / Tắt tiếng'],
+                              ['F', 'Toàn màn hình'],
+                              ['T', 'Chế độ rạp'],
+                              ['P', 'Picture-in-Picture'],
+                              ['C', 'Bật / Tắt phụ đề'],
+                              ['J / ←', 'Tập trước'],
+                              ['L / →', 'Tập tiếp theo'],
+                              ['↑ / ↓', 'Tăng / giảm âm lượng'],
+                              ['R', 'Tải lại nguồn phát'],
+                              ['Esc', 'Thoát chế độ rạp'],
+                            ].map(([key, desc]) => (
+                              <div key={key} className="flex items-center justify-between py-1.5">
+                                <span className="text-xs text-white/60">{desc}</span>
+                                <kbd className="rounded bg-white/10 px-2 py-0.5 font-mono text-[11px] text-white/80">
+                                  {key}
+                                </kbd>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* ── Subtitles sub-view ── */}
+                      {settingsView === 'subtitles' && (
+                        <div className="flex flex-col">
+                          <button
+                            type="button"
+                            className="flex items-center gap-2 border-b border-white/10 px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:bg-white/10"
+                            onClick={() => setSettingsView('main')}
+                          >
+                            <ChevronRight className="h-4 w-4 rotate-180" />
+                            <span>Phụ đề</span>
+                          </button>
+                          {captionOptions.map((option) => (
+                            <button
+                              key={option.value}
+                              type="button"
+                              className={cn(
+                                'flex items-center gap-3 px-4 py-2 text-sm text-white/80 transition-colors hover:bg-white/10',
+                                option.selected && 'text-white font-medium',
+                              )}
+                              onClick={() => {
+                                option.select();
+                                setSettingsView('main');
+                              }}
+                            >
+                              <span className="w-5">
+                                {option.selected && <Check className="h-4 w-4" />}
+                              </span>
+                              <span>{option.label}</span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Fullscreen */}
+              <FullscreenButton
+                className={cn(
+                  BRUTAL_ICON_BTN,
+                  'border-r-0 border-l border-[#3F3F46]',
+                  !canFullscreen && 'opacity-40 cursor-not-allowed',
                 )}
-              </AnimatePresence>
+                aria-label="Toàn màn hình"
+                title="Toàn màn hình (F)"
+                disabled={!canFullscreen}
+              >
+                {fullscreen ? (
+                  <SharpFullscreenExitIcon className={SHARP_STROKE_ICON} />
+                ) : (
+                  <SharpFullscreenIcon className={SHARP_STROKE_ICON} />
+                )}
+              </FullscreenButton>
             </div>
-
-            {/* Google Cast */}
-            {canGoogleCast && (
-              <GoogleCastButton
-                className={cn(
-                  YT_ICON_BTN,
-                  'hidden sm:inline-flex',
-                  isGoogleCastConnected && 'text-[#DFE104]',
-                )}
-                aria-label={isGoogleCastConnected ? 'Ngắt Google Cast' : 'Google Cast'}
-                title={isGoogleCastConnected ? 'Ngắt Google Cast' : 'Google Cast'}
-                disabled={!canInteract}
-              >
-                <Cast className="h-[20px] w-[20px]" />
-              </GoogleCastButton>
-            )}
-
-            {/* PiP */}
-            {canPictureInPicture && (
-              <PIPButton
-                className={cn(
-                  YT_ICON_BTN,
-                  'hidden sm:inline-flex',
-                  pictureInPicture && 'text-white',
-                )}
-                aria-label="Trình phát thu nhỏ"
-                title="Trình phát thu nhỏ (P)"
-                disabled={!canInteract}
-              >
-                <MonitorPlay className="h-[22px] w-[22px]" />
-              </PIPButton>
-            )}
-
-            {/* Theater mode */}
-            <button
-              type="button"
-              className={cn(YT_ICON_BTN, isTheaterMode && 'text-[#DFE104]')}
-              aria-label={isTheaterMode ? 'Thoát chế độ rạp' : 'Chế độ rạp'}
-              title={isTheaterMode ? 'Thoát rạp (T)' : 'Chế độ rạp (T)'}
-              onClick={() => {
-                window.dispatchEvent(new KeyboardEvent('keydown', { key: 't', bubbles: true }));
-              }}
-            >
-              <ProjectorScreenIcon className="h-[20px] w-[20px]" />
-            </button>
-
-            {/* Fullscreen */}
-            <FullscreenButton
-              className={cn(YT_ICON_BTN, !canFullscreen && 'opacity-40 cursor-not-allowed')}
-              aria-label="Toàn màn hình"
-              title="Toàn màn hình (F)"
-              disabled={!canFullscreen}
-            >
-              {fullscreen ? (
-                <Minimize2 className="h-[22px] w-[22px]" />
-              ) : (
-                <CornersOutIcon className="h-[22px] w-[22px]" />
-              )}
-            </FullscreenButton>
           </div>
         </Controls.Group>
       </Controls.Root>
@@ -1251,15 +1519,15 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
         {shouldShowInitialSplash && (
           <motion.div
             {...springOverlay}
-            className="absolute inset-0 z-[3] flex items-center justify-center"
+            className="pointer-events-none absolute inset-0 z-[3] flex items-center justify-center"
           >
             <button
               type="button"
               onClick={() => player?.play()}
-              className="group flex h-[68px] w-[68px] items-center justify-center rounded-full bg-black/50 text-white transition-all duration-200 hover:scale-110 hover:bg-[#DFE104]/90 hover:text-[#09090B]"
+              className="group pointer-events-auto flex h-[80px] w-[80px] items-center justify-center border border-[#3F3F46] bg-[#09090B]/90 text-[#FAFAFA] transition-none hover:bg-[#DFE104] hover:text-[#09090B]"
               aria-label="Bắt đầu phát"
             >
-              <Play className="h-8 w-8 translate-x-[2px] fill-white text-white" />
+              <SharpPlayIcon className="h-9 w-9 fill-current" />
             </button>
           </motion.div>
         )}
