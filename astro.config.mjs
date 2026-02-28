@@ -55,6 +55,8 @@ export default defineConfig({
         '/',
         '/[page]',
         '/tim-kiem/[keyword]',
+        '/danh-sach/[type]',
+        '/danh-sach/[type]/[page]',
         '/danh-sach/the-loai/[type]',
         '/danh-sach/quoc-gia/[type]',
         '/danh-sach/nam/[year]',
