@@ -254,6 +254,34 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
     goToEpisodeIndex(currentEpisodeIndex + 1);
   }, [currentEpisodeIndex, goToEpisodeIndex, hasNextEpisode]);
 
+  const seekWithinCurrentEpisode = useCallback(
+    (deltaSeconds: number) => {
+      const player = mediaPlayerRef.current;
+      if (
+        !player ||
+        playbackMode !== 'vidstack' ||
+        !Number.isFinite(deltaSeconds) ||
+        deltaSeconds === 0
+      )
+        return;
+
+      const currentTime = Number.isFinite(player.currentTime) ? player.currentTime : 0;
+      const duration = Number.isFinite(player.duration) ? player.duration : 0;
+      const maxTime =
+        duration > 0 ? duration : Math.max(currentTime + deltaSeconds, currentTime, 0);
+      const nextTime = Math.min(Math.max(currentTime + deltaSeconds, 0), maxTime);
+
+      const remoteApi = player.remote as unknown as { seek?: (time: number) => void };
+      if (typeof remoteApi.seek === 'function') {
+        remoteApi.seek(nextTime);
+        return;
+      }
+
+      player.currentTime = nextTime;
+    },
+    [playbackMode],
+  );
+
   const switchEpisodeSource = useCallback(
     (sourceName: string) => {
       const normalizedSource = normalizeSourceName(sourceName);
@@ -672,16 +700,31 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
     const onKeyDown = (event: KeyboardEvent) => {
       if (isEditableTarget(event.target)) return;
       const key = event.key.toLowerCase();
-      if (key === 'j' || event.key === 'ArrowLeft') {
+
+      if ((event.shiftKey && key === 'p') || event.key === 'PageUp') {
         event.preventDefault();
         goToPreviousEpisode();
         return;
       }
-      if (key === 'l' || event.key === 'ArrowRight') {
+
+      if ((event.shiftKey && key === 'n') || event.key === 'PageDown') {
         event.preventDefault();
         goToNextEpisode();
         return;
       }
+
+      if (key === 'j' || event.key === 'ArrowLeft') {
+        event.preventDefault();
+        seekWithinCurrentEpisode(-10);
+        return;
+      }
+
+      if (key === 'l' || event.key === 'ArrowRight') {
+        event.preventDefault();
+        seekWithinCurrentEpisode(10);
+        return;
+      }
+
       if (key === 'f') {
         event.preventDefault();
         void toggleFullscreen();
@@ -709,6 +752,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
     goToNextEpisode,
     goToPreviousEpisode,
     reloadCurrentSource,
+    seekWithinCurrentEpisode,
     toggleFullscreen,
     togglePiP,
     playbackMode,
@@ -732,14 +776,29 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
   useEffect(() => {
     if (playbackMode !== 'vidstack') return;
     const player = mediaPlayerRef.current;
-    if (!player || !canRootOrientScreen || rootPointer !== 'coarse') return;
+    if (!player || rootPointer !== 'coarse') return;
+
+    const nativeOrientation = screen.orientation as
+      | (ScreenOrientation & {
+          lock?: (orientation: OrientationLockType) => Promise<void>;
+          unlock?: () => void;
+        })
+      | undefined;
 
     const syncOrientation = async () => {
       try {
         if (isPlayerFullscreen) {
-          await player.orientation.lock('landscape');
+          if (canRootOrientScreen) {
+            await player.orientation.lock('landscape');
+            return;
+          }
+          await nativeOrientation?.lock?.('landscape');
         } else {
-          await player.orientation.unlock();
+          if (canRootOrientScreen) {
+            await player.orientation.unlock();
+            return;
+          }
+          nativeOrientation?.unlock?.();
         }
       } catch {
         // Ignore orientation lock/unlock failures.
@@ -748,9 +807,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ playlist = [], movieSlug }) =
 
     void syncOrientation();
     return () => {
-      void player.orientation.unlock().catch(() => undefined);
+      if (canRootOrientScreen) {
+        void player.orientation.unlock().catch(() => undefined);
+        return;
+      }
+      nativeOrientation?.unlock?.();
     };
-  }, [playbackMode, isPlayerFullscreen, canRootOrientScreen, rootPointer, playerSrc]);
+  }, [playbackMode, isPlayerFullscreen, canRootOrientScreen, rootPointer]);
 
   // Handle video events for progress tracking
   useEffect(() => {

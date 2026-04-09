@@ -370,14 +370,39 @@ const hasPlayableEpisodes = playableEpisodes.length > 0;
     playlist={playableEpisodes}
 />
 
-<!-- Episode Selection -->
-<section class="py-12 lg:py-16 bg-[#09090B]" id="episode-selection">
-    <div class="mx-3 px-4 sm:mx-5 sm:px-6 md:mx-7 lg:mx-20 lg:px-8 xl:mx-24 2xl:mx-28">
+<!-- Video Player -->
+<section class="bg-[#09090B] pb-6 pt-8 sm:py-10 lg:py-16" id="video-player">
+    <div class="mx-0 px-0 sm:mx-5 sm:px-6 md:mx-7 lg:mx-20 lg:px-8 xl:mx-24 2xl:mx-28">
         <div class="max-w-384">
-            <div class="border-t-2 border-[#3F3F46] pt-8">
-                <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    <h2 class="text-2xl font-bold uppercase tracking-tighter text-[#FAFAFA]">Chọn Tập</h2>
-                    <div class="flex items-center gap-2 text-sm text-[#A1A1AA] font-bold tracking-tight">
+            <div class="space-y-3 px-4 pt-0 sm:space-y-4 sm:border-t-2 sm:border-[#3F3F46] sm:px-0 sm:pt-8">
+                <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <h2 id="playerHeading" class="text-xl font-bold uppercase tracking-tighter text-[#FAFAFA] sm:text-2xl">
+                        {firstPlayableEpisode ? `Sẵn sàng phát: ${firstPlayableEpisode.label}` : "Chưa có tập để phát"}
+                    </h2>
+                    <span id="playerStatus" class="text-[11px] uppercase tracking-[0.18em] text-[#A1A1AA] sm:text-sm sm:tracking-wider" aria-live="polite">
+                        {hasPlayableEpisodes
+                            ? "Chọn tập để bắt đầu phát."
+                            : hasEpisodes
+                                ? "Đang cập nhật nguồn phát."
+                                : "Đợi nhà phát hành cập nhật tập mới."}
+                    </span>
+                </div>
+                <div class="-mx-4 sm:mx-0">
+                    <VideoPlayer client:load playlist={playableEpisodes} movieSlug={slug} />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Episode Selection -->
+<section class="bg-[#09090B] pb-8 pt-6 sm:py-10 lg:py-16" id="episode-selection">
+    <div class="mx-0 px-4 sm:mx-5 sm:px-6 md:mx-7 lg:mx-20 lg:px-8 xl:mx-24 2xl:mx-28">
+        <div class="max-w-384">
+            <div class="border-t-2 border-[#3F3F46] pt-5 sm:pt-8">
+                <div class="mb-4 flex flex-col gap-3 sm:mb-6 sm:flex-row sm:items-center sm:justify-between">
+                    <h2 class="text-xl font-bold uppercase tracking-tighter text-[#FAFAFA] sm:text-2xl">Chọn Tập</h2>
+                    <div class="flex items-center gap-2 text-[11px] font-bold tracking-tight text-[#A1A1AA] sm:text-sm">
                         <span class="w-2 h-2 bg-[#DFE104]"></span>
                         <span class="uppercase">{episodeAvailability}</span>
                     </div>
@@ -389,34 +414,6 @@ const hasPlayableEpisodes = playableEpisodes.length > 0;
                         Hiện chưa có tập nào được cập nhật.
                     </div>
                 )}
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Video Player -->
-<section class="py-12 lg:py-16 bg-[#09090B]" id="video-player">
-    <div class="mx-3 px-4 sm:mx-5 sm:px-6 md:mx-7 lg:mx-20 lg:px-8 xl:mx-24 2xl:mx-28">
-        <div class="max-w-384">
-            <div class="border-t-2 border-[#3F3F46] pt-8 space-y-4">
-                <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                    <h2 id="playerHeading" class="text-2xl font-bold uppercase tracking-tighter text-[#FAFAFA]">
-                        {firstPlayableEpisode ? `Sẵn sàng phát: ${firstPlayableEpisode.label}` : "Chưa có tập để phát"}
-                    </h2>
-                    <span id="playerStatus" class="text-sm uppercase tracking-wider text-[#A1A1AA]" aria-live="polite">
-                        {hasPlayableEpisodes
-                            ? "Chọn tập để bắt đầu phát."
-                            : hasEpisodes
-                                ? "Đang cập nhật nguồn phát."
-                                : "Đợi nhà phát hành cập nhật tập mới."}
-                    </span>
-                </div>
-                <!-- <div
-                    id="playerShell"
-                    class="player-shell relative overflow-hidden"
-                > -->
-                    <VideoPlayer client:load playlist={playableEpisodes} movieSlug={slug} />
-                <!-- </div> -->
             </div>
         </div>
     </div>

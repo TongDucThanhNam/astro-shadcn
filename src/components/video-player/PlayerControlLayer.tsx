@@ -147,7 +147,15 @@ const BRUTAL_SERVER_BADGE =
 const BRUTAL_TIMECODE =
   'flex h-12 items-center border-r border-[#3F3F46] px-6 text-[15px] font-bold tracking-[-0.02em] tabular-nums text-[#FAFAFA]';
 const BRUTAL_TOP_ICON_BTN =
-  'inline-flex h-9 w-9 items-center justify-center border border-[#3F3F46] bg-[#09090B]/90 text-[#A1A1AA] transition-none hover:bg-[#DFE104] hover:text-[#09090B] focus-visible:outline-none focus-visible:bg-[#DFE104] focus-visible:text-[#09090B] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-[#09090B]/90 disabled:hover:text-[#A1A1AA]';
+  'inline-flex h-9 w-9 items-center justify-center border border-[#3F3F46] bg-[#09090B]/58 text-[#A1A1AA] shadow-[0_8px_20px_rgba(0,0,0,0.18)] backdrop-blur-xl backdrop-saturate-150 transition-none hover:bg-[#DFE104] hover:text-[#09090B] focus-visible:outline-none focus-visible:bg-[#DFE104] focus-visible:text-[#09090B] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-[#09090B]/58 disabled:hover:text-[#A1A1AA]';
+const PLAYER_GLASS_BAR =
+  'bg-[#09090B]/56 shadow-[0_-12px_32px_rgba(0,0,0,0.28)] backdrop-blur-[18px] backdrop-saturate-150';
+const DESKTOP_CONTROLS_HIDE_DELAY = 900;
+const TOUCH_CONTROLS_HIDE_DELAY = 1800;
+const TOUCH_ICON_BTN = 'h-11 min-w-11 px-2.5';
+const TOUCH_ICON_ONLY_BTN = 'h-11 w-11 px-0';
+const TOUCH_FILL_ICON = 'h-[13px] w-[13px]';
+const TOUCH_STROKE_ICON = 'h-[15px] w-[15px] [stroke-width:1.85]';
 
 /* ── Overlay animation presets ── */
 const springOverlay = {
@@ -168,6 +176,7 @@ const springScale = {
 type ContextMenuPos = { x: number; y: number } | null;
 type SettingsView =
   | 'main'
+  | 'source'
   | 'speed'
   | 'quality'
   | 'audio'
@@ -204,12 +213,14 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
   const [clickIndicator, setClickIndicator] = useState<'play' | 'pause' | null>(null);
   const [showStats, setShowStats] = useState(false);
   const [copiedFeedback, setCopiedFeedback] = useState<string | null>(null);
-  const [controlsVisible, setControlsVisible] = useState(true);
+  const [desktopControlsVisible, setDesktopControlsVisible] = useState(true);
+  const [isNarrowViewport, setIsNarrowViewport] = useState(false);
   const [isVolumeHoverOpen, setIsVolumeHoverOpen] = useState(false);
 
   const contextMenuRef = useRef<HTMLDivElement>(null);
   const settingsRef = useRef<HTMLDivElement>(null);
   const sourceMenuRef = useRef<HTMLDivElement>(null);
+  const desktopHideTimerRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
 
   /* ── Player state ── */
   const player = useMediaPlayer();
@@ -285,8 +296,14 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
   const audioGainMultiplier = audioGain == null ? 1 : audioGain > 10 ? audioGain / 100 : audioGain;
   const audioGainPercent = Math.round(audioGainMultiplier * 100);
   const isTouchUI = pointer === 'coarse';
-  const useCompactControls = isTouchUI || isRemoteActive;
+  const isCompactViewport = isTouchUI || isNarrowViewport;
+  const controlsHideDelay = isTouchUI ? TOUCH_CONTROLS_HIDE_DELAY : DESKTOP_CONTROLS_HIDE_DELAY;
+  const useCompactControls = isCompactViewport || isRemoteActive;
+  const showInlineVolumeControl = !isCompactViewport || isRemoteActive;
+  const showCompactSeekButtons = isCompactViewport && !isRemoteActive;
   const showVolumeHoverSlider = canSetVolume && !isTouchUI;
+  const shouldForceControlsVisible =
+    isTouchUI || paused || waiting || seeking || ended || Boolean(settingsView || isSourceMenuOpen);
   const googleCastState =
     remotePlaybackType === 'google-cast'
       ? remotePlaybackState
@@ -319,6 +336,16 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
     }
   }, [clickIndicator]);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mediaQuery = window.matchMedia('(max-width: 640px)');
+    const updateViewport = () => setIsNarrowViewport(mediaQuery.matches);
+    updateViewport();
+
+    mediaQuery.addEventListener('change', updateViewport);
+    return () => mediaQuery.removeEventListener('change', updateViewport);
+  }, []);
+
   const prevPausedRef = useRef(paused);
   useEffect(() => {
     if (prevPausedRef.current !== paused && started) {
@@ -334,16 +361,121 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
     if (videoEl) videoEl.loop = loopEnabled;
   }, [loopEnabled, player]);
 
+  const clearDesktopHideTimer = useCallback(() => {
+    if (desktopHideTimerRef.current !== null) {
+      window.clearTimeout(desktopHideTimerRef.current);
+      desktopHideTimerRef.current = null;
+    }
+  }, []);
+
+  const hideDesktopControls = useCallback(() => {
+    clearDesktopHideTimer();
+    if (shouldForceControlsVisible) {
+      setDesktopControlsVisible(true);
+      return;
+    }
+    setDesktopControlsVisible(false);
+  }, [clearDesktopHideTimer, shouldForceControlsVisible]);
+
+  const showDesktopControls = useCallback(
+    (delay = controlsHideDelay) => {
+      clearDesktopHideTimer();
+      setDesktopControlsVisible(true);
+      if (shouldForceControlsVisible) return;
+      desktopHideTimerRef.current = window.setTimeout(() => {
+        setDesktopControlsVisible(false);
+      }, delay);
+    },
+    [clearDesktopHideTimer, controlsHideDelay, shouldForceControlsVisible],
+  );
+
   // Keep controls pinned while source/settings menu is open.
   useEffect(() => {
     if (!player) return;
-    const shouldPauseControls = Boolean(settingsView || isSourceMenuOpen || isVolumeHoverOpen);
+    const shouldPauseControls = Boolean(settingsView || isSourceMenuOpen);
     if (shouldPauseControls) {
       player.remote?.pauseControls?.();
       return;
     }
     player.remote?.resumeControls?.();
-  }, [player, settingsView, isSourceMenuOpen, isVolumeHoverOpen]);
+  }, [player, settingsView, isSourceMenuOpen]);
+
+  useEffect(() => {
+    if (!desktopControlsVisible && isVolumeHoverOpen) {
+      setIsVolumeHoverOpen(false);
+    }
+  }, [desktopControlsVisible, isVolumeHoverOpen]);
+
+  useEffect(() => {
+    if (shouldForceControlsVisible) {
+      clearDesktopHideTimer();
+      setDesktopControlsVisible(true);
+      return;
+    }
+    showDesktopControls();
+    return clearDesktopHideTimer;
+  }, [clearDesktopHideTimer, shouldForceControlsVisible, showDesktopControls]);
+
+  useEffect(() => {
+    if (isTouchUI) {
+      clearDesktopHideTimer();
+      setDesktopControlsVisible(true);
+      return;
+    }
+
+    const playerEl = player?.el;
+    if (!playerEl) return;
+
+    const handlePointerMove = () => {
+      showDesktopControls();
+    };
+
+    const handlePointerDown = () => {
+      showDesktopControls();
+    };
+
+    const handlePointerLeave = () => {
+      hideDesktopControls();
+    };
+
+    const handleFocusIn = () => {
+      clearDesktopHideTimer();
+      setDesktopControlsVisible(true);
+    };
+
+    const handleFocusOut = (event: FocusEvent) => {
+      const next = event.relatedTarget;
+      if (next instanceof Node && playerEl.contains(next)) return;
+      if (shouldForceControlsVisible) {
+        setDesktopControlsVisible(true);
+        return;
+      }
+      showDesktopControls();
+    };
+
+    playerEl.addEventListener('pointermove', handlePointerMove, { passive: true });
+    playerEl.addEventListener('pointerdown', handlePointerDown, { passive: true });
+    playerEl.addEventListener('pointerleave', handlePointerLeave);
+    playerEl.addEventListener('focusin', handleFocusIn);
+    playerEl.addEventListener('focusout', handleFocusOut);
+
+    return () => {
+      playerEl.removeEventListener('pointermove', handlePointerMove);
+      playerEl.removeEventListener('pointerdown', handlePointerDown);
+      playerEl.removeEventListener('pointerleave', handlePointerLeave);
+      playerEl.removeEventListener('focusin', handleFocusIn);
+      playerEl.removeEventListener('focusout', handleFocusOut);
+    };
+  }, [
+    clearDesktopHideTimer,
+    hideDesktopControls,
+    isTouchUI,
+    player,
+    shouldForceControlsVisible,
+    showDesktopControls,
+  ]);
+
+  useEffect(() => clearDesktopHideTimer, [clearDesktopHideTimer]);
 
   /* ── Right-click context menu via player element ── */
   useEffect(() => {
@@ -590,20 +722,16 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
 
       {/* ─── Controls overlay ─── */}
       <Controls.Root
-        hideDelay={2200}
+        hideDelay={controlsHideDelay}
         hideOnMouseLeave
-        onChange={setControlsVisible}
         className={cn(
           'absolute inset-0 z-[2] flex flex-col justify-end pointer-events-none',
-          'opacity-0 transition-opacity duration-300',
-          controlsVisible && 'opacity-100',
-          'group-data-[paused]/player:opacity-100',
-          'group-data-[waiting]/player:opacity-100 group-data-[seeking]/player:opacity-100',
-          pointer === 'coarse' && 'opacity-100',
+          'opacity-0 transition-opacity duration-200',
+          (shouldForceControlsVisible || desktopControlsVisible) && 'opacity-100',
         )}
       >
         {/* Top gradient */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#09090B]/85 via-[#09090B]/50 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#09090B]/72 via-[#09090B]/38 to-transparent" />
 
         {/* ─── Top info bar ─── */}
         {/* {(episodeLabel || sourceLabel || serverName) && (
@@ -632,7 +760,7 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
         <div className="flex-1" />
 
         {/* Bottom gradient */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#09090B]/95 via-[#09090B]/55 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#09090B]/76 via-[#09090B]/34 to-transparent" />
 
         {/* Top-right quick actions (remote playback) */}
         {(canUseGoogleCast || canUseAirPlay) && !isRemoteActive && (
@@ -676,7 +804,7 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
 
         {/* Live badge (top-left) */}
         {live && (
-          <div className="pointer-events-auto absolute left-3 top-3 z-10 flex items-center gap-1.5 border border-[#3F3F46] bg-[#09090B]/90 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.14em] backdrop-blur-md">
+          <div className="pointer-events-auto absolute left-3 top-3 z-10 flex items-center gap-1.5 border border-[#3F3F46] bg-[#09090B]/58 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.14em] shadow-[0_8px_20px_rgba(0,0,0,0.18)] backdrop-blur-xl backdrop-saturate-150">
             <span
               className={cn('h-1.5 w-1.5', liveEdge ? 'bg-red-500 animate-pulse' : 'bg-gray-500')}
             />
@@ -693,20 +821,40 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
           )}
           <TimeSlider.Root
             className={cn(
-              'group/time relative flex h-[3px] w-full cursor-pointer items-stretch transition-[height] duration-150 hover:h-[10px] data-[dragging]:h-[10px]',
+              'group/time relative flex w-full cursor-pointer transition-[height] duration-150',
+              isTouchUI
+                ? 'h-4 items-center py-[5px] data-[dragging]:h-4'
+                : 'h-[3px] items-stretch hover:h-[10px] data-[dragging]:h-[10px]',
               !canInteract && 'pointer-events-none opacity-60',
             )}
           >
-            <TimeSlider.Track className="relative h-full w-full overflow-hidden bg-white/20">
+            <TimeSlider.Track
+              className={cn(
+                'relative w-full overflow-hidden bg-white/20',
+                isTouchUI ? 'h-[4px] rounded-full' : 'h-full',
+              )}
+            >
               {/* Buffered */}
               <TimeSlider.Progress
-                className="absolute inset-y-0 left-0 bg-white/35"
+                className={cn('absolute inset-y-0 left-0 bg-white/35', isTouchUI && 'rounded-full')}
                 style={{ width: `${bufferedPercent}%` }}
               />
               {/* Played – accent yellow */}
-              <TimeSlider.TrackFill className="absolute inset-y-0 left-0 w-[var(--slider-fill)] bg-[#DFE104]" />
+              <TimeSlider.TrackFill
+                className={cn(
+                  'absolute inset-y-0 left-0 w-[var(--slider-fill)] bg-[#DFE104]',
+                  isTouchUI && 'rounded-full',
+                )}
+              />
             </TimeSlider.Track>
-            <TimeSlider.Thumb className="pointer-events-none absolute left-[var(--slider-fill)] top-1/2 z-[3] block h-[12px] w-[2px] -translate-x-1/2 -translate-y-1/2 bg-[#FAFAFA] opacity-0 shadow-[0_0_10px_rgba(223,225,4,0.5)] transition-[opacity,width] duration-150 group-hover/time:w-[4px] group-hover/time:opacity-100 group-data-[active]/time:w-[4px] group-data-[active]/time:opacity-100 group-data-[dragging]/time:w-[4px] group-data-[dragging]/time:opacity-100" />
+            <TimeSlider.Thumb
+              className={cn(
+                'pointer-events-none absolute left-[var(--slider-fill)] top-1/2 z-[3] block -translate-x-1/2 -translate-y-1/2 transition-[opacity,width,height] duration-150',
+                isTouchUI
+                  ? 'h-[10px] w-[10px] rounded-full border border-[#09090B] bg-[#FAFAFA] opacity-0 shadow-[0_0_0_2px_rgba(223,225,4,0.35)] group-data-[active]/time:opacity-100 group-data-[dragging]/time:opacity-100'
+                  : 'h-[12px] w-[2px] bg-[#FAFAFA] opacity-0 shadow-[0_0_10px_rgba(223,225,4,0.5)] group-hover/time:w-[4px] group-hover/time:opacity-100 group-data-[active]/time:w-[4px] group-data-[active]/time:opacity-100 group-data-[dragging]/time:w-[4px] group-data-[dragging]/time:opacity-100',
+              )}
+            />
           </TimeSlider.Root>
         </Controls.Group>
 
@@ -714,24 +862,54 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
         <Controls.Group className="pointer-events-auto relative z-10">
           <div
             className={cn(
-              'flex items-stretch bg-[#09090B]/85 backdrop-blur-[12px]',
-              useCompactControls ? 'h-10' : 'h-12',
+              'flex items-stretch overflow-hidden',
+              PLAYER_GLASS_BAR,
+              useCompactControls ? 'h-11' : 'h-12',
             )}
           >
             <div className="flex min-w-0 items-stretch">
               {/* Play / Pause */}
               <PlayButton
-                className={cn(BRUTAL_ICON_BTN, useCompactControls && 'h-10 px-3')}
+                className={cn(BRUTAL_ICON_BTN, useCompactControls && TOUCH_ICON_BTN)}
                 aria-label="Phát hoặc tạm dừng"
                 title="Phát/Tạm dừng (K)"
                 disabled={!canInteract}
               >
                 {paused ? (
-                  <SharpPlayIcon className={cn(SHARP_FILL_ICON, useCompactControls && 'h-4 w-4')} />
+                  <SharpPlayIcon
+                    className={cn(SHARP_FILL_ICON, useCompactControls && TOUCH_FILL_ICON)}
+                  />
                 ) : (
-                  <SharpPauseIcon className={cn(SHARP_FILL_ICON, useCompactControls && 'h-4 w-4')} />
+                  <SharpPauseIcon
+                    className={cn(SHARP_FILL_ICON, useCompactControls && TOUCH_FILL_ICON)}
+                  />
                 )}
               </PlayButton>
+
+              {showCompactSeekButtons && (
+                <>
+                  <button
+                    type="button"
+                    className={cn(BRUTAL_ICON_BTN, TOUCH_ICON_BTN)}
+                    aria-label="Lùi 10 giây"
+                    title="Lùi 10 giây"
+                    onClick={() => seekBySeconds(-10)}
+                    disabled={!canInteract}
+                  >
+                    <SkipBack className="h-[15px] w-[15px]" />
+                  </button>
+                  <button
+                    type="button"
+                    className={cn(BRUTAL_ICON_BTN, TOUCH_ICON_BTN)}
+                    aria-label="Tiến 10 giây"
+                    title="Tiến 10 giây"
+                    onClick={() => seekBySeconds(10)}
+                    disabled={!canInteract}
+                  >
+                    <SkipForward className="h-[15px] w-[15px]" />
+                  </button>
+                </>
+              )}
 
               {isRemoteActive && (
                 <>
@@ -758,98 +936,98 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                 </>
               )}
 
-              <div
-                className={cn(
-                  'group/volume flex items-stretch border-r border-[#3F3F46] bg-transparent',
-                  useCompactControls ? 'h-10' : 'h-12',
-                  showVolumeHoverSlider && 'w-[56px] transition-[width] duration-200 ease-out',
-                  showVolumeHoverSlider &&
-                    'hover:w-[210px] focus-within:w-[210px] data-[open=true]:w-[210px]',
-                )}
-                data-open={isVolumeHoverOpen}
-                onPointerEnter={() => {
-                  if (showVolumeHoverSlider) setIsVolumeHoverOpen(true);
-                }}
-                onPointerLeave={() => setIsVolumeHoverOpen(false)}
-                onFocusCapture={() => {
-                  if (showVolumeHoverSlider) setIsVolumeHoverOpen(true);
-                }}
-                onBlurCapture={(event) => {
-                  const next = event.relatedTarget;
-                  if (!(next instanceof Node) || !event.currentTarget.contains(next)) {
-                    setIsVolumeHoverOpen(false);
-                  }
-                }}
-              >
-                <MuteButton
+              {showInlineVolumeControl && (
+                <div
                   className={cn(
-                    'inline-flex h-12 w-[56px] shrink-0 items-center justify-center text-[#FAFAFA] transition-none hover:bg-[#DFE104] hover:text-[#09090B] focus-visible:outline-none focus-visible:bg-[#DFE104] focus-visible:text-[#09090B] disabled:cursor-not-allowed disabled:text-[#71717A] disabled:hover:bg-transparent disabled:hover:text-[#71717A]',
-                    useCompactControls && 'h-10 w-10',
-                    showVolumeHoverSlider && 'border-r border-[#3F3F46]',
+                    'group/volume flex items-stretch border-r border-[#3F3F46] bg-transparent',
+                    useCompactControls ? 'h-11' : 'h-12',
+                    showVolumeHoverSlider && 'w-[56px] transition-[width] duration-200 ease-out',
+                    showVolumeHoverSlider &&
+                      'hover:w-[210px] focus-within:w-[210px] data-[open=true]:w-[210px]',
                   )}
-                  aria-label="Bật hoặc tắt tiếng"
-                  title="Tắt tiếng (M)"
-                  disabled={!canInteract}
+                  data-open={isVolumeHoverOpen}
+                  onPointerEnter={() => {
+                    if (showVolumeHoverSlider) setIsVolumeHoverOpen(true);
+                  }}
+                  onPointerLeave={() => setIsVolumeHoverOpen(false)}
+                  onFocusCapture={() => {
+                    if (showVolumeHoverSlider) setIsVolumeHoverOpen(true);
+                  }}
+                  onBlurCapture={(event) => {
+                    const next = event.relatedTarget;
+                    if (!(next instanceof Node) || !event.currentTarget.contains(next)) {
+                      setIsVolumeHoverOpen(false);
+                    }
+                  }}
                 >
-                  {isMuted ? (
-                    <SharpMutedIcon
-                      className={cn(
-                        SHARP_STROKE_ICON,
-                        useCompactControls && 'h-[17px] w-[17px] [stroke-width:1.9]',
-                      )}
-                    />
-                  ) : (
-                    <SharpVolumeIcon
-                      className={cn(
-                        SHARP_STROKE_ICON,
-                        useCompactControls && 'h-[17px] w-[17px] [stroke-width:1.9]',
-                      )}
-                    />
-                  )}
-                </MuteButton>
-
-                {showVolumeHoverSlider && (
-                  <div
+                  <MuteButton
                     className={cn(
-                      'flex min-w-0 flex-1 items-center overflow-hidden px-0 opacity-0 transition-[opacity,padding] duration-150',
-                      'group-hover/volume:px-3 group-hover/volume:opacity-100',
-                      'group-focus-within/volume:px-3 group-focus-within/volume:opacity-100',
+                      'inline-flex h-12 w-[56px] shrink-0 items-center justify-center text-[#FAFAFA] transition-none hover:bg-[#DFE104] hover:text-[#09090B] focus-visible:outline-none focus-visible:bg-[#DFE104] focus-visible:text-[#09090B] disabled:cursor-not-allowed disabled:text-[#71717A] disabled:hover:bg-transparent disabled:hover:text-[#71717A]',
+                      useCompactControls && TOUCH_ICON_ONLY_BTN,
+                      showVolumeHoverSlider && 'border-r border-[#3F3F46]',
                     )}
+                    aria-label="Bật hoặc tắt tiếng"
+                    title="Tắt tiếng (M)"
+                    disabled={!canInteract}
                   >
-                    <VolumeSlider.Root
+                    {isMuted ? (
+                      <SharpMutedIcon
+                        className={cn(SHARP_STROKE_ICON, useCompactControls && TOUCH_STROKE_ICON)}
+                      />
+                    ) : (
+                      <SharpVolumeIcon
+                        className={cn(SHARP_STROKE_ICON, useCompactControls && TOUCH_STROKE_ICON)}
+                      />
+                    )}
+                  </MuteButton>
+
+                  {showVolumeHoverSlider && (
+                    <div
                       className={cn(
-                        'group/volslider relative flex h-4 min-w-0 w-full cursor-pointer items-center',
-                        !canInteract && 'pointer-events-none opacity-60',
+                        'flex min-w-0 flex-1 items-center overflow-hidden px-0 opacity-0 transition-[opacity,padding] duration-150',
+                        'group-hover/volume:px-3 group-hover/volume:opacity-100',
+                        'group-focus-within/volume:px-3 group-focus-within/volume:opacity-100',
                       )}
                     >
-                      <VolumeSlider.Track className="relative h-[3px] w-full bg-white/20">
-                        <VolumeSlider.TrackFill className="absolute inset-y-0 left-0 w-[var(--slider-fill)] bg-[#DFE104]" />
-                      </VolumeSlider.Track>
-                      <VolumeSlider.Thumb className="absolute left-[var(--slider-fill)] top-1/2 block h-[11px] w-[3px] -translate-x-1/2 -translate-y-1/2 bg-[#FAFAFA] opacity-0 shadow-[0_0_10px_rgba(223,225,4,0.5)] transition-[opacity,width] duration-150 group-hover/volslider:w-[4px] group-hover/volslider:opacity-100 group-data-[active]/volslider:w-[4px] group-data-[active]/volslider:opacity-100 group-data-[dragging]/volslider:w-[4px] group-data-[dragging]/volslider:opacity-100" />
-                    </VolumeSlider.Root>
-                  </div>
-                )}
-              </div>
+                      <VolumeSlider.Root
+                        className={cn(
+                          'group/volslider relative flex h-4 min-w-0 w-full cursor-pointer items-center',
+                          !canInteract && 'pointer-events-none opacity-60',
+                        )}
+                      >
+                        <VolumeSlider.Track className="relative h-[3px] w-full bg-white/20">
+                          <VolumeSlider.TrackFill className="absolute inset-y-0 left-0 w-[var(--slider-fill)] bg-[#DFE104]" />
+                        </VolumeSlider.Track>
+                        <VolumeSlider.Thumb className="absolute left-[var(--slider-fill)] top-1/2 block h-[11px] w-[3px] -translate-x-1/2 -translate-y-1/2 bg-[#FAFAFA] opacity-0 shadow-[0_0_10px_rgba(223,225,4,0.5)] transition-[opacity,width] duration-150 group-hover/volslider:w-[4px] group-hover/volslider:opacity-100 group-data-[active]/volslider:w-[4px] group-data-[active]/volslider:opacity-100 group-data-[dragging]/volslider:w-[4px] group-data-[dragging]/volslider:opacity-100" />
+                      </VolumeSlider.Root>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Time display */}
               <div
                 className={cn(
                   BRUTAL_TIMECODE,
-                  useCompactControls && 'h-10 min-w-0 border-r-0 px-2 text-[13px]',
+                  useCompactControls &&
+                    'h-11 min-w-0 border-r-0 px-1.5 text-[12px] tracking-[-0.01em]',
                 )}
               >
                 <Time type="current" className="inline" />
                 <span
                   className={cn(
                     'px-2.5 text-[#3F3F46]',
-                    isTouchUI && 'hidden px-1.5 min-[390px]:inline',
+                    isCompactViewport && 'hidden px-1.5 min-[390px]:inline',
                   )}
                 >
                   /
                 </span>
                 <Time
                   type="duration"
-                  className={cn('inline text-[#A1A1AA]', isTouchUI && 'hidden min-[390px]:inline')}
+                  className={cn(
+                    'inline text-[#A1A1AA]',
+                    isCompactViewport && 'hidden min-[390px]:inline',
+                  )}
                 />
               </div>
             </div>
@@ -867,7 +1045,10 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                   {isGoogleCastConnected && (
                     <div onPointerUp={(event) => event.stopPropagation()}>
                       <GoogleCastButton
-                        className={cn(BRUTAL_ICON_BTN, 'h-10 border-r-0 border-l border-[#3F3F46] px-3')}
+                        className={cn(
+                          BRUTAL_ICON_BTN,
+                          'h-10 border-r-0 border-l border-[#3F3F46] px-3',
+                        )}
                         disabled={!canGoogleCast || googleCastState === 'connecting'}
                         aria-label="Google Cast"
                         title={`Google Cast • ${getRemoteStateLabel('google-cast', googleCastState)}`}
@@ -880,7 +1061,10 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                   {isAirPlayConnected && (
                     <div onPointerUp={(event) => event.stopPropagation()}>
                       <AirPlayButton
-                        className={cn(BRUTAL_ICON_BTN, 'h-10 border-r-0 border-l border-[#3F3F46] px-3')}
+                        className={cn(
+                          BRUTAL_ICON_BTN,
+                          'h-10 border-r-0 border-l border-[#3F3F46] px-3',
+                        )}
                         disabled={!canAirPlay || airPlayState === 'connecting'}
                         aria-label="AirPlay"
                         title={`AirPlay • ${getRemoteStateLabel('airplay', airPlayState)}`}
@@ -906,13 +1090,14 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                     </span>
                   </button>
                 </>
-              ) : canSwitchSources ? (
+              ) : canSwitchSources && !isCompactViewport ? (
                 <div className="relative" ref={sourceMenuRef}>
                   <button
                     type="button"
                     className={cn(
                       BRUTAL_SERVER_BADGE,
-                      isTouchUI && 'h-10 w-10 justify-center border-l border-r px-0',
+                      isCompactViewport &&
+                        `${TOUCH_ICON_ONLY_BTN} justify-center border-l border-r`,
                       isSourceMenuOpen && 'bg-[#DFE104] text-[#09090B]',
                     )}
                     onClick={(e) => {
@@ -924,8 +1109,8 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                     aria-label="Đổi nguồn phát"
                     title="Đổi nguồn phát"
                   >
-                    {isTouchUI ? (
-                      <Server className="h-[16px] w-[16px]" />
+                    {isCompactViewport ? (
+                      <Server className="h-[15px] w-[15px]" />
                     ) : (
                       <>
                         <span className="h-1.5 w-1.5 shrink-0 bg-current opacity-85" />
@@ -945,7 +1130,7 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                         transition={{ duration: 0.15 }}
                         className={cn(
                           'absolute bottom-[calc(100%+4px)] right-0 z-30 min-w-[220px] overflow-hidden border border-[#3F3F46] bg-[#09090B]/95 py-1 shadow-2xl backdrop-blur-md',
-                          isTouchUI && 'w-[min(18rem,calc(100vw-24px))] min-w-0',
+                          isCompactViewport && 'w-[min(18rem,calc(100vw-24px))] min-w-0',
                         )}
                       >
                         {sourceOptions.map((source) => {
@@ -987,7 +1172,7 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                 </div>
               ) : (
                 hasSourceBadge &&
-                !isTouchUI && (
+                !isCompactViewport && (
                   <span className="inline-flex h-12 max-w-[220px] items-center gap-2 border-l border-[#3F3F46] border-r border-[#3F3F46] px-4 text-[11px] font-bold uppercase tracking-[0.14em] text-[#A1A1AA]">
                     <span className="h-1.5 w-1.5 shrink-0 bg-current opacity-85" />
                     <span className="truncate">#{sourceMenuLabel}</span>
@@ -1020,7 +1205,7 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                   className={cn(
                     BRUTAL_ICON_BTN,
                     'border-r-0 border-l border-[#3F3F46]',
-                    isTouchUI && 'h-10 px-3',
+                    isCompactViewport && TOUCH_ICON_BTN,
                     settingsView && 'bg-[#DFE104] text-[#09090B]',
                   )}
                   onClick={(e) => {
@@ -1035,7 +1220,7 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                   <Settings
                     className={cn(
                       'h-[20px] w-[20px]',
-                      isTouchUI && 'h-[17px] w-[17px]',
+                      isCompactViewport && 'h-[15px] w-[15px]',
                       settingsView ? 'text-[#09090B]' : 'text-[#FAFAFA]',
                     )}
                     weight="regular"
@@ -1056,6 +1241,25 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                       {/* ── Main view ── */}
                       {settingsView === 'main' && (
                         <div className="flex flex-col">
+                          {isCompactViewport && canSwitchSources && (
+                            <button
+                              type="button"
+                              className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm text-white/90 transition-colors hover:bg-white/10"
+                              onClick={() => setSettingsView('source')}
+                            >
+                              <div className="flex items-center gap-3">
+                                <Server className="h-5 w-5 text-white/60" />
+                                <span>Nguồn phát</span>
+                              </div>
+                              <div className="flex items-center gap-1 text-white/50">
+                                <span className="max-w-[8rem] truncate text-xs">
+                                  {sourceMenuLabel}
+                                </span>
+                                <ChevronRight className="h-4 w-4" />
+                              </div>
+                            </button>
+                          )}
+
                           {/* Playback Speed */}
                           <button
                             type="button"
@@ -1117,7 +1321,6 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                           )}
 
                           {/* Audio gain */}
-
 
                           {/* Subtitles */}
                           {captionOptions.length > 1 && (
@@ -1263,6 +1466,53 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                             </div>
                             <ChevronRight className="h-4 w-4 text-white/50" />
                           </button>
+                        </div>
+                      )}
+
+                      {/* ── Source sub-view ── */}
+                      {settingsView === 'source' && sourceOptions && (
+                        <div className="flex flex-col">
+                          <button
+                            type="button"
+                            className="flex items-center gap-2 border-b border-white/10 px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:bg-white/10"
+                            onClick={() => setSettingsView('main')}
+                          >
+                            <ChevronRight className="h-4 w-4 rotate-180" />
+                            <span>Nguồn phát</span>
+                          </button>
+                          {sourceOptions.map((source) => {
+                            const isDisabled = !source.available;
+                            return (
+                              <button
+                                key={source.name}
+                                type="button"
+                                disabled={isDisabled}
+                                className={cn(
+                                  'flex items-center justify-between gap-3 px-4 py-2.5 text-left text-sm transition-colors',
+                                  source.active
+                                    ? 'bg-[#DFE104]/12 font-medium text-[#DFE104]'
+                                    : 'text-white/90 hover:bg-white/10',
+                                  isDisabled &&
+                                    'cursor-not-allowed text-white/35 hover:bg-transparent',
+                                )}
+                                onClick={() => {
+                                  if (isDisabled || !onSourceChange) return;
+                                  onSourceChange(source.name);
+                                  setSettingsView('main');
+                                }}
+                              >
+                                <div className="min-w-0">
+                                  <div className="truncate">{source.name}</div>
+                                  {!source.available && (
+                                    <div className="mt-0.5 text-xs text-white/35">
+                                      {source.unavailableReason || 'Chưa có tập này'}
+                                    </div>
+                                  )}
+                                </div>
+                                {source.active && <Check className="h-4 w-4 shrink-0" />}
+                              </button>
+                            );
+                          })}
                         </div>
                       )}
 
@@ -1435,13 +1685,15 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                           <div className="max-h-[300px] overflow-y-auto px-4 py-2">
                             {[
                               ['K / Space', 'Phát / Tạm dừng'],
+                              ['J / ←', 'Lùi 10 giây'],
+                              ['L / →', 'Tiến 10 giây'],
                               ['M', 'Bật / Tắt tiếng'],
                               ['F', 'Toàn màn hình'],
                               ['T', 'Chế độ rạp'],
                               ['P', 'Picture-in-Picture'],
                               ['C', 'Bật / Tắt phụ đề'],
-                              ['J / ←', 'Tập trước'],
-                              ['L / →', 'Tập tiếp theo'],
+                              ['Shift+P / PageUp', 'Tập trước'],
+                              ['Shift+N / PageDown', 'Tập tiếp theo'],
                               ['↑ / ↓', 'Tăng / giảm âm lượng'],
                               ['R', 'Tải lại nguồn phát'],
                               ['Esc', 'Thoát chế độ rạp'],
@@ -1499,7 +1751,7 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                 className={cn(
                   BRUTAL_ICON_BTN,
                   'border-r-0 border-l border-[#3F3F46]',
-                  useCompactControls && 'h-10 px-3',
+                  useCompactControls && TOUCH_ICON_BTN,
                   !canFullscreen && 'opacity-40 cursor-not-allowed',
                 )}
                 aria-label="Toàn màn hình"
@@ -1508,17 +1760,11 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
               >
                 {fullscreen ? (
                   <SharpFullscreenExitIcon
-                    className={cn(
-                      SHARP_STROKE_ICON,
-                      useCompactControls && 'h-[17px] w-[17px] [stroke-width:1.9]',
-                    )}
+                    className={cn(SHARP_STROKE_ICON, useCompactControls && TOUCH_STROKE_ICON)}
                   />
                 ) : (
                   <SharpFullscreenIcon
-                    className={cn(
-                      SHARP_STROKE_ICON,
-                      useCompactControls && 'h-[17px] w-[17px] [stroke-width:1.9]',
-                    )}
+                    className={cn(SHARP_STROKE_ICON, useCompactControls && TOUCH_STROKE_ICON)}
                   />
                 )}
               </FullscreenButton>
