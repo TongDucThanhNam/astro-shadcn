@@ -152,24 +152,34 @@ const PLAYER_GLASS_BAR =
   'bg-[#09090B]/56 shadow-[0_-12px_32px_rgba(0,0,0,0.28)] backdrop-blur-[18px] backdrop-saturate-150';
 const DESKTOP_CONTROLS_HIDE_DELAY = 900;
 const TOUCH_CONTROLS_HIDE_DELAY = 1800;
-const TOUCH_ICON_BTN = 'h-11 min-w-11 px-2.5';
-const TOUCH_ICON_ONLY_BTN = 'h-11 w-11 px-0';
+const TOUCH_ICON_BTN = 'h-12 min-w-12 px-3'; // Increased from h-11 for WCAG compliance
+const TOUCH_ICON_ONLY_BTN = 'h-12 w-12 px-0'; // Increased from h-11 for better touch targets
 const TOUCH_FILL_ICON = 'h-[13px] w-[13px]';
 const TOUCH_STROKE_ICON = 'h-[15px] w-[15px] [stroke-width:1.85]';
+const SWIPE_THRESHOLD = 50; // Minimum pixels to trigger swipe
+const SWIPE_TIMEOUT_MS = 500; // Maximum time for swipe gesture
+const SWIPE_SEEK_SECONDS = 15; // Seconds to seek on swipe
+const NETWORK_RETRY_MAX = 3; // Max network retry attempts
+const NETWORK_RETRY_BACKOFF_MS = [1000, 2000, 4000]; // Exponential backoff delays
 
 /* ── Overlay animation presets ── */
+const getAnimationDuration = () => {
+  if (typeof window === 'undefined') return 0.25;
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 0.25;
+};
+
 const springOverlay = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
   exit: { opacity: 0 },
-  transition: { duration: 0.25 },
+  transition: { duration: getAnimationDuration() },
 };
 
 const springScale = {
   initial: { opacity: 0, scale: 0.8 },
   animate: { opacity: 1, scale: 1 },
   exit: { opacity: 0, scale: 0.8 },
-  transition: { duration: 0.3, ease: 'backOut' as const },
+  transition: { duration: getAnimationDuration() * 1.2, ease: 'backOut' as const },
 };
 
 /* ── Types ── */
@@ -216,11 +226,14 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
   const [desktopControlsVisible, setDesktopControlsVisible] = useState(true);
   const [isNarrowViewport, setIsNarrowViewport] = useState(false);
   const [isVolumeHoverOpen, setIsVolumeHoverOpen] = useState(false);
+  const [networkRetryCount, setNetworkRetryCount] = useState(0);
 
   const contextMenuRef = useRef<HTMLDivElement>(null);
   const settingsRef = useRef<HTMLDivElement>(null);
   const sourceMenuRef = useRef<HTMLDivElement>(null);
   const desktopHideTimerRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
+  const touchStartRef = useRef<{ x: number; time: number } | null>(null);
+  const networkRetryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   /* ── Player state ── */
   const player = useMediaPlayer();
@@ -299,11 +312,13 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
   const isCompactViewport = isTouchUI || isNarrowViewport;
   const controlsHideDelay = isTouchUI ? TOUCH_CONTROLS_HIDE_DELAY : DESKTOP_CONTROLS_HIDE_DELAY;
   const useCompactControls = isCompactViewport || isRemoteActive;
-  const showInlineVolumeControl = !isCompactViewport || isRemoteActive;
+  // IMPROVED: Hide volume slider on mobile entirely (save space, move to settings)
+  const showInlineVolumeControl = !isTouchUI && canSetVolume;
+  const showMuteButtonOnly = isTouchUI && canSetVolume;
   const showCompactSeekButtons = isCompactViewport && !isRemoteActive;
   const showVolumeHoverSlider = canSetVolume && !isTouchUI;
   const shouldForceControlsVisible =
-    isTouchUI || paused || waiting || seeking || ended || Boolean(settingsView || isSourceMenuOpen);
+    paused || waiting || seeking || ended || Boolean(settingsView || isSourceMenuOpen);
   const googleCastState =
     remotePlaybackType === 'google-cast'
       ? remotePlaybackState
@@ -317,16 +332,120 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
         ? 'connected'
         : 'disconnected';
 
-  const getRemoteStateLabel = useCallback(
-    (type: 'google-cast' | 'airplay', state: string) => {
-      if (state === 'connecting') return 'Đang kết nối...';
-      if (state === 'connected') {
-        return type === 'google-cast' ? remoteDeviceName : 'Đã kết nối';
+  // Check for safe area insets (iPhone notch support)
+  const hasSafeAreaInsets =
+    typeof window !== 'undefined' &&
+    (window.innerHeight < window.innerWidth || window.navigator.userAgent.includes('iPhone'));
+
+  /* ── Seek utility (needed for swipe gestures) ── */
+  const seekBySeconds = useCallback(
+    (deltaSeconds: number) => {
+      if (!player || !Number.isFinite(deltaSeconds) || deltaSeconds === 0) return;
+
+      const currentTime = Number.isFinite(player.currentTime) ? player.currentTime : 0;
+      const maxTime =
+        finiteDuration > 0 ? finiteDuration : Math.max(currentTime + deltaSeconds, currentTime, 0);
+      const nextTime = clamp(currentTime + deltaSeconds, 0, maxTime);
+
+      const remoteApi = player.remote as unknown as { seek?: (time: number) => void };
+      if (typeof remoteApi?.seek === 'function') {
+        remoteApi.seek(nextTime);
+        return;
       }
-      return 'Sẵn sàng';
+
+      player.currentTime = nextTime;
     },
-    [remoteDeviceName],
+    [player, finiteDuration],
   );
+
+  /* ── Desktop controls utilities (needed for touch interactions) ── */
+  const clearDesktopHideTimer = useCallback(() => {
+    if (desktopHideTimerRef.current !== null) {
+      window.clearTimeout(desktopHideTimerRef.current);
+      desktopHideTimerRef.current = null;
+    }
+  }, []);
+
+  const hideDesktopControls = useCallback(() => {
+    clearDesktopHideTimer();
+    if (shouldForceControlsVisible) {
+      setDesktopControlsVisible(true);
+      return;
+    }
+    setDesktopControlsVisible(false);
+  }, [clearDesktopHideTimer, shouldForceControlsVisible]);
+
+  const showDesktopControls = useCallback(
+    (delay = controlsHideDelay) => {
+      clearDesktopHideTimer();
+      setDesktopControlsVisible(true);
+      if (shouldForceControlsVisible) return;
+      desktopHideTimerRef.current = window.setTimeout(() => {
+        setDesktopControlsVisible(false);
+      }, delay);
+    },
+    [clearDesktopHideTimer, controlsHideDelay, shouldForceControlsVisible],
+  );
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      time: Date.now(),
+    };
+  }, []);
+
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || !isTouchUI) return;
+
+      const start = touchStartRef.current;
+      const end = e.changedTouches[0].clientX;
+      const diffX = start.x - end;
+      const deltaTime = Date.now() - start.time;
+
+      // Detect swipe gesture: quick horizontal movement
+      if (deltaTime < SWIPE_TIMEOUT_MS && Math.abs(diffX) > SWIPE_THRESHOLD) {
+        const direction = diffX > 0 ? 1 : -1; // Left swipe = forward (positive), Right = back (negative)
+        seekBySeconds(direction * SWIPE_SEEK_SECONDS);
+        showDesktopControls(TOUCH_CONTROLS_HIDE_DELAY);
+      }
+
+      touchStartRef.current = null;
+    },
+    [isTouchUI, seekBySeconds, showDesktopControls],
+  );
+
+  // Network retry handler with exponential backoff
+  const handleNetworkRetry = useCallback(async () => {
+    if (networkRetryCount >= NETWORK_RETRY_MAX) {
+      setCopiedFeedback('Đã thử lại quá nhiều lần. Vui lòng thử lại sau.');
+      return;
+    }
+
+    const retryIndex = networkRetryCount;
+    setNetworkRetryCount((prev) => prev + 1);
+    const delayMs = NETWORK_RETRY_BACKOFF_MS[retryIndex] || 4000;
+
+    setCopiedFeedback(`Đang thử lại (${retryIndex + 1}/${NETWORK_RETRY_MAX})...`);
+
+    // Cancel any pending retry
+    if (networkRetryTimerRef.current) clearTimeout(networkRetryTimerRef.current);
+
+    networkRetryTimerRef.current = setTimeout(() => {
+      if (player) {
+        player.play().catch(() => {
+          setCopiedFeedback('Lỗi kết nối. Kiểm tra mạng và thử lại.');
+        });
+      }
+    }, delayMs);
+  }, [player, networkRetryCount]);
+
+  // Reset retry counter on successful play
+  useEffect(() => {
+    if (!waiting && !error && networkRetryCount > 0) {
+      setNetworkRetryCount(0);
+    }
+  }, [waiting, error, networkRetryCount]);
 
   /* ── Click indicator animation (brief play/pause ripple) ── */
   useEffect(() => {
@@ -360,34 +479,6 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
     const videoEl = player.el?.querySelector('video');
     if (videoEl) videoEl.loop = loopEnabled;
   }, [loopEnabled, player]);
-
-  const clearDesktopHideTimer = useCallback(() => {
-    if (desktopHideTimerRef.current !== null) {
-      window.clearTimeout(desktopHideTimerRef.current);
-      desktopHideTimerRef.current = null;
-    }
-  }, []);
-
-  const hideDesktopControls = useCallback(() => {
-    clearDesktopHideTimer();
-    if (shouldForceControlsVisible) {
-      setDesktopControlsVisible(true);
-      return;
-    }
-    setDesktopControlsVisible(false);
-  }, [clearDesktopHideTimer, shouldForceControlsVisible]);
-
-  const showDesktopControls = useCallback(
-    (delay = controlsHideDelay) => {
-      clearDesktopHideTimer();
-      setDesktopControlsVisible(true);
-      if (shouldForceControlsVisible) return;
-      desktopHideTimerRef.current = window.setTimeout(() => {
-        setDesktopControlsVisible(false);
-      }, delay);
-    },
-    [clearDesktopHideTimer, controlsHideDelay, shouldForceControlsVisible],
-  );
 
   // Keep controls pinned while source/settings menu is open.
   useEffect(() => {
@@ -476,6 +567,15 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
   ]);
 
   useEffect(() => clearDesktopHideTimer, [clearDesktopHideTimer]);
+
+  // Cleanup network retry timer
+  useEffect(() => {
+    return () => {
+      if (networkRetryTimerRef.current) {
+        clearTimeout(networkRetryTimerRef.current);
+      }
+    };
+  }, []);
 
   /* ── Right-click context menu via player element ── */
   useEffect(() => {
@@ -608,26 +708,6 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
     }
   }, [player, canAirPlay]);
 
-  const seekBySeconds = useCallback(
-    (deltaSeconds: number) => {
-      if (!player || !Number.isFinite(deltaSeconds) || deltaSeconds === 0) return;
-
-      const currentTime = Number.isFinite(player.currentTime) ? player.currentTime : 0;
-      const maxTime =
-        finiteDuration > 0 ? finiteDuration : Math.max(currentTime + deltaSeconds, currentTime, 0);
-      const nextTime = clamp(currentTime + deltaSeconds, 0, maxTime);
-
-      const remoteApi = player.remote as unknown as { seek?: (time: number) => void };
-      if (typeof remoteApi?.seek === 'function') {
-        remoteApi.seek(nextTime);
-        return;
-      }
-
-      player.currentTime = nextTime;
-    },
-    [player, finiteDuration],
-  );
-
   const disconnectRemotePlayback = useCallback(() => {
     if (!player) return;
 
@@ -724,6 +804,8 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
       <Controls.Root
         hideDelay={controlsHideDelay}
         hideOnMouseLeave
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
         className={cn(
           'absolute inset-0 z-[2] flex flex-col justify-end pointer-events-none',
           'opacity-0 transition-opacity duration-200',
@@ -865,6 +947,7 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
               'flex items-stretch overflow-hidden',
               PLAYER_GLASS_BAR,
               useCompactControls ? 'h-11' : 'h-12',
+              'max-sm:[padding-bottom:env(safe-area-inset-bottom)]', // Safe area for notched devices
             )}
           >
             <div className="flex min-w-0 items-stretch">
@@ -1003,6 +1086,22 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
                     </div>
                   )}
                 </div>
+              )}
+
+              {/* Mobile: Mute button only (volume control in settings) */}
+              {showMuteButtonOnly && (
+                <MuteButton
+                  className={cn(BRUTAL_ICON_BTN, TOUCH_ICON_BTN)}
+                  aria-label="Bật hoặc tắt tiếng"
+                  title="Tắt tiếng (M)"
+                  disabled={!canInteract}
+                >
+                  {isMuted ? (
+                    <SharpMutedIcon className={cn(SHARP_STROKE_ICON, TOUCH_STROKE_ICON)} />
+                  ) : (
+                    <SharpVolumeIcon className={cn(SHARP_STROKE_ICON, TOUCH_STROKE_ICON)} />
+                  )}
+                </MuteButton>
               )}
 
               {/* Time display */}
@@ -1998,11 +2097,43 @@ const PlayerControlLayer: React.FC<PlayerControlLayerProps> = ({
             {...springOverlay}
             className="pointer-events-none absolute inset-0 z-[3] flex flex-col items-center justify-center gap-3 bg-black/50"
           >
-            <Spinner.Root className="h-10 w-10 text-white">
-              <Spinner.Track className="stroke-white/20" />
-              <Spinner.TrackFill className="stroke-white" />
-            </Spinner.Root>
-            {error && <p className="text-xs font-medium text-white/80">Nguồn phát gặp lỗi</p>}
+            {error ? (
+              // Network error with retry
+              <motion.div className="flex flex-col items-center gap-4">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-red-500/20 text-red-400">
+                  <Info className="h-6 w-6" />
+                </div>
+                <div className="text-center">
+                  <p className="text-sm font-medium text-white/90">Lỗi kết nối video</p>
+                  <p className="mt-1 text-xs text-white/60">Kiểm tra kết nối internet và thử lại</p>
+                </div>
+                {networkRetryCount < NETWORK_RETRY_MAX ? (
+                  <button
+                    type="button"
+                    onClick={() => handleNetworkRetry()}
+                    className="pointer-events-auto flex items-center gap-2 rounded-lg bg-[#DFE104] px-6 py-2 font-semibold text-[#09090B] transition-all hover:scale-105 hover:bg-[#E8E914]"
+                  >
+                    <RefreshCw className="h-4 w-4" />
+                    {networkRetryCount > 0
+                      ? `Thử Lại (${networkRetryCount}/${NETWORK_RETRY_MAX})`
+                      : 'Thử Lại'}
+                  </button>
+                ) : (
+                  <div className="rounded-lg bg-white/10 px-4 py-2 text-xs text-white/70">
+                    Đã thử quá nhiều lần. Vui lòng tải lại trang.
+                  </div>
+                )}
+              </motion.div>
+            ) : (
+              // Loading spinner
+              <>
+                <Spinner.Root className="h-10 w-10 text-white">
+                  <Spinner.Track className="stroke-white/20" />
+                  <Spinner.TrackFill className="stroke-white" />
+                </Spinner.Root>
+                <p className="text-xs font-medium text-white/80">Đang tải video...</p>
+              </>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
